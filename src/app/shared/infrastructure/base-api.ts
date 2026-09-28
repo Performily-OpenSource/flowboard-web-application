@@ -1,1 +1,3 @@
-export class BaseApi {}
+export abstract class BaseApi {
+
+}
