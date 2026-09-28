@@ -4,7 +4,7 @@ import {BaseAssembler} from './base-assembler';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {catchError, map, Observable, throwError} from 'rxjs';
 
-export abstract class BaseApiEndpoint
+export abstract class BaseApiEndpoint <
   TEntity extends BaseEntity,
   TResource extends BaseResource,
   TResponse extends BaseResponse,
