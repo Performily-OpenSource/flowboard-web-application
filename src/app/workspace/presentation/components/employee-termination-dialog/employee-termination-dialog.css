@@ -1,0 +1,39 @@
+.dialog-text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--fb-text-secondary);
+}
+
+.reports-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--fb-border);
+  border-radius: 10px;
+  background: var(--fb-background);
+}
+
+.reports-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.report {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.report p {
+  margin: 0;
+}
+
+.report-name {
+  font-size: 13px;
+  font-weight: 500;
+}

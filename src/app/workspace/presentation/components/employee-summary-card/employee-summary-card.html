@@ -1,0 +1,19 @@
+<div class="summary">
+  <div class="summary-person">
+    <span class="avatar" aria-hidden="true">{{ initials(employee()) }}</span>
+    <div>
+      <p class="summary-name">{{ employee().fullName }}</p>
+      <p class="summary-subtitle">{{ subtitle() ?? ((employee().position?.title ?? '-') + ' · ' + (employee().area?.name ?? '-')) }}</p>
+    </div>
+  </div>
+  @if (rows().length > 0) {
+    <dl class="summary-rows">
+      @for (row of rows(); track row.label) {
+        <div>
+          <dt>{{ row.label }}</dt>
+          <dd>{{ row.value }}</dd>
+        </div>
+      }
+    </dl>
+  }
+</div>

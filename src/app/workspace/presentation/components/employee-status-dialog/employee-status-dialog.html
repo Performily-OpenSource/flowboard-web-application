@@ -1,0 +1,23 @@
+<div class="dialog">
+  <header class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">{{ 'status-dialog.title' | translate }}</h2>
+    <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
+  </header>
+  <app-employee-summary-card [employee]="data.employee"/>
+  <div class="field">
+    <label for="status">{{ 'status-dialog.new-status' | translate }}</label>
+    <select id="status" class="input" [formControl]="status">
+      @for (option of statuses; track option) {
+        <option [ngValue]="option">{{ 'employee-status.' + option | translate }}</option>
+      }
+    </select>
+  </div>
+  <div class="info-note">
+    <mat-icon aria-hidden="true">info</mat-icon>
+    <span>{{ 'status-dialog.info' | translate }}</span>
+  </div>
+  <div class="dialog-actions">
+    <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.cancel' | translate }}</button>
+    <button mat-flat-button type="button" (click)="confirm()">{{ 'status-dialog.confirm' | translate }}</button>
+  </div>
+</div>

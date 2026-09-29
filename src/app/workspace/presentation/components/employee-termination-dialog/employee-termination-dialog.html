@@ -1,0 +1,72 @@
+@if (subordinates().length > 0) {
+  <div class="dialog">
+    <header class="dialog-header">
+      <h2 mat-dialog-title class="dialog-title">{{ 'termination-dialog.blocked-title' | translate }}</h2>
+      <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
+    </header>
+    <p class="dialog-text">{{ 'termination-dialog.blocked-message' | translate: { name: data.employee.fullName, count: subordinates().length } }}</p>
+    <div class="reports-box">
+      <div class="reports-head">
+        <span>{{ 'termination-dialog.reports-title' | translate }}</span>
+        <span class="pill pill-error">{{ subordinates().length }}</span>
+      </div>
+      @for (subordinate of visibleSubordinates(); track subordinate.id) {
+        <div class="report">
+          <span class="avatar" aria-hidden="true">{{ initials(subordinate) }}</span>
+          <div>
+            <p class="report-name">{{ subordinate.fullName }}</p>
+            <p class="muted">{{ subordinate.position?.title ?? '-' }}</p>
+          </div>
+        </div>
+      }
+      @if (subordinates().length > visibleSubordinates().length) {
+        <p class="muted">{{ 'termination-dialog.more' | translate: { count: subordinates().length - visibleSubordinates().length } }}</p>
+      }
+    </div>
+    <div class="dialog-actions">
+      <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.close' | translate }}</button>
+      <button mat-flat-button type="button" (click)="goToReassign()">{{ 'termination-dialog.go-reassign' | translate }}</button>
+    </div>
+  </div>
+} @else {
+  <form class="dialog" [formGroup]="form" (ngSubmit)="confirm()" novalidate>
+    <header class="dialog-header">
+      <h2 mat-dialog-title class="dialog-title">{{ 'termination-dialog.title' | translate }}</h2>
+      <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
+    </header>
+    <app-employee-summary-card [employee]="data.employee" [rows]="summaryRows()"/>
+    <div class="form-grid">
+      <div class="field">
+        <label for="terminationDate">{{ 'termination-dialog.date' | translate }}</label>
+        <input id="terminationDate" class="input" type="date" formControlName="terminationDate"
+               [min]="data.employee.hireDate" [class.invalid]="isInvalidControl(form, 'terminationDate') || dateBeforeHire"/>
+        @if (dateBeforeHire) {
+          <p class="field-error">{{ 'termination-dialog.error.before-hire' | translate }}</p>
+        }
+      </div>
+      <div class="field">
+        <label for="newStatus">{{ 'termination-dialog.new-status' | translate }}</label>
+        <select id="newStatus" class="input" disabled>
+          <option>{{ 'employee-status.TERMINATED' | translate }}</option>
+        </select>
+      </div>
+      <div class="field full">
+        <label for="terminationReason">{{ 'termination-dialog.reason' | translate }}</label>
+        <textarea id="terminationReason" class="input" maxlength="500" formControlName="terminationReason"
+                  [placeholder]="'termination-dialog.reason-placeholder' | translate"
+                  [class.invalid]="isInvalidControl(form, 'terminationReason')"></textarea>
+        @if (isInvalidControl(form, 'terminationReason')) {
+          <p class="field-error">{{ errorKeyForControl(form, 'terminationReason') | translate }}</p>
+        }
+      </div>
+    </div>
+    <div class="info-note">
+      <mat-icon aria-hidden="true">info</mat-icon>
+      <span>{{ 'termination-dialog.info' | translate }}</span>
+    </div>
+    <div class="dialog-actions">
+      <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.cancel' | translate }}</button>
+      <button mat-flat-button class="danger-button" type="submit">{{ 'termination-dialog.confirm' | translate }}</button>
+    </div>
+  </form>
+}

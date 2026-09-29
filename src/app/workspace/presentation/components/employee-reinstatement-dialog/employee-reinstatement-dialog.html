@@ -1,0 +1,53 @@
+<form class="dialog" [formGroup]="form" (ngSubmit)="confirm()" novalidate>
+  <header class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">{{ 'reinstatement-dialog.title' | translate }}</h2>
+    <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
+  </header>
+  <app-employee-summary-card [employee]="data.employee" [subtitle]="subtitle" [rows]="summaryRows()"/>
+  <div class="form-grid">
+    <div class="field">
+      <label for="areaId">{{ 'reinstatement-dialog.new-area' | translate }}</label>
+      <select id="areaId" class="input" formControlName="areaId" [class.invalid]="isInvalidControl(form, 'areaId')">
+        <option [ngValue]="null" disabled>{{ 'common.select' | translate }}</option>
+        @for (area of store.activeAreas(); track area.id) {
+          <option [ngValue]="area.id">{{ area.name }}</option>
+        }
+      </select>
+      @if (isInvalidControl(form, 'areaId')) {
+        <p class="field-error">{{ errorKeyForControl(form, 'areaId') | translate }}</p>
+      }
+    </div>
+    <div class="field">
+      <label for="positionId">{{ 'reinstatement-dialog.new-position' | translate }}</label>
+      <select id="positionId" class="input" formControlName="positionId" [class.invalid]="isInvalidControl(form, 'positionId')">
+        <option [ngValue]="null" disabled>{{ 'common.select' | translate }}</option>
+        @for (position of positionsOfArea(); track position.id) {
+          <option [ngValue]="position.id">{{ position.title }}</option>
+        }
+      </select>
+      @if (isInvalidControl(form, 'positionId')) {
+        <p class="field-error">{{ errorKeyForControl(form, 'positionId') | translate }}</p>
+      }
+    </div>
+    <div class="field">
+      <label for="reinstatementDate">{{ 'reinstatement-dialog.date' | translate }}</label>
+      <input id="reinstatementDate" class="input" type="date" formControlName="reinstatementDate" [min]="minDate"/>
+    </div>
+    <div class="field">
+      <label for="contractType">{{ 'employee.contract-type' | translate }}</label>
+      <select id="contractType" class="input" formControlName="contractType">
+        @for (type of contractTypes; track type) {
+          <option [ngValue]="type">{{ 'contract-type.' + type | translate }}</option>
+        }
+      </select>
+    </div>
+  </div>
+  <div class="info-note">
+    <mat-icon aria-hidden="true">info</mat-icon>
+    <span>{{ 'reinstatement-dialog.info' | translate }}</span>
+  </div>
+  <div class="dialog-actions">
+    <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.cancel' | translate }}</button>
+    <button mat-flat-button type="submit"><mat-icon>check</mat-icon>{{ 'reinstatement-dialog.confirm' | translate }}</button>
+  </div>
+</form>
