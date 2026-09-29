@@ -1,1 +1,88 @@
-<p>organization-chart works!</p>
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{{ 'organization-chart.title' | translate }}</h1>
+      <p class="page-subtitle">{{ 'organization-chart.subtitle' | translate }}</p>
+    </div>
+    <div class="page-actions">
+      <button class="filter-chip" [class.active]="selectedAreaId() !== null" type="button" [matMenuTriggerFor]="areaMenu">
+        {{ 'employees.area' | translate }}: {{ selectedAreaId() !== null ? areaName() : ('employees.all-female' | translate) }}
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      <mat-menu #areaMenu="matMenu">
+        <button mat-menu-item (click)="selectedAreaId.set(null)">{{ 'employees.all-female' | translate }}</button>
+        @for (area of store.activeAreas(); track area.id) {
+          <button mat-menu-item (click)="selectedAreaId.set(area.id)">{{ area.name }}</button>
+        }
+      </mat-menu>
+      <button mat-stroked-button (click)="exportChart()">
+        <mat-icon>upload</mat-icon>
+        {{ 'organization-chart.export' | translate }}
+      </button>
+    </div>
+  </header>
+
+  <nav class="segmented-tabs">
+    <a routerLink="/workspace/organization-chart" routerLinkActive="active">{{ 'organization.chart-tab' | translate }}</a>
+    <a routerLink="/workspace/organization-structure" routerLinkActive="active">{{ 'organization.structure-tab' | translate }}</a>
+  </nav>
+
+  <div class="card chart-card">
+    @if (isEmpty()) {
+      <div class="empty-state">
+        <span class="empty-icon" aria-hidden="true"><mat-icon>account_tree</mat-icon></span>
+        <h2 class="empty-title">{{ 'organization-chart.empty' | translate }}</h2>
+      </div>
+    }
+
+    <div class="trees">
+      @for (tree of trees(); track tree.root.id) {
+        <div class="tree">
+          <a class="node node-root" [class.highlight]="tree.root.id === highlightedId()" [routerLink]="['/workspace/employees', tree.root.id]">
+            <span class="avatar" aria-hidden="true">{{ initials(tree.root) }}</span>
+            <span class="node-text"><strong>{{ tree.root.fullName }}</strong><small>{{ tree.root.position?.title ?? '-' }}</small></span>
+          </a>
+          @if (tree.columns.length > 0) {
+            <div class="columns" [class.single]="tree.columns.length === 1">
+              @for (column of tree.columns; track column.head.id) {
+                <div class="column">
+                  <a class="node" [class.highlight]="column.head.id === highlightedId()" [routerLink]="['/workspace/employees', column.head.id]">
+                    <span class="avatar" aria-hidden="true">{{ initials(column.head) }}</span>
+                    <span class="node-text"><strong>{{ column.head.fullName }}</strong><small>{{ column.head.position?.title ?? '-' }}</small></span>
+                  </a>
+                  @for (item of column.descendants; track item.employee.id) {
+                    <a class="node node-stacked" [style.margin-left.px]="item.depth * 14"
+                       [class.highlight]="item.employee.id === highlightedId()" [routerLink]="['/workspace/employees', item.employee.id]">
+                      <span class="avatar" aria-hidden="true">{{ initials(item.employee) }}</span>
+                      <span class="node-text"><strong>{{ item.employee.fullName }}</strong><small>{{ item.employee.position?.title ?? '-' }}</small></span>
+                    </a>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    @if (chart().pendingReassignment.length > 0) {
+      <div class="pending">
+        <h2 class="pending-title">{{ 'organization-chart.pending-reassignment' | translate }}</h2>
+        <p class="muted">{{ 'organization-chart.pending-hint' | translate }}</p>
+        <div class="pending-nodes">
+          @for (employee of chart().pendingReassignment; track employee.id) {
+            <a class="node node-pending" [class.highlight]="employee.id === highlightedId()" [routerLink]="['/workspace/employees', employee.id]">
+              <span class="avatar" aria-hidden="true">{{ initials(employee) }}</span>
+              <span class="node-text"><strong>{{ employee.fullName }}</strong><small>{{ employee.position?.title ?? '-' }}</small></span>
+            </a>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="info-note chart-note">
+    <mat-icon aria-hidden="true">info</mat-icon>
+    <span>{{ 'organization-chart.rule' | translate }}</span>
+  </div>
+</section>

@@ -1,0 +1,116 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{{ 'organization-structure.title' | translate }}</h1>
+      <p class="page-subtitle">{{ 'organization-structure.subtitle' | translate }}</p>
+    </div>
+    <div class="page-actions">
+      <button mat-stroked-button (click)="openPositionDialog()">
+        <mat-icon>add</mat-icon>
+        {{ 'organization-structure.new-position' | translate }}
+      </button>
+      <button mat-flat-button (click)="openAreaDialog()">
+        <mat-icon>add</mat-icon>
+        {{ 'organization-structure.new-area' | translate }}
+      </button>
+    </div>
+  </header>
+
+  <nav class="segmented-tabs">
+    <a routerLink="/workspace/organization-chart" routerLinkActive="active">{{ 'organization.chart-tab' | translate }}</a>
+    <a routerLink="/workspace/organization-structure" routerLinkActive="active">{{ 'organization.structure-tab' | translate }}</a>
+  </nav>
+
+  @if (store.loading()) {
+    <mat-progress-bar mode="indeterminate"/>
+  }
+  @if (store.error()) {
+    <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ store.error() }}</span></div>
+  }
+
+  <div class="structure-layout">
+    <section class="card area-list" [attr.aria-label]="'organization-structure.areas' | translate">
+      <header class="area-list-head">
+        <span>{{ 'organization-structure.areas' | translate }}</span>
+        <span>{{ store.areas().length }}</span>
+      </header>
+      @for (area of store.areas(); track area.id) {
+        <div class="area-item" [class.selected]="area.id === selectedArea()?.id">
+          <button class="area-select" type="button" (click)="selectArea(area)" [attr.aria-pressed]="area.id === selectedArea()?.id">
+            <span class="area-name">{{ area.name }}</span>
+            <span class="muted">
+              {{ 'organization-structure.area-counts' | translate: { employees: store.countActiveEmployeesInArea(area.id), positions: store.countPositionsInArea(area.id) } }}
+            </span>
+          </button>
+          <span class="pill" [class.pill-active]="area.active" [class.pill-inactive]="!area.active">
+            {{ (area.active ? 'common.active-female' : 'common.inactive-female') | translate }}
+          </span>
+          <button class="icon-action" type="button" [matMenuTriggerFor]="areaMenu" [attr.aria-label]="'organization-structure.area-actions' | translate">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #areaMenu="matMenu" xPosition="before">
+            <button mat-menu-item (click)="openAreaDialog(area)">{{ 'common.edit' | translate }}</button>
+            <button mat-menu-item (click)="toggleArea(area)">{{ (area.active ? 'common.deactivate' : 'common.activate') | translate }}</button>
+          </mat-menu>
+        </div>
+      } @empty {
+        <p class="muted empty-areas">{{ 'organization-structure.no-areas' | translate }}</p>
+      }
+    </section>
+
+    <section class="positions">
+      <header class="positions-head">
+        <h2 class="positions-title">{{ 'organization-structure.positions-of' | translate: { area: selectedArea()?.name ?? '' } }}</h2>
+        <button mat-stroked-button (click)="openPositionDialog()" [disabled]="!selectedArea()">
+          <mat-icon>add</mat-icon>
+          {{ 'organization-structure.new-position' | translate }}
+        </button>
+      </header>
+
+      <div class="table-card">
+        <table mat-table [dataSource]="positionsOfSelectedArea()">
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef>{{ 'organization-structure.position' | translate }}</th>
+            <td mat-cell *matCellDef="let position" class="cell-strong">{{ position.title }}</td>
+          </ng-container>
+          <ng-container matColumnDef="referenceSalary">
+            <th mat-header-cell *matHeaderCellDef>{{ 'organization-structure.reference-salary' | translate }}</th>
+            <td mat-cell *matCellDef="let position">{{ position.referenceSalaryAmount | currency: position.referenceSalaryCurrency : (position.referenceSalaryCurrency === 'PEN' ? 'S/ ' : 'symbol-narrow') }}</td>
+          </ng-container>
+          <ng-container matColumnDef="active">
+            <th mat-header-cell *matHeaderCellDef>{{ 'organization-structure.status' | translate }}</th>
+            <td mat-cell *matCellDef="let position">
+              <span class="pill" [class.pill-active]="position.active" [class.pill-inactive]="!position.active">
+                {{ (position.active ? 'common.active-female' : 'common.inactive-female') | translate }}
+              </span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>{{ 'organization-structure.actions' | translate }}</th>
+            <td mat-cell *matCellDef="let position">
+              <button class="icon-action" type="button" (click)="openPositionDialog(position)" [attr.aria-label]="'common.edit' | translate">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button class="icon-action" type="button" [matMenuTriggerFor]="positionMenu" [attr.aria-label]="'organization-structure.position-actions' | translate">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #positionMenu="matMenu" xPosition="before">
+                <button mat-menu-item (click)="togglePosition(position)">{{ (position.active ? 'common.deactivate' : 'common.activate') | translate }}</button>
+              </mat-menu>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="columns"></tr>
+          <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+          <tr class="mat-mdc-row" *matNoDataRow>
+            <td class="mat-mdc-cell no-data" [attr.colspan]="columns.length">{{ 'organization-structure.no-positions' | translate }}</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="info-note">
+        <mat-icon aria-hidden="true">info</mat-icon>
+        <span>{{ 'organization-structure.salary-note' | translate }}</span>
+      </div>
+    </section>
+  </div>
+</section>

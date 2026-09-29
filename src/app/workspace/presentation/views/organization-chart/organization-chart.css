@@ -1,0 +1,183 @@
+.chart-card {
+  padding: 28px 24px;
+  overflow-x: auto;
+}
+
+.trees {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+}
+
+.tree {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.node {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 200px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  border: 1px solid var(--fb-outline);
+  border-radius: 8px;
+  background: var(--fb-surface);
+  color: var(--fb-text);
+  text-decoration: none;
+}
+
+.node:hover,
+.node:focus-visible {
+  border-color: var(--fb-primary);
+}
+
+.node-root {
+  border-color: var(--fb-primary-container);
+  background: var(--fb-primary-container);
+}
+
+.node.highlight {
+  outline: 2px solid var(--fb-primary);
+  outline-offset: 2px;
+}
+
+.node-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.node-text strong {
+  overflow: hidden;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.node-text small {
+  overflow: hidden;
+  font-size: 11px;
+  color: var(--fb-text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.node .avatar {
+  width: 28px;
+  height: 28px;
+  font-size: 10.5px;
+}
+
+/* Connectors: root -> horizontal bar -> each column, and vertical links inside a column. */
+.columns {
+  position: relative;
+  display: flex;
+  gap: 68px;
+  padding-top: 22px;
+}
+
+.columns::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 11px;
+  border-left: 1px solid var(--fb-outline);
+}
+
+.column {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.column::before {
+  content: '';
+  position: absolute;
+  top: -11px;
+  left: 100px;
+  height: 11px;
+  border-left: 1px solid var(--fb-outline);
+}
+
+.column::after {
+  content: '';
+  position: absolute;
+  top: -11px;
+  left: -34px;
+  right: -34px;
+  border-top: 1px solid var(--fb-outline);
+}
+
+.column:first-child::after {
+  left: 100px;
+}
+
+.column:last-child::after {
+  right: 100px;
+}
+
+.columns.single .column::after {
+  display: none;
+}
+
+.columns.single::before {
+  height: 22px;
+}
+
+.columns.single .column::before {
+  display: none;
+}
+
+.node-stacked {
+  position: relative;
+}
+
+.node-stacked::before {
+  content: '';
+  position: absolute;
+  top: -13px;
+  left: 99px;
+  height: 12px;
+  border-left: 1px solid var(--fb-outline);
+}
+
+.pending {
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--fb-outline);
+}
+
+.pending-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.pending-nodes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.node-pending {
+  border-style: dashed;
+}
+
+.chart-note {
+  margin-top: 16px;
+}
+
+@media print {
+  .page-actions,
+  .segmented-tabs {
+    display: none;
+  }
+}
