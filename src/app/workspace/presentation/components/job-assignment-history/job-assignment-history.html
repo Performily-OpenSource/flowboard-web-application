@@ -1,0 +1,20 @@
+<ol class="history" [attr.aria-label]="'job-assignment-history.title' | translate">
+  @for (assignment of assignments(); track assignment.id) {
+    <li [class.current]="assignment.isCurrent()">
+      <span class="dot" aria-hidden="true"></span>
+      <div class="history-body">
+        <div class="history-head">
+          <span class="history-position">{{ assignment.position?.title ?? '-' }}</span>
+          <span class="pill" [class.pill-active]="assignment.isCurrent()">{{ 'assignment-change-type.' + assignment.changeType | translate }}</span>
+        </div>
+        <span class="muted">
+          {{ assignment.area?.name ?? '-' }} ·
+          {{ assignment.startDate | localDate }} –
+          {{ assignment.isCurrent() ? ('job-assignment-history.current' | translate) : (assignment.endDate | localDate) }}
+        </span>
+      </div>
+    </li>
+  } @empty {
+    <li class="muted">{{ 'job-assignment-history.empty' | translate }}</li>
+  }
+</ol>

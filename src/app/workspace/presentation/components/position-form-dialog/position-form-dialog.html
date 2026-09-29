@@ -1,0 +1,59 @@
+<form class="dialog" [formGroup]="form" (ngSubmit)="confirm()" novalidate>
+  <header class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">{{ (isEdit ? 'position-dialog.edit-title' : 'position-dialog.new-title') | translate }}</h2>
+    <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
+  </header>
+
+  <div class="field">
+    <label for="positionTitle">{{ 'position-dialog.name' | translate }}</label>
+    <input id="positionTitle" class="input" formControlName="title"
+           [placeholder]="'position-dialog.name-placeholder' | translate" [class.invalid]="isInvalidControl(form, 'title')"/>
+    @if (form.controls.title.hasError('taken')) {
+      <p class="field-error">{{ 'position-dialog.error.title-taken' | translate }}</p>
+    } @else if (isInvalidControl(form, 'title')) {
+      <p class="field-error">{{ errorKeyForControl(form, 'title') | translate }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="positionArea">{{ 'position-dialog.area' | translate }}</label>
+    <select id="positionArea" class="input" formControlName="areaId" [class.invalid]="isInvalidControl(form, 'areaId')">
+      <option [ngValue]="null" disabled>{{ 'common.select' | translate }}</option>
+      @for (area of store.activeAreas(); track area.id) {
+        <option [ngValue]="area.id">{{ area.name }}</option>
+      }
+    </select>
+    @if (isInvalidControl(form, 'areaId')) {
+      <p class="field-error">{{ errorKeyForControl(form, 'areaId') | translate }}</p>
+    }
+  </div>
+
+  <div class="form-grid">
+    <div class="field">
+      <label for="referenceSalary">{{ 'position-dialog.reference-salary' | translate }}</label>
+      <input id="referenceSalary" class="input" type="number" min="0" step="0.01" placeholder="0.00"
+             formControlName="referenceSalaryAmount" [class.invalid]="isInvalidControl(form, 'referenceSalaryAmount')"/>
+      @if (isInvalidControl(form, 'referenceSalaryAmount')) {
+        <p class="field-error">{{ 'position-dialog.error.salary' | translate }}</p>
+      }
+    </div>
+    <div class="field">
+      <label for="currency">{{ 'position-dialog.currency' | translate }}</label>
+      <select id="currency" class="input" formControlName="referenceSalaryCurrency">
+        @for (currency of currencies; track currency) {
+          <option [ngValue]="currency">{{ currency }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="info-note">
+    <mat-icon aria-hidden="true">info</mat-icon>
+    <span>{{ 'position-dialog.info' | translate }}</span>
+  </div>
+
+  <div class="dialog-actions">
+    <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.cancel' | translate }}</button>
+    <button mat-flat-button type="submit">{{ (isEdit ? 'common.save' : 'position-dialog.create') | translate }}</button>
+  </div>
+</form>
