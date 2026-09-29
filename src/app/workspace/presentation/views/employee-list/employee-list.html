@@ -1,1 +1,183 @@
-<p>employee-list works!</p>
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{{ 'employees.title' | translate }}</h1>
+      <p class="page-subtitle">
+        @if (hasFilters() && filteredEmployees().length === 0) {
+          {{ 'employees.no-records' | translate }}
+        } @else {
+          {{ 'employees.summary' | translate: store.statusSummary() }}
+        }
+      </p>
+    </div>
+    <div class="page-actions">
+      <button mat-stroked-button (click)="exportEmployees()">
+        <mat-icon>upload</mat-icon>
+        {{ 'employees.export' | translate }}
+      </button>
+      <a mat-flat-button routerLink="/workspace/employees/new">
+        <mat-icon>add</mat-icon>
+        {{ 'employees.new' | translate }}
+      </a>
+    </div>
+  </header>
+
+  @if (store.loading()) {
+    <mat-progress-bar mode="indeterminate"/>
+  }
+  @if (store.error()) {
+    <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ store.error() }}</span></div>
+  }
+
+  <div class="filters">
+    <label class="search-box">
+      <mat-icon aria-hidden="true">search</mat-icon>
+      <input #searchInput type="search" (input)="onSearch($event)"
+             [placeholder]="'employees.search' | translate" [attr.aria-label]="'employees.search' | translate"/>
+    </label>
+
+    <span class="filter-chip" [class.active]="areaFilter() !== null">
+      <button class="clear" type="button" [matMenuTriggerFor]="areaMenu">
+        {{ 'employees.area' | translate }}: {{ areaFilter() !== null ? areaName(areaFilter()!) : ('employees.all-female' | translate) }}
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      @if (areaFilter() !== null) {
+        <button class="clear" type="button" (click)="setArea(null)" [attr.aria-label]="'employees.remove-filter' | translate"><mat-icon>close</mat-icon></button>
+      }
+    </span>
+    <mat-menu #areaMenu="matMenu">
+      <button mat-menu-item (click)="setArea(null)">{{ 'employees.all-female' | translate }}</button>
+      @for (area of store.areas(); track area.id) {
+        <button mat-menu-item (click)="setArea(area.id)">{{ area.name }}</button>
+      }
+    </mat-menu>
+
+    <span class="filter-chip" [class.active]="positionFilter() !== null">
+      <button class="clear" type="button" [matMenuTriggerFor]="positionMenu">
+        {{ 'employees.position' | translate }}: {{ positionFilter() !== null ? positionTitle(positionFilter()!) : ('employees.all' | translate) }}
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      @if (positionFilter() !== null) {
+        <button class="clear" type="button" (click)="setPosition(null)" [attr.aria-label]="'employees.remove-filter' | translate"><mat-icon>close</mat-icon></button>
+      }
+    </span>
+    <mat-menu #positionMenu="matMenu">
+      <button mat-menu-item (click)="setPosition(null)">{{ 'employees.all' | translate }}</button>
+      @for (position of positionOptions(); track position.id) {
+        <button mat-menu-item (click)="setPosition(position.id)">{{ position.title }}</button>
+      }
+    </mat-menu>
+
+    <span class="filter-chip" [class.active]="statusFilter() !== null">
+      <button class="clear" type="button" [matMenuTriggerFor]="statusMenu">
+        {{ 'employees.status' | translate }}: {{ statusFilter() !== null ? ('employee-status-plural.' + statusFilter() | translate) : ('employees.all' | translate) }}
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      @if (statusFilter() !== null) {
+        <button class="clear" type="button" (click)="setStatus(null)" [attr.aria-label]="'employees.remove-filter' | translate"><mat-icon>close</mat-icon></button>
+      }
+    </span>
+    <mat-menu #statusMenu="matMenu">
+      <button mat-menu-item (click)="setStatus(null)">{{ 'employees.all' | translate }}</button>
+      @for (status of statuses; track status) {
+        <button mat-menu-item (click)="setStatus(status)">{{ 'employee-status-plural.' + status | translate }}</button>
+      }
+    </mat-menu>
+
+    <span class="filter-chip" [class.active]="contractTypeFilter() !== null">
+      <button class="clear" type="button" [matMenuTriggerFor]="contractMenu">
+        {{ 'employees.contract-type' | translate }}: {{ contractTypeFilter() !== null ? ('contract-type.' + contractTypeFilter() | translate) : ('employees.all' | translate) }}
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      @if (contractTypeFilter() !== null) {
+        <button class="clear" type="button" (click)="setContractType(null)" [attr.aria-label]="'employees.remove-filter' | translate"><mat-icon>close</mat-icon></button>
+      }
+    </span>
+    <mat-menu #contractMenu="matMenu">
+      <button mat-menu-item (click)="setContractType(null)">{{ 'employees.all' | translate }}</button>
+      @for (type of contractTypes; track type) {
+        <button mat-menu-item (click)="setContractType(type)">{{ 'contract-type.' + type | translate }}</button>
+      }
+    </mat-menu>
+
+    <span class="spacer"></span>
+    @if (hasFilters()) {
+      <button class="text-link" type="button" (click)="clearFilters(searchInput)">{{ 'employees.clear-filters' | translate }}</button>
+    }
+  </div>
+
+  @if (filteredEmployees().length > 0 || store.loading()) {
+    <div class="table-card">
+      <table mat-table [dataSource]="pageEmployees()">
+        <ng-container matColumnDef="fullName">
+          <th mat-header-cell *matHeaderCellDef>{{ 'employees.employee' | translate }}</th>
+          <td mat-cell *matCellDef="let employee">
+            <a class="person person-link" [routerLink]="['/workspace/employees', employee.id]">
+              <span class="avatar" aria-hidden="true">{{ initials(employee) }}</span>
+              <span class="cell-strong">{{ employee.fullName }}</span>
+            </a>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="area">
+          <th mat-header-cell *matHeaderCellDef>{{ 'employees.area' | translate }}</th>
+          <td mat-cell *matCellDef="let employee">{{ employee.area?.name ?? '-' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef>{{ 'employees.position' | translate }}</th>
+          <td mat-cell *matCellDef="let employee">{{ employee.position?.title ?? '-' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>{{ 'employees.status' | translate }}</th>
+          <td mat-cell *matCellDef="let employee">
+            <span class="pill pill-{{ employee.status.toLowerCase() }}">{{ 'employee-status.' + employee.status | translate }}</span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="hireDate">
+          <th mat-header-cell *matHeaderCellDef>{{ 'employees.hire-date' | translate }}</th>
+          <td mat-cell *matCellDef="let employee">{{ employee.hireDate | localDate }}</td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>{{ 'employees.actions' | translate }}</th>
+          <td mat-cell *matCellDef="let employee">
+            <a class="icon-action" [routerLink]="['/workspace/employees', employee.id, 'edit']" [attr.aria-label]="'employees.edit' | translate">
+              <mat-icon>edit</mat-icon>
+            </a>
+            <button class="icon-action" type="button" [matMenuTriggerFor]="rowMenu" [attr.aria-label]="'employees.more-actions' | translate">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #rowMenu="matMenu">
+              <button mat-menu-item (click)="viewEmployee(employee)">{{ 'employees.view' | translate }}</button>
+              <a mat-menu-item [routerLink]="['/workspace/employees', employee.id, 'documents']">{{ 'employees.documents' | translate }}</a>
+            </mat-menu>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+      </table>
+    </div>
+
+    <nav class="pagination" [attr.aria-label]="'employees.pagination' | translate">
+      <span class="muted">{{ 'employees.range' | translate: { start: rangeStart(), end: rangeEnd(), total: filteredEmployees().length } }}</span>
+      <span class="spacer"></span>
+      <button class="page-button" type="button" [disabled]="page() === 0" (click)="page.set(page() - 1)">{{ 'employees.previous' | translate }}</button>
+      @for (index of pages(); track index) {
+        <button class="page-button" type="button" [class.current]="index === page()"
+                [attr.aria-current]="index === page() ? 'page' : null" (click)="page.set(index)">{{ index + 1 }}</button>
+      }
+      <button class="page-button" type="button" [disabled]="page() >= pageCount() - 1" (click)="page.set(page() + 1)">{{ 'employees.next' | translate }}</button>
+    </nav>
+  } @else {
+    <div class="card empty-state">
+      <span class="empty-icon" aria-hidden="true"><mat-icon>search</mat-icon></span>
+      <h2 class="empty-title">{{ 'employees.no-results-title' | translate }}</h2>
+      <p>{{ 'employees.no-results-content' | translate }}</p>
+      <div class="empty-actions">
+        <button mat-stroked-button type="button" (click)="clearFilters(searchInput)">{{ 'employees.clear-filters' | translate }}</button>
+        <button mat-flat-button type="button" (click)="clearFilters(searchInput); searchInput.focus()">
+          <mat-icon>search</mat-icon>
+          {{ 'employees.search-by-name' | translate }}
+        </button>
+      </div>
+    </div>
+  }
+</section>

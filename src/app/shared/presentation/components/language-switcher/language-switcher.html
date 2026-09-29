@@ -1,1 +1,11 @@
-<p>language-switcher works!</p>
+<div class="language-switcher" role="group" aria-label="Preferred language">
+  @for (language of languages; track language; let last = $last) {
+    <button type="button"
+            [class.active]="language === currentLanguage"
+            [attr.aria-pressed]="language === currentLanguage"
+            (click)="useLanguage(language)">{{ language.toUpperCase() }}</button>
+    @if (!last) {
+      <span aria-hidden="true">/</span>
+    }
+  }
+</div>

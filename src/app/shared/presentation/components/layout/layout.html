@@ -1,1 +1,50 @@
-<p>layout works!</p>
+<mat-sidenav-container class="shell">
+  <mat-sidenav #sidenav class="sidebar"
+               [mode]="isHandset() ? 'over' : 'side'"
+               [opened]="!isHandset()">
+    <a class="brand" routerLink="/home">
+      <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span class="brand-name">Flowboard</span>
+    </a>
+    <nav class="nav" [attr.aria-label]="'option.main-navigation' | translate">
+      @for (option of options(); track option.link) {
+        <a class="nav-item" [class.active]="isActive(option)" [routerLink]="option.link"
+           [attr.aria-current]="isActive(option) ? 'page' : null"
+           (click)="isHandset() && sidenav.close()">
+          <mat-icon aria-hidden="true">{{ option.icon }}</mat-icon>
+          <span>{{ option.label | translate }}</span>
+        </a>
+      }
+    </nav>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main">
+    <header class="topbar">
+      @if (isHandset()) {
+        <button mat-icon-button (click)="sidenav.toggle()" [attr.aria-label]="'option.toggle-menu' | translate">
+          <mat-icon>menu</mat-icon>
+        </button>
+      }
+      <p class="breadcrumb">
+        @for (key of breadcrumb(); track key; let last = $last) {
+          <span>{{ key | translate }}</span>
+          @if (!last || layoutStore.breadcrumbDetail()) {
+            <span aria-hidden="true"> / </span>
+          }
+        }
+        @if (layoutStore.breadcrumbDetail(); as detail) {
+          <span>{{ detail }}</span>
+          @if (breadcrumbSuffix(); as suffix) {
+            <span aria-hidden="true"> / </span>
+            <span>{{ suffix | translate }}</span>
+          }
+        }
+      </p>
+      <span class="spacer"></span>
+      <app-language-switcher/>
+    </header>
+    <main class="content">
+      <router-outlet/>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

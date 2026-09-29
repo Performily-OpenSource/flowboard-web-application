@@ -1,1 +1,318 @@
-<p>employee-form works!</p>
+<section class="page">
+  <a class="back-link" routerLink="/workspace/employees"><mat-icon>chevron_left</mat-icon>{{ 'employee-form.back-to-list' | translate }}</a>
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{{ (isEdit ? 'employee-form.edit-title' : 'employee-form.new-title') | translate }}</h1>
+      <p class="page-subtitle">{{ (isEdit ? 'employee-form.edit-subtitle' : 'employee-form.new-subtitle') | translate }}</p>
+    </div>
+  </header>
+
+  <ol class="stepper" [attr.aria-label]="'employee-form.steps' | translate">
+    @for (step of steps; track step; let index = $index; let last = $last) {
+      <li [class.active]="index === stepIndex()" [class.done]="index < stepIndex()" [attr.aria-current]="index === stepIndex() ? 'step' : null">
+        <button type="button" class="step" (click)="goToStep(index)" [disabled]="index >= stepIndex()">
+          <span class="step-number">{{ index + 1 }}</span>
+          <span class="step-label">{{ 'employee-form.step-' + step | translate }}</span>
+        </button>
+        @if (!last) {
+          <span class="step-line" aria-hidden="true"></span>
+        }
+      </li>
+    }
+  </ol>
+
+  @if (store.error()) {
+    <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ store.error() }}</span></div>
+  }
+
+  <div class="form-layout">
+    <div class="card card-body form-card">
+      @switch (currentStep()) {
+        @case ('personal') {
+          <form [formGroup]="personalForm" novalidate>
+            <h2 class="card-title">{{ 'employee-form.step-personal' | translate }}</h2>
+      @if (stepError()) {
+        <div class="error-banner" role="alert">
+          <mat-icon aria-hidden="true">error</mat-icon>
+          <span>{{ stepError() }}</span>
+        </div>
+      }
+            <div class="form-grid">
+        <div class="field">
+          <label for="firstName">{{ 'employee.first-name' | translate }}</label>
+          <input id="firstName" class="input" type="text" formControlName="firstName" [class.invalid]="isInvalidControl(personalForm, 'firstName')"/>
+          @if (isInvalidControl(personalForm, 'firstName')) {
+            <p class="field-error">{{ errorKeyForControl(personalForm, 'firstName') | translate }}</p>
+          }
+        </div>
+        <div class="field">
+          <label for="lastName">{{ 'employee.last-name' | translate }}</label>
+          <input id="lastName" class="input" type="text" formControlName="lastName" [class.invalid]="isInvalidControl(personalForm, 'lastName')"/>
+          @if (isInvalidControl(personalForm, 'lastName')) {
+            <p class="field-error">{{ errorKeyForControl(personalForm, 'lastName') | translate }}</p>
+          }
+        </div>
+        <div class="field">
+          <label for="identityDocumentType">{{ 'employee.identity-document-type' | translate }}</label>
+          <select id="identityDocumentType" class="input" formControlName="identityDocumentType" [class.invalid]="isInvalidControl(personalForm, 'identityDocumentType')">
+            @for (type of identityDocumentTypes; track type) {
+              <option [ngValue]="type">{{ 'identity-document-type.' + type | translate }}</option>
+            }
+          </select>
+          @if (isInvalidControl(personalForm, 'identityDocumentType')) {
+            <p class="field-error">{{ errorKeyForControl(personalForm, 'identityDocumentType') | translate }}</p>
+          }
+        </div>
+        <div class="field">
+          <label for="identityDocumentNumber">{{ 'employee.identity-document-number' | translate }}</label>
+          <input id="identityDocumentNumber" class="input" formControlName="identityDocumentNumber" [class.invalid]="isInvalidControl(personalForm, 'identityDocumentNumber')"/>
+          @if (personalForm.controls.identityDocumentNumber.getError('taken'); as taken) {
+            <p class="field-error">{{ 'employee.error.identity-document-taken' | translate: { number: personalForm.controls.identityDocumentNumber.value, owner: taken.owner } }}</p>
+          } @else if (isInvalidControl(personalForm, 'identityDocumentNumber')) {
+            <p class="field-error">{{ errorKeyForControl(personalForm, 'identityDocumentNumber') | translate }}</p>
+          }
+        </div>
+        <div class="field">
+          <label for="birthDate">{{ 'employee.birth-date' | translate }}</label>
+          <input id="birthDate" class="input" type="date" formControlName="birthDate" [max]="today" [class.invalid]="isInvalidControl(personalForm, 'birthDate')"/>
+          @if (isInvalidControl(personalForm, 'birthDate')) {
+            <p class="field-error">{{ errorKeyForControl(personalForm, 'birthDate') | translate }}</p>
+          }
+        </div>
+        <div class="field">
+          <label for="phoneNumber">{{ 'employee.phone-number' | translate }}</label>
+          <input id="phoneNumber" class="input" type="tel" formControlName="phoneNumber" placeholder="+51 986 224 118" [class.invalid]="isInvalidControl(personalForm, 'phoneNumber')"/>
+          @if (isInvalidControl(personalForm, 'phoneNumber')) {
+            <p class="field-error">{{ errorKeyForControl(personalForm, 'phoneNumber') | translate }}</p>
+          }
+        </div>
+        <div class="field full">
+          <label for="email">{{ 'employee.email' | translate }}</label>
+          <input id="email" class="input" type="email" formControlName="email" [class.invalid]="isInvalidControl(personalForm, 'email')"/>
+          @if (isInvalidControl(personalForm, 'email')) {
+            <p class="field-error">{{ errorKeyForControl(personalForm, 'email') | translate }}</p>
+          }
+        </div>
+        <div class="field full">
+          <label for="addressStreet">{{ 'employee.address-street' | translate }}</label>
+          <input id="addressStreet" class="input" type="text" formControlName="addressStreet" [class.invalid]="isInvalidControl(personalForm, 'addressStreet')"/>
+          @if (isInvalidControl(personalForm, 'addressStreet')) {
+            <p class="field-error">{{ errorKeyForControl(personalForm, 'addressStreet') | translate }}</p>
+          }
+        </div>
+        <div class="field">
+          <label for="addressDistrict">{{ 'employee.address-district' | translate }}</label>
+          <input id="addressDistrict" class="input" type="text" formControlName="addressDistrict" [class.invalid]="isInvalidControl(personalForm, 'addressDistrict')"/>
+          @if (isInvalidControl(personalForm, 'addressDistrict')) {
+            <p class="field-error">{{ errorKeyForControl(personalForm, 'addressDistrict') | translate }}</p>
+          }
+        </div>
+        <div class="field">
+          <label for="addressProvince">{{ 'employee.address-province' | translate }}</label>
+          <input id="addressProvince" class="input" type="text" formControlName="addressProvince" [class.invalid]="isInvalidControl(personalForm, 'addressProvince')"/>
+          @if (isInvalidControl(personalForm, 'addressProvince')) {
+            <p class="field-error">{{ errorKeyForControl(personalForm, 'addressProvince') | translate }}</p>
+          }
+        </div>
+        <div class="field">
+          <label for="addressDepartment">{{ 'employee.address-department' | translate }}</label>
+          <input id="addressDepartment" class="input" type="text" formControlName="addressDepartment" [class.invalid]="isInvalidControl(personalForm, 'addressDepartment')"/>
+          @if (isInvalidControl(personalForm, 'addressDepartment')) {
+            <p class="field-error">{{ errorKeyForControl(personalForm, 'addressDepartment') | translate }}</p>
+          }
+        </div>
+            </div>
+          </form>
+        }
+        @case ('employment') {
+          <form [formGroup]="employmentForm" novalidate>
+            <h2 class="card-title">{{ 'employee-form.step-employment' | translate }}</h2>
+      @if (stepError()) {
+        <div class="error-banner" role="alert">
+          <mat-icon aria-hidden="true">error</mat-icon>
+          <span>{{ stepError() }}</span>
+        </div>
+      }
+            <div class="form-grid">
+        <div class="field">
+          <label for="areaId">{{ 'employee.area' | translate }}</label>
+          <select id="areaId" class="input" formControlName="areaId" [class.invalid]="isInvalidControl(employmentForm, 'areaId')">
+            <option [ngValue]="null" disabled>{{ 'common.select' | translate }}</option>
+            @for (area of store.activeAreas(); track area.id) {
+              <option [ngValue]="area.id">{{ area.name }}</option>
+            }
+          </select>
+          @if (isInvalidControl(employmentForm, 'areaId')) {
+            <p class="field-error">{{ errorKeyForControl(employmentForm, 'areaId') | translate }}</p>
+          }
+        </div>
+        <div class="field">
+          <label for="positionId">{{ 'employee.position' | translate }}</label>
+          <select id="positionId" class="input" formControlName="positionId" [class.invalid]="isInvalidControl(employmentForm, 'positionId')">
+            <option [ngValue]="null" disabled>{{ 'common.select' | translate }}</option>
+            @for (position of positionsOfArea(); track position.id) {
+              <option [ngValue]="position.id">{{ position.title }}</option>
+            }
+          </select>
+          @if (isInvalidControl(employmentForm, 'positionId')) {
+            <p class="field-error">{{ errorKeyForControl(employmentForm, 'positionId') | translate }}</p>
+          }
+        </div>
+        <div class="field">
+          <label for="contractType">{{ 'employee.contract-type' | translate }}</label>
+          <select id="contractType" class="input" formControlName="contractType" [class.invalid]="isInvalidControl(employmentForm, 'contractType')">
+            @for (type of contractTypes; track type) {
+              <option [ngValue]="type">{{ 'contract-type.' + type | translate }}</option>
+            }
+          </select>
+          @if (isInvalidControl(employmentForm, 'contractType')) {
+            <p class="field-error">{{ errorKeyForControl(employmentForm, 'contractType') | translate }}</p>
+          }
+        </div>
+        <div class="field">
+          <label for="hireDate">{{ 'employee.hire-date' | translate }}</label>
+          <input id="hireDate" class="input" type="date" formControlName="hireDate" [class.invalid]="isInvalidControl(employmentForm, 'hireDate')"/>
+          @if (isInvalidControl(employmentForm, 'hireDate')) {
+            <p class="field-error">{{ errorKeyForControl(employmentForm, 'hireDate') | translate }}</p>
+          }
+        </div>
+        <div class="field">
+          <label for="contractEndDate">{{ 'employee.contract-end-date' | translate }}</label>
+          <input id="contractEndDate" class="input" type="date" formControlName="contractEndDate"
+                 [min]="employmentForm.controls.hireDate.value"
+                 [class.invalid]="employmentForm.touched && employmentForm.errors"/>
+          @if (employmentForm.touched && employmentForm.hasError('contractEndDateRequired')) {
+            <p class="field-error">{{ 'employee.error.contract-end-date-required' | translate }}</p>
+          } @else if (employmentForm.hasError('contractEndBeforeHire')) {
+            <p class="field-error">{{ 'employee.error.contract-end-before-hire' | translate }}</p>
+          }
+        </div>
+        <div class="field">
+          <label for="directManagerId">{{ 'employee.direct-manager' | translate }}</label>
+          <select id="directManagerId" class="input" formControlName="directManagerId" [class.invalid]="isInvalidControl(employmentForm, 'directManagerId')">
+            <option [ngValue]="null">{{ 'employee.no-manager' | translate }}</option>
+            @for (manager of managerCandidates(); track manager.id) {
+              <option [ngValue]="manager.id">{{ manager.fullName }} · {{ manager.position?.title ?? '-' }}</option>
+            }
+          </select>
+          @if (isInvalidControl(employmentForm, 'directManagerId')) {
+            <p class="field-error">{{ errorKeyForControl(employmentForm, 'directManagerId') | translate }}</p>
+          }
+        </div>
+            </div>
+          </form>
+        }
+        @case ('documents') {
+          <form [formGroup]="documentForm" novalidate>
+            <h2 class="card-title">{{ 'employee-form.step-documents' | translate }}</h2>
+            <p class="muted">{{ 'employee-form.documents-hint' | translate }}</p>
+            <div class="form-grid">
+              <div class="field">
+                <label for="documentType">{{ 'document-upload.type' | translate }}</label>
+                <select id="documentType" class="input" formControlName="documentType" [class.invalid]="isInvalidControl(documentForm, 'documentType')">
+                  <option [ngValue]="null" disabled>{{ 'common.select' | translate }}</option>
+                  @for (type of documentTypes; track type) {
+                    <option [ngValue]="type">{{ 'document-type.' + type | translate }}</option>
+                  }
+                </select>
+              </div>
+              <div class="field">
+                <span class="field-label">{{ 'document-upload.file' | translate }}</span>
+                <input #fileInput type="file" accept=".pdf,.jpg,.jpeg,.png" hidden (change)="onFileSelected($event, fileInput)"/>
+                <button type="button" class="input file-button" [class.invalid]="fileError()" (click)="fileInput.click()">
+                  <mat-icon aria-hidden="true">attach_file</mat-icon>
+                  <span>{{ selectedFile()?.name ?? ('document-upload.choose-file' | translate) }}</span>
+                </button>
+                @if (fileError(); as error) {
+                  <p class="field-error">{{ error.key | translate: error.params }}</p>
+                }
+              </div>
+            </div>
+            <div class="add-row">
+              <button mat-stroked-button type="button" [disabled]="!selectedFile() || !!fileError()" (click)="addPendingDocument()">
+                <mat-icon>add</mat-icon>
+                {{ 'employee-form.add-document' | translate }}
+              </button>
+              <span class="muted">{{ 'document-upload.hint' | translate }}</span>
+            </div>
+            <ul class="pending-list">
+              @for (document of pendingDocuments(); track $index) {
+                <li>
+                  <mat-icon aria-hidden="true">description</mat-icon>
+                  <div class="pending-info">
+                    <span class="cell-strong">{{ 'document-type.' + document.documentType | translate }}</span>
+                    <span class="muted">{{ document.file.name }} · {{ formatSize(document.file.size) }}</span>
+                  </div>
+                  <button class="icon-action" type="button" (click)="removePendingDocument($index)" [attr.aria-label]="'employee-form.remove-document' | translate">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </li>
+              } @empty {
+                <li class="muted">{{ 'employee-form.no-documents' | translate }}</li>
+              }
+            </ul>
+          </form>
+        }
+        @case ('review') {
+          <h2 class="card-title">{{ 'employee-form.step-review' | translate }}</h2>
+          <h3 class="review-title">{{ 'employee-form.step-personal' | translate }}</h3>
+          <dl class="kv-list">
+            <div class="kv-row"><dt>{{ 'employee.full-name' | translate }}</dt><dd>{{ personalForm.value.firstName }} {{ personalForm.value.lastName }}</dd></div>
+            <div class="kv-row"><dt>{{ 'employee.identity-document' | translate }}</dt><dd>{{ personalForm.value.identityDocumentType }} {{ personalForm.value.identityDocumentNumber }}</dd></div>
+            <div class="kv-row"><dt>{{ 'employee.birth-date' | translate }}</dt><dd>{{ personalForm.value.birthDate | localDate }}</dd></div>
+            <div class="kv-row"><dt>{{ 'employee.email' | translate }}</dt><dd>{{ personalForm.value.email }}</dd></div>
+            <div class="kv-row"><dt>{{ 'employee.phone-number' | translate }}</dt><dd>{{ personalForm.value.phoneNumber }}</dd></div>
+            <div class="kv-row"><dt>{{ 'employee.address' | translate }}</dt><dd>{{ personalForm.value.addressStreet }}, {{ personalForm.value.addressDistrict }}, {{ personalForm.value.addressProvince }}, {{ personalForm.value.addressDepartment }}</dd></div>
+          </dl>
+          <h3 class="review-title">{{ 'employee-form.step-employment' | translate }}</h3>
+          <dl class="kv-list">
+            <div class="kv-row"><dt>{{ 'employee.area' | translate }}</dt><dd>{{ areaName() }}</dd></div>
+            <div class="kv-row"><dt>{{ 'employee.position' | translate }}</dt><dd>{{ positionTitle() }}</dd></div>
+            <div class="kv-row"><dt>{{ 'employee.contract-type' | translate }}</dt><dd>{{ 'contract-type.' + employmentForm.getRawValue().contractType | translate }}</dd></div>
+            <div class="kv-row"><dt>{{ 'employee.hire-date' | translate }}</dt><dd>{{ employmentForm.value.hireDate | localDate }}</dd></div>
+            @if (employmentForm.value.contractEndDate) {
+              <div class="kv-row"><dt>{{ 'employee.contract-end-date' | translate }}</dt><dd>{{ employmentForm.value.contractEndDate | localDate }}</dd></div>
+            }
+            <div class="kv-row"><dt>{{ 'employee.direct-manager' | translate }}</dt><dd>{{ managerName() }}</dd></div>
+          </dl>
+          @if (!isEdit) {
+            <h3 class="review-title">{{ 'employee-form.step-documents' | translate }}</h3>
+            <p class="muted">{{ 'employee-form.documents-count' | translate: { count: pendingDocuments().length } }}</p>
+          }
+        }
+      }
+
+      <div class="form-footer">
+        @if (stepIndex() === 0) {
+          <a mat-stroked-button [routerLink]="isEdit ? ['/workspace/employees', employeeId] : ['/workspace/employees']">{{ 'common.cancel' | translate }}</a>
+        } @else {
+          <button mat-stroked-button type="button" (click)="back()">{{ 'employee-form.back' | translate }}</button>
+        }
+        <span class="spacer"></span>
+        @if (currentStep() === 'review') {
+          <button mat-flat-button type="button" (click)="submit()">{{ (isEdit ? 'common.save' : 'employee-form.register') | translate }}</button>
+        } @else {
+          <button mat-flat-button type="button" (click)="next()">{{ 'employee-form.continue' | translate: { step: stepIndex() + 2 } }}</button>
+        }
+      </div>
+    </div>
+
+    <aside class="form-aside">
+      @if (!isEdit) {
+        <section class="card card-body">
+          <h2 class="aside-title">{{ 'employee-form.on-save-title' | translate }}</h2>
+          <ol class="numbered">
+            <li><span>1</span>{{ 'employee-form.on-save-1' | translate }}</li>
+            <li><span>2</span>{{ 'employee-form.on-save-2' | translate }}</li>
+            <li><span>3</span>{{ 'employee-form.on-save-3' | translate }}</li>
+            <li><span>4</span>{{ 'employee-form.on-save-4' | translate }}</li>
+          </ol>
+        </section>
+      }
+      <section class="card card-body">
+        <h2 class="aside-title">{{ 'employee-form.rules-title' | translate }}</h2>
+        <p class="aside-text">{{ 'employee-form.rules-' + currentStep() | translate }}</p>
+      </section>
+    </aside>
+  </div>
+</section>

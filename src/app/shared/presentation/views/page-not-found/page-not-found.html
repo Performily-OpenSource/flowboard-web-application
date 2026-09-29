@@ -1,1 +1,8 @@
-<p>page-not-found works!</p>
+<section class="page">
+  <div class="card empty-state">
+    <span class="empty-icon" aria-hidden="true"><mat-icon>search_off</mat-icon></span>
+    <h1 class="empty-title">{{ 'page-not-found.title' | translate }}</h1>
+    <p [innerHTML]="'page-not-found.content' | translate: { invalid_path: invalidPath }"></p>
+    <button mat-flat-button (click)="navigateToHome()">{{ 'page-not-found.go-home' | translate }}</button>
+  </div>
+</section>

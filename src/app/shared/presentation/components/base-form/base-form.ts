@@ -45,4 +45,19 @@ export class BaseForm {
       errorMessages += this.errorMessageForControl(controlName, errorKey));
     return errorMessages;
   }
+
+  /**
+   * Returns the i18n key of the first error of a control, to show translated messages.
+   * @param form        - The form group containing the control.
+   * @param controlName - The name of the control to check.
+   * @returns A key such as 'validation.required', or an empty string when the control is valid.
+   * @protected
+   */
+  protected errorKeyForControl(form: FormGroup, controlName: string): string {
+    const errors = form.controls[controlName].errors;
+    if (!errors) return '';
+    const errorKey = Object.keys(errors)[0];
+    const knownErrors = ['required', 'maxlength', 'pattern', 'email', 'min', 'futureDate'];
+    return `validation.${knownErrors.includes(errorKey) ? errorKey : 'invalid'}`;
+  }
 }

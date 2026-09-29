@@ -1,0 +1,64 @@
+<section class="page">
+  <a class="back-link" [routerLink]="['/workspace/employees', employeeId]"><mat-icon>chevron_left</mat-icon>{{ 'employee-documents.back' | translate }}</a>
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{{ 'employee-documents.title' | translate }}</h1>
+      <p class="page-subtitle">{{ 'employee-documents.subtitle' | translate: { name: employee()?.fullName ?? '' } }}</p>
+    </div>
+    <button mat-flat-button (click)="openUploadDialog()">
+      <mat-icon>upload</mat-icon>
+      {{ 'employee-documents.upload' | translate }}
+    </button>
+  </header>
+
+  @if (store.loading()) {
+    <mat-progress-bar mode="indeterminate"/>
+  }
+  @if (store.error()) {
+    <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ store.error() }}</span></div>
+  }
+
+  <div class="filters">
+    <span class="filter-chip" [class.active]="typeFilter() !== null">
+      <button class="clear" type="button" [matMenuTriggerFor]="typeMenu">
+        {{ 'employee-documents.type' | translate }}: {{ typeFilter() !== null ? ('document-type.' + typeFilter() | translate) : ('employees.all' | translate) }}
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      @if (typeFilter() !== null) {
+        <button class="clear" type="button" (click)="typeFilter.set(null)" [attr.aria-label]="'employees.remove-filter' | translate"><mat-icon>close</mat-icon></button>
+      }
+    </span>
+    <mat-menu #typeMenu="matMenu">
+      <button mat-menu-item (click)="typeFilter.set(null)">{{ 'employees.all' | translate }}</button>
+      @for (type of documentTypes; track type) {
+        <button mat-menu-item (click)="typeFilter.set(type)">{{ 'document-type.' + type | translate }}</button>
+      }
+    </mat-menu>
+
+    <span class="filter-chip" [class.active]="yearFilter() !== null">
+      <button class="clear" type="button" [matMenuTriggerFor]="yearMenu">
+        {{ 'employee-documents.year' | translate }}: {{ yearFilter() ?? ('employees.all' | translate) }}
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      @if (yearFilter() !== null) {
+        <button class="clear" type="button" (click)="yearFilter.set(null)" [attr.aria-label]="'employees.remove-filter' | translate"><mat-icon>close</mat-icon></button>
+      }
+    </span>
+    <mat-menu #yearMenu="matMenu">
+      <button mat-menu-item (click)="yearFilter.set(null)">{{ 'employees.all' | translate }}</button>
+      @for (year of years(); track year) {
+        <button mat-menu-item (click)="yearFilter.set(year)">{{ year }}</button>
+      }
+    </mat-menu>
+
+    <span class="spacer"></span>
+    <span class="muted">{{ 'employee-documents.count' | translate: { count: documents().length } }} · {{ totalSize() }}</span>
+  </div>
+
+  <app-employee-document-table [documents]="documents()" (deleteDocument)="deleteDocument($event)"/>
+
+  <div class="info-note retention-note">
+    <mat-icon aria-hidden="true">info</mat-icon>
+    <span>{{ 'employee-documents.retention' | translate }}</span>
+  </div>
+</section>
