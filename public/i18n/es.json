@@ -1,0 +1,357 @@
+{
+  "option": {
+    "main-navigation": "Navegación principal",
+    "toggle-menu": "Abrir o cerrar menú",
+    "dashboard": "Dashboard",
+    "employees": "Colaboradores",
+    "organization": "Organización"
+  },
+  "breadcrumb": {
+    "dashboard": "Dashboard",
+    "about": "Acerca de",
+    "page-not-found": "Página no encontrada",
+    "employees": "Colaboradores",
+    "new": "Nuevo",
+    "edit": "Editar",
+    "file": "Expediente",
+    "organization": "Organización",
+    "organization-chart": "Organigrama",
+    "organization-structure": "Áreas y posiciones"
+  },
+  "home": {
+    "title": "Bienvenido a Flowboard",
+    "content": "Gestiona colaboradores, áreas, posiciones y el organigrama desde una única fuente de verdad."
+  },
+  "about": {
+    "title": "Acerca de Flowboard",
+    "content": "Flowboard es una plataforma de recursos humanos desarrollada por Performily para organizaciones peruanas en crecimiento."
+  },
+  "page-not-found": {
+    "title": "Página no encontrada",
+    "content": "La ruta <strong>{{ invalid_path }}</strong> no es válida.",
+    "go-home": "Ir al dashboard"
+  },
+  "common": {
+    "activate": "Activar",
+    "deactivate": "Desactivar",
+    "active-female": "Activa",
+    "inactive-female": "Inactiva",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "edit": "Editar",
+    "save": "Guardar cambios",
+    "select": "Seleccionar"
+  },
+  "validation": {
+    "required": "Este campo es obligatorio.",
+    "maxlength": "El valor es demasiado largo.",
+    "pattern": "El formato no es válido.",
+    "email": "Ingresa un correo válido.",
+    "min": "El valor debe ser mayor a cero.",
+    "futureDate": "La fecha no puede ser posterior a hoy.",
+    "invalid": "El valor no es válido."
+  },
+  "employees": {
+    "title": "Colaboradores",
+    "summary": "{{ active }} activos, {{ terminated }} cesados y {{ suspended }} suspendidos.",
+    "no-records": "Ningún registro coincide con los filtros aplicados.",
+    "export": "Exportar",
+    "new": "Nuevo colaborador",
+    "search": "Buscar por nombre o documento",
+    "area": "Área",
+    "position": "Puesto",
+    "status": "Estado",
+    "contract-type": "Tipo de contrato",
+    "all": "todos",
+    "all-female": "todas",
+    "remove-filter": "Quitar filtro",
+    "clear-filters": "Limpiar filtros",
+    "employee": "Colaborador",
+    "document": "Documento",
+    "hire-date": "Ingreso",
+    "actions": "Acciones",
+    "edit": "Editar colaborador",
+    "more-actions": "Más acciones",
+    "view": "Ver ficha",
+    "documents": "Expediente documental",
+    "pagination": "Paginación",
+    "range": "Mostrando {{ start }} a {{ end }} de {{ total }} colaboradores",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "no-results-title": "Ningún colaborador coincide con esos filtros",
+    "no-results-content": "Prueba quitando alguno de los filtros o busca por nombre y documento.",
+    "search-by-name": "Buscar por nombre"
+  },
+  "employee": {
+    "first-name": "Nombres",
+    "last-name": "Apellidos",
+    "full-name": "Nombre completo",
+    "identity-document": "Documento de identidad",
+    "identity-document-type": "Tipo de documento",
+    "identity-document-number": "Número de documento",
+    "birth-date": "Fecha de nacimiento",
+    "phone-number": "Teléfono",
+    "email": "Correo corporativo",
+    "address": "Dirección",
+    "address-street": "Dirección",
+    "address-district": "Distrito",
+    "address-province": "Provincia",
+    "address-department": "Departamento",
+    "area": "Área",
+    "position": "Puesto",
+    "contract-type": "Tipo de contrato",
+    "hire-date": "Fecha de ingreso",
+    "contract-end-date": "Fin de contrato",
+    "direct-manager": "Jefe directo",
+    "no-manager": "No asignado",
+    "termination-date": "Fecha de cese",
+    "termination-reason": "Motivo del cese",
+    "error": {
+      "identity-document-taken": "El documento {{ number }} ya pertenece a {{ owner }}, con vínculo activo.",
+      "contract-end-date-required": "Un contrato a plazo fijo requiere fecha de fin.",
+      "contract-end-before-hire": "El fin de contrato no puede ser anterior a la fecha de ingreso."
+    }
+  },
+  "employee-form": {
+    "back-to-list": "Volver a colaboradores",
+    "new-title": "Nuevo colaborador",
+    "edit-title": "Editar colaborador",
+    "new-subtitle": "Al guardar, el sistema genera las credenciales y envía el correo de bienvenida.",
+    "edit-subtitle": "Actualiza los datos personales y laborales de la ficha.",
+    "steps": "Pasos del registro",
+    "step-personal": "Datos personales",
+    "step-employment": "Información laboral",
+    "step-documents": "Expediente",
+    "step-review": "Revisión",
+    "continue": "Continuar al paso {{ step }}",
+    "back": "Atrás",
+    "register": "Registrar colaborador",
+    "step-errors": "Hay {{ errors }}. Corrige lo marcado antes de avanzar.",
+    "missing-fields": "{{ count }} campos obligatorios sin completar",
+    "invalid-fields": "{{ count }} campos con formato inválido",
+    "duplicated-document": "un documento de identidad que ya pertenece a un colaborador activo",
+    "documents-hint": "Opcional. Puedes adjuntar los documentos iniciales ahora o después desde el expediente.",
+    "add-document": "Agregar documento",
+    "remove-document": "Quitar documento",
+    "no-documents": "No se agregaron documentos.",
+    "documents-count": "Se adjuntarán {{ count }} documentos.",
+    "on-save-title": "Qué pasa al guardar",
+    "on-save-1": "Se crea la ficha del colaborador",
+    "on-save-2": "Se genera el usuario con su correo corporativo",
+    "on-save-3": "Se envía una contraseña temporal por correo",
+    "on-save-4": "Se exige cambiarla en el primer ingreso",
+    "rules-title": "Reglas de esta sección",
+    "rules-personal": "El documento de identidad no puede repetirse entre colaboradores activos. Si la persona fue cesada antes, usa la opción de reincorporar en lugar de crear una ficha nueva.",
+    "rules-employment": "El puesto debe pertenecer al área elegida. Un contrato a plazo fijo requiere fecha de fin. Un colaborador no puede ser su propio jefe y la jerarquía no admite ciclos.",
+    "rules-documents": "Solo se aceptan los tipos del catálogo: PDF, JPG o PNG de hasta 5 MB cada uno.",
+    "rules-review": "Revisa los datos antes de guardar. Puedes volver a cualquier paso anterior para corregirlos."
+  },
+  "employee-detail": {
+    "back": "Volver a colaboradores",
+    "hired": "Ingreso",
+    "edit": "Editar ficha",
+    "terminate": "Registrar cese",
+    "reinstate": "Reincorporar",
+    "view-chart": "Ver organigrama",
+    "more-actions": "Más acciones",
+    "assign-manager": "Asignar jefe directo",
+    "change-status": "Cambiar estado",
+    "open-documents": "Ver expediente",
+    "personal-tab": "Datos personales",
+    "employment-tab": "Información laboral",
+    "documents-tab": "Expediente documental",
+    "file": "Expediente",
+    "reference-salary": "Sueldo mínimo del puesto",
+    "salary-note-title": "Sobre la remuneración",
+    "salary-note": "Flowboard muestra el sueldo de referencia del puesto. El cálculo de la planilla y las boletas provienen del sistema contable de la organización.",
+    "not-found": "No se encontró al colaborador."
+  },
+  "employee-status": {
+    "ACTIVE": "Activo",
+    "SUSPENDED": "Suspendido",
+    "TERMINATED": "Cesado"
+  },
+  "employee-status-plural": {
+    "ACTIVE": "activos",
+    "SUSPENDED": "suspendidos",
+    "TERMINATED": "cesados"
+  },
+  "identity-document-type": {
+    "DNI": "DNI",
+    "CE": "Carné de extranjería",
+    "PASSPORT": "Pasaporte"
+  },
+  "contract-type": {
+    "INDEFINITE": "Indefinido",
+    "FIXED_TERM": "Plazo fijo",
+    "PART_TIME": "Tiempo parcial",
+    "INTERNSHIP": "Prácticas"
+  },
+  "contract-type-long": {
+    "INDEFINITE": "Contrato indefinido",
+    "FIXED_TERM": "Contrato a plazo fijo",
+    "PART_TIME": "Contrato a tiempo parcial",
+    "INTERNSHIP": "Convenio de prácticas"
+  },
+  "assignment-change-type": {
+    "HIRE": "Ingreso",
+    "REASSIGNMENT": "Reasignación",
+    "REINSTATEMENT": "Reincorporación"
+  },
+  "document-type": {
+    "IDENTITY_DOCUMENT": "Documento de identidad",
+    "EMPLOYMENT_CONTRACT": "Contrato de trabajo",
+    "CONTRACT_ADDENDUM": "Adenda de contrato",
+    "PENSION_AFFILIATION": "Constancia de afiliación AFP",
+    "HEALTH_INSURANCE": "Seguro de salud",
+    "EDUCATION_CERTIFICATE": "Certificado de estudios",
+    "CRIMINAL_RECORD_CERTIFICATE": "Certificado de antecedentes",
+    "WARNING_LETTER": "Carta de amonestación",
+    "COMMENDATION_LETTER": "Carta de felicitación"
+  },
+  "job-assignment-history": {
+    "title": "Historial de asignaciones",
+    "current": "actual",
+    "empty": "No hay asignaciones registradas."
+  },
+  "employee-documents": {
+    "back": "Volver a la ficha",
+    "title": "Expediente documental",
+    "subtitle": "Documentos de {{ name }}. Solo Recursos Humanos accede a este expediente.",
+    "upload": "Subir documento",
+    "type": "Tipo",
+    "year": "Año",
+    "count": "{{ count }} documentos",
+    "document": "Documento",
+    "uploaded-at": "Fecha de carga",
+    "size": "Tamaño",
+    "actions": "Acciones",
+    "view": "Ver",
+    "download": "Descargar",
+    "delete": "Eliminar",
+    "processing": "Archivo pendiente de almacenamiento",
+    "empty": "No hay documentos en el expediente.",
+    "retention": "El expediente conserva los documentos aun después del cese, por el plazo que exige la normativa laboral. Flowboard no reemplaza la custodia del original en físico."
+  },
+  "document-upload": {
+    "title": "Subir documento",
+    "type": "Tipo de documento",
+    "file": "Archivo",
+    "drop": "Arrastra el archivo o busca en tu equipo",
+    "hint": "PDF, JPG o PNG, hasta 5 MB",
+    "choose-file": "Elegir archivo",
+    "remove": "Quitar archivo",
+    "confirm": "Subir documento",
+    "error": {
+      "invalid-type": "Solo se aceptan archivos PDF, JPG o PNG.",
+      "too-large": "El archivo pesa {{ size }} y el límite es 5 MB. Comprímelo o súbelo en dos partes."
+    }
+  },
+  "termination-dialog": {
+    "title": "Registrar cese",
+    "hire-date": "Ingreso",
+    "reports": "Colaboradores a cargo",
+    "none": "Ninguno",
+    "date": "Fecha de cese",
+    "new-status": "Nuevo estado",
+    "reason": "Motivo del cese",
+    "reason-placeholder": "Escribe el motivo",
+    "info": "Su expediente y su historial se conservan. La cuenta deja de poder iniciar sesión y las solicitudes en trámite se cierran automáticamente. Podrás reincorporarla más adelante sin crear una ficha nueva.",
+    "confirm": "Registrar cese",
+    "blocked-title": "No se puede registrar el cese",
+    "blocked-message": "{{ name }} tiene {{ count }} colaboradores que le reportan. Reasígnalos a otro jefe antes de registrar su cese: si no, esas personas quedarían sin aprobador y sus solicitudes no podrían rutearse.",
+    "reports-title": "Colaboradores a su cargo",
+    "more": "y {{ count }} colaboradores más",
+    "go-reassign": "Ir a reasignar",
+    "error": {
+      "before-hire": "La fecha de cese no puede ser anterior a la fecha de ingreso."
+    }
+  },
+  "reinstatement-dialog": {
+    "title": "Reincorporar colaborador",
+    "terminated-on": "Cesado el {{ date }}",
+    "last-area": "Última área",
+    "last-position": "Última posición",
+    "document": "Documento",
+    "new-area": "Nueva área",
+    "new-position": "Nueva posición",
+    "date": "Fecha de reingreso",
+    "info": "Se reactiva la ficha existente y su cuenta de acceso, conservando el expediente anterior. Un nuevo periodo laboral inicia en la fecha de reingreso.",
+    "confirm": "Reincorporar"
+  },
+  "status-dialog": {
+    "title": "Cambiar estado",
+    "new-status": "Nuevo estado",
+    "info": "Un colaborador suspendido conserva su ficha, pero no puede usar la plataforma hasta que se reactive. Para terminar el vínculo usa Registrar cese.",
+    "confirm": "Cambiar estado"
+  },
+  "manager-dialog": {
+    "title": "Asignar jefe directo",
+    "current-manager": "Jefe directo actual",
+    "new-manager": "Nuevo jefe directo",
+    "placeholder": "Escribe un nombre",
+    "cycle": "{{ manager }} reporta a {{ employee }}. Asignarlo como su jefe crearía un ciclo en la jerarquía.",
+    "cycle-detected": "Ciclo detectado",
+    "remove": "Quitar jefe",
+    "confirm": "Asignar jefe"
+  },
+  "organization": {
+    "chart-tab": "Organigrama",
+    "structure-tab": "Áreas y posiciones"
+  },
+  "organization-chart": {
+    "title": "Organigrama",
+    "subtitle": "Se construye solo con el jefe directo declarado en cada ficha. Esta jerarquía es la que rutea las aprobaciones.",
+    "export": "Exportar",
+    "empty": "No hay colaboradores para mostrar.",
+    "pending-reassignment": "Pendiente de reasignación",
+    "pending-hint": "Colaboradores activos cuyo jefe directo ya no está activo.",
+    "rule": "Un colaborador no puede ser su propio jefe y no se permiten ciclos: si A reporta a B, B no puede reportar a A ni a nadie que dependa de A."
+  },
+  "organization-structure": {
+    "title": "Áreas y posiciones",
+    "subtitle": "Se modelan como datos, no como código: crear un área o un puesto no requiere desplegar la aplicación.",
+    "new-position": "Nueva posición",
+    "new-area": "Nueva área",
+    "areas": "Áreas",
+    "area-counts": "{{ employees }} colaboradores · {{ positions }} posiciones",
+    "area-actions": "Acciones del área",
+    "no-areas": "No hay áreas registradas.",
+    "positions-of": "Posiciones de {{ area }}",
+    "position": "Posición",
+    "reference-salary": "Sueldo mínimo",
+    "status": "Estado",
+    "actions": "Acciones",
+    "position-actions": "Acciones de la posición",
+    "no-positions": "Esta área todavía no tiene posiciones.",
+    "salary-note": "El sueldo mínimo del puesto es una referencia para el registro de la remuneración asignada. Flowboard no calcula ni valida montos de planilla."
+  },
+  "area-dialog": {
+    "new-title": "Nueva área",
+    "edit-title": "Editar área",
+    "name": "Nombre del área",
+    "description": "Descripción",
+    "description-placeholder": "Qué hace esta área dentro de la organización",
+    "status": "Estado",
+    "create": "Crear área",
+    "error": {
+      "name-taken": "Ya existe un área con ese nombre. Los nombres de área no pueden repetirse.",
+      "has-employees": "El área tiene colaboradores activos. Reasígnalos antes de desactivarla."
+    }
+  },
+  "position-dialog": {
+    "new-title": "Nueva posición",
+    "edit-title": "Editar posición",
+    "name": "Nombre de la posición",
+    "name-placeholder": "por ejemplo, Coordinador de Turno",
+    "area": "Área",
+    "reference-salary": "Sueldo mínimo",
+    "currency": "Moneda",
+    "info": "El sueldo mínimo es referencial para el área de Recursos Humanos al registrar la remuneración de cada colaborador.",
+    "create": "Crear posición",
+    "error": {
+      "salary": "Debe ser mayor a cero.",
+      "title-taken": "Esta área ya tiene una posición con ese nombre."
+    }
+  }
+}

@@ -1,0 +1,357 @@
+{
+  "option": {
+    "main-navigation": "Main navigation",
+    "toggle-menu": "Toggle menu",
+    "dashboard": "Dashboard",
+    "employees": "Employees",
+    "organization": "Organization"
+  },
+  "breadcrumb": {
+    "dashboard": "Dashboard",
+    "about": "About",
+    "page-not-found": "Page not found",
+    "employees": "Employees",
+    "new": "New",
+    "edit": "Edit",
+    "file": "File",
+    "organization": "Organization",
+    "organization-chart": "Organization chart",
+    "organization-structure": "Areas and positions"
+  },
+  "home": {
+    "title": "Welcome to Flowboard",
+    "content": "Manage employees, areas, positions and the organization chart from a single source of truth."
+  },
+  "about": {
+    "title": "About Flowboard",
+    "content": "Flowboard is a human resources platform developed by Performily for growing Peruvian organizations."
+  },
+  "page-not-found": {
+    "title": "Page not found",
+    "content": "The path <strong>{{ invalid_path }}</strong> is not valid.",
+    "go-home": "Go to dashboard"
+  },
+  "common": {
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "active-female": "Active",
+    "inactive-female": "Inactive",
+    "cancel": "Cancel",
+    "close": "Close",
+    "edit": "Edit",
+    "save": "Save changes",
+    "select": "Select"
+  },
+  "validation": {
+    "required": "This field is required.",
+    "maxlength": "The value is too long.",
+    "pattern": "The format is not valid.",
+    "email": "Enter a valid email address.",
+    "min": "The value must be greater than zero.",
+    "futureDate": "The date cannot be later than today.",
+    "invalid": "The value is not valid."
+  },
+  "employees": {
+    "title": "Employees",
+    "summary": "{{ active }} active, {{ terminated }} terminated and {{ suspended }} suspended.",
+    "no-records": "No record matches the applied filters.",
+    "export": "Export",
+    "new": "New employee",
+    "search": "Search by name or document",
+    "area": "Area",
+    "position": "Position",
+    "status": "Status",
+    "contract-type": "Contract type",
+    "all": "all",
+    "all-female": "all",
+    "remove-filter": "Remove filter",
+    "clear-filters": "Clear filters",
+    "employee": "Employee",
+    "document": "Document",
+    "hire-date": "Hire date",
+    "actions": "Actions",
+    "edit": "Edit employee",
+    "more-actions": "More actions",
+    "view": "View profile",
+    "documents": "Employee file",
+    "pagination": "Pagination",
+    "range": "Showing {{ start }} to {{ end }} of {{ total }} employees",
+    "previous": "Previous",
+    "next": "Next",
+    "no-results-title": "No employee matches these filters",
+    "no-results-content": "Try removing some of the filters or search by name and document.",
+    "search-by-name": "Search by name"
+  },
+  "employee": {
+    "first-name": "First names",
+    "last-name": "Last names",
+    "full-name": "Full name",
+    "identity-document": "Identity document",
+    "identity-document-type": "Document type",
+    "identity-document-number": "Document number",
+    "birth-date": "Birth date",
+    "phone-number": "Phone",
+    "email": "Corporate email",
+    "address": "Address",
+    "address-street": "Address",
+    "address-district": "District",
+    "address-province": "Province",
+    "address-department": "Department",
+    "area": "Area",
+    "position": "Position",
+    "contract-type": "Contract type",
+    "hire-date": "Hire date",
+    "contract-end-date": "Contract end date",
+    "direct-manager": "Direct manager",
+    "no-manager": "Not assigned",
+    "termination-date": "Termination date",
+    "termination-reason": "Termination reason",
+    "error": {
+      "identity-document-taken": "The document {{ number }} already belongs to {{ owner }}, with an active employment.",
+      "contract-end-date-required": "A fixed-term contract requires an end date.",
+      "contract-end-before-hire": "The contract end date cannot be before the hire date."
+    }
+  },
+  "employee-form": {
+    "back-to-list": "Back to employees",
+    "new-title": "New employee",
+    "edit-title": "Edit employee",
+    "new-subtitle": "When saving, the system creates the credentials and sends the welcome email.",
+    "edit-subtitle": "Update the personal and employment data of the profile.",
+    "steps": "Registration steps",
+    "step-personal": "Personal data",
+    "step-employment": "Employment information",
+    "step-documents": "File",
+    "step-review": "Review",
+    "continue": "Continue to step {{ step }}",
+    "back": "Back",
+    "register": "Register employee",
+    "step-errors": "There are {{ errors }}. Fix the marked fields before moving on.",
+    "missing-fields": "{{ count }} required fields to complete",
+    "invalid-fields": "{{ count }} fields with an invalid format",
+    "duplicated-document": "an identity document that already belongs to an active employee",
+    "documents-hint": "Optional. You can attach the initial documents now or later from the employee file.",
+    "add-document": "Add document",
+    "remove-document": "Remove document",
+    "no-documents": "No documents added.",
+    "documents-count": "{{ count }} documents will be attached.",
+    "on-save-title": "What happens when saving",
+    "on-save-1": "The employee profile is created",
+    "on-save-2": "The user is generated with the corporate email",
+    "on-save-3": "A temporary password is sent by email",
+    "on-save-4": "It must be changed on the first sign-in",
+    "rules-title": "Rules of this section",
+    "rules-personal": "The identity document cannot repeat among active employees. If the person was terminated before, use the reinstate option instead of creating a new profile.",
+    "rules-employment": "The position must belong to the selected area. A fixed-term contract requires an end date. An employee cannot be their own manager and the hierarchy cannot have cycles.",
+    "rules-documents": "Only the document types of the catalog are accepted: PDF, JPG or PNG up to 5 MB each.",
+    "rules-review": "Check the data before saving. You can go back to any previous step to fix it."
+  },
+  "employee-detail": {
+    "back": "Back to employees",
+    "hired": "Hired",
+    "edit": "Edit profile",
+    "terminate": "Register termination",
+    "reinstate": "Reinstate",
+    "view-chart": "View organization chart",
+    "more-actions": "More actions",
+    "assign-manager": "Assign direct manager",
+    "change-status": "Change status",
+    "open-documents": "Open employee file",
+    "personal-tab": "Personal data",
+    "employment-tab": "Employment information",
+    "documents-tab": "Employee file",
+    "file": "File",
+    "reference-salary": "Position minimum salary",
+    "salary-note-title": "About the salary",
+    "salary-note": "Flowboard shows the reference salary of the position. Payroll and payslips come from the organization's accounting system.",
+    "not-found": "The employee was not found."
+  },
+  "employee-status": {
+    "ACTIVE": "Active",
+    "SUSPENDED": "Suspended",
+    "TERMINATED": "Terminated"
+  },
+  "employee-status-plural": {
+    "ACTIVE": "active",
+    "SUSPENDED": "suspended",
+    "TERMINATED": "terminated"
+  },
+  "identity-document-type": {
+    "DNI": "DNI",
+    "CE": "Foreigner ID (CE)",
+    "PASSPORT": "Passport"
+  },
+  "contract-type": {
+    "INDEFINITE": "Indefinite",
+    "FIXED_TERM": "Fixed term",
+    "PART_TIME": "Part time",
+    "INTERNSHIP": "Internship"
+  },
+  "contract-type-long": {
+    "INDEFINITE": "Indefinite contract",
+    "FIXED_TERM": "Fixed-term contract",
+    "PART_TIME": "Part-time contract",
+    "INTERNSHIP": "Internship agreement"
+  },
+  "assignment-change-type": {
+    "HIRE": "Hire",
+    "REASSIGNMENT": "Reassignment",
+    "REINSTATEMENT": "Reinstatement"
+  },
+  "document-type": {
+    "IDENTITY_DOCUMENT": "Identity document",
+    "EMPLOYMENT_CONTRACT": "Employment contract",
+    "CONTRACT_ADDENDUM": "Contract addendum",
+    "PENSION_AFFILIATION": "Pension affiliation",
+    "HEALTH_INSURANCE": "Health insurance",
+    "EDUCATION_CERTIFICATE": "Education certificate",
+    "CRIMINAL_RECORD_CERTIFICATE": "Criminal record certificate",
+    "WARNING_LETTER": "Warning letter",
+    "COMMENDATION_LETTER": "Commendation letter"
+  },
+  "job-assignment-history": {
+    "title": "Assignment history",
+    "current": "current",
+    "empty": "There are no assignments registered."
+  },
+  "employee-documents": {
+    "back": "Back to profile",
+    "title": "Employee file",
+    "subtitle": "Documents of {{ name }}. Only Human Resources can access this file.",
+    "upload": "Upload document",
+    "type": "Type",
+    "year": "Year",
+    "count": "{{ count }} documents",
+    "document": "Document",
+    "uploaded-at": "Upload date",
+    "size": "Size",
+    "actions": "Actions",
+    "view": "View",
+    "download": "Download",
+    "delete": "Delete",
+    "processing": "File pending storage",
+    "empty": "There are no documents in the file.",
+    "retention": "The file keeps the documents even after the termination, for the period required by labor regulations. Flowboard does not replace the custody of the physical original."
+  },
+  "document-upload": {
+    "title": "Upload document",
+    "type": "Document type",
+    "file": "File",
+    "drop": "Drag the file or browse your computer",
+    "hint": "PDF, JPG or PNG, up to 5 MB",
+    "choose-file": "Choose file",
+    "remove": "Remove file",
+    "confirm": "Upload document",
+    "error": {
+      "invalid-type": "Only PDF, JPG or PNG files are accepted.",
+      "too-large": "The file weighs {{ size }} and the limit is 5 MB. Compress it or upload it in two parts."
+    }
+  },
+  "termination-dialog": {
+    "title": "Register termination",
+    "hire-date": "Hire date",
+    "reports": "Direct reports",
+    "none": "None",
+    "date": "Termination date",
+    "new-status": "New status",
+    "reason": "Termination reason",
+    "reason-placeholder": "Write the reason",
+    "info": "The file and history are kept. The account can no longer sign in and the requests in progress are closed automatically. You can reinstate the employee later without creating a new profile.",
+    "confirm": "Register termination",
+    "blocked-title": "The termination cannot be registered",
+    "blocked-message": "{{ name }} has {{ count }} employees who report to them. Reassign them to another manager before registering the termination: otherwise, those people would have no approver and their requests could not be routed.",
+    "reports-title": "Employees in charge",
+    "more": "and {{ count }} more employees",
+    "go-reassign": "Go to reassign",
+    "error": {
+      "before-hire": "The termination date cannot be before the hire date."
+    }
+  },
+  "reinstatement-dialog": {
+    "title": "Reinstate employee",
+    "terminated-on": "Terminated on {{ date }}",
+    "last-area": "Last area",
+    "last-position": "Last position",
+    "document": "Document",
+    "new-area": "New area",
+    "new-position": "New position",
+    "date": "Reinstatement date",
+    "info": "The existing profile and its access account are reactivated, keeping the previous file. A new employment period starts on the reinstatement date.",
+    "confirm": "Reinstate"
+  },
+  "status-dialog": {
+    "title": "Change status",
+    "new-status": "New status",
+    "info": "A suspended employee keeps the profile but cannot use the platform until reactivated. To end the employment use Register termination.",
+    "confirm": "Change status"
+  },
+  "manager-dialog": {
+    "title": "Assign direct manager",
+    "current-manager": "Current direct manager",
+    "new-manager": "New direct manager",
+    "placeholder": "Type a name",
+    "cycle": "{{ manager }} reports to {{ employee }}. Assigning them as manager would create a cycle in the hierarchy.",
+    "cycle-detected": "Cycle detected",
+    "remove": "Remove manager",
+    "confirm": "Assign manager"
+  },
+  "organization": {
+    "chart-tab": "Organization chart",
+    "structure-tab": "Areas and positions"
+  },
+  "organization-chart": {
+    "title": "Organization chart",
+    "subtitle": "It is built only from the direct manager declared in each profile. This hierarchy routes the approvals.",
+    "export": "Export",
+    "empty": "There are no employees to display.",
+    "pending-reassignment": "Pending reassignment",
+    "pending-hint": "Active employees whose direct manager is no longer active.",
+    "rule": "An employee cannot be their own manager and cycles are not allowed: if A reports to B, B cannot report to A or to anyone who depends on A."
+  },
+  "organization-structure": {
+    "title": "Areas and positions",
+    "subtitle": "They are modeled as data, not as code: creating an area or a position does not require deploying the application.",
+    "new-position": "New position",
+    "new-area": "New area",
+    "areas": "Areas",
+    "area-counts": "{{ employees }} employees · {{ positions }} positions",
+    "area-actions": "Area actions",
+    "no-areas": "There are no areas registered.",
+    "positions-of": "Positions of {{ area }}",
+    "position": "Position",
+    "reference-salary": "Minimum salary",
+    "status": "Status",
+    "actions": "Actions",
+    "position-actions": "Position actions",
+    "no-positions": "This area has no positions yet.",
+    "salary-note": "The minimum salary of the position is a reference for registering the assigned pay. Flowboard does not calculate or validate payroll amounts."
+  },
+  "area-dialog": {
+    "new-title": "New area",
+    "edit-title": "Edit area",
+    "name": "Area name",
+    "description": "Description",
+    "description-placeholder": "What this area does in the organization",
+    "status": "Status",
+    "create": "Create area",
+    "error": {
+      "name-taken": "An area with this name already exists. Area names cannot repeat.",
+      "has-employees": "The area has active employees. Reassign them before deactivating it."
+    }
+  },
+  "position-dialog": {
+    "new-title": "New position",
+    "edit-title": "Edit position",
+    "name": "Position name",
+    "name-placeholder": "for example, Shift Coordinator",
+    "area": "Area",
+    "reference-salary": "Minimum salary",
+    "currency": "Currency",
+    "info": "The minimum salary is a reference for Human Resources when registering the pay of each employee.",
+    "create": "Create position",
+    "error": {
+      "salary": "It must be greater than zero.",
+      "title-taken": "This area already has a position with this name."
+    }
+  }
+}
