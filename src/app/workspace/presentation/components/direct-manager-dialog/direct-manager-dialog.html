@@ -1,0 +1,54 @@
+<div class="dialog">
+  <header class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">{{ 'manager-dialog.title' | translate }}</h2>
+    <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
+  </header>
+  <app-employee-summary-card [employee]="data.employee" [rows]="summaryRows"/>
+
+  <div class="field">
+    <label for="managerSearch">{{ 'manager-dialog.new-manager' | translate }}</label>
+    <div class="search-input" [class.invalid]="cyclePath().length > 0">
+      <mat-icon aria-hidden="true">search</mat-icon>
+      <input id="managerSearch"
+             [value]="displayName(selectedManager())"
+             (input)="onInput($event)"
+             [matAutocomplete]="managerAutocomplete"
+             [placeholder]="'manager-dialog.placeholder' | translate"/>
+    </div>
+    <mat-autocomplete #managerAutocomplete="matAutocomplete" [displayWith]="displayName" (optionSelected)="onSelected($event)">
+      @for (candidate of candidates(); track candidate.id) {
+        <mat-option [value]="candidate">
+          {{ candidate.fullName }} <span class="muted">· {{ candidate.position?.title ?? '-' }}</span>
+        </mat-option>
+      }
+    </mat-autocomplete>
+    @if (cyclePath().length > 0) {
+      <p class="field-error">{{ 'manager-dialog.cycle' | translate: { manager: selectedManager()!.fullName, employee: data.employee.fullName } }}</p>
+    }
+  </div>
+
+  @if (cyclePath().length > 0) {
+    <div class="cycle-box" role="alert">
+      <p class="cycle-title">{{ 'manager-dialog.cycle-detected' | translate }}</p>
+      <div class="cycle-path">
+        @for (person of cyclePath(); track $index; let last = $last) {
+          <span class="cycle-chip">{{ shortName(person) }}</span>
+          @if (!last) {
+            <mat-icon aria-hidden="true">chevron_right</mat-icon>
+          }
+        }
+      </div>
+    </div>
+  }
+
+  <div class="dialog-actions">
+    @if (data.employee.hasDirectManager()) {
+      <button class="text-link" type="button" (click)="removeManager()">{{ 'manager-dialog.remove' | translate }}</button>
+      <span class="spacer"></span>
+    }
+    <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.cancel' | translate }}</button>
+    <button mat-flat-button type="button" [disabled]="!selectedManager() || cyclePath().length > 0" (click)="confirm()">
+      {{ 'manager-dialog.confirm' | translate }}
+    </button>
+  </div>
+</div>

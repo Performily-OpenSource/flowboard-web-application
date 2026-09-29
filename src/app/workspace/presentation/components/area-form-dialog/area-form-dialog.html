@@ -1,0 +1,38 @@
+<form class="dialog" [formGroup]="form" (ngSubmit)="confirm()" novalidate>
+  <header class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">{{ (isEdit ? 'area-dialog.edit-title' : 'area-dialog.new-title') | translate }}</h2>
+    <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
+  </header>
+
+  <div class="field">
+    <label for="areaName">{{ 'area-dialog.name' | translate }}</label>
+    <input id="areaName" class="input" formControlName="name" [class.invalid]="isInvalidControl(form, 'name')"/>
+    @if (form.controls.name.hasError('taken')) {
+      <p class="field-error">{{ 'area-dialog.error.name-taken' | translate }}</p>
+    } @else if (isInvalidControl(form, 'name')) {
+      <p class="field-error">{{ errorKeyForControl(form, 'name') | translate }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="areaDescription">{{ 'area-dialog.description' | translate }}</label>
+    <textarea id="areaDescription" class="input" formControlName="description"
+              [placeholder]="'area-dialog.description-placeholder' | translate"></textarea>
+  </div>
+
+  <div class="field">
+    <label for="areaStatus">{{ 'area-dialog.status' | translate }}</label>
+    <select id="areaStatus" class="input" formControlName="active" [class.invalid]="form.controls.active.invalid">
+      <option [ngValue]="true">{{ 'common.active-female' | translate }}</option>
+      <option [ngValue]="false">{{ 'common.inactive-female' | translate }}</option>
+    </select>
+    @if (form.controls.active.hasError('hasEmployees')) {
+      <p class="field-error">{{ 'area-dialog.error.has-employees' | translate }}</p>
+    }
+  </div>
+
+  <div class="dialog-actions">
+    <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.cancel' | translate }}</button>
+    <button mat-flat-button type="submit">{{ (isEdit ? 'common.save' : 'area-dialog.create') | translate }}</button>
+  </div>
+</form>
