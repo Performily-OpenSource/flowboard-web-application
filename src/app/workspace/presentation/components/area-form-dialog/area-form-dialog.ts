@@ -12,7 +12,6 @@ export interface AreaFormData {
   area?: Area;
 }
 
-/** Creates or edits an area (WA-47, US09). */
 @Component({
   selector: 'app-area-form-dialog',
   imports: [
@@ -46,7 +45,6 @@ export class AreaFormDialog extends BaseForm {
     const value = this.form.getRawValue();
     const name = value.name.trim();
 
-    // US09 scenario 2: the area name cannot repeat.
     const nameTaken = this.store.areas().some(area =>
       area.id !== this.data.area?.id && area.name.toLowerCase() === name.toLowerCase());
     if (nameTaken) {
@@ -54,7 +52,6 @@ export class AreaFormDialog extends BaseForm {
       return;
     }
 
-    // US09 scenario 3: an area with active employees cannot be deactivated.
     if (this.data.area?.active && !value.active && this.store.countActiveEmployeesInArea(this.data.area.id) > 0) {
       this.form.controls.active.setErrors({ hasEmployees: true });
       return;

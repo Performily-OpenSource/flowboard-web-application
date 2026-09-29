@@ -6,7 +6,6 @@ export interface SummaryRow {
   value: string;
 }
 
-/** Card with the employee identity and a few facts, used at the top of the dialogs (WA-49 to WA-52). */
 @Component({
   selector: 'app-employee-summary-card',
   imports: [],

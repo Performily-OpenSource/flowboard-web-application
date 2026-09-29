@@ -26,7 +26,6 @@ import {Position} from '../../../domain/model/position.entity';
 import {AreaFormDialog} from '../../components/area-form-dialog/area-form-dialog';
 import {PositionFormDialog} from '../../components/position-form-dialog/position-form-dialog';
 
-/** Areas and positions catalog (WA-46, US09). */
 @Component({
   selector: 'app-organization-structure',
   imports: [
@@ -63,7 +62,6 @@ export class OrganizationStructure {
 
   private readonly selectedAreaIdSignal = signal<number | null>(null);
 
-  /** The selected area, or the first one when nothing is selected yet. */
   readonly selectedArea = computed<Area | undefined>(() => {
     const areas = this.store.areas();
     return areas.find(area => area.id === this.selectedAreaIdSignal()) ?? areas[0];

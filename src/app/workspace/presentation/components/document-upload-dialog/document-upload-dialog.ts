@@ -15,7 +15,6 @@ export interface DocumentUploadData {
 export const ALLOWED_DOCUMENT_CONTENT_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 export const MAX_DOCUMENT_SIZE_IN_BYTES = 5 * 1024 * 1024;
 
-/** Uploads a document of the catalog to the employee file (WA-54, US17). */
 @Component({
   selector: 'app-document-upload-dialog',
   imports: [
@@ -73,7 +72,6 @@ export class DocumentUploadDialog {
     this.dialogRef.close(true);
   }
 
-  /** US17 scenarios 2 and 3: only PDF or images, up to 5 MB. */
   private setFile(file: File | null) {
     this.file.set(file);
     this.fileError.set(null);

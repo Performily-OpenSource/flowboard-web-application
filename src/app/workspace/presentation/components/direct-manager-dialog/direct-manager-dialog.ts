@@ -12,7 +12,6 @@ export interface DirectManagerData {
   employee: Employee;
 }
 
-/** Assigns the direct manager and blocks self-management and cycles (WA-49, US11). */
 @Component({
   selector: 'app-direct-manager-dialog',
   imports: [

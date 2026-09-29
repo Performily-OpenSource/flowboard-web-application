@@ -18,7 +18,6 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {LocalDatePipe} from '../../../../shared/presentation/pipes/local-date-pipe';
 import {EmployeeDocument} from '../../../domain/model/employee-document.entity';
 
-/** Table of the employee file (WA-53): document, type, upload date, size and actions. */
 @Component({
   selector: 'app-employee-document-table',
   imports: [

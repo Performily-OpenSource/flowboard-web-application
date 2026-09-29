@@ -9,13 +9,11 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {OrganizationChartNode, WorkspaceStore} from '../../../application/workspace.store';
 import {Employee} from '../../../domain/model/employee.entity';
 
-/** A column under a root: the direct report and everyone below, stacked as in WA-43. */
 interface ChartColumn {
   head: Employee;
   descendants: { employee: Employee; depth: number }[];
 }
 
-/** Organization chart built from the direct manager of each profile (WA-43, US12, US13). */
 @Component({
   selector: 'app-organization-chart',
   imports: [
@@ -42,7 +40,6 @@ export class OrganizationChart {
 
   readonly chart = computed(() => this.store.buildOrganizationChart(this.selectedAreaId()));
 
-  /** Each root with its direct reports as columns. */
   readonly trees = computed(() => this.chart().roots.map(root => ({
     root: root.employee,
     columns: root.subordinates.map(child => this.toColumn(child))

@@ -15,7 +15,6 @@ export interface EmployeeReinstatementData {
   employee: Employee;
 }
 
-/** Reinstates a terminated employee with a new area and position (WA-52, US16). */
 @Component({
   selector: 'app-employee-reinstatement-dialog',
   imports: [

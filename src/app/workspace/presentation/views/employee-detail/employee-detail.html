@@ -1,1 +1,149 @@
-<p>employee-detail works!</p>
+<section class="page">
+  <a class="back-link" routerLink="/workspace/employees"><mat-icon>chevron_left</mat-icon>{{ 'employee-detail.back' | translate }}</a>
+
+  @if (store.loading()) {
+    <mat-progress-bar mode="indeterminate"/>
+  }
+  @if (store.error()) {
+    <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ store.error() }}</span></div>
+  }
+
+  @if (employee(); as employee) {
+    <header class="card profile">
+      <span class="avatar avatar-large" aria-hidden="true">{{ initials(employee) }}</span>
+      <div class="profile-summary">
+        <div class="profile-name-row">
+          <h1 class="profile-name">{{ employee.fullName }}</h1>
+          <span class="pill pill-{{ employee.status.toLowerCase() }}">{{ 'employee-status.' + employee.status | translate }}</span>
+        </div>
+        <p class="profile-subtitle">
+          {{ employee.position?.title ?? '-' }} · {{ employee.area?.name ?? '-' }} · {{ 'employee-detail.hired' | translate }} {{ employee.hireDate | localDate }}
+        </p>
+        <div class="profile-tags">
+          <span class="tag">{{ employee.identityDocumentType }} {{ employee.identityDocumentNumber }}</span>
+          <span class="tag">{{ 'contract-type-long.' + employee.contractType | translate }}</span>
+          <span class="tag">{{ 'employee.direct-manager' | translate }}: {{ directManager() ? shortName(directManager()!) : ('employee.no-manager' | translate) }}</span>
+        </div>
+      </div>
+      <div class="profile-actions">
+        <a mat-stroked-button [routerLink]="['/workspace/employees', employee.id, 'edit']">
+          <mat-icon>edit</mat-icon>
+          {{ 'employee-detail.edit' | translate }}
+        </a>
+        @if (employee.isTerminated()) {
+          <button mat-stroked-button (click)="openReinstatementDialog(employee)">{{ 'employee-detail.reinstate' | translate }}</button>
+        } @else {
+          <button mat-stroked-button (click)="openTerminationDialog(employee)">{{ 'employee-detail.terminate' | translate }}</button>
+        }
+        <button mat-flat-button (click)="openOrganizationChart()">{{ 'employee-detail.view-chart' | translate }}</button>
+        <button class="icon-action" type="button" [matMenuTriggerFor]="moreMenu" [attr.aria-label]="'employee-detail.more-actions' | translate">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #moreMenu="matMenu" xPosition="before">
+          @if (!employee.isTerminated()) {
+            <button mat-menu-item (click)="openDirectManagerDialog(employee)">{{ 'employee-detail.assign-manager' | translate }}</button>
+            <button mat-menu-item (click)="openStatusDialog(employee)">{{ 'employee-detail.change-status' | translate }}</button>
+          }
+          <a mat-menu-item [routerLink]="['/workspace/employees', employee.id, 'documents']">{{ 'employee-detail.open-documents' | translate }}</a>
+        </mat-menu>
+      </div>
+    </header>
+
+    <nav class="segmented-tabs" role="tablist">
+      <button role="tab" type="button" [class.active]="tab() === 'personal'" [attr.aria-selected]="tab() === 'personal'" (click)="tab.set('personal')">{{ 'employee-detail.personal-tab' | translate }}</button>
+      <button role="tab" type="button" [class.active]="tab() === 'employment'" [attr.aria-selected]="tab() === 'employment'" (click)="tab.set('employment')">{{ 'employee-detail.employment-tab' | translate }}</button>
+      <button role="tab" type="button" [class.active]="tab() === 'documents'" [attr.aria-selected]="tab() === 'documents'" (click)="tab.set('documents')">{{ 'employee-detail.documents-tab' | translate }}</button>
+    </nav>
+
+    <div class="detail-layout">
+      <div class="detail-main" role="tabpanel">
+        @switch (tab()) {
+          @case ('personal') {
+            <section class="card card-body">
+              <h2 class="card-title">{{ 'employee-detail.personal-tab' | translate }}</h2>
+              <dl class="kv-list">
+                <div class="kv-row"><dt>{{ 'employee.first-name' | translate }}</dt><dd>{{ employee.firstName }}</dd></div>
+                <div class="kv-row"><dt>{{ 'employee.last-name' | translate }}</dt><dd>{{ employee.lastName }}</dd></div>
+                <div class="kv-row"><dt>{{ 'employee.identity-document' | translate }}</dt><dd>{{ 'identity-document-type.' + employee.identityDocumentType | translate }} {{ employee.identityDocumentNumber }}</dd></div>
+                <div class="kv-row"><dt>{{ 'employee.birth-date' | translate }}</dt><dd>{{ employee.birthDate | localDate }}</dd></div>
+                <div class="kv-row"><dt>{{ 'employee.email' | translate }}</dt><dd>{{ employee.email }}</dd></div>
+                <div class="kv-row"><dt>{{ 'employee.phone-number' | translate }}</dt><dd>{{ employee.phoneNumber }}</dd></div>
+                <div class="kv-row"><dt>{{ 'employee.address' | translate }}</dt><dd>{{ employee.fullAddress }}</dd></div>
+              </dl>
+            </section>
+          }
+          @case ('employment') {
+            <section class="card card-body">
+              <h2 class="card-title">{{ 'employee-detail.employment-tab' | translate }}</h2>
+              <dl class="kv-list">
+                <div class="kv-row"><dt>{{ 'employee.area' | translate }}</dt><dd>{{ employee.area?.name ?? '-' }}</dd></div>
+                <div class="kv-row"><dt>{{ 'employee.position' | translate }}</dt><dd>{{ employee.position?.title ?? '-' }}</dd></div>
+                <div class="kv-row"><dt>{{ 'employee.contract-type' | translate }}</dt><dd>{{ 'contract-type.' + employee.contractType | translate }}</dd></div>
+                <div class="kv-row"><dt>{{ 'employee.hire-date' | translate }}</dt><dd>{{ employee.hireDate | localDate }}</dd></div>
+                @if (employee.contractEndDate) {
+                  <div class="kv-row"><dt>{{ 'employee.contract-end-date' | translate }}</dt><dd>{{ employee.contractEndDate | localDate }}</dd></div>
+                }
+                <div class="kv-row">
+                  <dt>{{ 'employee.direct-manager' | translate }}</dt>
+                  <dd>
+                    @if (directManager(); as manager) {
+                      <a [routerLink]="['/workspace/employees', manager.id]">{{ manager.fullName }}</a>
+                    } @else {
+                      {{ 'employee.no-manager' | translate }}
+                    }
+                  </dd>
+                </div>
+                <div class="kv-row">
+                  <dt>{{ 'employee-detail.reference-salary' | translate }}</dt>
+                  <dd>{{ employee.position ? (employee.position.referenceSalaryAmount | currency: employee.position.referenceSalaryCurrency : (employee.position.referenceSalaryCurrency === 'PEN' ? 'S/ ' : 'symbol-narrow')) : '-' }}</dd>
+                </div>
+                @if (employee.isTerminated()) {
+                  <div class="kv-row"><dt>{{ 'employee.termination-date' | translate }}</dt><dd>{{ employee.terminationDate | localDate }}</dd></div>
+                  <div class="kv-row"><dt>{{ 'employee.termination-reason' | translate }}</dt><dd>{{ employee.terminationReason }}</dd></div>
+                }
+              </dl>
+              <div class="info-note">
+                <mat-icon aria-hidden="true">info</mat-icon>
+                <span><strong>{{ 'employee-detail.salary-note-title' | translate }}</strong><br>{{ 'employee-detail.salary-note' | translate }}</span>
+              </div>
+            </section>
+
+            <section class="card card-body">
+              <h2 class="card-title">{{ 'job-assignment-history.title' | translate }}</h2>
+              <app-job-assignment-history [assignments]="store.jobAssignments()"/>
+            </section>
+          }
+          @case ('documents') {
+            <app-employee-document-table [documents]="store.employeeDocuments()" (deleteDocument)="deleteDocument($event)"/>
+          }
+        }
+      </div>
+
+      <aside class="detail-side">
+        <section class="card card-body">
+          <div class="side-head">
+            <h2 class="card-title">{{ 'employee-detail.file' | translate }}</h2>
+            <span class="muted">{{ 'employee-documents.count' | translate: { count: store.employeeDocuments().length } }}</span>
+          </div>
+          @for (document of latestDocuments(); track document.id) {
+            <div class="side-document">
+              <mat-icon aria-hidden="true">description</mat-icon>
+              <div>
+                <p class="side-document-name">{{ 'document-type.' + document.documentType | translate }}</p>
+                <p class="muted">{{ fileExtension(document) }} · {{ formatSize(document.sizeInBytes) }}</p>
+              </div>
+            </div>
+          } @empty {
+            <p class="muted">{{ 'employee-documents.empty' | translate }}</p>
+          }
+          <a class="text-link side-link" [routerLink]="['/workspace/employees', employee.id, 'documents']">{{ 'employee-detail.open-documents' | translate }}</a>
+        </section>
+      </aside>
+    </div>
+  } @else if (!store.loading()) {
+    <div class="card empty-state">
+      <span class="empty-icon" aria-hidden="true"><mat-icon>person_off</mat-icon></span>
+      <h2 class="empty-title">{{ 'employee-detail.not-found' | translate }}</h2>
+    </div>
+  }
+</section>

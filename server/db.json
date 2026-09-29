@@ -1,0 +1,301 @@
+{
+  "areas": [
+    {
+      "id": 1,
+      "name": "Human Resources",
+      "description": "People management and organizational development",
+      "active": true
+    },
+    {
+      "id": 2,
+      "name": "Technology",
+      "description": "Software development and IT support",
+      "active": true
+    },
+    {
+      "id": 3,
+      "name": "Sales",
+      "description": "Commercial team and customer accounts",
+      "active": true
+    }
+  ],
+  "positions": [
+    {
+      "id": 1,
+      "title": "HR Manager",
+      "areaId": 1,
+      "referenceSalaryAmount": 7500.0,
+      "referenceSalaryCurrency": "PEN",
+      "active": true
+    },
+    {
+      "id": 2,
+      "title": "HR Analyst",
+      "areaId": 1,
+      "referenceSalaryAmount": 3800.0,
+      "referenceSalaryCurrency": "PEN",
+      "active": true
+    },
+    {
+      "id": 3,
+      "title": "Tech Lead",
+      "areaId": 2,
+      "referenceSalaryAmount": 9000.0,
+      "referenceSalaryCurrency": "PEN",
+      "active": true
+    },
+    {
+      "id": 4,
+      "title": "Software Developer",
+      "areaId": 2,
+      "referenceSalaryAmount": 5200.0,
+      "referenceSalaryCurrency": "PEN",
+      "active": true
+    },
+    {
+      "id": 5,
+      "title": "Sales Executive",
+      "areaId": 3,
+      "referenceSalaryAmount": 3200.0,
+      "referenceSalaryCurrency": "PEN",
+      "active": true
+    }
+  ],
+  "employees": [
+    {
+      "id": 1,
+      "firstName": "María",
+      "lastName": "Quispe Rojas",
+      "identityDocumentType": "DNI",
+      "identityDocumentNumber": "45872136",
+      "birthDate": "1985-04-12",
+      "email": "maria.quispe@flowboard.pe",
+      "phoneNumber": "+51987654321",
+      "addressStreet": "Av. Javier Prado Este 1234",
+      "addressDistrict": "San Isidro",
+      "addressProvince": "Lima",
+      "addressDepartment": "Lima",
+      "contractType": "INDEFINITE",
+      "hireDate": "2019-03-01",
+      "contractEndDate": null,
+      "status": "ACTIVE",
+      "terminationReason": null,
+      "terminationDate": null,
+      "areaId": 1,
+      "positionId": 1,
+      "directManagerId": null
+    },
+    {
+      "id": 2,
+      "firstName": "Jorge",
+      "lastName": "Salazar Huamán",
+      "identityDocumentType": "DNI",
+      "identityDocumentNumber": "41236587",
+      "birthDate": "1988-09-23",
+      "email": "jorge.salazar@flowboard.pe",
+      "phoneNumber": "+51912345678",
+      "addressStreet": "Jr. Las Begonias 456",
+      "addressDistrict": "Surquillo",
+      "addressProvince": "Lima",
+      "addressDepartment": "Lima",
+      "contractType": "INDEFINITE",
+      "hireDate": "2020-06-15",
+      "contractEndDate": null,
+      "status": "ACTIVE",
+      "terminationReason": null,
+      "terminationDate": null,
+      "areaId": 2,
+      "positionId": 3,
+      "directManagerId": 1
+    },
+    {
+      "id": 3,
+      "firstName": "Lucía",
+      "lastName": "Fernández Paredes",
+      "identityDocumentType": "DNI",
+      "identityDocumentNumber": "72659841",
+      "birthDate": "1996-01-30",
+      "email": "lucia.fernandez@flowboard.pe",
+      "phoneNumber": "+51923456789",
+      "addressStreet": "Calle Los Pinos 789",
+      "addressDistrict": "Miraflores",
+      "addressProvince": "Lima",
+      "addressDepartment": "Lima",
+      "contractType": "FIXED_TERM",
+      "hireDate": "2024-02-01",
+      "contractEndDate": "2026-12-31",
+      "status": "ACTIVE",
+      "terminationReason": null,
+      "terminationDate": null,
+      "areaId": 2,
+      "positionId": 4,
+      "directManagerId": 2
+    },
+    {
+      "id": 4,
+      "firstName": "Carlos",
+      "lastName": "Mendoza Torres",
+      "identityDocumentType": "CE",
+      "identityDocumentNumber": "001234567",
+      "birthDate": "1992-07-08",
+      "email": "carlos.mendoza@flowboard.pe",
+      "phoneNumber": "+51934567890",
+      "addressStreet": "Av. Arequipa 2020",
+      "addressDistrict": "Lince",
+      "addressProvince": "Lima",
+      "addressDepartment": "Lima",
+      "contractType": "INDEFINITE",
+      "hireDate": "2022-08-01",
+      "contractEndDate": null,
+      "status": "ACTIVE",
+      "terminationReason": null,
+      "terminationDate": null,
+      "areaId": 1,
+      "positionId": 2,
+      "directManagerId": 1
+    },
+    {
+      "id": 5,
+      "firstName": "Ana",
+      "lastName": "Ramírez Castillo",
+      "identityDocumentType": "DNI",
+      "identityDocumentNumber": "70123456",
+      "birthDate": "1994-11-17",
+      "email": "ana.ramirez@flowboard.pe",
+      "phoneNumber": "+51945678901",
+      "addressStreet": "Av. La Marina 3050",
+      "addressDistrict": "San Miguel",
+      "addressProvince": "Lima",
+      "addressDepartment": "Lima",
+      "contractType": "PART_TIME",
+      "hireDate": "2021-05-10",
+      "contractEndDate": null,
+      "status": "TERMINATED",
+      "terminationReason": "Voluntary resignation",
+      "terminationDate": "2025-10-31",
+      "areaId": 3,
+      "positionId": 5,
+      "directManagerId": 1
+    },
+    {
+      "id": 6,
+      "firstName": "Diego",
+      "lastName": "Torres Vega",
+      "identityDocumentType": "DNI",
+      "identityDocumentNumber": "73214589",
+      "birthDate": "1999-03-05",
+      "email": "diego.torres@flowboard.pe",
+      "phoneNumber": "+51956789012",
+      "addressStreet": "Jr. Huallaga 321",
+      "addressDistrict": "Cercado de Lima",
+      "addressProvince": "Lima",
+      "addressDepartment": "Lima",
+      "contractType": "INTERNSHIP",
+      "hireDate": "2025-03-01",
+      "contractEndDate": null,
+      "status": "ACTIVE",
+      "terminationReason": null,
+      "terminationDate": null,
+      "areaId": 3,
+      "positionId": 5,
+      "directManagerId": 5
+    }
+  ],
+  "job-assignments": [
+    {
+      "id": 1,
+      "employeeId": 1,
+      "areaId": 1,
+      "positionId": 1,
+      "changeType": "HIRE",
+      "startDate": "2019-03-01",
+      "endDate": null
+    },
+    {
+      "id": 2,
+      "employeeId": 2,
+      "areaId": 2,
+      "positionId": 4,
+      "changeType": "HIRE",
+      "startDate": "2020-06-15",
+      "endDate": "2022-12-31"
+    },
+    {
+      "id": 3,
+      "employeeId": 2,
+      "areaId": 2,
+      "positionId": 3,
+      "changeType": "REASSIGNMENT",
+      "startDate": "2023-01-01",
+      "endDate": null
+    },
+    {
+      "id": 4,
+      "employeeId": 3,
+      "areaId": 2,
+      "positionId": 4,
+      "changeType": "HIRE",
+      "startDate": "2024-02-01",
+      "endDate": null
+    },
+    {
+      "id": 5,
+      "employeeId": 4,
+      "areaId": 1,
+      "positionId": 2,
+      "changeType": "HIRE",
+      "startDate": "2022-08-01",
+      "endDate": null
+    },
+    {
+      "id": 6,
+      "employeeId": 5,
+      "areaId": 3,
+      "positionId": 5,
+      "changeType": "HIRE",
+      "startDate": "2021-05-10",
+      "endDate": "2025-10-31"
+    },
+    {
+      "id": 7,
+      "employeeId": 6,
+      "areaId": 3,
+      "positionId": 5,
+      "changeType": "HIRE",
+      "startDate": "2025-03-01",
+      "endDate": null
+    }
+  ],
+  "employee-documents": [
+    {
+      "id": 1,
+      "employeeId": 1,
+      "documentType": "IDENTITY_DOCUMENT",
+      "fileName": "dni-maria-quispe.pdf",
+      "contentType": "application/pdf",
+      "sizeInBytes": 245760,
+      "storageUrl": "",
+      "uploadedAt": "2019-03-01T09:00:00Z"
+    },
+    {
+      "id": 2,
+      "employeeId": 1,
+      "documentType": "EMPLOYMENT_CONTRACT",
+      "fileName": "contract-maria-quispe.pdf",
+      "contentType": "application/pdf",
+      "sizeInBytes": 512000,
+      "storageUrl": "",
+      "uploadedAt": "2019-03-01T09:05:00Z"
+    },
+    {
+      "id": 3,
+      "employeeId": 3,
+      "documentType": "EMPLOYMENT_CONTRACT",
+      "fileName": "contract-lucia-fernandez.pdf",
+      "contentType": "application/pdf",
+      "sizeInBytes": 498000,
+      "storageUrl": "",
+      "uploadedAt": "2024-02-01T10:00:00Z"
+    }
+  ]
+}

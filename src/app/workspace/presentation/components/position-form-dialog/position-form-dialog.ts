@@ -13,7 +13,6 @@ export interface PositionFormData {
   areaId?: number | null;
 }
 
-/** Creates or edits a position with its minimum reference salary (WA-48). */
 @Component({
   selector: 'app-position-form-dialog',
   imports: [
