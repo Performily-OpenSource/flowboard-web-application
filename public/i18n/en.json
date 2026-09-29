@@ -18,6 +18,12 @@
     "organization-chart": "Organization chart",
     "organization-structure": "Areas and positions"
   },
+  "toolbar": {
+    "search": "Search",
+    "search-hint": "Search employees by name or document and press Enter",
+    "notifications": "Notifications",
+    "no-notifications": "You have no new notifications."
+  },
   "home": {
     "title": "Welcome to Flowboard",
     "content": "Manage employees, areas, positions and the organization chart from a single source of truth."
@@ -62,8 +68,8 @@
     "position": "Position",
     "status": "Status",
     "contract-type": "Contract type",
-    "all": "all",
-    "all-female": "all",
+    "all": "All",
+    "all-female": "All",
     "remove-filter": "Remove filter",
     "clear-filters": "Clear filters",
     "employee": "Employee",
@@ -172,9 +178,9 @@
     "TERMINATED": "Terminated"
   },
   "employee-status-plural": {
-    "ACTIVE": "active",
-    "SUSPENDED": "suspended",
-    "TERMINATED": "terminated"
+    "ACTIVE": "Active",
+    "SUSPENDED": "Suspended",
+    "TERMINATED": "Terminated"
   },
   "identity-document-type": {
     "DNI": "DNI",

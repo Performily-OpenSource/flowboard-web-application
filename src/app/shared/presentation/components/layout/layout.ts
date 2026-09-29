@@ -1,14 +1,12 @@
-import {Component, computed, inject, signal} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {BreakpointObserver} from '@angular/cdk/layout';
-import {ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterLink, RouterOutlet} from '@angular/router';
+import {NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
 import {filter, map} from 'rxjs';
 import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
 import {MatIcon} from '@angular/material/icon';
-import {MatIconButton} from '@angular/material/button';
 import {TranslatePipe} from '@ngx-translate/core';
-import {LanguageSwitcher} from '../language-switcher/language-switcher';
-import {LayoutStore} from '../../../application/layout.store';
+import {Toolbar} from '../toolbar/toolbar';
 
 interface NavigationOption {
   link: string;
@@ -26,17 +24,14 @@ interface NavigationOption {
     MatSidenav,
     MatSidenavContent,
     MatIcon,
-    MatIconButton,
     TranslatePipe,
-    LanguageSwitcher
+    Toolbar
   ],
   templateUrl: './layout.html',
   styleUrl: './layout.css',
 })
 export class Layout {
   private router = inject(Router);
-  private route = inject(ActivatedRoute);
-  readonly layoutStore = inject(LayoutStore);
 
   readonly options = signal<NavigationOption[]>([
     { link: '/home', label: 'option.dashboard', icon: 'grid_view', activeWhen: ['/home'] },
@@ -55,26 +50,12 @@ export class Layout {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd), map(() => this.router.url)),
     { initialValue: this.router.url });
 
-  private readonly deepestRouteData = computed(() => {
-    this.currentUrl();
-    let route = this.route.snapshot;
-    while (route.firstChild) route = route.firstChild;
-    return route.data;
-  });
-
-  readonly breadcrumb = computed<string[]>(() =>
-    (this.deepestRouteData()['breadcrumb'] as string[] | undefined) ?? ['breadcrumb.dashboard']);
-
-  readonly breadcrumbSuffix = computed(() => this.deepestRouteData()['breadcrumbSuffix'] as string | undefined);
-
-  constructor() {
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationStart))
-      .subscribe(() => this.layoutStore.setBreadcrumbDetail(null));
-  }
-
   isActive(option: NavigationOption): boolean {
     const url = this.currentUrl();
     return option.activeWhen.some(path => url.startsWith(path));
+  }
+
+  searchEmployees(text: string) {
+    this.router.navigate(['/workspace/employees'], { queryParams: { search: text } });
   }
 }

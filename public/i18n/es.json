@@ -18,6 +18,12 @@
     "organization-chart": "Organigrama",
     "organization-structure": "Áreas y posiciones"
   },
+  "toolbar": {
+    "search": "Buscar",
+    "search-hint": "Busca colaboradores por nombre o documento y presiona Enter",
+    "notifications": "Notificaciones",
+    "no-notifications": "No tienes notificaciones nuevas."
+  },
   "home": {
     "title": "Bienvenido a Flowboard",
     "content": "Gestiona colaboradores, áreas, posiciones y el organigrama desde una única fuente de verdad."
@@ -62,8 +68,8 @@
     "position": "Puesto",
     "status": "Estado",
     "contract-type": "Tipo de contrato",
-    "all": "todos",
-    "all-female": "todas",
+    "all": "Todos",
+    "all-female": "Todas",
     "remove-filter": "Quitar filtro",
     "clear-filters": "Limpiar filtros",
     "employee": "Colaborador",
@@ -172,9 +178,9 @@
     "TERMINATED": "Cesado"
   },
   "employee-status-plural": {
-    "ACTIVE": "activos",
-    "SUSPENDED": "suspendidos",
-    "TERMINATED": "cesados"
+    "ACTIVE": "Activos",
+    "SUSPENDED": "Suspendidos",
+    "TERMINATED": "Cesados"
   },
   "identity-document-type": {
     "DNI": "DNI",

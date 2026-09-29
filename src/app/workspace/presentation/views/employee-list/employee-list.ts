@@ -1,5 +1,6 @@
 import {Component, computed, inject, signal} from '@angular/core';
-import {Router, RouterLink} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {
   MatCell,
   MatCellDef,
@@ -60,6 +61,7 @@ export class EmployeeList {
   readonly store = inject(WorkspaceStore);
   private router = inject(Router);
   private translate = inject(TranslateService);
+  private route = inject(ActivatedRoute);
 
   readonly statuses = EMPLOYMENT_STATUSES;
   readonly contractTypes = CONTRACT_TYPES;
@@ -99,6 +101,18 @@ export class EmployeeList {
     this.filteredEmployees().slice(this.page() * PAGE_SIZE, (this.page() + 1) * PAGE_SIZE));
   readonly rangeStart = computed(() => this.filteredEmployees().length === 0 ? 0 : this.page() * PAGE_SIZE + 1);
   readonly rangeEnd = computed(() => Math.min((this.page() + 1) * PAGE_SIZE, this.filteredEmployees().length));
+
+  constructor() {
+    this.route.queryParamMap
+      .pipe(takeUntilDestroyed())
+      .subscribe(params => {
+        const search = params.get('search');
+        if (search !== null) {
+          this.searchText.set(search);
+          this.page.set(0);
+        }
+      });
+  }
 
   onSearch(event: Event) {
     this.searchText.set((event.target as HTMLInputElement).value);
@@ -152,7 +166,6 @@ export class EmployeeList {
     this.router.navigate(['/workspace/employees', employee.id]).then();
   }
 
-  /** Downloads the filtered list as CSV. */
   exportEmployees() {
     const header = ['employees.employee', 'employees.document', 'employees.area', 'employees.position', 'employees.status', 'employees.hire-date']
       .map(key => this.translate.instant(key));

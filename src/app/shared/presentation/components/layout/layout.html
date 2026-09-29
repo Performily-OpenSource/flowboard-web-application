@@ -19,30 +19,9 @@
   </mat-sidenav>
 
   <mat-sidenav-content class="main">
-    <header class="topbar">
-      @if (isHandset()) {
-        <button mat-icon-button (click)="sidenav.toggle()" [attr.aria-label]="'option.toggle-menu' | translate">
-          <mat-icon>menu</mat-icon>
-        </button>
-      }
-      <p class="breadcrumb">
-        @for (key of breadcrumb(); track key; let last = $last) {
-          <span>{{ key | translate }}</span>
-          @if (!last || layoutStore.breadcrumbDetail()) {
-            <span aria-hidden="true"> / </span>
-          }
-        }
-        @if (layoutStore.breadcrumbDetail(); as detail) {
-          <span>{{ detail }}</span>
-          @if (breadcrumbSuffix(); as suffix) {
-            <span aria-hidden="true"> / </span>
-            <span>{{ suffix | translate }}</span>
-          }
-        }
-      </p>
-      <span class="spacer"></span>
-      <app-language-switcher/>
-    </header>
+    <app-toolbar [showMenuButton]="isHandset()"
+                 (menuToggle)="sidenav.toggle()"
+                 (searchSubmit)="searchEmployees($event)"/>
     <main class="content">
       <router-outlet/>
     </main>

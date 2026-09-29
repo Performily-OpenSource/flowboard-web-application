@@ -32,7 +32,7 @@
   <div class="filters">
     <label class="search-box">
       <mat-icon aria-hidden="true">search</mat-icon>
-      <input #searchInput type="search" (input)="onSearch($event)"
+       <input #searchInput type="search" [value]="searchText()" (input)="onSearch($event)"
              [placeholder]="'employees.search' | translate" [attr.aria-label]="'employees.search' | translate"/>
     </label>
 

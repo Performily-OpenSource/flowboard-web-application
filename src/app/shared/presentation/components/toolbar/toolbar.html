@@ -1,0 +1,48 @@
+<header class="toolbar">
+  @if (showMenuButton()) {
+    <button mat-icon-button type="button" (click)="menuToggle.emit()" [attr.aria-label]="'option.toggle-menu' | translate">
+      <mat-icon>menu</mat-icon>
+    </button>
+  }
+
+  <h1 class="title">
+    @for (key of breadcrumb(); track key; let last = $last) {
+      <span>{{ key | translate }}</span>
+      @if (!last || layoutStore.breadcrumbDetail()) {
+        <span aria-hidden="true"> / </span>
+      }
+    }
+    @if (layoutStore.breadcrumbDetail(); as detail) {
+      <span>{{ detail }}</span>
+      @if (breadcrumbSuffix(); as suffix) {
+        <span aria-hidden="true"> / </span>
+        <span>{{ suffix | translate }}</span>
+      }
+    }
+  </h1>
+
+  <span class="spacer"></span>
+
+  <label class="search">
+    <mat-icon aria-hidden="true">search</mat-icon>
+    <input #searchInput type="search"
+           [placeholder]="'toolbar.search' | translate"
+           [attr.aria-label]="'toolbar.search-hint' | translate"
+           [matTooltip]="'toolbar.search-hint' | translate"
+           (keydown.enter)="onSearch(searchInput)"/>
+  </label>
+
+  <app-language-switcher/>
+
+  <button class="notifications" type="button"
+          [matMenuTriggerFor]="notificationsMenu"
+          [attr.aria-label]="'toolbar.notifications' | translate">
+    <mat-icon>notifications</mat-icon>
+  </button>
+  <mat-menu #notificationsMenu="matMenu" xPosition="before">
+    <div class="notifications-panel">
+      <p class="notifications-title">{{ 'toolbar.notifications' | translate }}</p>
+      <p class="notifications-empty">{{ 'toolbar.no-notifications' | translate }}</p>
+    </div>
+  </mat-menu>
+</header>
