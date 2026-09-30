@@ -3145,5 +3145,1192 @@
       "punchedAt": "2026-09-09T18:20:00",
       "type": "CHECK_OUT"
     }
+  ],
+  "request-types": [
+    {
+      "id": 1,
+      "name": "Vacations",
+      "description": "Paid vacation days, deducted from the vacation balance.",
+      "requiresAttachment": false,
+      "balanceDeduction": "VACATION_DAYS",
+      "active": true,
+      "fields": [
+        {
+          "id": 1,
+          "key": "startDate",
+          "label": "Start date",
+          "dataType": "DATE",
+          "required": true,
+          "displayOrder": 1
+        },
+        {
+          "id": 2,
+          "key": "endDate",
+          "label": "End date",
+          "dataType": "DATE",
+          "required": true,
+          "displayOrder": 2
+        },
+        {
+          "id": 3,
+          "key": "comment",
+          "label": "Comment",
+          "dataType": "TEXT",
+          "required": false,
+          "displayOrder": 3
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Paid leave",
+      "description": "Leave with pay supported by a document (marriage, bereavement, paternity...).",
+      "requiresAttachment": true,
+      "balanceDeduction": "NONE",
+      "active": true,
+      "fields": [
+        {
+          "id": 1,
+          "key": "startDate",
+          "label": "Start date",
+          "dataType": "DATE",
+          "required": true,
+          "displayOrder": 1
+        },
+        {
+          "id": 2,
+          "key": "endDate",
+          "label": "End date",
+          "dataType": "DATE",
+          "required": true,
+          "displayOrder": 2
+        },
+        {
+          "id": 3,
+          "key": "reason",
+          "label": "Reason",
+          "dataType": "TEXT",
+          "required": true,
+          "displayOrder": 3
+        },
+        {
+          "id": 4,
+          "key": "comment",
+          "label": "Comment",
+          "dataType": "TEXT",
+          "required": false,
+          "displayOrder": 4
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Unpaid leave",
+      "description": "Leave without pay for personal reasons.",
+      "requiresAttachment": true,
+      "balanceDeduction": "NONE",
+      "active": true,
+      "fields": [
+        {
+          "id": 1,
+          "key": "startDate",
+          "label": "Start date",
+          "dataType": "DATE",
+          "required": true,
+          "displayOrder": 1
+        },
+        {
+          "id": 2,
+          "key": "endDate",
+          "label": "End date",
+          "dataType": "DATE",
+          "required": true,
+          "displayOrder": 2
+        },
+        {
+          "id": 3,
+          "key": "reason",
+          "label": "Reason",
+          "dataType": "TEXT",
+          "required": true,
+          "displayOrder": 3
+        },
+        {
+          "id": 4,
+          "key": "comment",
+          "label": "Comment",
+          "dataType": "TEXT",
+          "required": false,
+          "displayOrder": 4
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Permission by hours",
+      "description": "Absence of a few hours within the same day.",
+      "requiresAttachment": false,
+      "balanceDeduction": "NONE",
+      "active": true,
+      "fields": [
+        {
+          "id": 1,
+          "key": "startDate",
+          "label": "Date",
+          "dataType": "DATE",
+          "required": true,
+          "displayOrder": 1
+        },
+        {
+          "id": 2,
+          "key": "startTime",
+          "label": "Start time",
+          "dataType": "TIME",
+          "required": true,
+          "displayOrder": 2
+        },
+        {
+          "id": 3,
+          "key": "endTime",
+          "label": "End time",
+          "dataType": "TIME",
+          "required": true,
+          "displayOrder": 3
+        },
+        {
+          "id": 4,
+          "key": "reason",
+          "label": "Reason",
+          "dataType": "TEXT",
+          "required": true,
+          "displayOrder": 4
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Medical rest",
+      "description": "Rest days supported by a medical certificate.",
+      "requiresAttachment": true,
+      "balanceDeduction": "NONE",
+      "active": true,
+      "fields": [
+        {
+          "id": 1,
+          "key": "startDate",
+          "label": "Start date",
+          "dataType": "DATE",
+          "required": true,
+          "displayOrder": 1
+        },
+        {
+          "id": 2,
+          "key": "endDate",
+          "label": "End date",
+          "dataType": "DATE",
+          "required": true,
+          "displayOrder": 2
+        },
+        {
+          "id": 3,
+          "key": "comment",
+          "label": "Comment",
+          "dataType": "TEXT",
+          "required": false,
+          "displayOrder": 3
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Absence justification",
+      "description": "Justifies a day already missed.",
+      "requiresAttachment": true,
+      "balanceDeduction": "NONE",
+      "active": true,
+      "fields": [
+        {
+          "id": 1,
+          "key": "startDate",
+          "label": "Absence date",
+          "dataType": "DATE",
+          "required": true,
+          "displayOrder": 1
+        },
+        {
+          "id": 2,
+          "key": "reason",
+          "label": "Reason",
+          "dataType": "TEXT",
+          "required": true,
+          "displayOrder": 2
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Salary advance",
+      "description": "Advance of part of the monthly salary, deducted from the advance benefit.",
+      "requiresAttachment": false,
+      "balanceDeduction": "BENEFIT_BALANCE",
+      "active": true,
+      "fields": [
+        {
+          "id": 1,
+          "key": "amount",
+          "label": "Amount (PEN)",
+          "dataType": "MONEY",
+          "required": true,
+          "displayOrder": 1
+        },
+        {
+          "id": 2,
+          "key": "payrollMonth",
+          "label": "Payroll month",
+          "dataType": "TEXT",
+          "required": true,
+          "displayOrder": 2
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Employment certificate",
+      "description": "Certificate that proves the current employment.",
+      "requiresAttachment": false,
+      "balanceDeduction": "NONE",
+      "active": true,
+      "fields": [
+        {
+          "id": 1,
+          "key": "purpose",
+          "label": "Purpose",
+          "dataType": "TEXT",
+          "required": true,
+          "displayOrder": 1
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Payroll account change",
+      "description": "Change of the bank account where the salary is paid.",
+      "requiresAttachment": true,
+      "balanceDeduction": "NONE",
+      "active": false,
+      "fields": [
+        {
+          "id": 1,
+          "key": "bankName",
+          "label": "Bank",
+          "dataType": "TEXT",
+          "required": true,
+          "displayOrder": 1
+        },
+        {
+          "id": 2,
+          "key": "accountNumber",
+          "label": "Account number",
+          "dataType": "TEXT",
+          "required": true,
+          "displayOrder": 2
+        }
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "id": 401,
+      "requesterId": 2,
+      "requestTypeId": 1,
+      "period": {
+        "startDate": "2026-10-08",
+        "endDate": "2026-10-09",
+        "startTime": null,
+        "endTime": null
+      },
+      "fieldValues": [
+        {
+          "key": "startDate",
+          "value": "2026-10-08"
+        },
+        {
+          "key": "endDate",
+          "value": "2026-10-09"
+        },
+        {
+          "key": "comment",
+          "value": "Family trip to Cusco"
+        }
+      ],
+      "attachments": [],
+      "approver": {
+        "type": "DIRECT_MANAGER",
+        "employeeId": 1
+      },
+      "status": "IN_PROGRESS",
+      "submittedAt": "2026-09-28T14:40:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 2,
+          "comment": null,
+          "occurredAt": "2026-09-28T14:40:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 402,
+      "requesterId": 4,
+      "requestTypeId": 2,
+      "period": {
+        "startDate": "2026-10-02",
+        "endDate": "2026-10-02",
+        "startTime": null,
+        "endTime": null
+      },
+      "fieldValues": [
+        {
+          "key": "startDate",
+          "value": "2026-10-02"
+        },
+        {
+          "key": "endDate",
+          "value": "2026-10-02"
+        },
+        {
+          "key": "reason",
+          "value": "Civil wedding"
+        },
+        {
+          "key": "comment",
+          "value": ""
+        }
+      ],
+      "attachments": [
+        {
+          "fileName": "certificate.pdf",
+          "contentType": "application/pdf",
+          "sizeInBytes": 215040,
+          "storageUrl": "/files/requests/certificate.pdf"
+        }
+      ],
+      "approver": {
+        "type": "DIRECT_MANAGER",
+        "employeeId": 1
+      },
+      "status": "IN_PROGRESS",
+      "submittedAt": "2026-09-28T12:10:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 4,
+          "comment": null,
+          "occurredAt": "2026-09-28T12:10:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 403,
+      "requesterId": 6,
+      "requestTypeId": 4,
+      "period": {
+        "startDate": "2026-10-01",
+        "endDate": "2026-10-01",
+        "startTime": "09:00",
+        "endTime": "12:00"
+      },
+      "fieldValues": [
+        {
+          "key": "startDate",
+          "value": "2026-10-01"
+        },
+        {
+          "key": "startTime",
+          "value": "09:00"
+        },
+        {
+          "key": "endTime",
+          "value": "12:00"
+        },
+        {
+          "key": "reason",
+          "value": "University exam"
+        }
+      ],
+      "attachments": [],
+      "approver": {
+        "type": "HR_STAFF",
+        "employeeId": null
+      },
+      "status": "IN_PROGRESS",
+      "submittedAt": "2026-09-27T16:30:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 6,
+          "comment": null,
+          "occurredAt": "2026-09-27T16:30:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 404,
+      "requesterId": 2,
+      "requestTypeId": 8,
+      "period": null,
+      "fieldValues": [
+        {
+          "key": "purpose",
+          "value": "Bank loan application"
+        }
+      ],
+      "attachments": [],
+      "approver": {
+        "type": "DIRECT_MANAGER",
+        "employeeId": 1
+      },
+      "status": "IN_PROGRESS",
+      "submittedAt": "2026-09-24T15:00:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 2,
+          "comment": null,
+          "occurredAt": "2026-09-24T15:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 405,
+      "requesterId": 6,
+      "requestTypeId": 7,
+      "period": null,
+      "fieldValues": [
+        {
+          "key": "amount",
+          "value": "500.00"
+        },
+        {
+          "key": "payrollMonth",
+          "value": "October 2026"
+        }
+      ],
+      "attachments": [],
+      "approver": {
+        "type": "HR_STAFF",
+        "employeeId": null
+      },
+      "status": "IN_PROGRESS",
+      "submittedAt": "2026-09-23T13:20:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 6,
+          "comment": null,
+          "occurredAt": "2026-09-23T13:20:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 406,
+      "requesterId": 4,
+      "requestTypeId": 5,
+      "period": {
+        "startDate": "2026-09-21",
+        "endDate": "2026-09-22",
+        "startTime": null,
+        "endTime": null
+      },
+      "fieldValues": [
+        {
+          "key": "startDate",
+          "value": "2026-09-21"
+        },
+        {
+          "key": "endDate",
+          "value": "2026-09-22"
+        },
+        {
+          "key": "comment",
+          "value": "Flu"
+        }
+      ],
+      "attachments": [
+        {
+          "fileName": "medical-certificate.pdf",
+          "contentType": "application/pdf",
+          "sizeInBytes": 348160,
+          "storageUrl": "/files/requests/medical-certificate.pdf"
+        }
+      ],
+      "approver": {
+        "type": "DIRECT_MANAGER",
+        "employeeId": 1
+      },
+      "status": "IN_PROGRESS",
+      "submittedAt": "2026-09-23T09:05:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 4,
+          "comment": null,
+          "occurredAt": "2026-09-23T09:05:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 407,
+      "requesterId": 6,
+      "requestTypeId": 1,
+      "period": {
+        "startDate": "2026-10-19",
+        "endDate": "2026-10-23",
+        "startTime": null,
+        "endTime": null
+      },
+      "fieldValues": [
+        {
+          "key": "startDate",
+          "value": "2026-10-19"
+        },
+        {
+          "key": "endDate",
+          "value": "2026-10-23"
+        },
+        {
+          "key": "comment",
+          "value": ""
+        }
+      ],
+      "attachments": [],
+      "approver": {
+        "type": "HR_STAFF",
+        "employeeId": null
+      },
+      "status": "UNDER_REVIEW",
+      "submittedAt": "2026-09-22T10:00:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 6,
+          "comment": null,
+          "occurredAt": "2026-09-22T10:00:00.000Z"
+        },
+        {
+          "id": 2,
+          "previousStatus": "IN_PROGRESS",
+          "newStatus": "UNDER_REVIEW",
+          "actorId": 1,
+          "comment": "Please confirm with your team who will cover the sales visits that week.",
+          "occurredAt": "2026-09-23T11:15:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 408,
+      "requesterId": 2,
+      "requestTypeId": 1,
+      "period": {
+        "startDate": "2026-08-10",
+        "endDate": "2026-08-14",
+        "startTime": null,
+        "endTime": null
+      },
+      "fieldValues": [
+        {
+          "key": "startDate",
+          "value": "2026-08-10"
+        },
+        {
+          "key": "endDate",
+          "value": "2026-08-14"
+        },
+        {
+          "key": "comment",
+          "value": ""
+        }
+      ],
+      "attachments": [],
+      "approver": {
+        "type": "DIRECT_MANAGER",
+        "employeeId": 1
+      },
+      "status": "APPROVED",
+      "submittedAt": "2026-07-28T13:00:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 2,
+          "comment": null,
+          "occurredAt": "2026-07-28T13:00:00.000Z"
+        },
+        {
+          "id": 2,
+          "previousStatus": "IN_PROGRESS",
+          "newStatus": "APPROVED",
+          "actorId": 1,
+          "comment": "Enjoy your time off.",
+          "occurredAt": "2026-07-29T09:30:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 409,
+      "requesterId": 4,
+      "requestTypeId": 3,
+      "period": {
+        "startDate": "2026-09-07",
+        "endDate": "2026-09-11",
+        "startTime": null,
+        "endTime": null
+      },
+      "fieldValues": [
+        {
+          "key": "startDate",
+          "value": "2026-09-07"
+        },
+        {
+          "key": "endDate",
+          "value": "2026-09-11"
+        },
+        {
+          "key": "reason",
+          "value": "Personal matters"
+        },
+        {
+          "key": "comment",
+          "value": ""
+        }
+      ],
+      "attachments": [
+        {
+          "fileName": "letter.pdf",
+          "contentType": "application/pdf",
+          "sizeInBytes": 102400,
+          "storageUrl": "/files/requests/letter.pdf"
+        }
+      ],
+      "approver": {
+        "type": "DIRECT_MANAGER",
+        "employeeId": 1
+      },
+      "status": "REJECTED",
+      "submittedAt": "2026-08-25T15:00:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 4,
+          "comment": null,
+          "occurredAt": "2026-08-25T15:00:00.000Z"
+        },
+        {
+          "id": 2,
+          "previousStatus": "IN_PROGRESS",
+          "newStatus": "REJECTED",
+          "actorId": 1,
+          "comment": "That week is the payroll closing. Please choose other dates.",
+          "occurredAt": "2026-08-26T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 410,
+      "requesterId": 3,
+      "requestTypeId": 1,
+      "period": {
+        "startDate": "2026-10-12",
+        "endDate": "2026-10-23",
+        "startTime": null,
+        "endTime": null
+      },
+      "fieldValues": [
+        {
+          "key": "startDate",
+          "value": "2026-10-12"
+        },
+        {
+          "key": "endDate",
+          "value": "2026-10-23"
+        },
+        {
+          "key": "comment",
+          "value": ""
+        }
+      ],
+      "attachments": [],
+      "approver": {
+        "type": "DIRECT_MANAGER",
+        "employeeId": 2
+      },
+      "status": "IN_PROGRESS",
+      "submittedAt": "2026-09-25T14:14:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 3,
+          "comment": null,
+          "occurredAt": "2026-09-25T14:14:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 411,
+      "requesterId": 3,
+      "requestTypeId": 6,
+      "period": {
+        "startDate": "2026-09-02",
+        "endDate": "2026-09-02",
+        "startTime": null,
+        "endTime": null
+      },
+      "fieldValues": [
+        {
+          "key": "startDate",
+          "value": "2026-09-02"
+        },
+        {
+          "key": "reason",
+          "value": "Medical appointment"
+        }
+      ],
+      "attachments": [
+        {
+          "fileName": "appointment.pdf",
+          "contentType": "application/pdf",
+          "sizeInBytes": 81920,
+          "storageUrl": "/files/requests/appointment.pdf"
+        }
+      ],
+      "approver": {
+        "type": "DIRECT_MANAGER",
+        "employeeId": 2
+      },
+      "status": "UNDER_REVIEW",
+      "submittedAt": "2026-09-03T13:00:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 3,
+          "comment": null,
+          "occurredAt": "2026-09-03T13:00:00.000Z"
+        },
+        {
+          "id": 2,
+          "previousStatus": "IN_PROGRESS",
+          "newStatus": "UNDER_REVIEW",
+          "actorId": 2,
+          "comment": "The attached file is the appointment, please attach the attendance certificate from the clinic.",
+          "occurredAt": "2026-09-04T09:40:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 412,
+      "requesterId": 3,
+      "requestTypeId": 4,
+      "period": {
+        "startDate": "2026-08-22",
+        "endDate": "2026-08-22",
+        "startTime": "14:00",
+        "endTime": "17:00"
+      },
+      "fieldValues": [
+        {
+          "key": "startDate",
+          "value": "2026-08-22"
+        },
+        {
+          "key": "startTime",
+          "value": "14:00"
+        },
+        {
+          "key": "endTime",
+          "value": "17:00"
+        },
+        {
+          "key": "reason",
+          "value": "Paperwork at RENIEC"
+        }
+      ],
+      "attachments": [],
+      "approver": {
+        "type": "DIRECT_MANAGER",
+        "employeeId": 2
+      },
+      "status": "APPROVED",
+      "submittedAt": "2026-08-19T12:00:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 3,
+          "comment": null,
+          "occurredAt": "2026-08-19T12:00:00.000Z"
+        },
+        {
+          "id": 2,
+          "previousStatus": "IN_PROGRESS",
+          "newStatus": "APPROVED",
+          "actorId": 2,
+          "comment": null,
+          "occurredAt": "2026-08-19T16:20:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 413,
+      "requesterId": 3,
+      "requestTypeId": 3,
+      "period": {
+        "startDate": "2026-07-14",
+        "endDate": "2026-07-15",
+        "startTime": null,
+        "endTime": null
+      },
+      "fieldValues": [
+        {
+          "key": "startDate",
+          "value": "2026-07-14"
+        },
+        {
+          "key": "endDate",
+          "value": "2026-07-15"
+        },
+        {
+          "key": "reason",
+          "value": "Personal trip"
+        },
+        {
+          "key": "comment",
+          "value": ""
+        }
+      ],
+      "attachments": [
+        {
+          "fileName": "tickets.pdf",
+          "contentType": "application/pdf",
+          "sizeInBytes": 153600,
+          "storageUrl": "/files/requests/tickets.pdf"
+        }
+      ],
+      "approver": {
+        "type": "DIRECT_MANAGER",
+        "employeeId": 2
+      },
+      "status": "REJECTED",
+      "submittedAt": "2026-07-06T15:30:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 3,
+          "comment": null,
+          "occurredAt": "2026-07-06T15:30:00.000Z"
+        },
+        {
+          "id": 2,
+          "previousStatus": "IN_PROGRESS",
+          "newStatus": "REJECTED",
+          "actorId": 2,
+          "comment": "Those days are the release of the new module. Let's move it to August.",
+          "occurredAt": "2026-07-07T10:10:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 414,
+      "requesterId": 3,
+      "requestTypeId": 8,
+      "period": null,
+      "fieldValues": [
+        {
+          "key": "purpose",
+          "value": "Apartment rental"
+        }
+      ],
+      "attachments": [],
+      "approver": {
+        "type": "DIRECT_MANAGER",
+        "employeeId": 2
+      },
+      "status": "APPROVED",
+      "submittedAt": "2026-07-01T14:00:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 3,
+          "comment": null,
+          "occurredAt": "2026-07-01T14:00:00.000Z"
+        },
+        {
+          "id": 2,
+          "previousStatus": "IN_PROGRESS",
+          "newStatus": "APPROVED",
+          "actorId": 2,
+          "comment": null,
+          "occurredAt": "2026-07-02T09:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 415,
+      "requesterId": 3,
+      "requestTypeId": 1,
+      "period": {
+        "startDate": "2026-06-15",
+        "endDate": "2026-06-19",
+        "startTime": null,
+        "endTime": null
+      },
+      "fieldValues": [
+        {
+          "key": "startDate",
+          "value": "2026-06-15"
+        },
+        {
+          "key": "endDate",
+          "value": "2026-06-19"
+        },
+        {
+          "key": "comment",
+          "value": ""
+        }
+      ],
+      "attachments": [],
+      "approver": {
+        "type": "DIRECT_MANAGER",
+        "employeeId": 2
+      },
+      "status": "CANCELLED",
+      "submittedAt": "2026-06-01T15:00:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 3,
+          "comment": null,
+          "occurredAt": "2026-06-01T15:00:00.000Z"
+        },
+        {
+          "id": 2,
+          "previousStatus": "IN_PROGRESS",
+          "newStatus": "CANCELLED",
+          "actorId": 3,
+          "comment": null,
+          "occurredAt": "2026-06-02T08:30:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 416,
+      "requesterId": 1,
+      "requestTypeId": 1,
+      "period": {
+        "startDate": "2026-12-21",
+        "endDate": "2026-12-24",
+        "startTime": null,
+        "endTime": null
+      },
+      "fieldValues": [
+        {
+          "key": "startDate",
+          "value": "2026-12-21"
+        },
+        {
+          "key": "endDate",
+          "value": "2026-12-24"
+        },
+        {
+          "key": "comment",
+          "value": "Christmas with family"
+        }
+      ],
+      "attachments": [],
+      "approver": {
+        "type": "HR_STAFF",
+        "employeeId": null
+      },
+      "status": "IN_PROGRESS",
+      "submittedAt": "2026-09-26T17:00:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 1,
+          "comment": null,
+          "occurredAt": "2026-09-26T17:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 417,
+      "requesterId": 7,
+      "requestTypeId": 1,
+      "period": {
+        "startDate": "2026-10-19",
+        "endDate": "2026-10-23",
+        "startTime": null,
+        "endTime": null
+      },
+      "fieldValues": [
+        {
+          "key": "startDate",
+          "value": "2026-10-19"
+        },
+        {
+          "key": "endDate",
+          "value": "2026-10-23"
+        },
+        {
+          "key": "comment",
+          "value": ""
+        }
+      ],
+      "attachments": [],
+      "approver": {
+        "type": "DIRECT_MANAGER",
+        "employeeId": 2
+      },
+      "status": "IN_PROGRESS",
+      "submittedAt": "2026-09-29T21:30:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 7,
+          "comment": null,
+          "occurredAt": "2026-09-29T21:30:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 418,
+      "requesterId": 9,
+      "requestTypeId": 2,
+      "period": {
+        "startDate": "2026-10-02",
+        "endDate": "2026-10-02",
+        "startTime": null,
+        "endTime": null
+      },
+      "fieldValues": [
+        {
+          "key": "startDate",
+          "value": "2026-10-02"
+        },
+        {
+          "key": "endDate",
+          "value": "2026-10-02"
+        },
+        {
+          "key": "reason",
+          "value": "Bereavement"
+        },
+        {
+          "key": "comment",
+          "value": ""
+        }
+      ],
+      "attachments": [
+        {
+          "fileName": "certificate.pdf",
+          "contentType": "application/pdf",
+          "sizeInBytes": 215040,
+          "storageUrl": "/files/requests/certificate.pdf"
+        }
+      ],
+      "approver": {
+        "type": "DIRECT_MANAGER",
+        "employeeId": 2
+      },
+      "status": "IN_PROGRESS",
+      "submittedAt": "2026-09-29T20:10:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 9,
+          "comment": null,
+          "occurredAt": "2026-09-29T20:10:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 419,
+      "requesterId": 13,
+      "requestTypeId": 4,
+      "period": {
+        "startDate": "2026-10-06",
+        "endDate": "2026-10-06",
+        "startTime": "09:00",
+        "endTime": "12:00"
+      },
+      "fieldValues": [
+        {
+          "key": "startDate",
+          "value": "2026-10-06"
+        },
+        {
+          "key": "startTime",
+          "value": "09:00"
+        },
+        {
+          "key": "endTime",
+          "value": "12:00"
+        },
+        {
+          "key": "reason",
+          "value": "Medical appointment"
+        }
+      ],
+      "attachments": [],
+      "approver": {
+        "type": "DIRECT_MANAGER",
+        "employeeId": 1
+      },
+      "status": "IN_PROGRESS",
+      "submittedAt": "2026-09-29T15:00:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 13,
+          "comment": null,
+          "occurredAt": "2026-09-29T15:00:00.000Z"
+        }
+      ]
+    }
   ]
 }
