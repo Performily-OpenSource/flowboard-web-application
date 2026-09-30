@@ -4,7 +4,9 @@
     "toggle-menu": "Abrir o cerrar menú",
     "dashboard": "Dashboard",
     "employees": "Colaboradores",
-    "organization": "Organización"
+    "organization": "Organización",
+    "attendance": "Asistencia",
+    "my-attendance": "Mi asistencia"
   },
   "breadcrumb": {
     "dashboard": "Dashboard",
@@ -16,7 +18,12 @@
     "file": "Expediente",
     "organization": "Organización",
     "organization-chart": "Organigrama",
-    "organization-structure": "Áreas y posiciones"
+    "organization-structure": "Áreas y posiciones",
+    "attendance": "Asistencia",
+    "attendance-records": "Registros",
+    "my-attendance": "Mi asistencia",
+    "attendance-summary": "Resumen por área",
+    "attendance-hours": "Horas y sobretiempo"
   },
   "toolbar": {
     "search": "Buscar",
@@ -359,5 +366,93 @@
       "salary": "Debe ser mayor a cero.",
       "title-taken": "Esta área ya tiene una posición con ese nombre."
     }
+  },
+  "attendance": {
+    "export": "Exportar",
+    "period": "Desde",
+    "until": "Hasta",
+    "month": "Periodo",
+    "compare": "Comparar con",
+    "area": "Área",
+    "all": "Todos",
+    "date": "Fecha",
+    "employee": "Colaborador",
+    "check-in": "Entrada",
+    "check-out": "Salida",
+    "worked-hours": "Horas efectivas",
+    "overtime": "Sobretiempo",
+    "actions": "Acciones",
+    "justify": "Justificar inasistencia",
+    "invalid-range": "La fecha de inicio es posterior a la fecha de fin. Corrige el rango para poder consultar el historial.",
+    "clear-filters": "Limpiar filtros",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "range": "Mostrando {{ start }} a {{ end }} de {{ total }} registros",
+    "empty": {
+      "title": "No hay registros en el periodo seleccionado",
+      "content": "No se registró ninguna marcación en el periodo seleccionado. Prueba con otro rango de fechas o limpia los filtros."
+    },
+    "summary": {
+      "punctuality": "puntualidad",
+      "records": "registros",
+      "lates": "tardanzas",
+      "absences": "inasistencias",
+      "justified": "justificadas",
+      "period": "en el periodo",
+      "overtime": "Sobretiempo",
+      "accumulated": "acumulado",
+      "title": "Resumen por área",
+      "subtitle": "Comparativo del periodo. Sirve para ver dónde se concentran las tardanzas antes de hablar con cada jefatura."
+    },
+    "records": {
+      "title": "Asistencia",
+      "subtitle": "Registro de marcaciones del periodo. La plataforma registra y clasifica; no deriva descuentos ni pagos."
+    },
+    "my": {
+      "title": "Mi asistencia",
+      "subtitle": "Solo tú puedes ver este historial. Si encuentras un registro que no corresponde, envía una justificación.",
+      "justify": "Justificar inasistencia",
+      "worked-days": "Días trabajados",
+      "lates": "Tardanzas",
+      "absences": "Inasistencias",
+      "unjustified": "sin justificar",
+      "empty": "No hay registros de asistencia para el periodo seleccionado."
+    },
+    "status": {
+      "label": "Estado",
+      "ON_TIME": "Puntual",
+      "LATE": "Tardanza",
+      "ABSENT": "Inasistencia",
+      "JUSTIFIED": "Justificada",
+      "INCOMPLETE": "Incompleto"
+    },
+    "justification": {
+      "title": "Justificar inasistencia",
+      "date": "Fecha",
+      "status": "Estado actual",
+      "record": "Registro",
+      "reason": "Motivo de la inasistencia",
+      "reason-placeholder": "Explica qué ocurrió ese día",
+      "support": "Sustento",
+      "upload": "Arrastra el archivo o busca en tu equipo",
+      "note": "Al enviar se crea una solicitud de justificación. Tu jefe directo la va a revisar y podrás seguir su estado desde Mis solicitudes.",
+      "submit": "Enviar justificación"
+    },
+    "hours": {
+      "title": "Horas y sobretiempo",
+      "subtitle": "Horas efectivas frente a la jornada esperada del puesto. El sobretiempo es informativo: no genera pago automático.",
+      "order": "Orden",
+      "order-overtime": "mayor sobretiempo",
+      "order-effective": "mayor horas efectivas",
+      "note": "El sobretiempo se muestra como diferencia entre las horas efectivas registradas y la jornada esperada del puesto. Cualquier compensación se gestiona fuera de Flowboard.",
+      "expected": "Jornada esperada",
+      "variation": "Variación",
+      "level": "Nivel",
+      "high": "Alto",
+      "normal": "Normal",
+      "low": "Bajo",
+      "footer": "Mostrando {{count}} colaboradores del área"
+    },
+    "summary-title": "Resumen por área"
   }
 }
