@@ -4,7 +4,9 @@
     "toggle-menu": "Abrir o cerrar menú",
     "dashboard": "Dashboard",
     "employees": "Colaboradores",
-    "organization": "Organización"
+    "organization": "Organización",
+    "payroll": "Boletas",
+    "my-payslips": "Mis boletas"
   },
   "breadcrumb": {
     "dashboard": "Dashboard",
@@ -16,7 +18,9 @@
     "file": "Expediente",
     "organization": "Organización",
     "organization-chart": "Organigrama",
-    "organization-structure": "Áreas y posiciones"
+    "organization-structure": "Áreas y posiciones",
+    "payroll": "Boletas",
+    "my-payslips": "Mis boletas"
   },
   "toolbar": {
     "search": "Buscar",
@@ -359,5 +363,93 @@
       "salary": "Debe ser mayor a cero.",
       "title-taken": "Esta área ya tiene una posición con ese nombre."
     }
+  },
+  "payroll": {
+    "title": "Boletas y pagos",
+    "subtitle": "Repositorio de las boletas que emite el sistema de planilla. Flowboard las almacena y controla el estado del depósito.",
+    "upload": "Cargar boletas",
+    "page-info": "Flowboard no genera ni recalcula boletas. El archivo que se muestra al colaborador es exactamente el que se carga aquí.",
+    "period": "Periodo",
+    "all-periods": "Todos los periodos",
+    "area": "Área",
+    "all-areas": "Todas",
+    "status": "Estado",
+    "all-statuses": "Todos",
+    "period-count": "boletas del periodo",
+    "employee": "Colaborador",
+    "issue-date": "Fecha de carga",
+    "net-amount": "Monto neto",
+    "payment-status-title": "Estado del pago",
+    "actions": "Acciones",
+    "register-payment": "Registrar pago",
+    "view-reason": "Ver motivo",
+    "view": "Ver",
+    "publish": "Publicar",
+    "replace": "Reemplazar",
+    "under-review": "En revisión",
+    "more-actions": "Más acciones",
+    "pagination": "Paginación",
+    "range": "Mostrando {{ start }} a {{ end }} de {{ total }} boletas",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "current-status": "Estado actual",
+    "payment-status": {
+      "PENDING": "Pendiente",
+      "PAID": "Pagado",
+      "OBSERVED": "Observado"
+    },
+    "payment-dialog": {
+      "title": "Registrar pago",
+      "deposit-date": "Fecha del depósito",
+      "reference": "Referencia (opcional)",
+      "reference-placeholder": "Número de operación bancaria",
+      "info": "El estado pasa a pagado y el colaborador lo verá en su boleta. El monto proviene del archivo cargado y no se edita aquí.",
+      "confirm": "Marcar como pagado"
+    },
+    "observation-dialog": {
+      "title": "Observar pago",
+      "view-title": "Motivo de la observación",
+      "reason": "Motivo de la observación",
+      "reason-placeholder": "Explica qué impide el pago",
+      "info": "La observación queda visible para Recursos Humanos en el listado de boletas. El colaborador no la ve; si hay que avisarle, se hace por el canal habitual.",
+      "confirm": "Marcar como observado"
+    },
+    "upload-dialog": {
+      "title": "Cargar boleta",
+      "replace-title": "Reemplazar boleta",
+      "description": "Carga el PDF emitido por el sistema de planilla. La boleta quedará en revisión y con pago pendiente hasta que se publique y se registre el depósito.",
+      "employee": "Colaborador",
+      "period": "Periodo",
+      "issue-date": "Fecha de emisión",
+      "net-amount": "Monto neto",
+      "file": "Archivo de boleta",
+      "choose-file": "Seleccionar PDF",
+      "info": "Solo se aceptan archivos PDF de hasta 5 MB. No se recalcula el monto del archivo.",
+      "duplicate-title": "Ya existe una boleta para este colaborador y periodo.",
+      "replace": "Reemplazar",
+      "upload": "Cargar"
+    },
+    "viewer": {
+      "title": "Boleta de pago",
+      "description": "Documento cargado por Recursos Humanos. La plataforma muestra el archivo tal como fue cargado: no lo genera, no lo recalcula y no aplica descuentos.",
+      "employee": "Colaborador",
+      "period": "Periodo",
+      "status": "Estado",
+      "preview": "Vista previa del documento",
+      "print": "Imprimir",
+      "download": "Descargar PDF"
+    }
+  },
+  "my-payslips": {
+    "title": "Mis boletas",
+    "subtitle": "Solo tú puedes ver estas boletas. Se muestran tal como las emitió el sistema de planilla.",
+    "available": "boletas disponibles",
+    "year": "Año",
+    "all-periods": "Periodo: todos",
+    "download": "Descargar boleta",
+    "pagination": "Paginación",
+    "range": "Mostrando {{ start }} a {{ end }} de {{ total }} boletas",
+    "previous": "Anterior",
+    "next": "Siguiente"
   }
 }

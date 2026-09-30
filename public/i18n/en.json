@@ -4,7 +4,9 @@
     "toggle-menu": "Toggle menu",
     "dashboard": "Dashboard",
     "employees": "Employees",
-    "organization": "Organization"
+    "organization": "Organization",
+    "payroll": "Payslips",
+    "my-payslips": "My payslips"
   },
   "breadcrumb": {
     "dashboard": "Dashboard",
@@ -16,7 +18,9 @@
     "file": "File",
     "organization": "Organization",
     "organization-chart": "Organization chart",
-    "organization-structure": "Areas and positions"
+    "organization-structure": "Areas and positions",
+    "payroll": "Payslips",
+    "my-payslips": "My payslips"
   },
   "toolbar": {
     "search": "Search",
@@ -359,5 +363,93 @@
       "salary": "It must be greater than zero.",
       "title-taken": "This area already has a position with this name."
     }
+  },
+  "payroll": {
+    "title": "Payslips and payments",
+    "subtitle": "Repository of payslips issued by the payroll system. Flowboard stores them and controls deposit status.",
+    "upload": "Upload payslips",
+    "page-info": "Flowboard does not generate or recalculate payslips. The file shown to the employee is exactly the one uploaded here.",
+    "period": "Period",
+    "all-periods": "All periods",
+    "area": "Area",
+    "all-areas": "All",
+    "status": "Status",
+    "all-statuses": "All",
+    "period-count": "payslips in period",
+    "employee": "Employee",
+    "issue-date": "Upload date",
+    "net-amount": "Net amount",
+    "payment-status-title": "Payment status",
+    "actions": "Actions",
+    "register-payment": "Register payment",
+    "view-reason": "View reason",
+    "view": "View",
+    "publish": "Publish",
+    "replace": "Replace",
+    "under-review": "Under review",
+    "more-actions": "More actions",
+    "pagination": "Pagination",
+    "range": "Showing {{ start }} to {{ end }} of {{ total }} payslips",
+    "previous": "Previous",
+    "next": "Next",
+    "current-status": "Current status",
+    "payment-status": {
+      "PENDING": "Pending",
+      "PAID": "Paid",
+      "OBSERVED": "Observed"
+    },
+    "payment-dialog": {
+      "title": "Register payment",
+      "deposit-date": "Deposit date",
+      "reference": "Reference (optional)",
+      "reference-placeholder": "Bank operation number",
+      "info": "The status changes to paid and the employee will see it on their payslip. The amount comes from the uploaded file and is not edited here.",
+      "confirm": "Mark as paid"
+    },
+    "observation-dialog": {
+      "title": "Observe payment",
+      "view-title": "Observation reason",
+      "reason": "Observation reason",
+      "reason-placeholder": "Explain what prevents the payment",
+      "info": "The observation is visible to Human Resources in the payslip list. The employee does not see it; notify them through the usual channel if needed.",
+      "confirm": "Mark as observed"
+    },
+    "upload-dialog": {
+      "title": "Upload payslip",
+      "replace-title": "Replace payslip",
+      "description": "Upload the PDF issued by the payroll system. The payslip starts under review and with a pending payment until it is published and the deposit is registered.",
+      "employee": "Employee",
+      "period": "Period",
+      "issue-date": "Issue date",
+      "net-amount": "Net amount",
+      "file": "Payslip file",
+      "choose-file": "Select PDF",
+      "info": "Only PDF files up to 5 MB are accepted. The file amount is not recalculated.",
+      "duplicate-title": "A payslip already exists for this employee and period.",
+      "replace": "Replace",
+      "upload": "Upload"
+    },
+    "viewer": {
+      "title": "Payslip",
+      "description": "Document uploaded by Human Resources. The platform shows the file exactly as uploaded: it does not generate, recalculate or apply deductions.",
+      "employee": "Employee",
+      "period": "Period",
+      "status": "Status",
+      "preview": "Document preview",
+      "print": "Print",
+      "download": "Download PDF"
+    }
+  },
+  "my-payslips": {
+    "title": "My payslips",
+    "subtitle": "Only you can view these payslips. They are shown exactly as issued by the payroll system.",
+    "available": "payslips available",
+    "year": "Year",
+    "all-periods": "Period: all",
+    "download": "Download payslip",
+    "pagination": "Pagination",
+    "range": "Showing {{ start }} to {{ end }} of {{ total }} payslips",
+    "previous": "Previous",
+    "next": "Next"
   }
 }
