@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, signal} from '@angular/core';
+import {Component, computed, inject, signal} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {
   MatCell,
@@ -23,7 +23,6 @@ import {RequestStore} from '../../../application/request.store';
 import {Request} from '../../../domain/model/request.entity';
 import {RequestStatusBadge} from '../../components/request-status-badge/request-status-badge';
 import {RequestTimeline} from '../../components/request-timeline/request-timeline';
-import {ActingEmployeeSelector} from '../../components/acting-employee-selector/acting-employee-selector';
 import {ApproveRequestDialog} from '../../components/approve-request-dialog/approve-request-dialog';
 import {RejectRequestDialog} from '../../components/reject-request-dialog/reject-request-dialog';
 import {ReturnRequestDialog} from '../../components/return-request-dialog/return-request-dialog';
@@ -60,7 +59,6 @@ const AGE_FILTERS: AgeFilter[] = ['today', 'over-2-days', 'over-7-days'];
     TranslatePipe,
     RequestStatusBadge,
     RequestTimeline,
-    ActingEmployeeSelector,
     RelativeTimePipe,
     RequestPeriodPipe
   ],
@@ -119,14 +117,6 @@ export class RequestInbox {
   readonly rangeEnd = computed(() => Math.min((this.page() + 1) * PAGE_SIZE, this.filteredRequests().length));
 
   readonly selectedRequest = computed(() => this.store.inboxRequests().find(request => request.id === this.selectedId()) ?? null);
-
-  constructor() {
-    effect(() => {
-      this.store.actingEmployeeId();
-      this.selectedId.set(null);
-      this.page.set(0);
-    });
-  }
 
   setTab(tab: InboxTab) {
     this.tab.set(tab);

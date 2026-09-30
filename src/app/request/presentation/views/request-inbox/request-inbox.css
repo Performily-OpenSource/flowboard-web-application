@@ -1,7 +1,19 @@
-.acting-bar {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 12px;
+.list-card {
+  margin-top: 20px;
+}
+
+.row-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.approve-action {
+  color: var(--fb-success, #1e7d46);
+}
+
+.reject-action {
+  color: var(--fb-error);
 }
 
 .pagination {

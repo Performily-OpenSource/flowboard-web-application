@@ -445,9 +445,6 @@
       "UNITS": "unid."
     },
     "pagination": {
-      "showing": "Mostrando {{from}} a {{to}} de {{total}} {{items}}",
-      "previous": "Anterior",
-      "next": "Siguiente",
       "benefits": "beneficios",
       "employees": "colaboradores",
       "assignments": "asignaciones",
@@ -462,7 +459,19 @@
       "already-delivered-on": "Esta asignación ya figura como entregada el {{date}}. Una entrega solo se registra una vez.",
       "cancelled": "La asignación fue cancelada y no se puede registrar su entrega.",
       "cancel-delivered": "Una asignación entregada no se puede cancelar.",
-      "negative-balance": "El saldo disponible no puede quedar en negativo."
+      "negative-balance": "El saldo disponible no puede quedar en negativo.",
+      "load-benefits": "No se pudo cargar el catálogo de beneficios.",
+      "load-assignments": "No se pudieron cargar las asignaciones de beneficios.",
+      "load-balances": "No se pudieron cargar los saldos de vacaciones.",
+      "create-benefit": "No se pudo crear el beneficio.",
+      "update-benefit": "No se pudo actualizar el beneficio.",
+      "assign-benefit": "No se pudo asignar el beneficio.",
+      "register-delivery": "No se pudo registrar la entrega.",
+      "cancel-assignment": "No se pudo cancelar la asignación.",
+      "adjust-balance": "No se pudo guardar el ajuste del saldo de vacaciones.",
+      "balance-not-found": "El colaborador no tiene un saldo de vacaciones registrado.",
+      "not-enough-days": "El colaborador no tiene suficientes días de vacaciones disponibles.",
+      "debit-balance": "No se pudo descontar el saldo de vacaciones."
     }
   },
   "benefit-unit": {
@@ -984,11 +993,6 @@
     "range": "{{start}} al {{end}}",
     "working-days": "{{count}} días hábiles"
   },
-  "acting": {
-    "label": "Viendo como",
-    "hr": "RR. HH.",
-    "hint": "Temporal: todavía no hay inicio de sesión, elige un colaborador para probar las pantallas del solicitante y del aprobador."
-  },
   "inbox": {
     "title": "Bandeja de solicitudes",
     "summary": "{{pending}} pendientes, {{waiting}} de ellas con más de dos días de espera.",
@@ -1142,6 +1146,7 @@
     "confirm": "Cancelar solicitud"
   },
   "request-types": {
+    "back": "Volver a la bandeja",
     "title": "Tipos de solicitud",
     "subtitle": "Cada tipo define sus campos, si exige adjunto y si descuenta saldo. Agregar uno nuevo no requiere tocar el sistema.",
     "new": "Nuevo tipo",
@@ -1203,7 +1208,7 @@
   },
   "request-error": {
     "already-resolved": "La solicitud ya está resuelta o en otro estado, por eso no se puede hacer esta acción.",
-    "not-assigned": "No eres el aprobador asignado a esta solicitud.",
+    "not-assigned": "Solo se pueden resolver solicitudes pendientes de otros colaboradores.",
     "not-owner": "Solo el colaborador que envió la solicitud puede hacer esto.",
     "not-under-review": "Solo se puede reenviar una solicitud en revisión.",
     "reason-required": "El motivo del rechazo es obligatorio.",
@@ -1220,6 +1225,23 @@
     "type-duplicated": "Ya existe un tipo de solicitud con ese nombre.",
     "type-in-use": "{{name}} tiene solicitudes, por eso no se puede eliminar. Puedes desactivarlo en su lugar."
   },
+  "employee-requests": {
+    "title": "Solicitudes",
+    "summary": "{{total}} solicitudes, {{open}} sin resolver.",
+    "open-inbox": "Ir a la bandeja",
+    "number": "N.°",
+    "type": "Tipo",
+    "period": "Periodo",
+    "status": "Estado",
+    "submitted": "Enviada",
+    "empty": "Este colaborador todavía no tiene solicitudes."
+  },
+  "latest-requests": {
+    "title": "Últimas solicitudes",
+    "count": "{{count}} en total",
+    "empty": "Sin solicitudes registradas.",
+    "open-inbox": "Ir a la bandeja"
+  },
   "my-profile": {
     "request-update": "Solicitar actualización de datos",
     "data-tab": "Mis datos",
@@ -1230,5 +1252,21 @@
     "contract": "Contrato",
     "no-manager": "No asignado",
     "not-found": "No encontramos tu ficha de colaborador."
+  },
+  "pagination": {
+    "showing": "Mostrando {{from}} a {{to}} de {{total}} {{items}}",
+    "previous": "Anterior",
+    "next": "Siguiente"
+  },
+  "employee-benefits": {
+    "title": "Beneficios asignados",
+    "empty": "Este colaborador todavía no tiene beneficios asignados.",
+    "view-all": "Ver todas las asignaciones"
+  },
+  "vacation-card": {
+    "title": "Saldo de vacaciones",
+    "days": "días",
+    "empty": "Este colaborador todavía no tiene saldo de vacaciones.",
+    "view": "Ver saldo por colaborador"
   }
 }

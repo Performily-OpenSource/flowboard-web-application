@@ -38,7 +38,9 @@
 .text-link {
   margin-right: 4px;
 }
-
+.icon-action {
+  vertical-align: middle;
+}
 .no-data {
   padding: 24px 16px;
   text-align: center;

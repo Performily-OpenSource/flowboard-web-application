@@ -13,7 +13,6 @@ import {RequestField} from '../../../domain/model/request-field.entity';
 import {DynamicField} from '../../components/dynamic-field/dynamic-field';
 import {VacationBalanceCard} from '../../components/vacation-balance-card/vacation-balance-card';
 import {ApproverCard} from '../../components/approver-card/approver-card';
-import {ActingEmployeeSelector} from '../../components/acting-employee-selector/acting-employee-selector';
 import {FileSizePipe} from '../../pipes/file-size-pipe';
 
 const ALLOWED_CONTENT_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
@@ -33,7 +32,6 @@ type FieldsForm = FormGroup<Record<string, FormControl<string>>>;
     DynamicField,
     VacationBalanceCard,
     ApproverCard,
-    ActingEmployeeSelector,
     FileSizePipe
   ],
   templateUrl: './request-form.html',
@@ -85,7 +83,7 @@ export class RequestForm {
   });
 
   readonly manager = computed(() => {
-    const { approverId } = this.store.resolveApprover(this.store.actingEmployee());
+    const { approverId } = this.store.resolveApprover(this.store.currentEmployee());
     return this.store.getRequester(approverId);
   });
 

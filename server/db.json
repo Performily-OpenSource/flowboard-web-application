@@ -4452,6 +4452,191 @@
           "occurredAt": "2026-09-29T15:00:00.000Z"
         }
       ]
+    },
+    {
+      "id": 420,
+      "requesterId": 1,
+      "requestTypeId": 6,
+      "period": {
+        "startDate": "2026-09-14",
+        "endDate": "2026-09-14",
+        "startTime": null,
+        "endTime": null
+      },
+      "fieldValues": [
+        {
+          "key": "startDate",
+          "value": "2026-09-14"
+        },
+        {
+          "key": "reason",
+          "value": "Medical appointment"
+        }
+      ],
+      "attachments": [
+        {
+          "fileName": "appointment.pdf",
+          "contentType": "application/pdf",
+          "sizeInBytes": 90112,
+          "storageUrl": "/files/requests/appointment-maria.pdf"
+        }
+      ],
+      "approver": {
+        "type": "HR_STAFF",
+        "employeeId": null
+      },
+      "status": "UNDER_REVIEW",
+      "submittedAt": "2026-09-15T13:30:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 1,
+          "comment": null,
+          "occurredAt": "2026-09-15T13:30:00.000Z"
+        },
+        {
+          "id": 2,
+          "previousStatus": "IN_PROGRESS",
+          "newStatus": "UNDER_REVIEW",
+          "actorId": 4,
+          "comment": "Please attach the attendance certificate issued by the clinic.",
+          "occurredAt": "2026-09-16T10:05:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 421,
+      "requesterId": 1,
+      "requestTypeId": 8,
+      "period": null,
+      "fieldValues": [
+        {
+          "key": "purpose",
+          "value": "Bank loan"
+        }
+      ],
+      "attachments": [],
+      "approver": {
+        "type": "HR_STAFF",
+        "employeeId": null
+      },
+      "status": "APPROVED",
+      "submittedAt": "2026-08-20T15:00:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 1,
+          "comment": null,
+          "occurredAt": "2026-08-20T15:00:00.000Z"
+        },
+        {
+          "id": 2,
+          "previousStatus": "IN_PROGRESS",
+          "newStatus": "APPROVED",
+          "actorId": 4,
+          "comment": null,
+          "occurredAt": "2026-08-21T09:15:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 422,
+      "requesterId": 1,
+      "requestTypeId": 4,
+      "period": {
+        "startDate": "2026-08-07",
+        "endDate": "2026-08-07",
+        "startTime": "09:00",
+        "endTime": "13:00"
+      },
+      "fieldValues": [
+        {
+          "key": "startDate",
+          "value": "2026-08-07"
+        },
+        {
+          "key": "startTime",
+          "value": "09:00"
+        },
+        {
+          "key": "endTime",
+          "value": "13:00"
+        },
+        {
+          "key": "reason",
+          "value": "Personal paperwork"
+        }
+      ],
+      "attachments": [],
+      "approver": {
+        "type": "HR_STAFF",
+        "employeeId": null
+      },
+      "status": "REJECTED",
+      "submittedAt": "2026-08-05T16:40:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 1,
+          "comment": null,
+          "occurredAt": "2026-08-05T16:40:00.000Z"
+        },
+        {
+          "id": 2,
+          "previousStatus": "IN_PROGRESS",
+          "newStatus": "REJECTED",
+          "actorId": 13,
+          "comment": "That morning is the payroll closing. Please choose another date.",
+          "occurredAt": "2026-08-06T08:50:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 423,
+      "requesterId": 1,
+      "requestTypeId": 7,
+      "period": null,
+      "fieldValues": [
+        {
+          "key": "amount",
+          "value": "800"
+        },
+        {
+          "key": "payrollMonth",
+          "value": "July 2026"
+        }
+      ],
+      "attachments": [],
+      "approver": {
+        "type": "HR_STAFF",
+        "employeeId": null
+      },
+      "status": "CANCELLED",
+      "submittedAt": "2026-07-08T14:00:00.000Z",
+      "history": [
+        {
+          "id": 1,
+          "previousStatus": null,
+          "newStatus": "IN_PROGRESS",
+          "actorId": 1,
+          "comment": null,
+          "occurredAt": "2026-07-08T14:00:00.000Z"
+        },
+        {
+          "id": 2,
+          "previousStatus": "IN_PROGRESS",
+          "newStatus": "CANCELLED",
+          "actorId": 1,
+          "comment": null,
+          "occurredAt": "2026-07-08T18:20:00.000Z"
+        }
+      ]
     }
   ]
 }

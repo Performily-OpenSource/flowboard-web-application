@@ -1,55 +1,28 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {map, Observable, switchMap} from 'rxjs';
+import {computed, inject, Injectable} from '@angular/core';
+import {BenefitsStore} from '../../benefits/application/benefits.store';
+import {VacationBalance as BenefitsVacationBalance} from '../../benefits/domain/model/vacation-balance.entity';
 import {VacationBalance} from '../domain/model/vacation-balance.entity';
-import {VacationBalancesApiEndpoint} from './vacation-balances-api-endpoint';
-import {VacationBalanceAssembler} from './vacation-balance-assembler';
-import {VacationBalanceResource} from './vacation-balances-response';
-import {environment} from '../../../environments/environment';
 
-interface VacationMovementResource {
-  id: number;
-  type: string;
-  days: number;
-  reason: string;
-  authorId: number | null;
-  requestId: number | null;
-  occurredAt: string;
-}
 
 @Injectable({providedIn: 'root'})
 export class BenefitsAcl {
-  private readonly vacationBalancesEndpoint: VacationBalancesApiEndpoint;
-  private readonly assembler = new VacationBalanceAssembler();
-  private readonly url = `${environment.platformProviderApiBaseUrl}${environment.platformProviderVacationBalancesEndpointPath}`;
+  private readonly benefitsStore = inject(BenefitsStore);
 
-  constructor(private http: HttpClient) {
-    this.vacationBalancesEndpoint = new VacationBalancesApiEndpoint(http);
+  /** Vacation balances translated to the read model of Request. */
+  readonly vacationBalances = computed(() =>
+    this.benefitsStore.vacationBalances().map(balance => this.toVacationBalance(balance)));
+
+ 
+  debitVacationDays(employeeId: number, days: number, requestId: number): void {
+    this.benefitsStore.debitVacationDays(employeeId, days, requestId);
   }
 
-  getVacationBalances(): Observable<VacationBalance[]> {
-    return this.vacationBalancesEndpoint.getAll();
-  }
-
-  debitVacationDays(balance: VacationBalance, days: number, requestId: number): Observable<VacationBalance> {
-    return this.http.get<VacationBalanceResource & { movements?: VacationMovementResource[] }>(`${this.url}/${balance.id}`).pipe(
-      switchMap(current => {
-        const movements = current.movements ?? [];
-        const movement: VacationMovementResource = {
-          id: Date.now(),
-          type: 'USAGE',
-          days: -days,
-          reason: 'Approved vacation request',
-          authorId: null,
-          requestId,
-          occurredAt: new Date().toISOString()
-        };
-        return this.http.patch<VacationBalanceResource>(`${this.url}/${balance.id}`, {
-          usedDays: current.usedDays + days,
-          movements: [...movements, movement]
-        });
-      }),
-      map(resource => this.assembler.toEntityFromResource(resource))
-    );
+  private toVacationBalance(balance: BenefitsVacationBalance): VacationBalance {
+    return new VacationBalance({
+      id: balance.id,
+      employeeId: balance.employeeId,
+      accruedDays: balance.accruedDays,
+      usedDays: balance.usedDays
+    });
   }
 }

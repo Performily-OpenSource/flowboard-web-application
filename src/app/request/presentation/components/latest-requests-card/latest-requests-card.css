@@ -1,0 +1,36 @@
+.side-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.latest-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--fb-border);
+}
+
+.latest-item:last-of-type {
+  border-bottom: none;
+}
+
+.latest-text {
+  min-width: 0;
+}
+
+.latest-text p {
+  margin: 0;
+}
+
+.latest-type {
+  font-weight: 500;
+}
+
+.side-link {
+  display: inline-block;
+  margin-top: 8px;
+}

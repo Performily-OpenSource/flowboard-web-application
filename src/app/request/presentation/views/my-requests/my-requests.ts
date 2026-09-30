@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, signal} from '@angular/core';
+import {Component, computed, inject, signal} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import {
   MatCell,
@@ -22,7 +22,6 @@ import {RequestStore} from '../../../application/request.store';
 import {Request} from '../../../domain/model/request.entity';
 import {RequestStatusBadge} from '../../components/request-status-badge/request-status-badge';
 import {RequestTimeline} from '../../components/request-timeline/request-timeline';
-import {ActingEmployeeSelector} from '../../components/acting-employee-selector/acting-employee-selector';
 import {CancelRequestDialog} from '../../components/cancel-request-dialog/cancel-request-dialog';
 import {RequestPeriodPipe} from '../../pipes/request-period-pipe';
 
@@ -51,7 +50,6 @@ type MyRequestsTab = 'open' | 'resolved' | 'all';
     TranslatePipe,
     RequestStatusBadge,
     RequestTimeline,
-    ActingEmployeeSelector,
     RequestPeriodPipe
   ],
   templateUrl: './my-requests.html',
@@ -81,13 +79,6 @@ export class MyRequests {
     const visible = this.visibleRequests();
     return visible.find(request => request.id === this.selectedId()) ?? visible.at(0) ?? null;
   });
-
-  constructor() {
-    effect(() => {
-      this.store.actingEmployeeId();
-      this.selectedId.set(null);
-    });
-  }
 
   setTab(tab: MyRequestsTab) {
     this.tab.set(tab);

@@ -9,13 +9,8 @@ import {BenefitsApi} from '../infrastructure/benefits-api';
 import {BenefitTypeAssembler} from '../infrastructure/benefit-type-assembler';
 import {BenefitAssignmentAssembler} from '../infrastructure/benefit-assignment-assembler';
 import {VacationBalanceAssembler} from '../infrastructure/vacation-balance-assembler';
-import {EmployeeDirectory} from './employee-directory';
-
-/**
- * Employee that performs the HR actions (registers deliveries, adjusts balances).
- * Replace it with the signed-in user once the IAM context is integrated.
- */
-export const CURRENT_EMPLOYEE_ID = 1;
+import {WorkspaceAcl} from '../infrastructure/workspace-acl';
+import {CurrentEmployeeStore} from '../../shared/application/current-employee.store';
 
 export interface AssignBenefitCommand {
   benefitTypeId: number;
@@ -34,7 +29,8 @@ export interface AssignmentPlan {
 
 @Injectable({providedIn: 'root'})
 export class BenefitsStore {
-  private readonly directory = inject(EmployeeDirectory);
+  private readonly directory = inject(WorkspaceAcl);
+  private readonly currentEmployee = inject(CurrentEmployeeStore);
   private readonly typeAssembler = new BenefitTypeAssembler();
   private readonly assignmentAssembler = new BenefitAssignmentAssembler();
   private readonly balanceAssembler = new VacationBalanceAssembler();
@@ -125,7 +121,7 @@ export class BenefitsStore {
         this.benefitTypesSignal.update(types => [...types, created]);
         this.loadingSignal.set(false);
       },
-      error: error => this.failOperation(error, 'Failed to create benefit')
+      error: error => this.failOperation(error, 'benefits.error.create-benefit')
     });
   }
 
@@ -140,7 +136,7 @@ export class BenefitsStore {
         this.benefitTypesSignal.update(types => types.map(type => type.id === updated.id ? updated : type));
         this.loadingSignal.set(false);
       },
-      error: error => this.failOperation(error, 'Failed to update benefit')
+      error: error => this.failOperation(error, 'benefits.error.update-benefit')
     });
   }
 
@@ -197,7 +193,7 @@ export class BenefitsStore {
           this.assignmentsSignal.update(current => [...current, ...created]);
           this.loadingSignal.set(false);
         },
-        error: error => this.failOperation(error, 'Failed to assign benefit')
+        error: error => this.failOperation(error, 'benefits.error.assign-benefit')
       });
   }
 
@@ -205,12 +201,12 @@ export class BenefitsStore {
   registerDelivery(assignment: BenefitAssignment, deliveredOn: string, notes: string): void {
     const copy = this.copyAssignment(assignment);
     try {
-      copy.registerDelivery(deliveredOn, CURRENT_EMPLOYEE_ID, notes.trim());
+      copy.registerDelivery(deliveredOn, this.currentEmployee.employeeId(), notes.trim());
     } catch {
       this.errorSignal.set(assignment.isDelivered() ? 'benefits.error.already-delivered' : 'benefits.error.cancelled');
       return;
     }
-    this.saveAssignment(copy, 'Failed to register delivery');
+    this.saveAssignment(copy, 'benefits.error.register-delivery');
   }
 
   cancelAssignment(assignment: BenefitAssignment): void {
@@ -221,7 +217,7 @@ export class BenefitsStore {
       this.errorSignal.set('benefits.error.cancel-delivered');
       return;
     }
-    this.saveAssignment(copy, 'Failed to cancel assignment');
+    this.saveAssignment(copy, 'benefits.error.cancel-assignment');
   }
 
   // ---------- Vacation balances ----------
@@ -230,7 +226,7 @@ export class BenefitsStore {
   adjustVacationBalance(balance: VacationBalance, days: number, reason: string): void {
     const copy = this.balanceAssembler.toEntityFromResource(this.balanceAssembler.toResourceFromEntity(balance));
     try {
-      copy.adjust(days, reason, CURRENT_EMPLOYEE_ID);
+      copy.adjust(days, reason, this.currentEmployee.employeeId());
     } catch {
       this.errorSignal.set('benefits.error.negative-balance');
       return;
@@ -241,7 +237,30 @@ export class BenefitsStore {
         this.balancesSignal.update(balances => balances.map(current => current.id === updated.id ? updated : current));
         this.loadingSignal.set(false);
       },
-      error: error => this.failOperation(error, 'Failed to adjust vacation balance')
+      error: error => this.failOperation(error, 'benefits.error.adjust-balance')
+    });
+  }
+  
+   debitVacationDays(employeeId: number, days: number, requestId: number): void {
+    const balance = this.getBalanceByEmployeeId(employeeId);
+    if (!balance) {
+      this.errorSignal.set('benefits.error.balance-not-found');
+      return;
+    }
+    const copy = this.balanceAssembler.toEntityFromResource(this.balanceAssembler.toResourceFromEntity(balance));
+    try {
+      copy.debit(days, requestId);
+    } catch {
+      this.errorSignal.set('benefits.error.not-enough-days');
+      return;
+    }
+    this.startOperation();
+    this.benefitsApi.updateVacationBalance(copy).pipe(retry(2)).subscribe({
+      next: updated => {
+        this.balancesSignal.update(balances => balances.map(current => current.id === updated.id ? updated : current));
+        this.loadingSignal.set(false);
+      },
+      error: error => this.failOperation(error, 'benefits.error.debit-balance')
     });
   }
 
@@ -251,7 +270,7 @@ export class BenefitsStore {
 
   // ---------- Internals ----------
 
-  private saveAssignment(assignment: BenefitAssignment, failure: string): void {
+  private saveAssignment(assignment: BenefitAssignment, errorKey: string): void {
     this.startOperation();
     this.benefitsApi.updateBenefitAssignment(assignment).pipe(retry(2)).subscribe({
       next: updated => {
@@ -259,7 +278,7 @@ export class BenefitsStore {
           assignments.map(current => current.id === updated.id ? updated : current));
         this.loadingSignal.set(false);
       },
-      error: error => this.failOperation(error, failure)
+      error: error => this.failOperation(error, errorKey)
     });
   }
 
@@ -274,21 +293,21 @@ export class BenefitsStore {
         this.benefitTypesSignal.set(types);
         this.loadingSignal.set(false);
       },
-      error: error => this.failOperation(error, 'Failed to load benefits')
+      error: error => this.failOperation(error, 'benefits.error.load-benefits')
     });
   }
 
   private loadAssignments(): void {
     this.benefitsApi.getBenefitAssignments().pipe(takeUntilDestroyed()).subscribe({
       next: assignments => this.assignmentsSignal.set(assignments),
-      error: error => this.errorSignal.set(this.formatError(error, 'Failed to load benefit assignments'))
+      error: error => this.errorSignal.set(this.formatError(error, 'benefits.error.load-assignments'))
     });
   }
 
   private loadVacationBalances(): void {
     this.benefitsApi.getVacationBalances().pipe(takeUntilDestroyed()).subscribe({
       next: balances => this.balancesSignal.set(balances),
-      error: error => this.errorSignal.set(this.formatError(error, 'Failed to load vacation balances'))
+      error: error => this.errorSignal.set(this.formatError(error, 'benefits.error.load-balances'))
     });
   }
 
@@ -297,15 +316,15 @@ export class BenefitsStore {
     this.errorSignal.set(null);
   }
 
-  private failOperation(error: unknown, fallback: string): void {
-    this.errorSignal.set(this.formatError(error, fallback));
+  private failOperation(error: unknown, errorKey: string): void {
+    this.errorSignal.set(this.formatError(error, errorKey));
     this.loadingSignal.set(false);
   }
 
-  private formatError(error: unknown, fallback: string): string {
-    if (error instanceof Error) {
-      return error.message.includes('Resource not found') ? `${fallback}: Not found` : error.message;
-    }
-    return fallback;
+  /** Returns the i18n key of the failed operation; the raw HTTP message is only logged. */
+  private formatError(error: unknown, errorKey: string): string {
+    console.error(errorKey, error);
+    return errorKey;
   }
+
 }

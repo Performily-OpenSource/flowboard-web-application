@@ -24,7 +24,7 @@ export interface AreaSummary {
  * and reads the names it shows through this directory.
  */
 @Injectable({providedIn: 'root'})
-export class EmployeeDirectory {
+export class WorkspaceAcl {
   private workspace = inject(WorkspaceStore);
 
   readonly employees = computed<EmployeeSummary[]>(() => this.workspace.employees().map(employee => ({

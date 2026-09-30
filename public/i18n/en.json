@@ -445,9 +445,6 @@
       "UNITS": "units"
     },
     "pagination": {
-      "showing": "Showing {{from}} to {{to}} of {{total}} {{items}}",
-      "previous": "Previous",
-      "next": "Next",
       "benefits": "benefits",
       "employees": "employees",
       "assignments": "assignments",
@@ -462,7 +459,19 @@
       "already-delivered-on": "This assignment was already delivered on {{date}}. A delivery can only be registered once.",
       "cancelled": "The assignment was cancelled and its delivery cannot be registered.",
       "cancel-delivered": "A delivered assignment cannot be cancelled.",
-      "negative-balance": "The available balance cannot be negative."
+      "negative-balance": "The available balance cannot be negative.",
+      "load-benefits": "The benefits catalog could not be loaded.",
+      "load-assignments": "The benefit assignments could not be loaded.",
+      "load-balances": "The vacation balances could not be loaded.",
+      "create-benefit": "The benefit could not be created.",
+      "update-benefit": "The benefit could not be updated.",
+      "assign-benefit": "The benefit could not be assigned.",
+      "register-delivery": "The delivery could not be registered.",
+      "cancel-assignment": "The assignment could not be cancelled.",
+      "adjust-balance": "The vacation balance adjustment could not be saved.",
+      "balance-not-found": "The employee does not have a vacation balance.",
+      "not-enough-days": "The employee does not have enough vacation days available.",
+      "debit-balance": "The vacation balance could not be debited."
     }
   },
   "benefit-unit": {
@@ -983,11 +992,6 @@
     "range": "{{start}} to {{end}}",
     "working-days": "{{count}} working days"
   },
-  "acting": {
-    "label": "Acting as",
-    "hr": "HR",
-    "hint": "Temporary: there is no login yet, pick an employee to test the requester and approver screens."
-  },
   "inbox": {
     "title": "Request inbox",
     "summary": "{{pending}} pending, {{waiting}} of them waiting for more than two days.",
@@ -1141,6 +1145,7 @@
     "confirm": "Cancel request"
   },
   "request-types": {
+    "back": "Back to inbox",
     "title": "Request types",
     "subtitle": "Each type defines its fields, whether it requires an attachment and whether it deducts a balance. Adding one does not change the system.",
     "new": "New type",
@@ -1202,7 +1207,7 @@
   },
   "request-error": {
     "already-resolved": "The request is already resolved or in another status, so this action is not possible.",
-    "not-assigned": "You are not the approver assigned to this request.",
+    "not-assigned": "Only pending requests from other employees can be resolved.",
     "not-owner": "Only the employee who sent the request can do this.",
     "not-under-review": "Only a request under review can be sent again.",
     "reason-required": "The rejection reason is required.",
@@ -1219,6 +1224,23 @@
     "type-duplicated": "A request type with that name already exists.",
     "type-in-use": "{{name}} has requests, so it cannot be deleted. You can deactivate it instead."
   },
+  "employee-requests": {
+    "title": "Requests",
+    "summary": "{{total}} requests, {{open}} not resolved.",
+    "open-inbox": "Go to inbox",
+    "number": "No.",
+    "type": "Type",
+    "period": "Period",
+    "status": "Status",
+    "submitted": "Submitted",
+    "empty": "This employee has no requests yet."
+  },
+  "latest-requests": {
+    "title": "Latest requests",
+    "count": "{{count}} in total",
+    "empty": "No requests yet.",
+    "open-inbox": "Go to inbox"
+  },
   "my-profile": {
     "request-update": "Request data update",
     "data-tab": "My data",
@@ -1229,5 +1251,21 @@
     "contract": "Contract",
     "no-manager": "Not assigned",
     "not-found": "We could not find your employee profile."
+  },
+  "pagination": {
+    "showing": "Showing {{from}} to {{to}} of {{total}} {{items}}",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "employee-benefits": {
+    "title": "Assigned benefits",
+    "empty": "This employee has no assigned benefits yet.",
+    "view-all": "View all assignments"
+  },
+  "vacation-card": {
+    "title": "Vacation balance",
+    "days": "days",
+    "empty": "This employee has no vacation balance yet.",
+    "view": "View balance per employee"
   }
 }
