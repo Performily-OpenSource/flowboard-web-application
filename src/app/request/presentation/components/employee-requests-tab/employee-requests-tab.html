@@ -1,0 +1,40 @@
+<section class="card card-body">
+  <div class="tab-head">
+    <div>
+      <h2 class="card-title">{{ 'employee-requests.title' | translate }}</h2>
+      <p class="muted">{{ 'employee-requests.summary' | translate: { total: requests().length, open: openCount() } }}</p>
+    </div>
+    <a class="text-link" routerLink="/requests/inbox">{{ 'employee-requests.open-inbox' | translate }}</a>
+  </div>
+
+  @if (requests().length > 0) {
+    <div class="table-scroll">
+      <table mat-table [dataSource]="requests()">
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef>{{ 'employee-requests.number' | translate }}</th>
+          <td mat-cell *matCellDef="let request" class="cell-strong">{{ request.code }}</td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>{{ 'employee-requests.type' | translate }}</th>
+          <td mat-cell *matCellDef="let request">{{ request.requestType?.name ?? '-' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="period">
+          <th mat-header-cell *matHeaderCellDef>{{ 'employee-requests.period' | translate }}</th>
+          <td mat-cell *matCellDef="let request">{{ request | requestPeriod }}</td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>{{ 'employee-requests.status' | translate }}</th>
+          <td mat-cell *matCellDef="let request"><app-request-status-badge [status]="request.status"/></td>
+        </ng-container>
+        <ng-container matColumnDef="submittedAt">
+          <th mat-header-cell *matHeaderCellDef>{{ 'employee-requests.submitted' | translate }}</th>
+          <td mat-cell *matCellDef="let request">{{ request.submittedAt | localDate }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+      </table>
+    </div>
+  } @else {
+    <p class="muted empty">{{ 'employee-requests.empty' | translate }}</p>
+  }
+</section>
