@@ -7,7 +7,8 @@
     "organization": "Organization",
     "benefits": "Benefits",
     "payroll": "Payslips",
-    "my-payslips": "My payslips"
+    "my-payslips": "My payslips",
+    "wellbeing": "Wellbeing"
   },
   "breadcrumb": {
     "dashboard": "Dashboard",
@@ -25,7 +26,8 @@
     "benefit-deliveries": "Deliveries",
     "vacation-balances": "Balance per employee",
     "payroll": "Payslips",
-    "my-payslips": "My payslips"
+    "my-payslips": "My payslips",
+    "wellbeing": "Wellbeing"
   },
   "toolbar": {
     "search": "Search",
@@ -682,5 +684,127 @@
     "range": "Showing {{ start }} to {{ end }} of {{ total }} payslips",
     "previous": "Previous",
     "next": "Next"
+  },
+  "wellbeing": {
+    "title": "Wellbeing",
+    "page-title": "Workplace wellbeing",
+    "page-subtitle": "Temperature, lighting and air quality readings, classified according to the thresholds defined by the organization.",
+    "new-space": "New space",
+    "loading": "Loading",
+    "close": "Close",
+    "sections": "Wellbeing sections",
+    "dashboard-tab": "Indicator panel",
+    "spaces-tab": "Spaces",
+    "thresholds-tab": "Thresholds by metric",
+    "stale-alert": "{{ office }} has not reported readings for more than {{ hours }} hours. While there is no recent data, its indicator is not calculated: the space is shown as no data.",
+    "last-reading": "Last reading {{ relative }}",
+    "relative": {
+      "no-readings": "No readings",
+      "minutes": "{{ minutes }} min ago",
+      "hours": "{{ hours }} h ago"
+    },
+    "metric": {
+      "temperature": "Temperature",
+      "illumination": "Lighting",
+      "air-quality": "Air quality"
+    },
+    "indicator": {
+      "optimal": "Optimal",
+      "acceptable": "Acceptable",
+      "poor": "Poor",
+      "hazardous": "Hazardous",
+      "no-data": "No data"
+    },
+    "unit": "Unit: {{ unit }}",
+    "ranges-edit": "Edit ranges",
+    "thresholds-note": "Ranges are defined as data, not code. Changing them updates the classification of readings received afterwards.",
+    "spaces-count": "{{ count }} monitored spaces",
+    "filter": {
+      "site-all": "Site: all",
+      "site": "Site: {{ value }}",
+      "floor-all": "Floor: all",
+      "floor": "Floor: {{ value }}",
+      "state-active": "Status: active",
+      "state-all": "Status: all",
+      "state-inactive": "Status: inactive"
+    },
+    "table": {
+      "space": "SPACE",
+      "temperature": "TEMPERATURE",
+      "illumination": "LIGHTING",
+      "air-quality": "AIR QUALITY",
+      "indicator": "INDICATOR",
+      "site": "SITE",
+      "floor": "FLOOR",
+      "capacity": "REFERENCE CAPACITY",
+      "last-reading": "LAST READING",
+      "actions": "ACTIONS"
+    },
+    "action": {
+      "history": "History",
+      "devices": "Devices",
+      "more": "More actions",
+      "configure-devices": "Configure devices"
+    },
+    "empty-spaces": "No spaces match the selected filters.",
+    "device-dialog": {
+      "title": "Devices · {{ space }}",
+      "subtitle": "Link sensors that are in inventory. A device cannot be linked to two spaces.",
+      "linked": "Linked devices",
+      "linked-empty": "This space does not have any linked devices yet.",
+      "inventory": "Available inventory",
+      "inventory-empty": "There are no devices available in inventory.",
+      "unlink": "Unlink",
+      "link": "Link",
+      "register": "Register device in inventory and link",
+      "code": "Code",
+      "code-placeholder": "FB-SENSOR-004",
+      "temperature": "Temperature",
+      "illumination": "Lighting",
+      "air-quality": "Air quality",
+      "register-link": "Register and link",
+      "close": "Close",
+      "duplicate": "A device with this code already exists.",
+      "already-linked": "This device is already linked to another office."
+    },
+    "history-dialog": {
+      "title": "History of {{ space }}",
+      "subtitle": "Review a metric over time and distinguish a one-off episode from a persistent issue.",
+      "invalid-range": "The range must be valid and cannot include future dates.",
+      "empty-title": "No readings recorded in the interval",
+      "empty-content": "Try another period or check whether the device has sent data.",
+      "summary": "{{ count }} readings of {{ metric }} · Unit {{ unit }}",
+      "from": "to",
+      "close": "Close"
+    },
+    "office-dialog": {
+      "title": "New monitored space",
+      "subtitle": "Register the physical environment from which readings will be received. Flowboard does not provide sensors; it classifies the readings that are registered.",
+      "name": "Space name",
+      "name-placeholder": "Meeting room 2",
+      "name-required": "The name is required and must be at most 80 characters.",
+      "duplicate": "A space with that name already exists in this organization.",
+      "site": "Site",
+      "floor": "Floor",
+      "capacity": "Reference capacity",
+      "capacity-placeholder": "12 people",
+      "cancel": "Cancel",
+      "save": "Save space"
+    },
+    "threshold-dialog": {
+      "title": "Edit thresholds",
+      "subtitle": "Ranges must cover the interval continuously, without gaps or overlaps.",
+      "min": "Minimum",
+      "max": "Maximum",
+      "note": "Changes are effective for the classification of new readings.",
+      "cancel": "Cancel",
+      "save": "Save changes",
+      "error-not-found": "Threshold not found.",
+      "error-invalid-ranges": "Ranges must be contiguous, without gaps or overlaps."
+    },
+    "errors": {
+      "load": "We could not load wellbeing information.",
+      "generic": "We could not complete the operation."
+    }
   }
 }

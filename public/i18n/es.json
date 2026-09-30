@@ -7,7 +7,8 @@
     "organization": "Organización",
     "benefits": "Beneficios",
     "payroll": "Boletas",
-    "my-payslips": "Mis boletas"
+    "my-payslips": "Mis boletas",
+    "wellbeing": "Bienestar"
   },
   "breadcrumb": {
     "dashboard": "Dashboard",
@@ -25,7 +26,8 @@
     "benefit-deliveries": "Entregas",
     "vacation-balances": "Saldo por colaborador",
     "payroll": "Boletas",
-    "my-payslips": "Mis boletas"
+    "my-payslips": "Mis boletas",
+    "wellbeing": "Bienestar"
   },
   "toolbar": {
     "search": "Buscar",
@@ -682,5 +684,127 @@
     "range": "Mostrando {{ start }} a {{ end }} de {{ total }} boletas",
     "previous": "Anterior",
     "next": "Siguiente"
+  },
+  "wellbeing": {
+    "title": "Bienestar",
+    "page-title": "Bienestar del espacio de trabajo",
+    "page-subtitle": "Lecturas de temperatura, iluminación y calidad del aire, clasificadas según los umbrales que define la organización.",
+    "new-space": "Nuevo espacio",
+    "loading": "Cargando",
+    "close": "Cerrar",
+    "sections": "Secciones de Bienestar",
+    "dashboard-tab": "Panel de indicadores",
+    "spaces-tab": "Espacios",
+    "thresholds-tab": "Umbrales por métrica",
+    "stale-alert": "{{ office }} no reporta lecturas desde hace más de {{ hours }} horas. Mientras no haya datos recientes no se calcula su indicador: el espacio se muestra como sin dato.",
+    "last-reading": "Última lectura {{ relative }}",
+    "relative": {
+      "no-readings": "Sin lecturas",
+      "minutes": "Hace {{ minutes }} min",
+      "hours": "Hace {{ hours }} h"
+    },
+    "metric": {
+      "temperature": "Temperatura",
+      "illumination": "Iluminación",
+      "air-quality": "Calidad del aire"
+    },
+    "indicator": {
+      "optimal": "Optimo",
+      "acceptable": "Aceptable",
+      "poor": "Deficiente",
+      "hazardous": "Peligro",
+      "no-data": "Sin datos"
+    },
+    "unit": "Unidad: {{ unit }}",
+    "ranges-edit": "Editar rangos",
+    "thresholds-note": "Los rangos se definen como datos, no como código. Cambiarlos actualiza la clasificación de las lecturas que entren con posterioridad.",
+    "spaces-count": "{{ count }} espacios monitoreados",
+    "filter": {
+      "site-all": "Sede: todas",
+      "site": "Sede: {{ value }}",
+      "floor-all": "Piso: todos",
+      "floor": "Piso: {{ value }}",
+      "state-active": "Estado: activos",
+      "state-all": "Estado: todos",
+      "state-inactive": "Estado: inactivos"
+    },
+    "table": {
+      "space": "ESPACIO",
+      "temperature": "TEMPERATURA",
+      "illumination": "ILUMINACIÓN",
+      "air-quality": "CALIDAD DEL AIRE",
+      "indicator": "INDICADOR",
+      "site": "SEDE",
+      "floor": "PISO",
+      "capacity": "AFORO REFERENCIAL",
+      "last-reading": "ÚLTIMA LECTURA",
+      "actions": "ACCIONES"
+    },
+    "action": {
+      "history": "Histórico",
+      "devices": "Dispositivos",
+      "more": "Más acciones",
+      "configure-devices": "Configurar dispositivos"
+    },
+    "empty-spaces": "No hay espacios que coincidan con los filtros.",
+    "device-dialog": {
+      "title": "Dispositivos · {{ space }}",
+      "subtitle": "Vincula sensores que estén en inventario. Un dispositivo no puede estar vinculado a dos espacios.",
+      "linked": "Dispositivos vinculados",
+      "linked-empty": "Este espacio todavía no tiene dispositivos vinculados.",
+      "inventory": "Inventario disponible",
+      "inventory-empty": "No hay dispositivos disponibles en inventario.",
+      "unlink": "Desvincular",
+      "link": "Vincular",
+      "register": "Registrar dispositivo en inventario y vincular",
+      "code": "Código",
+      "code-placeholder": "FB-SENSOR-004",
+      "temperature": "Temperatura",
+      "illumination": "Iluminación",
+      "air-quality": "Calidad del aire",
+      "register-link": "Registrar y vincular",
+      "close": "Cerrar",
+      "duplicate": "Ya existe un dispositivo con ese código.",
+      "already-linked": "Este dispositivo ya está vinculado a otra oficina."
+    },
+    "history-dialog": {
+      "title": "Histórico de {{ space }}",
+      "subtitle": "Revisa la evolución de una métrica y distingue un episodio puntual de un problema persistente.",
+      "invalid-range": "El rango debe ser válido y no puede incluir fechas futuras.",
+      "empty-title": "No hay lecturas registradas en el intervalo",
+      "empty-content": "Prueba con otro período o revisa si el dispositivo ha enviado datos.",
+      "summary": "{{ count }} lecturas de {{ metric }} · Unidad {{ unit }}",
+      "from": "a",
+      "close": "Cerrar"
+    },
+    "office-dialog": {
+      "title": "Nuevo espacio monitoreado",
+      "subtitle": "Registra el ambiente físico del que se van a recibir lecturas. Flowboard no provee sensores: clasifica las lecturas que se registren.",
+      "name": "Nombre del espacio",
+      "name-placeholder": "Sala de reuniones 2",
+      "name-required": "El nombre es obligatorio y debe tener hasta 80 caracteres.",
+      "duplicate": "Ya existe un espacio con ese nombre en esta organización.",
+      "site": "Sede",
+      "floor": "Piso",
+      "capacity": "Aforo referencial",
+      "capacity-placeholder": "12 personas",
+      "cancel": "Cancelar",
+      "save": "Guardar espacio"
+    },
+    "threshold-dialog": {
+      "title": "Editar umbrales",
+      "subtitle": "Los rangos deben cubrir el intervalo de forma continua, sin huecos ni superposiciones.",
+      "min": "Mínimo",
+      "max": "Máximo",
+      "note": "Los cambios quedan vigentes para la clasificación de las lecturas nuevas.",
+      "cancel": "Cancelar",
+      "save": "Guardar cambios",
+      "error-not-found": "No se encontró el umbral.",
+      "error-invalid-ranges": "Los rangos deben ser contiguos, sin huecos ni superposiciones."
+    },
+    "errors": {
+      "load": "No pudimos cargar la información de bienestar.",
+      "generic": "No pudimos completar la operación."
+    }
   }
 }
