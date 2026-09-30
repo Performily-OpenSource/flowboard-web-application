@@ -1,0 +1,124 @@
+<section class="page wellbeing-page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{{ 'wellbeing.title' | translate }}</h1>
+      <h2 class="section-title">{{ 'wellbeing.page-title' | translate }}</h2>
+      <p class="page-subtitle">{{ 'wellbeing.page-subtitle' | translate }}</p>
+    </div>
+    <div class="page-actions">
+      <button mat-flat-button type="button" (click)="openNewOffice()"><mat-icon>add</mat-icon> {{ 'wellbeing.new-space' | translate }}</button>
+    </div>
+  </header>
+
+  @if (store.loading()) { <div class="loading-line" [attr.aria-label]="'wellbeing.loading' | translate"></div> }
+  @if (store.error()) {
+    <div class="alert alert-error" role="alert">
+      <mat-icon>error_outline</mat-icon><span>{{ translateError(store.error()) }}</span>
+      <button class="alert-close" type="button" (click)="store.clearError()" [attr.aria-label]="'wellbeing.close' | translate"><mat-icon>close</mat-icon></button>
+    </div>
+  }
+
+  <nav class="tabs" [attr.aria-label]="'wellbeing.sections' | translate">
+    <button type="button" [class.active]="tab() === 'dashboard'" (click)="setTab('dashboard')">{{ 'wellbeing.dashboard-tab' | translate }}</button>
+    <button type="button" [class.active]="tab() === 'spaces'" (click)="setTab('spaces')">{{ 'wellbeing.spaces-tab' | translate }}</button>
+    <button type="button" [class.active]="tab() === 'thresholds'" (click)="setTab('thresholds')">{{ 'wellbeing.thresholds-tab' | translate }}</button>
+  </nav>
+
+  @if (tab() === 'dashboard') {
+    @if (hasStaleAlert()) {
+      <div class="alert alert-error">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ 'wellbeing.stale-alert' | translate: { office: staleOffice()?.name ?? '', hours: 6 } }}</span>
+      </div>
+    }
+
+    @let featured = offices()[0];
+    @if (featured) {
+      <div class="metric-grid">
+        @for (metric of featured.metrics; track metric.metricType) {
+          <article class="metric-card">
+            <div class="metric-head">
+              <div class="metric-icon"><mat-icon>{{ metric.metricType === 'TEMPERATURE' ? 'device_thermostat' : metric.metricType === 'ILLUMINATION' ? 'light_mode' : 'air' }}</mat-icon></div>
+              <div class="metric-name">{{ metricKey(metric.metricType) | translate }}</div>
+              <span class="pill indicator-{{ (metric.indicator ?? 'NO_DATA').toLowerCase() }}">{{ indicatorKey(metric.indicator) | translate }}</span>
+            </div>
+            <div class="metric-value">{{ formatMetric(metric.value, metric.metricType) }} <span>{{ metric.unit }}</span></div>
+            <div class="progress-track"><span [class]="progressClass(metric.indicator)" [style.width.%]="progress(metric.indicator)"></span></div>
+            <div class="metric-foot">{{ metric.value === null ? lastSeen(metric.recordedAt) : ('wellbeing.last-reading' | translate: { relative: lastSeen(metric.recordedAt) }) }}</div>
+          </article>
+        }
+      </div>
+    }
+
+    <section class="table-card">
+      <table>
+        <thead><tr><th>{{ 'wellbeing.table.space' | translate }}</th><th>{{ 'wellbeing.table.temperature' | translate }}</th><th>{{ 'wellbeing.table.illumination' | translate }}</th><th>{{ 'wellbeing.table.air-quality' | translate }}</th><th>{{ 'wellbeing.table.indicator' | translate }}</th><th></th></tr></thead>
+        <tbody>
+          @for (item of offices(); track item.office.id) {
+            <tr>
+              <td class="strong">{{ item.office.name }}</td>
+              @for (metricType of metricTypes; track metricType) {
+                @let metric = officeMetric(item.office, metricType);
+                <td>{{ formatMetric(metric?.value ?? null, metricType) }} {{ metric?.value === null ? '' : metricUnit(metricType) }}</td>
+              }
+              <td><span class="pill indicator-{{ item.overallIndicator.toLowerCase() }}">{{ indicatorKey(item.overallIndicator) | translate }}</span></td>
+              <td class="row-actions">
+                <button class="icon-action" type="button" (click)="openHistory(item.office)" [attr.aria-label]="'wellbeing.action.history' | translate"><mat-icon>insights</mat-icon></button>
+                <button class="icon-action" type="button" (click)="openDeviceDialog(item.office)" [attr.aria-label]="'wellbeing.action.devices' | translate"><mat-icon>memory</mat-icon></button>
+                <button class="icon-action" type="button" [matMenuTriggerFor]="rowMenu" [attr.aria-label]="'wellbeing.action.more' | translate"><mat-icon>more_vert</mat-icon></button>
+                <mat-menu #rowMenu="matMenu">
+                  <button mat-menu-item (click)="openHistory(item.office, 'TEMPERATURE')">{{ 'wellbeing.action.history' | translate }}</button>
+                  <button mat-menu-item (click)="openDeviceDialog(item.office)">{{ 'wellbeing.action.configure-devices' | translate }}</button>
+                </mat-menu>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </section>
+  } @else if (tab() === 'spaces') {
+    <div class="filters">
+      <select [value]="sede()" (change)="sede.set($any($event.target).value)"><option value="">{{ 'wellbeing.filter.site-all' | translate }}</option>@for (building of buildings(); track building) {<option [value]="building">{{ 'wellbeing.filter.site' | translate: {value: building} }}</option>}</select>
+      <select [value]="floor()" (change)="floor.set($any($event.target).value)"><option value="">{{ 'wellbeing.filter.floor-all' | translate }}</option>@for (floorName of floors(); track floorName) {<option [value]="floorName">{{ 'wellbeing.filter.floor' | translate: {value: floorName} }}</option>}</select>
+      <select [value]="state()" (change)="state.set($any($event.target).value)"><option value="ACTIVE">{{ 'wellbeing.filter.state-active' | translate }}</option><option value="ALL">{{ 'wellbeing.filter.state-all' | translate }}</option><option value="INACTIVE">{{ 'wellbeing.filter.state-inactive' | translate }}</option></select>
+      <span class="spacer"></span><span class="muted">{{ 'wellbeing.spaces-count' | translate: {count: filteredOffices().length} }}</span>
+    </div>
+
+    <section class="table-card">
+      <table>
+        <thead><tr><th>{{ 'wellbeing.table.space' | translate }}</th><th>{{ 'wellbeing.table.site' | translate }}</th><th>{{ 'wellbeing.table.floor' | translate }}</th><th>{{ 'wellbeing.table.capacity' | translate }}</th><th>{{ 'wellbeing.table.last-reading' | translate }}</th><th>{{ 'wellbeing.table.actions' | translate }}</th></tr></thead>
+        <tbody>
+          @for (office of filteredOffices(); track office.id) {
+            <tr>
+              <td class="strong">{{ office.name }}</td><td>{{ office.location.building }}</td><td>{{ office.location.floor }}</td><td>{{ office.location.reference || '—' }}</td>
+              <td>{{ lastSeen(store.latestReading(office.id, 'TEMPERATURE', false)?.recordedAt ?? null) }}</td>
+              <td class="row-actions"><button class="icon-action" type="button" (click)="openDeviceDialog(office)" [attr.aria-label]="'wellbeing.action.devices' | translate"><mat-icon>memory</mat-icon></button><button class="icon-action" type="button" (click)="openHistory(office)" [attr.aria-label]="'wellbeing.action.history' | translate"><mat-icon>insights</mat-icon></button></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      @if (!filteredOffices().length) { <div class="empty">{{ 'wellbeing.empty-spaces' | translate }}</div> }
+    </section>
+  } @else {
+    <div class="alert">
+      <mat-icon>info_outline</mat-icon>
+      <span>{{ 'wellbeing.thresholds-note' | translate }}</span>
+    </div>
+    <div class="threshold-list">
+      @for (threshold of store.thresholds(); track threshold.id) {
+        <article class="threshold-card">
+          <div class="threshold-head">
+            <div class="metric-icon"><mat-icon>{{ threshold.metricType === 'TEMPERATURE' ? 'device_thermostat' : threshold.metricType === 'ILLUMINATION' ? 'light_mode' : 'air' }}</mat-icon></div>
+            <div><strong>{{ metricKey(threshold.metricType) | translate }}</strong><span>{{ 'wellbeing.unit' | translate: {unit: metricUnit(threshold.metricType)} }}</span></div>
+            <span class="spacer"></span><button class="text-link" type="button" (click)="openThreshold(threshold.metricType)">{{ 'wellbeing.ranges-edit' | translate }}</button>
+          </div>
+          <div class="range-grid">
+            @for (range of threshold.ranges; track range.indicator) {
+              <div class="range-box"><div class="range-title"><span class="dot dot-{{ range.indicator.toLowerCase() }}"></span>{{ indicatorKey(range.indicator) | translate }}</div><div>{{ range.minValue }} <span>{{ 'wellbeing.history-dialog.from' | translate }}</span> {{ range.maxValue }}</div></div>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  }
+</section>
