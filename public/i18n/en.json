@@ -452,6 +452,11 @@
       "normal": "Normal",
       "low": "Low",
       "footer": "Showing {{count}} collaborators in the area"
+    },
+    "tabs": {
+      "records": "Records",
+      "summary": "Summary by area",
+      "hours": "Hours and overtime"
     }
   }
 }

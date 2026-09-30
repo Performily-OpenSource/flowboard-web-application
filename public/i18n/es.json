@@ -453,6 +453,11 @@
       "low": "Bajo",
       "footer": "Mostrando {{count}} colaboradores del área"
     },
-    "summary-title": "Resumen por área"
+    "summary-title": "Resumen por área",
+    "tabs": {
+      "records": "Registros",
+      "summary": "Resumen por área",
+      "hours": "Horas y sobretiempo"
+    }
   }
 }
