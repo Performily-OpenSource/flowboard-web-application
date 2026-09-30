@@ -1,0 +1,19 @@
+.payroll-page { max-width:1200px; }
+.result-count { color:var(--fb-text-muted); font-size:12px; }
+.filters-row { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:20px; }
+.select-filter { position:relative; display:inline-flex; align-items:center; min-width:120px; border:1px solid var(--fb-outline); border-radius:9px; background:var(--fb-surface); }
+.select-filter.active { background:var(--fb-primary-container); border-color:transparent; }
+.select-filter select { appearance:none; min-height:34px; padding:0 30px 0 12px; border:0; outline:0; background:transparent; color:var(--fb-text-secondary); font:inherit; font-size:12.5px; cursor:pointer; }
+.select-filter.active select { color:var(--fb-on-primary-container); }
+.select-filter mat-icon { position:absolute; right:7px; pointer-events:none; font-size:18px; }
+.table-card { overflow:hidden; border:1px solid var(--fb-border); border-radius:12px; background:var(--fb-surface); }
+.table-scroll { overflow-x:auto; }
+table { width:100%; }
+.action-cell { display:flex; align-items:center; gap:8px; white-space:nowrap; }
+.payment-paid { background:var(--fb-success-container); }
+.pagination { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-top:18px; }
+.page-button { min-width:32px; height:30px; padding:0 12px; border:1px solid var(--fb-outline); border-radius:6px; background:var(--fb-surface); color:var(--fb-text-secondary); font:inherit; font-size:12.5px; cursor:pointer; }
+.page-button:disabled { opacity:.5; cursor:default; }
+.page-button.current { border-color:var(--fb-primary); background:var(--fb-primary); color:var(--fb-on-primary); }
+.error-banner { display:flex; gap:8px; align-items:center; margin:10px 0; padding:10px 12px; border-radius:8px; background:var(--fb-error-container); color:var(--fb-on-error-container); font-size:12px; }
+@media (max-width:599px) { .result-count { width:100%; } }
