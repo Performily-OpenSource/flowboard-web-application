@@ -1,0 +1,30 @@
+<div class="dialog">
+  <header class="dialog-header">
+    <h2>{{ 'attendance.justification.title' | translate }}</h2>
+    <button class="close" type="button" (click)="close()" [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
+  </header>
+
+  <div class="record-summary">
+    <div><span>{{ 'attendance.justification.date' | translate }}</span><strong>{{ data.record.workDate | slice: 8:10 }}/{{ data.record.workDate | slice: 5:7 }}/{{ data.record.workDate | slice: 0:4 }}</strong></div>
+    <div><span>{{ 'attendance.justification.status' | translate }}</span><strong>{{ 'attendance.status.' + data.record.status | translate }}</strong></div>
+    <div><span>{{ 'attendance.justification.record' | translate }}</span><strong>{{ data.record.checkInTime || '—' }} / {{ data.record.checkOutTime || '—' }}</strong></div>
+  </div>
+
+  <label class="field-label" for="reason">{{ 'attendance.justification.reason' | translate }}</label>
+  <textarea id="reason" [(ngModel)]="reason" rows="4" [placeholder]="'attendance.justification.reason-placeholder' | translate"></textarea>
+
+  <label class="field-label">{{ 'attendance.justification.support' | translate }}</label>
+  <label class="upload">
+    <mat-icon>upload</mat-icon>
+    <span>{{ fileName || ('attendance.justification.upload' | translate) }}</span>
+    <small>PDF o imagen, hasta 5 MB</small>
+    <input type="file" accept="application/pdf,image/*" (change)="selectFile($event)" hidden>
+  </label>
+
+  <div class="info-note"><mat-icon>info</mat-icon><span>{{ 'attendance.justification.note' | translate }}</span></div>
+
+  <footer class="dialog-actions">
+    <button mat-stroked-button type="button" (click)="close()">{{ 'common.cancel' | translate }}</button>
+    <button mat-flat-button type="button" [disabled]="!reason.trim()" (click)="submit()">{{ 'attendance.justification.submit' | translate }}</button>
+  </footer>
+</div>
