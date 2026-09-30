@@ -1,7 +1,7 @@
-import {computed, Injectable, Signal, signal} from '@angular/core';
+import {computed, inject, Injectable, Signal, signal} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {Observable, retry} from 'rxjs';
-import {environment} from '../../../environments/environment';
+import {CurrentEmployeeStore} from '../../shared/application/current-employee.store';
 import {RequestApi} from '../infrastructure/request-api';
 import {WorkspaceAcl} from '../infrastructure/workspace-acl';
 import {BenefitsAcl} from '../infrastructure/benefits-acl';
@@ -45,12 +45,15 @@ export class RequestStore {
   private readonly errorSignal = signal<RequestError | null>(null);
   readonly error = this.errorSignal.asReadonly();
 
-  private readonly actingEmployeeIdSignal = signal<number>(environment.defaultActingEmployeeId);
-  readonly actingEmployeeId = this.actingEmployeeIdSignal.asReadonly();
+  /**
+   * Employee in session, shared by every bounded context. Until IAM exists it starts with a
+   * Human Resources employee (environment.defaultActingEmployeeId).
+   */
+  private readonly currentEmployeeStore = inject(CurrentEmployeeStore);
+  readonly currentEmployeeId = this.currentEmployeeStore.employeeId;
 
   readonly requesters = this.requestersSignal.asReadonly();
-  readonly activeRequesters = computed(() => this.requestersSignal().filter(requester => requester.active));
-  readonly actingEmployee = computed(() => this.getRequester(this.actingEmployeeIdSignal()));
+  readonly currentEmployee = computed(() => this.getRequester(this.currentEmployeeId()));
 
   readonly requestTypes = computed(() => [...this.requestTypesSignal()].sort((a, b) => a.id - b.id));
   readonly activeRequestTypes = computed(() => this.requestTypes().filter(type => type.active));
@@ -65,25 +68,18 @@ export class RequestStore {
       .sort((a, b) => b.submittedAt.localeCompare(a.submittedAt));
   });
 
-  readonly myRequests = computed(() => this.requests().filter(request => request.isOwnedBy(this.actingEmployeeIdSignal())));
+  readonly myRequests = computed(() => this.requests().filter(request => request.isOwnedBy(this.currentEmployeeId())));
 
-  readonly inboxRequests = computed(() => {
-    const actor = this.actingEmployee();
-    return actor ? this.requests().filter(request => this.isAssignedTo(request, actor)) : [];
-  });
+  /** Human Resources sees the requests of every other employee. */
+  readonly inboxRequests = computed(() => this.requests().filter(request => !request.isOwnedBy(this.currentEmployeeId())));
 
-  readonly myVacationBalance = computed(() => this.getVacationBalance(this.actingEmployeeIdSignal()));
+  readonly myVacationBalance = computed(() => this.getVacationBalance(this.currentEmployeeId()));
 
   constructor(private requestApi: RequestApi, private workspaceAcl: WorkspaceAcl, private benefitsAcl: BenefitsAcl) {
     this.loadRequesters();
     this.loadRequestTypes();
     this.loadRequests();
     this.loadVacationBalances();
-  }
-
-  setActingEmployee(employeeId: number): void {
-    this.actingEmployeeIdSignal.set(employeeId);
-    this.errorSignal.set(null);
   }
 
   getRequestTypeById(id: number): Signal<RequestType | undefined> {
@@ -107,11 +103,6 @@ export class RequestStore {
 
   approverName(request: Request): string | null {
     return request.isRoutedToHr() ? null : this.getRequester(request.approverId)?.fullName ?? null;
-  }
-
-  isAssignedTo(request: Request, actor: Requester): boolean {
-    if (request.isOwnedBy(actor.id)) return false;
-    return request.isRoutedToHr() ? actor.hrStaff : request.approverId === actor.id;
   }
 
   countRequestsOfType(requestTypeId: number): number {
@@ -173,7 +164,7 @@ export class RequestStore {
   }
 
   submitRequest(requestType: RequestType, fieldValues: RequestFieldValue[], attachments: RequestAttachment[]): boolean {
-    const requester = this.actingEmployee();
+    const requester = this.currentEmployee();
     if (!requester || !this.passes(this.checkBeforeSubmit(requestType, fieldValues, attachments))) return false;
     const now = new Date().toISOString();
     const period = requestType.hasPeriod() ? this.periodFrom(fieldValues) : null;
@@ -200,7 +191,7 @@ export class RequestStore {
   }
 
   resubmitRequest(request: Request, requestType: RequestType, fieldValues: RequestFieldValue[], attachments: RequestAttachment[]): boolean {
-    const actor = this.actingEmployee();
+    const actor = this.currentEmployee();
     if (!actor || !request.isUnderReview() || !request.isOwnedBy(actor.id)) return this.fail('request-error.not-under-review');
     if (!this.passes(this.checkBeforeSubmit(requestType, fieldValues, attachments))) return false;
     const updated = this.copyRequest(request);
@@ -216,14 +207,14 @@ export class RequestStore {
   }
 
   canResolve(request: Request): boolean {
-    const actor = this.actingEmployee();
-    return !!actor && request.isPending() && this.isAssignedTo(request, actor);
+    // Human Resources can resolve any pending request, except its own
+    return request.isPending() && !request.isOwnedBy(this.currentEmployeeId());
   }
 
   approveRequest(request: Request, comment: string | null): boolean {
     if (!this.canResolve(request)) return this.fail('request-error.not-assigned');
     const updated = this.copyRequest(request);
-    this.changeStatus(updated, 'APPROVED', this.actingEmployeeIdSignal(), comment?.trim() || null,
+    this.changeStatus(updated, 'APPROVED', this.currentEmployeeId(), comment?.trim() || null,
       () => this.notifyBenefitsOfApproval(updated));
     return true;
   }
@@ -231,21 +222,21 @@ export class RequestStore {
   rejectRequest(request: Request, reason: string): boolean {
     if (!this.canResolve(request)) return this.fail('request-error.not-assigned');
     if (!reason.trim()) return this.fail('request-error.reason-required');
-    this.changeStatus(this.copyRequest(request), 'REJECTED', this.actingEmployeeIdSignal(), reason.trim());
+    this.changeStatus(this.copyRequest(request), 'REJECTED', this.currentEmployeeId(), reason.trim());
     return true;
   }
 
   returnRequestForReview(request: Request, comment: string): boolean {
     if (!this.canResolve(request)) return this.fail('request-error.not-assigned');
     if (!comment.trim()) return this.fail('request-error.comment-required');
-    this.changeStatus(this.copyRequest(request), 'UNDER_REVIEW', this.actingEmployeeIdSignal(), comment.trim());
+    this.changeStatus(this.copyRequest(request), 'UNDER_REVIEW', this.currentEmployeeId(), comment.trim());
     return true;
   }
 
   cancelRequest(request: Request): boolean {
     if (!request.canBeCancelled()) return this.fail('request-error.already-resolved');
-    if (!request.isOwnedBy(this.actingEmployeeIdSignal())) return this.fail('request-error.not-owner');
-    this.changeStatus(this.copyRequest(request), 'CANCELLED', this.actingEmployeeIdSignal(), null);
+    if (!request.isOwnedBy(this.currentEmployeeId())) return this.fail('request-error.not-owner');
+    this.changeStatus(this.copyRequest(request), 'CANCELLED', this.currentEmployeeId(), null);
     return true;
   }
 

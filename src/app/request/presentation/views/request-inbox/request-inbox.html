@@ -1,6 +1,4 @@
 <section class="page">
-  <div class="acting-bar"><app-acting-employee-selector/></div>
-
   <header class="page-header">
     <div>
       <h1 class="page-title">{{ 'inbox.title' | translate }}</h1>
@@ -94,7 +92,11 @@
   }
 
   @if (filteredRequests().length > 0) {
-    <div class="table-card">
+    @if (selectedRequest(); as selected) {
+      <app-request-timeline [request]="selected"/>
+    }
+
+    <div class="table-card list-card">
       <table mat-table [dataSource]="pageRequests()">
         <ng-container matColumnDef="requester">
           <th mat-header-cell *matHeaderCellDef>{{ 'inbox.requester' | translate }}</th>
@@ -124,20 +126,25 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>{{ 'inbox.actions' | translate }}</th>
           <td mat-cell *matCellDef="let request">
-            @if (request.isPending()) {
-              <button class="icon-action" type="button" (click)="approve(request)"
-                      [matTooltip]="'inbox.approve' | translate" [attr.aria-label]="'inbox.approve' | translate">
-                <mat-icon>edit</mat-icon>
+            <span class="row-actions">
+              @if (store.canResolve(request)) {
+                <button class="icon-action approve-action" type="button" (click)="approve(request)"
+                        [matTooltip]="'inbox.approve' | translate" [attr.aria-label]="'inbox.approve' | translate">
+                  <mat-icon>check</mat-icon>
+                </button>
+                <button class="icon-action reject-action" type="button" (click)="reject(request)"
+                        [matTooltip]="'inbox.reject' | translate" [attr.aria-label]="'inbox.reject' | translate">
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+              <button class="icon-action" type="button" [matMenuTriggerFor]="rowMenu"
+                      [matTooltip]="'inbox.more-actions' | translate" [attr.aria-label]="'inbox.more-actions' | translate">
+                <mat-icon>more_vert</mat-icon>
               </button>
-            }
-            <button class="icon-action" type="button" [matMenuTriggerFor]="rowMenu" [attr.aria-label]="'inbox.more-actions' | translate">
-              <mat-icon>more_vert</mat-icon>
-            </button>
+            </span>
             <mat-menu #rowMenu="matMenu">
-              @if (request.isPending()) {
-                <button mat-menu-item (click)="approve(request)"><mat-icon>check</mat-icon>{{ 'inbox.approve' | translate }}</button>
+              @if (store.canResolve(request)) {
                 <button mat-menu-item (click)="returnForReview(request)"><mat-icon>undo</mat-icon>{{ 'inbox.return' | translate }}</button>
-                <button mat-menu-item (click)="reject(request)"><mat-icon>close</mat-icon>{{ 'inbox.reject' | translate }}</button>
               }
               <button mat-menu-item (click)="toggleDetail(request)"><mat-icon>history</mat-icon>{{ 'inbox.view-history' | translate }}</button>
             </mat-menu>
@@ -158,10 +165,6 @@
       }
       <button class="page-button" type="button" [disabled]="page() >= pageCount() - 1" (click)="page.set(page() + 1)">{{ 'inbox.next' | translate }}</button>
     </nav>
-
-    @if (selectedRequest(); as selected) {
-      <app-request-timeline [request]="selected"/>
-    }
   } @else if (!store.loading()) {
     <div class="card empty-state">
       <span class="empty-icon" aria-hidden="true"><mat-icon>check</mat-icon></span>

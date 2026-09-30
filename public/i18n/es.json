@@ -974,11 +974,6 @@
     "range": "{{start}} al {{end}}",
     "working-days": "{{count}} días hábiles"
   },
-  "acting": {
-    "label": "Viendo como",
-    "hr": "RR. HH.",
-    "hint": "Temporal: todavía no hay inicio de sesión, elige un colaborador para probar las pantallas del solicitante y del aprobador."
-  },
   "inbox": {
     "title": "Bandeja de solicitudes",
     "summary": "{{pending}} pendientes, {{waiting}} de ellas con más de dos días de espera.",
@@ -1132,6 +1127,7 @@
     "confirm": "Cancelar solicitud"
   },
   "request-types": {
+    "back": "Volver a la bandeja",
     "title": "Tipos de solicitud",
     "subtitle": "Cada tipo define sus campos, si exige adjunto y si descuenta saldo. Agregar uno nuevo no requiere tocar el sistema.",
     "new": "Nuevo tipo",
@@ -1193,7 +1189,7 @@
   },
   "request-error": {
     "already-resolved": "La solicitud ya está resuelta o en otro estado, por eso no se puede hacer esta acción.",
-    "not-assigned": "No eres el aprobador asignado a esta solicitud.",
+    "not-assigned": "Solo se pueden resolver solicitudes pendientes de otros colaboradores.",
     "not-owner": "Solo el colaborador que envió la solicitud puede hacer esto.",
     "not-under-review": "Solo se puede reenviar una solicitud en revisión.",
     "reason-required": "El motivo del rechazo es obligatorio.",

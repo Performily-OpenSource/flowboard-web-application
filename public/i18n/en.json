@@ -973,11 +973,6 @@
     "range": "{{start}} to {{end}}",
     "working-days": "{{count}} working days"
   },
-  "acting": {
-    "label": "Acting as",
-    "hr": "HR",
-    "hint": "Temporary: there is no login yet, pick an employee to test the requester and approver screens."
-  },
   "inbox": {
     "title": "Request inbox",
     "summary": "{{pending}} pending, {{waiting}} of them waiting for more than two days.",
@@ -1131,6 +1126,7 @@
     "confirm": "Cancel request"
   },
   "request-types": {
+    "back": "Back to inbox",
     "title": "Request types",
     "subtitle": "Each type defines its fields, whether it requires an attachment and whether it deducts a balance. Adding one does not change the system.",
     "new": "New type",
@@ -1192,7 +1188,7 @@
   },
   "request-error": {
     "already-resolved": "The request is already resolved or in another status, so this action is not possible.",
-    "not-assigned": "You are not the approver assigned to this request.",
+    "not-assigned": "Only pending requests from other employees can be resolved.",
     "not-owner": "Only the employee who sent the request can do this.",
     "not-under-review": "Only a request under review can be sent again.",
     "reason-required": "The rejection reason is required.",

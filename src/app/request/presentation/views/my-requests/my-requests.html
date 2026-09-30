@@ -1,6 +1,4 @@
 <section class="page">
-  <div class="acting-bar"><app-acting-employee-selector/></div>
-
   <header class="page-header">
     <div>
       <h1 class="page-title">{{ 'my-requests.title' | translate }}</h1>
@@ -28,7 +26,18 @@
   </nav>
 
   @if (visibleRequests().length > 0) {
-    <div class="table-card">
+    <!-- traceability of the selected request stays on top, so it does not move when the list grows -->
+    @if (selectedRequest(); as selected) {
+      @if (selected.isUnderReview() && selected.reviewComment) {
+        <div class="info-note review-note">
+          <mat-icon aria-hidden="true">info</mat-icon>
+          <span>{{ 'my-requests.review-note' | translate: { comment: selected.reviewComment } }}</span>
+        </div>
+      }
+      <app-request-timeline [request]="selected"/>
+    }
+
+    <div class="table-card list-card">
       <table mat-table [dataSource]="visibleRequests()">
         <ng-container matColumnDef="code">
           <th mat-header-cell *matHeaderCellDef>{{ 'my-requests.number' | translate }}</th>
@@ -85,16 +94,6 @@
             [class.selected]="row.id === selectedRequest()?.id" (click)="select(row)"></tr>
       </table>
     </div>
-
-    @if (selectedRequest(); as selected) {
-      @if (selected.isUnderReview() && selected.reviewComment) {
-        <div class="info-note review-note">
-          <mat-icon aria-hidden="true">info</mat-icon>
-          <span>{{ 'my-requests.review-note' | translate: { comment: selected.reviewComment } }}</span>
-        </div>
-      }
-      <app-request-timeline [request]="selected"/>
-    }
   } @else if (!store.loading()) {
     <div class="card empty-state">
       <span class="empty-icon" aria-hidden="true"><mat-icon>description</mat-icon></span>

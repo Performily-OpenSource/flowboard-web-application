@@ -1,7 +1,5 @@
-.acting-bar {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 12px;
+.list-card {
+  margin-top: 20px;
 }
 
 tr.clickable {
