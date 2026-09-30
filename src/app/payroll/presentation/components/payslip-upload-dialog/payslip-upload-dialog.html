@@ -1,0 +1,71 @@
+<form class="dialog" [formGroup]="form" (ngSubmit)="submit(!!data.payslip || !!duplicate())" novalidate>
+  <header class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">{{ (isReplacement ? 'payroll.upload-dialog.replace-title' : 'payroll.upload-dialog.title') | translate }}</h2>
+    <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
+  </header>
+
+  <p class="dialog-description">{{ 'payroll.upload-dialog.description' | translate }}</p>
+
+  <div class="grid">
+    <div class="field">
+      <label for="employee">{{ 'payroll.upload-dialog.employee' | translate }}</label>
+      <select id="employee" class="input" formControlName="employeeId">
+        @for (employee of store.employees(); track employee.id) {
+          <option [ngValue]="employee.id">{{ employee.fullName }}</option>
+        }
+      </select>
+    </div>
+    <div class="field">
+      <label for="period">{{ 'payroll.upload-dialog.period' | translate }}</label>
+      <select id="period" class="input" formControlName="payrollPeriodId">
+        @for (period of store.periods(); track period.id) {
+          <option [ngValue]="period.id">{{ period.label() }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="field">
+      <label for="issueDate">{{ 'payroll.upload-dialog.issue-date' | translate }}</label>
+      <input id="issueDate" class="input" type="date" formControlName="issueDate"/>
+    </div>
+    <div class="field">
+      <label for="netAmount">{{ 'payroll.upload-dialog.net-amount' | translate }}</label>
+      <input id="netAmount" class="input" type="number" min="0.01" step="0.01" formControlName="netAmount"/>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="file">{{ 'payroll.upload-dialog.file' | translate }}</label>
+    <label class="file-picker" for="file">
+      <mat-icon>picture_as_pdf</mat-icon>
+      <span>{{ selectedFile()?.name ?? ('payroll.upload-dialog.choose-file' | translate) }}</span>
+      <span class="file-hint">PDF · máx. 5 MB</span>
+    </label>
+    <input id="file" class="visually-hidden" type="file" accept="application/pdf,.pdf" (change)="onFileChange($event)"/>
+  </div>
+
+  <div class="info-banner">
+    <mat-icon>info</mat-icon>
+    <span>{{ 'payroll.upload-dialog.info' | translate }}</span>
+  </div>
+
+  @if (error) {
+    <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ error }}</span></div>
+  }
+  @if (duplicate(); as existing) {
+    <div class="duplicate-card">
+      <strong>{{ 'payroll.upload-dialog.duplicate-title' | translate }}</strong>
+      <span>{{ employeeName(existing.employeeId) }} · {{ periodLabel(existing.payrollPeriodId) }}</span>
+      <button mat-stroked-button type="button" (click)="submit(true)">{{ 'payroll.upload-dialog.replace' | translate }}</button>
+    </div>
+  }
+
+  <footer class="dialog-actions">
+    <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.cancel' | translate }}</button>
+    <button mat-flat-button type="submit" [disabled]="store.loading()">
+      <mat-icon>upload</mat-icon>{{ (isReplacement ? 'payroll.upload-dialog.replace' : 'payroll.upload-dialog.upload') | translate }}
+    </button>
+  </footer>
+</form>
