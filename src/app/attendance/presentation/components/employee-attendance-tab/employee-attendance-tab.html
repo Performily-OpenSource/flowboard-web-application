@@ -1,0 +1,19 @@
+<section class="card card-body employee-attendance-tab">
+  <h2 class="card-title">{{ 'employee-detail.attendance-tab' | translate }}</h2>
+  <div class="summary-grid">
+    <div class="summary-item"><span>{{ 'attendance.my.worked-days' | translate }}</span><strong>{{ summary().workedDays }}</strong></div>
+    <div class="summary-item"><span>{{ 'attendance.my.lates' | translate }}</span><strong>{{ summary().late }}</strong></div>
+    <div class="summary-item"><span>{{ 'attendance.my.absences' | translate }}</span><strong>{{ summary().absent }}</strong></div>
+    <div class="summary-item"><span>{{ 'attendance.summary.overtime' | translate }}</span><strong>{{ hours(summary().overtime) }}</strong></div>
+  </div>
+  <h3 class="section-title">{{ 'attendance.employee.latest' | translate }}</h3>
+  @if (rows().length) {
+    <div class="table-wrap"><table><thead><tr><th>{{ 'attendance.date' | translate }}</th><th>{{ 'attendance.check-in' | translate }}</th><th>{{ 'attendance.check-out' | translate }}</th><th>{{ 'attendance.status.label' | translate }}</th></tr></thead><tbody>
+      @for (row of rows(); track row.record.id) {
+        <tr><td>{{ row.record.workDate | slice:8:10 }}/{{ row.record.workDate | slice:5:7 }}/{{ row.record.workDate | slice:0:4 }}</td><td>{{ row.record.checkInTime || '—' }}</td><td>{{ row.record.checkOutTime || '—' }}</td><td>{{ ('attendance.status.' + row.record.status) | translate }}</td></tr>
+      }
+    </tbody></table></div>
+  } @else {
+    <p class="muted">{{ 'attendance.employee.empty' | translate }}</p>
+  }
+</section>
