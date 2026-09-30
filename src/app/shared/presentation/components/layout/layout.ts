@@ -36,13 +36,14 @@ export class Layout {
   readonly options = signal<NavigationOption[]>([
     { link: '/home', label: 'option.dashboard', icon: 'grid_view', activeWhen: ['/home'] },
     { link: '/workspace/employees', label: 'option.employees', icon: 'group', activeWhen: ['/workspace/employees'] },
-    { link: '/attendance/records', label: 'option.attendance', icon: 'schedule', activeWhen: ['/attendance/records', '/attendance/summary', '/attendance/hours'] },
-    { link: '/attendance/my-attendance', label: 'option.my-attendance', icon: 'schedule', activeWhen: ['/attendance/my-attendance'] },
+
     {
       link: '/workspace/organization-chart', label: 'option.organization', icon: 'account_tree',
       activeWhen: ['/workspace/organization-chart', '/workspace/organization-structure']
     },
-    // Asistencia (Attendance) va aquí
+    { link: '/workspace/my-profile', label: 'option.my-profile', icon: 'badge', activeWhen: ['/workspace/my-profile'] },
+    { link: '/attendance/records', label: 'option.attendance', icon: 'schedule', activeWhen: ['/attendance/records', '/attendance/summary', '/attendance/hours'] },
+    { link: '/attendance/my-attendance', label: 'option.my-attendance', icon: 'schedule', activeWhen: ['/attendance/my-attendance'] },
     { link: '/requests/inbox', label: 'option.requests', icon: 'assignment_turned_in', activeWhen: ['/requests/inbox', '/requests/types'] },
     { link: '/requests/my-requests', label: 'option.my-requests', icon: 'description', activeWhen: ['/requests/my-requests'] },
     { link: '/benefits', label: 'option.benefits', icon: 'calendar_month', activeWhen: ['/benefits'] },
