@@ -1,21 +1,26 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { AttendanceRecordResponse } from './attendance-records-response';
 import { AttendanceRecordsApiEndpoint } from './attendance-records-api-endpoint';
 
+@Injectable({ providedIn: 'root' })
 export class AttendanceApi {
-  // Ajusta el cliente HTTP (fetch, axios, HttpClient) según lo que uses en workspace-api.ts
-  static async getRecordsByEmployee(employeeId: string): Promise<AttendanceRecordResponse[]> {
-    const response = await fetch(AttendanceRecordsApiEndpoint.byEmployee(employeeId));
-    if (!response.ok) throw new Error('Error fetching attendance records');
-    return response.json();
+  constructor(private http: HttpClient) {}
+
+  getRecordsByEmployeeId(employeeId: string): Observable<AttendanceRecordResponse[]> {
+    return this.http.get<AttendanceRecordResponse[]>(AttendanceRecordsApiEndpoint.byEmployee(employeeId));
   }
 
-  static async markEntry(data: { employeeId: string; time: string }): Promise<AttendanceRecordResponse> {
-    const response = await fetch(AttendanceRecordsApiEndpoint.entry(), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+  markEntry(employeeId: string, time: string): Observable<AttendanceRecordResponse> {
+    return this.http.post<AttendanceRecordResponse>(AttendanceRecordsApiEndpoint.entry(), { employeeId, time });
+  }
+
+  markExit(id: string, employeeId: string, time: string, scheduleStartTime: string): Observable<AttendanceRecordResponse> {
+    return this.http.patch<AttendanceRecordResponse>(AttendanceRecordsApiEndpoint.exit(id), { 
+      employeeId, 
+      time, 
+      scheduleStartTime 
     });
-    if (!response.ok) throw new Error('Error marking entry');
-    return response.json();
   }
 }
