@@ -1578,11 +1578,11 @@
       "workDate": "2026-09-01",
       "checkInTime": "07:59",
       "checkOutTime": "18:01",
-      "workedHours": 9.0333,
       "overtimeHours": 1.0333,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 9.0333
     },
     {
       "id": 2,
@@ -1590,11 +1590,11 @@
       "workDate": "2026-09-01",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 3,
@@ -1602,11 +1602,11 @@
       "workDate": "2026-09-01",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 4,
@@ -1614,11 +1614,11 @@
       "workDate": "2026-09-01",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 5,
@@ -1626,11 +1626,11 @@
       "workDate": "2026-09-01",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 6,
@@ -1638,11 +1638,11 @@
       "workDate": "2026-09-01",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 7,
@@ -1650,11 +1650,11 @@
       "workDate": "2026-09-01",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 8,
@@ -1662,11 +1662,11 @@
       "workDate": "2026-09-01",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 9,
@@ -1674,11 +1674,11 @@
       "workDate": "2026-09-02",
       "checkInTime": null,
       "checkOutTime": null,
-      "workedHours": null,
       "overtimeHours": null,
       "status": "JUSTIFIED",
       "justificationReason": "Justificación registrada.",
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": null
     },
     {
       "id": 10,
@@ -1686,11 +1686,11 @@
       "workDate": "2026-09-02",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 11,
@@ -1698,11 +1698,11 @@
       "workDate": "2026-09-02",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 12,
@@ -1710,11 +1710,11 @@
       "workDate": "2026-09-02",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 13,
@@ -1722,11 +1722,11 @@
       "workDate": "2026-09-02",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 14,
@@ -1734,11 +1734,11 @@
       "workDate": "2026-09-02",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 15,
@@ -1746,11 +1746,11 @@
       "workDate": "2026-09-02",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 16,
@@ -1758,11 +1758,11 @@
       "workDate": "2026-09-02",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 17,
@@ -1770,11 +1770,11 @@
       "workDate": "2026-09-03",
       "checkInTime": "08:00",
       "checkOutTime": "18:04",
-      "workedHours": 9.0667,
       "overtimeHours": 1.0667,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 9.0667
     },
     {
       "id": 18,
@@ -1782,11 +1782,11 @@
       "workDate": "2026-09-03",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 19,
@@ -1794,11 +1794,11 @@
       "workDate": "2026-09-03",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 20,
@@ -1806,11 +1806,11 @@
       "workDate": "2026-09-03",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 21,
@@ -1818,11 +1818,11 @@
       "workDate": "2026-09-03",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 22,
@@ -1830,11 +1830,11 @@
       "workDate": "2026-09-03",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 23,
@@ -1842,11 +1842,11 @@
       "workDate": "2026-09-03",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 24,
@@ -1854,11 +1854,11 @@
       "workDate": "2026-09-03",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 25,
@@ -1866,11 +1866,11 @@
       "workDate": "2026-09-04",
       "checkInTime": "07:55",
       "checkOutTime": "18:00",
-      "workedHours": 9.0833,
       "overtimeHours": 1.0833,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 9.0833
     },
     {
       "id": 26,
@@ -1878,11 +1878,11 @@
       "workDate": "2026-09-04",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 27,
@@ -1890,11 +1890,11 @@
       "workDate": "2026-09-04",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 28,
@@ -1902,11 +1902,11 @@
       "workDate": "2026-09-04",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 29,
@@ -1914,11 +1914,11 @@
       "workDate": "2026-09-04",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 30,
@@ -1926,11 +1926,11 @@
       "workDate": "2026-09-04",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 31,
@@ -1938,11 +1938,11 @@
       "workDate": "2026-09-04",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 32,
@@ -1950,11 +1950,11 @@
       "workDate": "2026-09-04",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 33,
@@ -1962,11 +1962,11 @@
       "workDate": "2026-09-05",
       "checkInTime": "08:01",
       "checkOutTime": "19:15",
-      "workedHours": 10.2333,
       "overtimeHours": 2.2333,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 10.2333
     },
     {
       "id": 34,
@@ -1974,11 +1974,11 @@
       "workDate": "2026-09-05",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 35,
@@ -1986,11 +1986,11 @@
       "workDate": "2026-09-05",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 36,
@@ -1998,11 +1998,11 @@
       "workDate": "2026-09-05",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 37,
@@ -2010,11 +2010,11 @@
       "workDate": "2026-09-05",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 38,
@@ -2022,11 +2022,11 @@
       "workDate": "2026-09-05",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 39,
@@ -2034,11 +2034,11 @@
       "workDate": "2026-09-05",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 40,
@@ -2046,11 +2046,11 @@
       "workDate": "2026-09-05",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 41,
@@ -2058,11 +2058,11 @@
       "workDate": "2026-09-07",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 42,
@@ -2070,11 +2070,11 @@
       "workDate": "2026-09-07",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 43,
@@ -2082,11 +2082,11 @@
       "workDate": "2026-09-07",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 44,
@@ -2094,11 +2094,11 @@
       "workDate": "2026-09-07",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 45,
@@ -2106,11 +2106,11 @@
       "workDate": "2026-09-07",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 46,
@@ -2118,11 +2118,11 @@
       "workDate": "2026-09-07",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 47,
@@ -2130,11 +2130,11 @@
       "workDate": "2026-09-07",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 48,
@@ -2142,11 +2142,11 @@
       "workDate": "2026-09-07",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 49,
@@ -2154,11 +2154,11 @@
       "workDate": "2026-09-08",
       "checkInTime": "07:58",
       "checkOutTime": "18:02",
-      "workedHours": 9.0667,
       "overtimeHours": 1.0667,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 9.0667
     },
     {
       "id": 50,
@@ -2166,11 +2166,11 @@
       "workDate": "2026-09-08",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 51,
@@ -2178,11 +2178,11 @@
       "workDate": "2026-09-08",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 52,
@@ -2190,11 +2190,11 @@
       "workDate": "2026-09-08",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 53,
@@ -2202,11 +2202,11 @@
       "workDate": "2026-09-08",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 54,
@@ -2214,11 +2214,11 @@
       "workDate": "2026-09-08",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 55,
@@ -2226,11 +2226,11 @@
       "workDate": "2026-09-08",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 56,
@@ -2238,11 +2238,11 @@
       "workDate": "2026-09-08",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "workedHours": 8.0,
       "overtimeHours": 0.0,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.0
     },
     {
       "id": 57,
@@ -2250,11 +2250,11 @@
       "workDate": "2026-09-09",
       "checkInTime": "08:24",
       "checkOutTime": "18:10",
-      "workedHours": 8.7667,
       "overtimeHours": 0.7667,
       "status": "LATE",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 8.7667
     },
     {
       "id": 58,
@@ -2262,11 +2262,11 @@
       "workDate": "2026-09-09",
       "checkInTime": "08:02",
       "checkOutTime": "18:05",
-      "workedHours": 9.05,
       "overtimeHours": 1.05,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 9.05
     },
     {
       "id": 59,
@@ -2274,11 +2274,11 @@
       "workDate": "2026-09-09",
       "checkInTime": "07:58",
       "checkOutTime": "17:59",
-      "workedHours": 9.0167,
       "overtimeHours": 1.0167,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 9.0167
     },
     {
       "id": 60,
@@ -2286,11 +2286,11 @@
       "workDate": "2026-09-09",
       "checkInTime": null,
       "checkOutTime": null,
-      "workedHours": null,
       "overtimeHours": null,
       "status": "ABSENT",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": null
     },
     {
       "id": 61,
@@ -2298,11 +2298,11 @@
       "workDate": "2026-09-09",
       "checkInTime": "08:00",
       "checkOutTime": null,
-      "workedHours": null,
       "overtimeHours": null,
       "status": "INCOMPLETE",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": null
     },
     {
       "id": 62,
@@ -2310,11 +2310,11 @@
       "workDate": "2026-09-09",
       "checkInTime": "08:05",
       "checkOutTime": "19:40",
-      "workedHours": 10.5833,
       "overtimeHours": 2.5833,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 10.5833
     },
     {
       "id": 63,
@@ -2322,11 +2322,11 @@
       "workDate": "2026-09-09",
       "checkInTime": null,
       "checkOutTime": null,
-      "workedHours": null,
       "overtimeHours": null,
       "status": "JUSTIFIED",
       "justificationReason": "Sustento presentado y aprobado.",
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": null
     },
     {
       "id": 64,
@@ -2334,19 +2334,17 @@
       "workDate": "2026-09-09",
       "checkInTime": "07:45",
       "checkOutTime": "18:20",
-      "workedHours": 9.5833,
       "overtimeHours": 1.5833,
       "status": "ON_TIME",
       "justificationReason": null,
-      "justificationDocumentName": null
+      "justificationDocumentName": null,
+      "effectiveHours": 9.5833
     }
   ],
   "work-schedules": [
     {
       "id": 1,
       "positionId": 1,
-      "startTime": "08:00",
-      "endTime": "17:00",
       "lateToleranceMinutes": 10,
       "workingDays": [
         1,
@@ -2355,13 +2353,13 @@
         4,
         5,
         6
-      ]
+      ],
+      "shiftStartTime": "08:00",
+      "shiftEndTime": "17:00"
     },
     {
       "id": 2,
       "positionId": 2,
-      "startTime": "08:00",
-      "endTime": "17:00",
       "lateToleranceMinutes": 10,
       "workingDays": [
         1,
@@ -2370,13 +2368,13 @@
         4,
         5,
         6
-      ]
+      ],
+      "shiftStartTime": "08:00",
+      "shiftEndTime": "17:00"
     },
     {
       "id": 3,
       "positionId": 3,
-      "startTime": "08:00",
-      "endTime": "17:00",
       "lateToleranceMinutes": 10,
       "workingDays": [
         1,
@@ -2385,13 +2383,13 @@
         4,
         5,
         6
-      ]
+      ],
+      "shiftStartTime": "08:00",
+      "shiftEndTime": "17:00"
     },
     {
       "id": 4,
       "positionId": 4,
-      "startTime": "08:00",
-      "endTime": "17:00",
       "lateToleranceMinutes": 10,
       "workingDays": [
         1,
@@ -2400,13 +2398,13 @@
         4,
         5,
         6
-      ]
+      ],
+      "shiftStartTime": "08:00",
+      "shiftEndTime": "17:00"
     },
     {
       "id": 5,
       "positionId": 5,
-      "startTime": "08:00",
-      "endTime": "17:00",
       "lateToleranceMinutes": 10,
       "workingDays": [
         1,
@@ -2415,7 +2413,9 @@
         4,
         5,
         6
-      ]
+      ],
+      "shiftStartTime": "08:00",
+      "shiftEndTime": "17:00"
     }
   ],
   "punches": [
@@ -2423,727 +2423,848 @@
       "id": 1,
       "employeeId": 7,
       "punchedAt": "2026-09-01T07:59:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 1
     },
     {
       "id": 2,
       "employeeId": 7,
       "punchedAt": "2026-09-01T18:01:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 1
     },
     {
       "id": 3,
       "employeeId": 8,
       "punchedAt": "2026-09-01T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 2
     },
     {
       "id": 4,
       "employeeId": 8,
       "punchedAt": "2026-09-01T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 2
     },
     {
       "id": 5,
       "employeeId": 9,
       "punchedAt": "2026-09-01T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 3
     },
     {
       "id": 6,
       "employeeId": 9,
       "punchedAt": "2026-09-01T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 3
     },
     {
       "id": 7,
       "employeeId": 10,
       "punchedAt": "2026-09-01T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 4
     },
     {
       "id": 8,
       "employeeId": 10,
       "punchedAt": "2026-09-01T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 4
     },
     {
       "id": 9,
       "employeeId": 11,
       "punchedAt": "2026-09-01T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 5
     },
     {
       "id": 10,
       "employeeId": 11,
       "punchedAt": "2026-09-01T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 5
     },
     {
       "id": 11,
       "employeeId": 12,
       "punchedAt": "2026-09-01T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 6
     },
     {
       "id": 12,
       "employeeId": 12,
       "punchedAt": "2026-09-01T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 6
     },
     {
       "id": 13,
       "employeeId": 13,
       "punchedAt": "2026-09-01T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 7
     },
     {
       "id": 14,
       "employeeId": 13,
       "punchedAt": "2026-09-01T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 7
     },
     {
       "id": 15,
       "employeeId": 14,
       "punchedAt": "2026-09-01T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 8
     },
     {
       "id": 16,
       "employeeId": 14,
       "punchedAt": "2026-09-01T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 8
     },
     {
       "id": 17,
       "employeeId": 8,
       "punchedAt": "2026-09-02T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 10
     },
     {
       "id": 18,
       "employeeId": 8,
       "punchedAt": "2026-09-02T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 10
     },
     {
       "id": 19,
       "employeeId": 9,
       "punchedAt": "2026-09-02T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 11
     },
     {
       "id": 20,
       "employeeId": 9,
       "punchedAt": "2026-09-02T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 11
     },
     {
       "id": 21,
       "employeeId": 10,
       "punchedAt": "2026-09-02T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 12
     },
     {
       "id": 22,
       "employeeId": 10,
       "punchedAt": "2026-09-02T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 12
     },
     {
       "id": 23,
       "employeeId": 11,
       "punchedAt": "2026-09-02T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 13
     },
     {
       "id": 24,
       "employeeId": 11,
       "punchedAt": "2026-09-02T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 13
     },
     {
       "id": 25,
       "employeeId": 12,
       "punchedAt": "2026-09-02T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 14
     },
     {
       "id": 26,
       "employeeId": 12,
       "punchedAt": "2026-09-02T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 14
     },
     {
       "id": 27,
       "employeeId": 13,
       "punchedAt": "2026-09-02T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 15
     },
     {
       "id": 28,
       "employeeId": 13,
       "punchedAt": "2026-09-02T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 15
     },
     {
       "id": 29,
       "employeeId": 14,
       "punchedAt": "2026-09-02T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 16
     },
     {
       "id": 30,
       "employeeId": 14,
       "punchedAt": "2026-09-02T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 16
     },
     {
       "id": 31,
       "employeeId": 7,
       "punchedAt": "2026-09-03T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 17
     },
     {
       "id": 32,
       "employeeId": 7,
       "punchedAt": "2026-09-03T18:04:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 17
     },
     {
       "id": 33,
       "employeeId": 8,
       "punchedAt": "2026-09-03T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 18
     },
     {
       "id": 34,
       "employeeId": 8,
       "punchedAt": "2026-09-03T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 18
     },
     {
       "id": 35,
       "employeeId": 9,
       "punchedAt": "2026-09-03T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 19
     },
     {
       "id": 36,
       "employeeId": 9,
       "punchedAt": "2026-09-03T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 19
     },
     {
       "id": 37,
       "employeeId": 10,
       "punchedAt": "2026-09-03T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 20
     },
     {
       "id": 38,
       "employeeId": 10,
       "punchedAt": "2026-09-03T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 20
     },
     {
       "id": 39,
       "employeeId": 11,
       "punchedAt": "2026-09-03T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 21
     },
     {
       "id": 40,
       "employeeId": 11,
       "punchedAt": "2026-09-03T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 21
     },
     {
       "id": 41,
       "employeeId": 12,
       "punchedAt": "2026-09-03T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 22
     },
     {
       "id": 42,
       "employeeId": 12,
       "punchedAt": "2026-09-03T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 22
     },
     {
       "id": 43,
       "employeeId": 13,
       "punchedAt": "2026-09-03T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 23
     },
     {
       "id": 44,
       "employeeId": 13,
       "punchedAt": "2026-09-03T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 23
     },
     {
       "id": 45,
       "employeeId": 14,
       "punchedAt": "2026-09-03T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 24
     },
     {
       "id": 46,
       "employeeId": 14,
       "punchedAt": "2026-09-03T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 24
     },
     {
       "id": 47,
       "employeeId": 7,
       "punchedAt": "2026-09-04T07:55:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 25
     },
     {
       "id": 48,
       "employeeId": 7,
       "punchedAt": "2026-09-04T18:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 25
     },
     {
       "id": 49,
       "employeeId": 8,
       "punchedAt": "2026-09-04T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 26
     },
     {
       "id": 50,
       "employeeId": 8,
       "punchedAt": "2026-09-04T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 26
     },
     {
       "id": 51,
       "employeeId": 9,
       "punchedAt": "2026-09-04T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 27
     },
     {
       "id": 52,
       "employeeId": 9,
       "punchedAt": "2026-09-04T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 27
     },
     {
       "id": 53,
       "employeeId": 10,
       "punchedAt": "2026-09-04T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 28
     },
     {
       "id": 54,
       "employeeId": 10,
       "punchedAt": "2026-09-04T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 28
     },
     {
       "id": 55,
       "employeeId": 11,
       "punchedAt": "2026-09-04T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 29
     },
     {
       "id": 56,
       "employeeId": 11,
       "punchedAt": "2026-09-04T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 29
     },
     {
       "id": 57,
       "employeeId": 12,
       "punchedAt": "2026-09-04T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 30
     },
     {
       "id": 58,
       "employeeId": 12,
       "punchedAt": "2026-09-04T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 30
     },
     {
       "id": 59,
       "employeeId": 13,
       "punchedAt": "2026-09-04T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 31
     },
     {
       "id": 60,
       "employeeId": 13,
       "punchedAt": "2026-09-04T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 31
     },
     {
       "id": 61,
       "employeeId": 14,
       "punchedAt": "2026-09-04T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 32
     },
     {
       "id": 62,
       "employeeId": 14,
       "punchedAt": "2026-09-04T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 32
     },
     {
       "id": 63,
       "employeeId": 7,
       "punchedAt": "2026-09-05T08:01:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 33
     },
     {
       "id": 64,
       "employeeId": 7,
       "punchedAt": "2026-09-05T19:15:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 33
     },
     {
       "id": 65,
       "employeeId": 8,
       "punchedAt": "2026-09-05T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 34
     },
     {
       "id": 66,
       "employeeId": 8,
       "punchedAt": "2026-09-05T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 34
     },
     {
       "id": 67,
       "employeeId": 9,
       "punchedAt": "2026-09-05T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 35
     },
     {
       "id": 68,
       "employeeId": 9,
       "punchedAt": "2026-09-05T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 35
     },
     {
       "id": 69,
       "employeeId": 10,
       "punchedAt": "2026-09-05T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 36
     },
     {
       "id": 70,
       "employeeId": 10,
       "punchedAt": "2026-09-05T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 36
     },
     {
       "id": 71,
       "employeeId": 11,
       "punchedAt": "2026-09-05T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 37
     },
     {
       "id": 72,
       "employeeId": 11,
       "punchedAt": "2026-09-05T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 37
     },
     {
       "id": 73,
       "employeeId": 12,
       "punchedAt": "2026-09-05T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 38
     },
     {
       "id": 74,
       "employeeId": 12,
       "punchedAt": "2026-09-05T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 38
     },
     {
       "id": 75,
       "employeeId": 13,
       "punchedAt": "2026-09-05T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 39
     },
     {
       "id": 76,
       "employeeId": 13,
       "punchedAt": "2026-09-05T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 39
     },
     {
       "id": 77,
       "employeeId": 14,
       "punchedAt": "2026-09-05T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 40
     },
     {
       "id": 78,
       "employeeId": 14,
       "punchedAt": "2026-09-05T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 40
     },
     {
       "id": 79,
       "employeeId": 7,
       "punchedAt": "2026-09-07T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 41
     },
     {
       "id": 80,
       "employeeId": 7,
       "punchedAt": "2026-09-07T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 41
     },
     {
       "id": 81,
       "employeeId": 8,
       "punchedAt": "2026-09-07T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 42
     },
     {
       "id": 82,
       "employeeId": 8,
       "punchedAt": "2026-09-07T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 42
     },
     {
       "id": 83,
       "employeeId": 9,
       "punchedAt": "2026-09-07T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 43
     },
     {
       "id": 84,
       "employeeId": 9,
       "punchedAt": "2026-09-07T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 43
     },
     {
       "id": 85,
       "employeeId": 10,
       "punchedAt": "2026-09-07T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 44
     },
     {
       "id": 86,
       "employeeId": 10,
       "punchedAt": "2026-09-07T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 44
     },
     {
       "id": 87,
       "employeeId": 11,
       "punchedAt": "2026-09-07T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 45
     },
     {
       "id": 88,
       "employeeId": 11,
       "punchedAt": "2026-09-07T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 45
     },
     {
       "id": 89,
       "employeeId": 12,
       "punchedAt": "2026-09-07T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 46
     },
     {
       "id": 90,
       "employeeId": 12,
       "punchedAt": "2026-09-07T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 46
     },
     {
       "id": 91,
       "employeeId": 13,
       "punchedAt": "2026-09-07T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 47
     },
     {
       "id": 92,
       "employeeId": 13,
       "punchedAt": "2026-09-07T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 47
     },
     {
       "id": 93,
       "employeeId": 14,
       "punchedAt": "2026-09-07T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 48
     },
     {
       "id": 94,
       "employeeId": 14,
       "punchedAt": "2026-09-07T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 48
     },
     {
       "id": 95,
       "employeeId": 7,
       "punchedAt": "2026-09-08T07:58:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 49
     },
     {
       "id": 96,
       "employeeId": 7,
       "punchedAt": "2026-09-08T18:02:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 49
     },
     {
       "id": 97,
       "employeeId": 8,
       "punchedAt": "2026-09-08T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 50
     },
     {
       "id": 98,
       "employeeId": 8,
       "punchedAt": "2026-09-08T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 50
     },
     {
       "id": 99,
       "employeeId": 9,
       "punchedAt": "2026-09-08T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 51
     },
     {
       "id": 100,
       "employeeId": 9,
       "punchedAt": "2026-09-08T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 51
     },
     {
       "id": 101,
       "employeeId": 10,
       "punchedAt": "2026-09-08T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 52
     },
     {
       "id": 102,
       "employeeId": 10,
       "punchedAt": "2026-09-08T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 52
     },
     {
       "id": 103,
       "employeeId": 11,
       "punchedAt": "2026-09-08T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 53
     },
     {
       "id": 104,
       "employeeId": 11,
       "punchedAt": "2026-09-08T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 53
     },
     {
       "id": 105,
       "employeeId": 12,
       "punchedAt": "2026-09-08T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 54
     },
     {
       "id": 106,
       "employeeId": 12,
       "punchedAt": "2026-09-08T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 54
     },
     {
       "id": 107,
       "employeeId": 13,
       "punchedAt": "2026-09-08T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 55
     },
     {
       "id": 108,
       "employeeId": 13,
       "punchedAt": "2026-09-08T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 55
     },
     {
       "id": 109,
       "employeeId": 14,
       "punchedAt": "2026-09-08T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 56
     },
     {
       "id": 110,
       "employeeId": 14,
       "punchedAt": "2026-09-08T17:00:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 56
     },
     {
       "id": 111,
       "employeeId": 7,
       "punchedAt": "2026-09-09T08:24:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 57
     },
     {
       "id": 112,
       "employeeId": 7,
       "punchedAt": "2026-09-09T18:10:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 57
     },
     {
       "id": 113,
       "employeeId": 8,
       "punchedAt": "2026-09-09T08:02:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 58
     },
     {
       "id": 114,
       "employeeId": 8,
       "punchedAt": "2026-09-09T18:05:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 58
     },
     {
       "id": 115,
       "employeeId": 9,
       "punchedAt": "2026-09-09T07:58:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 59
     },
     {
       "id": 116,
       "employeeId": 9,
       "punchedAt": "2026-09-09T17:59:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 59
     },
     {
       "id": 117,
       "employeeId": 11,
       "punchedAt": "2026-09-09T08:00:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 61
     },
     {
       "id": 118,
       "employeeId": 12,
       "punchedAt": "2026-09-09T08:05:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 62
     },
     {
       "id": 119,
       "employeeId": 12,
       "punchedAt": "2026-09-09T19:40:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 62
     },
     {
       "id": 120,
       "employeeId": 14,
       "punchedAt": "2026-09-09T07:45:00",
-      "type": "CHECK_IN"
+      "type": "CHECK_IN",
+      "attendanceRecordId": 64
     },
     {
       "id": 121,
       "employeeId": 14,
       "punchedAt": "2026-09-09T18:20:00",
-      "type": "CHECK_OUT"
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 64
     }
   ],
   "request-types": [
