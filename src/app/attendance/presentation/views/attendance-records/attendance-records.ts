@@ -10,7 +10,6 @@ import {RouterLink} from '@angular/router';
 import {AttendanceStore} from '../../../application/attendance.store';
 import {AttendanceRecord, ATTENDANCE_STATUSES, AttendanceStatus} from '../../../domain/model/attendance-record.entity';
 import {AttendanceJustificationDialog} from '../../components/attendance-justification-dialog/attendance-justification-dialog';
-import {WorkspaceStore} from '../../../../workspace/application/workspace.store';
 
 @Component({
   selector: 'app-attendance-records',
@@ -20,11 +19,10 @@ import {WorkspaceStore} from '../../../../workspace/application/workspace.store'
 })
 export class AttendanceRecords {
   readonly store = inject(AttendanceStore);
-  readonly workspace = inject(WorkspaceStore);
   private readonly dialog = inject(MatDialog);
   readonly columns = ['employee', 'date', 'checkIn', 'checkOut', 'workedHours', 'status', 'actions'];
-  readonly fromDate = signal('2026-09-01');
-  readonly toDate = signal('2026-09-09');
+  readonly fromDate = signal(AttendanceRecords.monthStart());
+  readonly toDate = signal(AttendanceRecords.today());
   readonly areaFilter = signal<number | null>(null);
   readonly statusFilter = signal<AttendanceStatus | null>(null);
   readonly page = signal(0);
@@ -33,7 +31,7 @@ export class AttendanceRecords {
 
   readonly periodRecords = computed(() => this.store.rows()
     .filter(row => row.record.workDate >= this.fromDate() && row.record.workDate <= this.toDate())
-    .filter(row => this.areaFilter() === null || row.areaName === this.workspace.getAreaById(this.areaFilter()!)()?.name)
+    .filter(row => this.areaFilter() === null || row.areaId === this.areaFilter())
     .filter(row => this.statusFilter() === null || row.record.status === this.statusFilter())
     .sort((a,b) => b.record.workDate.localeCompare(a.record.workDate) || a.employeeName.localeCompare(b.employeeName)));
 
@@ -55,15 +53,29 @@ export class AttendanceRecords {
   setTo(value: string) { this.toDate.set(value); this.page.set(0); }
   setArea(value: string) { this.areaFilter.set(value ? +value : null); this.page.set(0); }
   setStatus(value: string) { this.statusFilter.set((value || null) as AttendanceStatus | null); this.page.set(0); }
-  clearFilters() { this.fromDate.set('2026-09-01'); this.toDate.set('2026-09-09'); this.areaFilter.set(null); this.statusFilter.set(null); this.page.set(0); }
+  clearFilters() { this.fromDate.set(AttendanceRecords.monthStart()); this.toDate.set(AttendanceRecords.today()); this.areaFilter.set(null); this.statusFilter.set(null); this.page.set(0); }
 
   openJustification(row: {record: AttendanceRecord; employeeName: string}) {
     this.dialog.open(AttendanceJustificationDialog, {data: row, width: '560px', maxWidth: '95vw'});
   }
 
   statusClass(status: AttendanceStatus): string { return status.toLowerCase(); }
-  statusLabel(status: AttendanceStatus): string { return AttendanceStore.statusLabel(status); }
+  statusLabel(status: AttendanceStatus): string { return status; }
   hours(value: number | null): string { return AttendanceStore.hoursToLabel(value); }
   initials(name: string): string { return name.split(' ').slice(0,2).map(x => x[0]).join('').toUpperCase(); }
+  static today(): string {
+    return AttendanceRecords.toIsoDate(new Date());
+  }
+
+  static monthStart(): string {
+    const now = new Date();
+    return AttendanceRecords.toIsoDate(new Date(now.getFullYear(), now.getMonth(), 1));
+  }
+
+  private static toIsoDate(date: Date): string {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  }
+
   employeeCount(): number { return new Set(this.periodRecords().map(r => r.record.employeeId)).size; }
 }
+
