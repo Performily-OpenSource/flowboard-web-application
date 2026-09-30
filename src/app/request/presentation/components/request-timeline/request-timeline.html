@@ -1,0 +1,31 @@
+<section class="card card-body timeline-card">
+  <header class="timeline-header">
+    <h2 class="card-title">{{ request().code }} · {{ request().requestType?.name }}</h2>
+    <app-request-status-badge [status]="request().status"/>
+  </header>
+
+  <ol class="steps">
+    @for (step of steps(); track $index) {
+      <li class="step" [class.done]="step.done">
+        <span class="dot" aria-hidden="true"></span>
+        <p class="step-label">{{ step.label | translate }}</p>
+        <p class="muted">{{ step.date ? (step.date | date: 'dd/MM/yyyy, HH:mm') : '—' }}</p>
+      </li>
+    }
+  </ol>
+
+  <h3 class="history-title">{{ 'timeline.history' | translate }}</h3>
+  <ul class="history">
+    @for (entry of history(); track entry.id) {
+      <li>
+        <div class="history-head">
+          <strong>{{ 'history-status.' + entry.newStatus | translate }}</strong>
+          <span class="muted">{{ actorName(entry.actorId) }} · {{ entry.occurredAt | date: 'dd/MM/yyyy, HH:mm' }}</span>
+        </div>
+        @if (entry.comment) {
+          <p class="comment">"{{ entry.comment }}"</p>
+        }
+      </li>
+    }
+  </ul>
+</section>

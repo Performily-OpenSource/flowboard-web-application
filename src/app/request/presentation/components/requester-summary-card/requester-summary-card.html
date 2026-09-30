@@ -1,0 +1,21 @@
+<div class="summary">
+  @if (requester(); as requester) {
+    <div class="summary-person">
+      <span class="avatar" aria-hidden="true">{{ requester.initials }}</span>
+      <div>
+        <p class="summary-name">{{ requester.fullName }}</p>
+        <p class="summary-subtitle">{{ requester.positionTitle }} · {{ requester.areaName }}</p>
+      </div>
+    </div>
+  }
+  @if (rows().length > 0) {
+    <dl class="summary-rows">
+      @for (row of rows(); track row.label) {
+        <div>
+          <dt>{{ row.label }}</dt>
+          <dd>{{ row.value }}</dd>
+        </div>
+      }
+    </dl>
+  }
+</div>

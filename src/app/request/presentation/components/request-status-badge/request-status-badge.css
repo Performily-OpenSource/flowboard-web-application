@@ -1,0 +1,16 @@
+.status-in_progress { 
+    background: var(--fb-warning-container); 
+}
+.status-under_review { 
+    background: #eeedf8; 
+}
+.status-approved { 
+    background: var(--fb-success-container); 
+}
+.status-rejected { 
+    background: var(--fb-error-container); 
+}
+.status-cancelled { 
+    background: var(--fb-surface-muted); 
+    color: var(--fb-text-secondary); 
+}
