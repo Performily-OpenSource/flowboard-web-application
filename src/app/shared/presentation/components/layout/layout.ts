@@ -36,13 +36,16 @@ export class Layout {
   readonly options = signal<NavigationOption[]>([
     { link: '/home', label: 'option.dashboard', icon: 'grid_view', activeWhen: ['/home'] },
     { link: '/workspace/employees', label: 'option.employees', icon: 'group', activeWhen: ['/workspace/employees'] },
-    { link: '/payroll/payslips', label: 'option.payroll', icon: 'receipt_long', activeWhen: ['/payroll/payslips'] },
-    { link: '/payroll/my-payslips', label: 'option.my-payslips', icon: 'receipt_long', activeWhen: ['/payroll/my-payslips'] },
     {
       link: '/workspace/organization-chart', label: 'option.organization', icon: 'account_tree',
       activeWhen: ['/workspace/organization-chart', '/workspace/organization-structure']
     },
-    { link: '/benefits', label: 'option.benefits', icon: 'calendar_month', activeWhen: ['/benefits'] }
+    // Asistencia (Attendance) va aquí
+    // Solicitudes (Request) va aquí
+    { link: '/benefits', label: 'option.benefits', icon: 'calendar_month', activeWhen: ['/benefits'] },
+    { link: '/payroll/payslips', label: 'option.payroll', icon: 'receipt_long', activeWhen: ['/payroll/payslips'] },
+    { link: '/payroll/my-payslips', label: 'option.my-payslips', icon: 'receipt_long', activeWhen: ['/payroll/my-payslips'] }
+    // Bienestar (Wellbeing) va aquí
   ]);
 
   readonly isHandset = toSignal(
