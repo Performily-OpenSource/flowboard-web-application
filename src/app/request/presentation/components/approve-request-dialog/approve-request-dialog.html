@@ -1,0 +1,26 @@
+<div class="dialog">
+  <header class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">{{ 'approve-dialog.title' | translate }}</h2>
+    <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
+  </header>
+  <app-requester-summary-card [requester]="requester()" [rows]="rows()"/>
+  <div class="field">
+    <label for="approveComment">{{ 'approve-dialog.comment' | translate }}</label>
+    <textarea id="approveComment" class="input" maxlength="500" [formControl]="comment"
+              [placeholder]="'approve-dialog.comment-placeholder' | translate"></textarea>
+  </div>
+  <div class="info-note">
+    <mat-icon aria-hidden="true">check</mat-icon>
+    <span>{{ (deductsVacation() ? 'approve-dialog.info-vacation' : 'approve-dialog.info') | translate }}</span>
+  </div>
+  @if (store.error(); as error) {
+    <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ error.key | translate: error.params }}</span></div>
+  }
+  <div class="dialog-actions">
+    <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.cancel' | translate }}</button>
+    <button mat-flat-button type="button" (click)="confirm()">
+      <mat-icon>check</mat-icon>
+      {{ 'approve-dialog.confirm' | translate }}
+    </button>
+  </div>
+</div>

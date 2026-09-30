@@ -1,0 +1,181 @@
+<section class="page">
+  <div class="acting-bar"><app-acting-employee-selector/></div>
+
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{{ 'inbox.title' | translate }}</h1>
+      <p class="page-subtitle">
+        @if (pending().length > 0) {
+          {{ 'inbox.summary' | translate: { pending: pending().length, waiting: waitingOverTwoDays() } }}
+        } @else {
+          {{ 'inbox.summary-empty' | translate }}
+        }
+      </p>
+    </div>
+    <div class="page-actions">
+      <a mat-stroked-button routerLink="/requests/types">{{ 'inbox.request-types' | translate }}</a>
+      <a mat-flat-button routerLink="/requests/my-requests/new">
+        <mat-icon>add</mat-icon>
+        {{ 'inbox.new-request' | translate }}
+      </a>
+    </div>
+  </header>
+
+  @if (store.loading()) {
+    <mat-progress-bar mode="indeterminate"/>
+  }
+  @if (store.error(); as error) {
+    <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ error.key | translate: error.params }}</span></div>
+  }
+
+  <nav class="segmented-tabs" [attr.aria-label]="'inbox.tabs' | translate">
+    <button type="button" [class.active]="tab() === 'pending'" (click)="setTab('pending')">{{ 'inbox.tab-pending' | translate: { count: pending().length } }}</button>
+    <button type="button" [class.active]="tab() === 'review'" (click)="setTab('review')">{{ 'inbox.tab-review' | translate: { count: underReview().length } }}</button>
+    <button type="button" [class.active]="tab() === 'resolved'" (click)="setTab('resolved')">{{ 'inbox.tab-resolved' | translate: { count: resolved().length } }}</button>
+    <button type="button" [class.active]="tab() === 'all'" (click)="setTab('all')">{{ 'inbox.tab-all' | translate }}</button>
+  </nav>
+
+  @if (tabRequests().length > 0) {
+    <div class="filters">
+      <span class="filter-chip" [class.active]="typeFilter() !== null">
+        <button class="clear" type="button" [matMenuTriggerFor]="typeMenu">
+          {{ 'inbox.type' | translate }}: {{ typeFilter() !== null ? typeName(typeFilter()!) : ('inbox.all' | translate) }}
+          <mat-icon>expand_more</mat-icon>
+        </button>
+        @if (typeFilter() !== null) {
+          <button class="clear" type="button" (click)="setType(null)" [attr.aria-label]="'inbox.remove-filter' | translate"><mat-icon>close</mat-icon></button>
+        }
+      </span>
+      <mat-menu #typeMenu="matMenu">
+        <button mat-menu-item (click)="setType(null)">{{ 'inbox.all' | translate }}</button>
+        @for (type of store.requestTypes(); track type.id) {
+          <button mat-menu-item (click)="setType(type.id)">{{ type.name }}</button>
+        }
+      </mat-menu>
+
+      <span class="filter-chip" [class.active]="areaFilter() !== null">
+        <button class="clear" type="button" [matMenuTriggerFor]="areaMenu">
+          {{ 'inbox.area' | translate }}: {{ areaFilter() !== null ? areaName(areaFilter()!) : ('inbox.all-female' | translate) }}
+          <mat-icon>expand_more</mat-icon>
+        </button>
+        @if (areaFilter() !== null) {
+          <button class="clear" type="button" (click)="setArea(null)" [attr.aria-label]="'inbox.remove-filter' | translate"><mat-icon>close</mat-icon></button>
+        }
+      </span>
+      <mat-menu #areaMenu="matMenu">
+        <button mat-menu-item (click)="setArea(null)">{{ 'inbox.all-female' | translate }}</button>
+        @for (area of areas(); track area.id) {
+          <button mat-menu-item (click)="setArea(area.id)">{{ area.name }}</button>
+        }
+      </mat-menu>
+
+      <span class="filter-chip" [class.active]="ageFilter() !== null">
+        <button class="clear" type="button" [matMenuTriggerFor]="ageMenu">
+          {{ 'inbox.age' | translate }}: {{ ageFilter() !== null ? ('inbox.age-' + ageFilter() | translate) : ('inbox.all-female' | translate) }}
+          <mat-icon>expand_more</mat-icon>
+        </button>
+        @if (ageFilter() !== null) {
+          <button class="clear" type="button" (click)="setAge(null)" [attr.aria-label]="'inbox.remove-filter' | translate"><mat-icon>close</mat-icon></button>
+        }
+      </span>
+      <mat-menu #ageMenu="matMenu">
+        <button mat-menu-item (click)="setAge(null)">{{ 'inbox.all-female' | translate }}</button>
+        @for (age of ageFilters; track age) {
+          <button mat-menu-item (click)="setAge(age)">{{ 'inbox.age-' + age | translate }}</button>
+        }
+      </mat-menu>
+
+      <span class="spacer"></span>
+      @if (hasFilters()) {
+        <button class="text-link" type="button" (click)="clearFilters()">{{ 'inbox.clear-filters' | translate }}</button>
+      }
+      <span class="muted">{{ 'inbox.results' | translate: { count: filteredRequests().length } }}</span>
+    </div>
+  }
+
+  @if (filteredRequests().length > 0) {
+    <div class="table-card">
+      <table mat-table [dataSource]="pageRequests()">
+        <ng-container matColumnDef="requester">
+          <th mat-header-cell *matHeaderCellDef>{{ 'inbox.requester' | translate }}</th>
+          <td mat-cell *matCellDef="let request">
+            <span class="person">
+              <span class="avatar" aria-hidden="true">{{ requesterOf(request)?.initials }}</span>
+              <span class="cell-strong">{{ requesterOf(request)?.fullName ?? '-' }}</span>
+            </span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>{{ 'inbox.type' | translate }}</th>
+          <td mat-cell *matCellDef="let request">{{ request.requestType?.name ?? '-' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="period">
+          <th mat-header-cell *matHeaderCellDef>{{ 'inbox.period' | translate }}</th>
+          <td mat-cell *matCellDef="let request">{{ request | requestPeriod }}</td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>{{ 'inbox.status' | translate }}</th>
+          <td mat-cell *matCellDef="let request"><app-request-status-badge [status]="request.status"/></td>
+        </ng-container>
+        <ng-container matColumnDef="submittedAt">
+          <th mat-header-cell *matHeaderCellDef>{{ 'inbox.submitted' | translate }}</th>
+          <td mat-cell *matCellDef="let request">{{ request.submittedAt | relativeTime }}</td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>{{ 'inbox.actions' | translate }}</th>
+          <td mat-cell *matCellDef="let request">
+            @if (request.isPending()) {
+              <button class="icon-action" type="button" (click)="approve(request)"
+                      [matTooltip]="'inbox.approve' | translate" [attr.aria-label]="'inbox.approve' | translate">
+                <mat-icon>edit</mat-icon>
+              </button>
+            }
+            <button class="icon-action" type="button" [matMenuTriggerFor]="rowMenu" [attr.aria-label]="'inbox.more-actions' | translate">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #rowMenu="matMenu">
+              @if (request.isPending()) {
+                <button mat-menu-item (click)="approve(request)"><mat-icon>check</mat-icon>{{ 'inbox.approve' | translate }}</button>
+                <button mat-menu-item (click)="returnForReview(request)"><mat-icon>undo</mat-icon>{{ 'inbox.return' | translate }}</button>
+                <button mat-menu-item (click)="reject(request)"><mat-icon>close</mat-icon>{{ 'inbox.reject' | translate }}</button>
+              }
+              <button mat-menu-item (click)="toggleDetail(request)"><mat-icon>history</mat-icon>{{ 'inbox.view-history' | translate }}</button>
+            </mat-menu>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns;" [class.selected]="row.id === selectedId()"></tr>
+      </table>
+    </div>
+
+    <nav class="pagination" [attr.aria-label]="'inbox.pagination' | translate">
+      <span class="muted">{{ 'inbox.range' | translate: { start: rangeStart(), end: rangeEnd(), total: filteredRequests().length } }}</span>
+      <span class="spacer"></span>
+      <button class="page-button" type="button" [disabled]="page() === 0" (click)="page.set(page() - 1)">{{ 'inbox.previous' | translate }}</button>
+      @for (index of pages(); track index) {
+        <button class="page-button" type="button" [class.current]="index === page()"
+                [attr.aria-current]="index === page() ? 'page' : null" (click)="page.set(index)">{{ index + 1 }}</button>
+      }
+      <button class="page-button" type="button" [disabled]="page() >= pageCount() - 1" (click)="page.set(page() + 1)">{{ 'inbox.next' | translate }}</button>
+    </nav>
+
+    @if (selectedRequest(); as selected) {
+      <app-request-timeline [request]="selected"/>
+    }
+  } @else if (!store.loading()) {
+    <div class="card empty-state">
+      <span class="empty-icon" aria-hidden="true"><mat-icon>check</mat-icon></span>
+      @if (hasFilters()) {
+        <h2 class="empty-title">{{ 'inbox.no-results-title' | translate }}</h2>
+        <p>{{ 'inbox.no-results-content' | translate }}</p>
+        <button mat-stroked-button type="button" (click)="clearFilters()">{{ 'inbox.clear-filters' | translate }}</button>
+      } @else {
+        <h2 class="empty-title">{{ 'inbox.empty-title' | translate }}</h2>
+        <p>{{ 'inbox.empty-content' | translate }}</p>
+        @if (tab() !== 'resolved') {
+          <button mat-stroked-button type="button" (click)="setTab('resolved')">{{ 'inbox.view-resolved' | translate }}</button>
+        }
+      }
+    </div>
+  }
+</section>

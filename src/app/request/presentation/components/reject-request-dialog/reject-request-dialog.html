@@ -1,0 +1,26 @@
+<div class="dialog">
+  <header class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">{{ 'reject-dialog.title' | translate }}</h2>
+    <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
+  </header>
+  <app-requester-summary-card [requester]="requester()" [rows]="rows()"/>
+  <div class="field">
+    <label for="rejectReason">{{ 'reject-dialog.reason' | translate }}</label>
+    <textarea id="rejectReason" class="input" maxlength="500" [formControl]="reason" [class.invalid]="showReasonError"
+              [placeholder]="'reject-dialog.reason-placeholder' | translate"></textarea>
+    @if (showReasonError) {
+      <p class="field-error">{{ 'reject-dialog.reason-required' | translate }}</p>
+    }
+  </div>
+  <div class="info-note">
+    <mat-icon aria-hidden="true">info</mat-icon>
+    <span>{{ 'reject-dialog.info' | translate }}</span>
+  </div>
+  @if (store.error(); as error) {
+    <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ error.key | translate: error.params }}</span></div>
+  }
+  <div class="dialog-actions">
+    <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.cancel' | translate }}</button>
+    <button mat-flat-button class="danger-button" type="button" (click)="confirm()">{{ 'reject-dialog.confirm' | translate }}</button>
+  </div>
+</div>
