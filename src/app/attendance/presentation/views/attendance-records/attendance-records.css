@@ -20,3 +20,35 @@
 .pagination { display:flex; align-items:center; gap:6px; margin-top:14px; }.page-button { min-width:34px;height:32px;border:1px solid var(--fb-outline);border-radius:7px;background:var(--fb-surface);cursor:pointer;color:var(--fb-text-secondary); }.page-button.current{background:var(--fb-primary);color:#fff;border-color:var(--fb-primary)}.page-button:disabled{opacity:.5;cursor:default}
 @media(max-width:900px){.summary-grid{grid-template-columns:repeat(2,1fr)}.table-card{overflow-x:auto}.table-card table{min-width:900px}}
 @media(max-width:600px){.summary-grid{grid-template-columns:1fr}.filters label{width:100%;justify-content:space-between}}
+
+.attendance-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 18px 0 20px;
+  border-bottom: 1px solid transparent;
+}
+.attendance-tab {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 16px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--fb-text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+}
+.attendance-tab:hover {
+  background: var(--fb-surface-muted);
+}
+.attendance-tab.active {
+  background: var(--fb-surface);
+  border-color: var(--fb-border);
+  color: var(--fb-primary);
+}
+@media(max-width:600px){
+  .attendance-tabs { overflow-x:auto; white-space:nowrap; padding-bottom:2px; }
+  .attendance-tab { flex: 0 0 auto; padding:0 13px; }
+}

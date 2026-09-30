@@ -4,6 +4,12 @@
     <div class="page-actions"><button mat-stroked-button type="button"><mat-icon>upload</mat-icon>{{ 'attendance.export' | translate }}</button></div>
   </header>
 
+  <nav class="attendance-tabs" aria-label="Attendance views">
+    <a class="attendance-tab active" routerLink="/attendance/records">{{ 'attendance.tabs.records' | translate }}</a>
+    <a class="attendance-tab" routerLink="/attendance/summary">{{ 'attendance.tabs.summary' | translate }}</a>
+    <a class="attendance-tab" routerLink="/attendance/hours">{{ 'attendance.tabs.hours' | translate }}</a>
+  </nav>
+
   <div class="filters">
     <label>{{ 'attendance.period' | translate }} <input type="date" [value]="fromDate()" (change)="setFrom($any($event.target).value)"></label>
     <label>{{ 'attendance.until' | translate }} <input type="date" [value]="toDate()" (change)="setTo($any($event.target).value)"></label>

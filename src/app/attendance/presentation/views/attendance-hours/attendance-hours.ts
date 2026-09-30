@@ -2,10 +2,11 @@ import {Component, computed, inject, signal} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {TranslatePipe} from '@ngx-translate/core';
+import {RouterLink} from '@angular/router';
 import {AttendanceStore} from '../../../application/attendance.store';
 import {WorkspaceStore} from '../../../../workspace/application/workspace.store';
 
-@Component({selector:'app-attendance-hours',imports:[MatButton,MatIcon,TranslatePipe],templateUrl:'./attendance-hours.html',styleUrl:'./attendance-hours.css'})
+@Component({selector:'app-attendance-hours',imports:[MatButton,MatIcon,TranslatePipe,RouterLink],templateUrl:'./attendance-hours.html',styleUrl:'./attendance-hours.css'})
 export class AttendanceHours {
   readonly store=inject(AttendanceStore); readonly workspace=inject(WorkspaceStore); readonly period=signal('2026-09'); readonly areaFilter=signal<number|null>(null); readonly order=signal('overtime');
   readonly rows=computed(()=>this.workspace.employees().filter(e=>e.status==='ACTIVE').map(e=>{const records=this.store.records().filter(r=>r.employeeId===e.id&&r.workDate.startsWith(this.period()));const effective=records.reduce((s,r)=>s+(r.workedHours??0),0);const overtime=records.reduce((s,r)=>s+(r.overtimeHours??0),0);const expected=this.expectedHours(records,e.id);const variation=expected?overtime/expected*100:0;return {employee:e,effective,overtime,expected,variation};}).filter(r=>this.areaFilter()===null||r.employee.areaId===this.areaFilter()).sort((a,b)=>this.order()==='effective'?b.effective-a.effective:b.overtime-a.overtime));
