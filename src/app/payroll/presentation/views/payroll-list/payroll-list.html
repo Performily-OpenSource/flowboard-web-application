@@ -1,0 +1,77 @@
+<section class="page payroll-page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{{ 'payroll.title' | translate }}</h1>
+      <p class="page-subtitle">{{ 'payroll.subtitle' | translate }}</p>
+    </div>
+    <div class="page-actions">
+      <button mat-flat-button type="button" (click)="openUpload()"><mat-icon>upload</mat-icon>{{ 'payroll.upload' | translate }}</button>
+    </div>
+  </header>
+
+  <div class="info-banner page-info"><mat-icon>info</mat-icon><span>{{ 'payroll.page-info' | translate }}</span></div>
+
+  @if (store.loading()) { <mat-progress-bar mode="indeterminate"/> }
+  @if (store.error()) { <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ store.error() }}</span></div> }
+
+  <div class="filters-row">
+    <label class="select-filter active"><span>{{ 'payroll.period' | translate }}</span><select [value]="periodFilter() ?? ''" (change)="setPeriod($any($event.target).value)"><option value="">{{ 'payroll.all-periods' | translate }}</option>@for (period of store.periods(); track period.id) { <option [value]="period.id">{{ period.label() }}</option> }</select><mat-icon>expand_more</mat-icon></label>
+    <label class="select-filter"><span>{{ 'payroll.area' | translate }}</span><select [value]="areaFilter() ?? ''" (change)="setArea($any($event.target).value)"><option value="">{{ 'payroll.all-areas' | translate }}</option>@for (area of store.areas(); track area.id) { <option [value]="area.id">{{ area.name }}</option> }</select><mat-icon>expand_more</mat-icon></label>
+    <label class="select-filter"><span>{{ 'payroll.status' | translate }}</span><select [value]="paymentFilter() ?? ''" (change)="setPaymentStatus($any($event.target).value)"><option value="">{{ 'payroll.all-statuses' | translate }}</option>@for (status of paymentStatuses; track status) { <option [value]="status">{{ statusKey(status) | translate }}</option> }</select><mat-icon>expand_more</mat-icon></label>
+    <span class="result-count">{{ filteredPayslips().length }} {{ 'payroll.period-count' | translate }}</span>
+  </div>
+
+  <div class="table-card">
+    <div class="table-scroll">
+      <table mat-table [dataSource]="pagePayslips()">
+        <ng-container matColumnDef="employee">
+          <th mat-header-cell *matHeaderCellDef>{{ 'payroll.employee' | translate }}</th>
+          <td mat-cell *matCellDef="let payslip"><div class="employee-cell"><span class="avatar">{{ initials(payslip.employeeId) }}</span><strong>{{ employeeName(payslip.employeeId) }}</strong></div></td>
+        </ng-container>
+        <ng-container matColumnDef="period">
+          <th mat-header-cell *matHeaderCellDef>{{ 'payroll.period' | translate }}</th>
+          <td mat-cell *matCellDef="let payslip">{{ periodLabel(payslip.payrollPeriodId) }}</td>
+        </ng-container>
+        <ng-container matColumnDef="issueDate">
+          <th mat-header-cell *matHeaderCellDef>{{ 'payroll.issue-date' | translate }}</th>
+          <td mat-cell *matCellDef="let payslip">{{ payslip.issueDate | localDate }}</td>
+        </ng-container>
+        <ng-container matColumnDef="netAmount">
+          <th mat-header-cell *matHeaderCellDef>{{ 'payroll.net-amount' | translate }}</th>
+          <td mat-cell *matCellDef="let payslip">{{ money(payslip) }}</td>
+        </ng-container>
+        <ng-container matColumnDef="paymentStatus">
+          <th mat-header-cell *matHeaderCellDef>{{ 'payroll.payment-status-title' | translate }}</th>
+          <td mat-cell *matCellDef="let payslip"><span class="pill {{ statusClass(payslip.payment.status) }}">{{ statusKey(payslip.payment.status) | translate }}</span></td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>{{ 'payroll.actions' | translate }}</th>
+          <td mat-cell *matCellDef="let payslip">
+            <div class="action-cell">
+              @if (payslip.payment.status === 'PENDING') { <button class="text-link" type="button" (click)="openPayment(payslip)">{{ 'payroll.register-payment' | translate }}</button> }
+              @else if (payslip.payment.status === 'OBSERVED') { <button class="text-link observed-link" type="button" (click)="openObservation(payslip, true)">{{ 'payroll.view-reason' | translate }}</button> }
+              @else { <button class="text-link" type="button" (click)="openViewer(payslip)">{{ 'payroll.view' | translate }}</button> }
+              @if (payslip.publicationStatus === 'UNDER_REVIEW') { <span class="review-badge">{{ 'payroll.under-review' | translate }}</span> }
+              <button class="icon-action" type="button" [matMenuTriggerFor]="rowMenu" [attr.aria-label]="'payroll.more-actions' | translate"><mat-icon>more_vert</mat-icon></button>
+              <mat-menu #rowMenu="matMenu">
+                <button mat-menu-item (click)="openViewer(payslip)">{{ 'payroll.view' | translate }}</button>
+                @if (payslip.publicationStatus === 'UNDER_REVIEW') { <button mat-menu-item (click)="publish(payslip)">{{ 'payroll.publish' | translate }}</button> }
+                <button mat-menu-item (click)="openReplace(payslip)">{{ 'payroll.replace' | translate }}</button>
+              </mat-menu>
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+      </table>
+    </div>
+  </div>
+
+  <nav class="pagination" [attr.aria-label]="'payroll.pagination' | translate">
+    <span class="muted">{{ 'payroll.range' | translate: {start: rangeStart(), end: rangeEnd(), total: filteredPayslips().length} }}</span>
+    <span class="spacer"></span>
+    <button class="page-button" type="button" [disabled]="page() === 0" (click)="page.set(page() - 1)">{{ 'payroll.previous' | translate }}</button>
+    @for (index of pages(); track index) { <button class="page-button" type="button" [class.current]="index === page()" (click)="page.set(index)">{{ index + 1 }}</button> }
+    <button class="page-button" type="button" [disabled]="page() >= pageCount() - 1" (click)="page.set(page() + 1)">{{ 'payroll.next' | translate }}</button>
+  </nav>
+</section>
