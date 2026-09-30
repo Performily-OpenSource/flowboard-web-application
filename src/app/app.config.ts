@@ -9,6 +9,8 @@ import {EmployeeBenefitsTab} from './benefits/presentation/components/employee-b
 import {VacationBalanceCard} from './benefits/presentation/components/vacation-balance-card/vacation-balance-card';
 import {EmployeeRequestsTab} from './request/presentation/components/employee-requests-tab/employee-requests-tab';
 import {LatestRequestsCard} from './request/presentation/components/latest-requests-card/latest-requests-card';
+import {EmployeeAttendanceTab} from './attendance/presentation/components/employee-attendance-tab/employee-attendance-tab';
+import {EmployeeAttendanceEmployment} from './attendance/presentation/components/employee-attendance-employment/employee-attendance-employment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,6 +24,8 @@ export const appConfig: ApplicationConfig = {
     { provide: EMPLOYEE_FILE_SECTIONS, multi: true, useValue: { slot: 'benefits-tab', order: 1, component: EmployeeBenefitsTab } },
     { provide: EMPLOYEE_FILE_SECTIONS, multi: true, useValue: { slot: 'aside', order: 1, component: VacationBalanceCard } },
     { provide: EMPLOYEE_FILE_SECTIONS, multi: true, useValue: { slot: 'requests-tab', order: 1, component: EmployeeRequestsTab } },
-    { provide: EMPLOYEE_FILE_SECTIONS, multi: true, useValue: { slot: 'aside', order: 2, component: LatestRequestsCard } }
+    { provide: EMPLOYEE_FILE_SECTIONS, multi: true, useValue: { slot: 'aside', order: 2, component: LatestRequestsCard } },
+    { provide: EMPLOYEE_FILE_SECTIONS, multi: true, useValue: { slot: 'attendance-tab', order: 1, component: EmployeeAttendanceTab } },
+    { provide: EMPLOYEE_FILE_SECTIONS, multi: true, useValue: { slot: 'employment', order: 1, component: EmployeeAttendanceEmployment } }
   ]
 };
