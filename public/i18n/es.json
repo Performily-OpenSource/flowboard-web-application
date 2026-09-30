@@ -4,6 +4,7 @@
     "toggle-menu": "Abrir o cerrar menú",
     "dashboard": "Dashboard",
     "employees": "Colaboradores",
+    "my-profile": "Mi perfil",
     "organization": "Organización",
     "benefits": "Beneficios",
     "payroll": "Boletas",
@@ -19,6 +20,7 @@
     "about": "Acerca de",
     "page-not-found": "Página no encontrada",
     "employees": "Colaboradores",
+    "my-profile": "Mi perfil",
     "new": "Nuevo",
     "edit": "Editar",
     "file": "Expediente",
@@ -195,7 +197,11 @@
     "reference-salary": "Sueldo mínimo del puesto",
     "salary-note-title": "Sobre la remuneración",
     "salary-note": "Flowboard muestra el sueldo de referencia del puesto. El cálculo de la planilla y las boletas provienen del sistema contable de la organización.",
-    "not-found": "No se encontró al colaborador."
+    "not-found": "No se encontró al colaborador.",
+    "attendance-tab": "Asistencia",
+    "requests-tab": "Solicitudes",
+    "benefits-tab": "Beneficios",
+    "section-pending": "Esta información estará disponible pronto."
   },
   "employee-status": {
     "ACTIVE": "Activo",
@@ -1203,5 +1209,16 @@
     "field-key-duplicated": "La clave {{key}} ya se usa en este tipo.",
     "type-duplicated": "Ya existe un tipo de solicitud con ese nombre.",
     "type-in-use": "{{name}} tiene solicitudes, por eso no se puede eliminar. Puedes desactivarlo en su lugar."
+  },
+  "my-profile": {
+    "request-update": "Solicitar actualización de datos",
+    "data-tab": "Mis datos",
+    "contract-tab": "Mi contrato",
+    "documents-tab": "Mis documentos",
+    "update-note": "Los datos personales los actualiza Recursos Humanos. Envía una solicitud de actualización y adjunta el sustento correspondiente.",
+    "my-position": "Mi puesto",
+    "contract": "Contrato",
+    "no-manager": "No asignado",
+    "not-found": "No encontramos tu ficha de colaborador."
   }
 }

@@ -4,6 +4,7 @@
     "toggle-menu": "Toggle menu",
     "dashboard": "Dashboard",
     "employees": "Employees",
+    "my-profile": "My profile",
     "organization": "Organization",
     "benefits": "Benefits",
     "payroll": "Payslips",
@@ -19,6 +20,7 @@
     "about": "About",
     "page-not-found": "Page not found",
     "employees": "Employees",
+    "my-profile": "My profile",
     "new": "New",
     "edit": "Edit",
     "file": "File",
@@ -195,7 +197,11 @@
     "reference-salary": "Position minimum salary",
     "salary-note-title": "About the salary",
     "salary-note": "Flowboard shows the reference salary of the position. Payroll and payslips come from the organization's accounting system.",
-    "not-found": "The employee was not found."
+    "not-found": "The employee was not found.",
+    "attendance-tab": "Attendance",
+    "requests-tab": "Requests",
+    "benefits-tab": "Benefits",
+    "section-pending": "This information will be available soon."
   },
   "employee-status": {
     "ACTIVE": "Active",
@@ -1202,5 +1208,18 @@
     "field-key-duplicated": "The key {{key}} is already used in this type.",
     "type-duplicated": "A request type with that name already exists.",
     "type-in-use": "{{name}} has requests, so it cannot be deleted. You can deactivate it instead."
+  },
+
+  "my-profile": {
+  "request-update": "Request data update",
+  "data-tab": "My data",
+  "contract-tab": "My contract",
+  "documents-tab": "My documents",
+  "update-note": "Human Resources updates your personal data. Send an update request and attach the supporting document.",
+  "my-position": "My position",
+  "contract": "Contract",
+  "no-manager": "Not assigned",
+  "not-found": "We could not find your employee profile."
   }
+  
 }
