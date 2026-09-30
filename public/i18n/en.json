@@ -468,7 +468,10 @@
       "assign-benefit": "The benefit could not be assigned.",
       "register-delivery": "The delivery could not be registered.",
       "cancel-assignment": "The assignment could not be cancelled.",
-      "adjust-balance": "The vacation balance adjustment could not be saved."
+      "adjust-balance": "The vacation balance adjustment could not be saved.",
+      "balance-not-found": "The employee does not have a vacation balance.",
+      "not-enough-days": "The employee does not have enough vacation days available.",
+      "debit-balance": "The vacation balance could not be debited."
     }
   },
   "benefit-unit": {
@@ -1210,6 +1213,23 @@
     "field-key-duplicated": "The key {{key}} is already used in this type.",
     "type-duplicated": "A request type with that name already exists.",
     "type-in-use": "{{name}} has requests, so it cannot be deleted. You can deactivate it instead."
+  },
+  "employee-requests": {
+    "title": "Requests",
+    "summary": "{{total}} requests, {{open}} not resolved.",
+    "open-inbox": "Go to inbox",
+    "number": "No.",
+    "type": "Type",
+    "period": "Period",
+    "status": "Status",
+    "submitted": "Submitted",
+    "empty": "This employee has no requests yet."
+  },
+  "latest-requests": {
+    "title": "Latest requests",
+    "count": "{{count}} in total",
+    "empty": "No requests yet.",
+    "open-inbox": "Go to inbox"
   },
   "my-profile": {
     "request-update": "Request data update",

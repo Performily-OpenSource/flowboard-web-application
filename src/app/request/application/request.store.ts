@@ -37,7 +37,6 @@ export class RequestStore {
   private readonly requestsSignal = signal<Request[]>([]);
   private readonly requestTypesSignal = signal<RequestType[]>([]);
   private readonly requestersSignal = signal<Requester[]>([]);
-  private readonly vacationBalancesSignal = signal<VacationBalance[]>([]);
 
   private readonly loadingSignal = signal<boolean>(false);
   readonly loading = this.loadingSignal.asReadonly();
@@ -79,7 +78,6 @@ export class RequestStore {
     this.loadRequesters();
     this.loadRequestTypes();
     this.loadRequests();
-    this.loadVacationBalances();
   }
 
   getRequestTypeById(id: number): Signal<RequestType | undefined> {
@@ -90,8 +88,13 @@ export class RequestStore {
     return id === null ? null : this.requestersSignal().find(requester => requester.id === id) ?? null;
   }
 
+  /** Requests of one employee, newest first. Used by the employee file of Workspace. */
+  requestsOf(employeeId: number): Request[] {
+    return this.requests().filter(request => request.isOwnedBy(employeeId));
+  }
+
   getVacationBalance(employeeId: number): VacationBalance | null {
-    return this.vacationBalancesSignal().find(balance => balance.employeeId === employeeId) ?? null;
+    return this.benefitsAcl.vacationBalances().find(balance => balance.employeeId === employeeId) ?? null;
   }
 
   resolveApprover(requester: Requester | null): { approverType: ApproverType; approverId: number | null } {
@@ -294,15 +297,11 @@ export class RequestStore {
     }, 'Failed to update request');
   }
 
+  /** Vacation requests: once approved, Benefits debits the days (RequestApproved). */
   private notifyBenefitsOfApproval(request: Request): void {
     const requestType = this.requestTypesSignal().find(type => type.id === request.requestTypeId);
-    const balance = this.getVacationBalance(request.requesterId);
-    if (!requestType?.deductsVacationDays() || !balance || request.requestedDays() === 0) return;
-    this.benefitsAcl.debitVacationDays(balance, request.requestedDays(), request.id).subscribe({
-      next: debited => this.vacationBalancesSignal.update(balances =>
-        balances.map(current => current.id === debited.id ? debited : current)),
-      error: error => this.errorSignal.set(this.toError(error, 'Failed to update vacation balance'))
-    });
+    if (!requestType?.deductsVacationDays() || request.requestedDays() === 0) return;
+    this.benefitsAcl.debitVacationDays(request.requesterId, request.requestedDays(), request.id);
   }
 
   private passes(error: RequestError | null): boolean {
@@ -355,13 +354,6 @@ export class RequestStore {
     this.workspaceAcl.getRequesters().pipe(takeUntilDestroyed()).subscribe({
       next: requesters => this.requestersSignal.set(requesters),
       error: error => this.errorSignal.set(this.toError(error, 'Failed to load employees'))
-    });
-  }
-
-  private loadVacationBalances(): void {
-    this.benefitsAcl.getVacationBalances().pipe(takeUntilDestroyed()).subscribe({
-      next: balances => this.vacationBalancesSignal.set(balances),
-      error: error => this.errorSignal.set(this.toError(error, 'Failed to load vacation balances'))
     });
   }
 

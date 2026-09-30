@@ -240,6 +240,29 @@ export class BenefitsStore {
       error: error => this.failOperation(error, 'benefits.error.adjust-balance')
     });
   }
+  
+   debitVacationDays(employeeId: number, days: number, requestId: number): void {
+    const balance = this.getBalanceByEmployeeId(employeeId);
+    if (!balance) {
+      this.errorSignal.set('benefits.error.balance-not-found');
+      return;
+    }
+    const copy = this.balanceAssembler.toEntityFromResource(this.balanceAssembler.toResourceFromEntity(balance));
+    try {
+      copy.debit(days, requestId);
+    } catch {
+      this.errorSignal.set('benefits.error.not-enough-days');
+      return;
+    }
+    this.startOperation();
+    this.benefitsApi.updateVacationBalance(copy).pipe(retry(2)).subscribe({
+      next: updated => {
+        this.balancesSignal.update(balances => balances.map(current => current.id === updated.id ? updated : current));
+        this.loadingSignal.set(false);
+      },
+      error: error => this.failOperation(error, 'benefits.error.debit-balance')
+    });
+  }
 
   clearError(): void {
     this.errorSignal.set(null);

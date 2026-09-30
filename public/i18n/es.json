@@ -468,7 +468,10 @@
       "assign-benefit": "No se pudo asignar el beneficio.",
       "register-delivery": "No se pudo registrar la entrega.",
       "cancel-assignment": "No se pudo cancelar la asignación.",
-      "adjust-balance": "No se pudo guardar el ajuste del saldo de vacaciones."
+      "adjust-balance": "No se pudo guardar el ajuste del saldo de vacaciones.",
+      "balance-not-found": "El colaborador no tiene un saldo de vacaciones registrado.",
+      "not-enough-days": "El colaborador no tiene suficientes días de vacaciones disponibles.",
+      "debit-balance": "No se pudo descontar el saldo de vacaciones."
     }
   },
   "benefit-unit": {
@@ -1211,6 +1214,23 @@
     "field-key-duplicated": "La clave {{key}} ya se usa en este tipo.",
     "type-duplicated": "Ya existe un tipo de solicitud con ese nombre.",
     "type-in-use": "{{name}} tiene solicitudes, por eso no se puede eliminar. Puedes desactivarlo en su lugar."
+  },
+  "employee-requests": {
+    "title": "Solicitudes",
+    "summary": "{{total}} solicitudes, {{open}} sin resolver.",
+    "open-inbox": "Ir a la bandeja",
+    "number": "N.°",
+    "type": "Tipo",
+    "period": "Periodo",
+    "status": "Estado",
+    "submitted": "Enviada",
+    "empty": "Este colaborador todavía no tiene solicitudes."
+  },
+  "latest-requests": {
+    "title": "Últimas solicitudes",
+    "count": "{{count}} en total",
+    "empty": "Sin solicitudes registradas.",
+    "open-inbox": "Ir a la bandeja"
   },
   "my-profile": {
     "request-update": "Solicitar actualización de datos",
