@@ -1,4 +1,5 @@
 import {Component, computed, inject, signal} from '@angular/core';
+import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {MatTable, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatCell, MatCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef} from '@angular/material/table';
 import {MatButton} from '@angular/material/button';
@@ -25,6 +26,7 @@ const PAGE_SIZE = 6;
 export class PayrollList {
   readonly store = inject(PayrollStore);
   private readonly dialog = inject(MatDialog);
+  private readonly router = inject(Router);
   readonly columns = ['employee', 'period', 'issueDate', 'netAmount', 'paymentStatus', 'actions'];
   readonly paymentStatuses: PaymentStatus[] = ['PENDING', 'PAID', 'OBSERVED'];
   readonly periodFilter = signal<number | null>(null);
@@ -55,7 +57,7 @@ export class PayrollList {
   }
   money(payslip: Payslip): string { return `S/ ${payslip.netAmount.amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`; }
 
-  openUpload() { this.dialog.open(PayslipUploadDialog, {width: '620px', maxWidth: '95vw'}).afterClosed().subscribe(); }
+  openUpload() { this.router.navigate(['/payroll/payslips/upload']); }
   openReplace(payslip: Payslip) { this.dialog.open(PayslipUploadDialog, {data: {payslip}, width: '620px', maxWidth: '95vw'}).afterClosed().subscribe(); }
   openPayment(payslip: Payslip) { this.dialog.open(PaymentDialog, {data: {payslip}, width: '540px', maxWidth: '95vw'}).afterClosed().subscribe(); }
   openObservation(payslip: Payslip, readOnly = false) {
