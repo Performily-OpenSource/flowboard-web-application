@@ -11,8 +11,8 @@ export class WorkScheduleAssembler implements BaseAssembler<WorkSchedule, WorkSc
     return {
       id: entity.id,
       positionId: entity.positionId,
-      startTime: entity.startTime,
-      endTime: entity.endTime,
+      shiftStartTime: entity.shiftStartTime,
+      shiftEndTime: entity.shiftEndTime,
       lateToleranceMinutes: entity.lateToleranceMinutes,
       workingDays: entity.workingDays
     };

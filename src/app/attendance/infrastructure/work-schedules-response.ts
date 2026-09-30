@@ -3,8 +3,8 @@ import {BaseResource, BaseResponse} from '../../shared/infrastructure/base-respo
 export interface WorkScheduleResource extends BaseResource {
   id: number;
   positionId: number;
-  startTime: string;
-  endTime: string;
+  shiftStartTime: string;
+  shiftEndTime: string;
   lateToleranceMinutes: number;
   workingDays: number[];
 }

@@ -6,7 +6,7 @@ export interface AttendanceRecordResource extends BaseResource {
   workDate: string;
   checkInTime: string | null;
   checkOutTime: string | null;
-  workedHours: number | null;
+  effectiveHours: number | null;
   overtimeHours: number | null;
   status: string;
   justificationReason: string | null;
