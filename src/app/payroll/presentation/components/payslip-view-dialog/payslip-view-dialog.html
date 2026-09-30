@@ -1,0 +1,32 @@
+<section class="dialog">
+  <header class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">{{ 'payroll.viewer.title' | translate }}{{ period ? ', ' + period.label() : '' }}</h2>
+    <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
+  </header>
+  <p class="dialog-description">{{ 'payroll.viewer.description' | translate }}</p>
+
+  <div class="summary-grid">
+    <div><span>{{ 'payroll.viewer.employee' | translate }}</span><strong>{{ employee?.fullName ?? '—' }}</strong></div>
+    <div><span>{{ 'payroll.viewer.period' | translate }}</span><strong>{{ period?.label() ?? '—' }}</strong></div>
+    <div><span>{{ 'payroll.viewer.status' | translate }}</span><strong>{{ 'payroll.payment-status.' + data.payslip.payment.status | translate }}</strong></div>
+  </div>
+
+  <section class="document-card">
+    <p class="document-title">{{ 'payroll.viewer.preview' | translate }}</p>
+    @if (previewUrl) {
+      <iframe class="document-preview" [src]="previewUrl" [title]="'payroll.viewer.preview' | translate"></iframe>
+    } @else {
+      <div class="document-skeleton" aria-hidden="true">
+        <div class="skeleton-title"></div><div class="skeleton-subtitle"></div><div class="skeleton-rule"></div>
+        @for (row of [1,2,3,4,5,6]; track row) { <div class="skeleton-row"><span></span><span></span></div> }
+        <div class="skeleton-total"></div>
+      </div>
+    }
+  </section>
+
+  <footer class="dialog-actions">
+    <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.close' | translate }}</button>
+    <button mat-stroked-button type="button" (click)="print()"><mat-icon>print</mat-icon>{{ 'payroll.viewer.print' | translate }}</button>
+    <button mat-flat-button type="button" (click)="download()"><mat-icon>download</mat-icon>{{ 'payroll.viewer.download' | translate }}</button>
+  </footer>
+</section>

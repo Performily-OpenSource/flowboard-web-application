@@ -1,0 +1,54 @@
+<section class="page payroll-page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{{ 'my-payslips.title' | translate }}</h1>
+      <p class="page-subtitle">{{ 'my-payslips.subtitle' | translate }}</p>
+    </div>
+    <span class="result-count">{{ filteredPayslips().length }} {{ 'my-payslips.available' | translate }}</span>
+  </header>
+
+  @if (store.loading()) { <mat-progress-bar mode="indeterminate"/> }
+  @if (store.error()) { <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ store.error() }}</span></div> }
+
+  <div class="filters-row">
+    <label class="select-filter active"><span>{{ 'my-payslips.year' | translate }}</span><select [value]="yearFilter()" (change)="setYear($any($event.target).value)">@for (year of years(); track year) { <option [value]="year">{{ 'my-payslips.year' | translate }}: {{ year }}</option> }</select><mat-icon>expand_more</mat-icon></label>
+    <label class="select-filter"><span>{{ 'payroll.period' | translate }}</span><select [value]="periodFilter() ?? ''" (change)="setPeriod($any($event.target).value)"><option value="">{{ 'my-payslips.all-periods' | translate }}</option>@for (period of store.periods(); track period.id) { @if (period.year === yearFilter()) { <option [value]="period.id">{{ period.label() }}</option> } }</select><mat-icon>expand_more</mat-icon></label>
+  </div>
+
+  <div class="table-card">
+    <div class="table-scroll">
+      <table mat-table [dataSource]="pagePayslips()">
+        <ng-container matColumnDef="period">
+          <th mat-header-cell *matHeaderCellDef>{{ 'payroll.period' | translate }}</th>
+          <td mat-cell *matCellDef="let payslip"><strong>{{ periodLabel(payslip.payrollPeriodId) }}</strong></td>
+        </ng-container>
+        <ng-container matColumnDef="issueDate">
+          <th mat-header-cell *matHeaderCellDef>{{ 'payroll.issue-date' | translate }}</th>
+          <td mat-cell *matCellDef="let payslip">{{ payslip.issueDate | localDate }}</td>
+        </ng-container>
+        <ng-container matColumnDef="netAmount">
+          <th mat-header-cell *matHeaderCellDef>{{ 'payroll.net-amount' | translate }}</th>
+          <td mat-cell *matCellDef="let payslip">{{ money(payslip) }}</td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>{{ 'payroll.payment-status-title' | translate }}</th>
+          <td mat-cell *matCellDef="let payslip"><span class="pill payment-paid">{{ 'payroll.payment-status.' + payslip.payment.status | translate }}</span></td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>{{ 'payroll.actions' | translate }}</th>
+          <td mat-cell *matCellDef="let payslip"><div class="action-cell"><button class="text-link" type="button" (click)="openViewer(payslip)">{{ 'payroll.view' | translate }}</button><button class="icon-action" type="button" (click)="download(payslip)" [attr.aria-label]="'my-payslips.download' | translate"><mat-icon>download</mat-icon></button></div></td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+      </table>
+    </div>
+  </div>
+
+  <nav class="pagination" [attr.aria-label]="'my-payslips.pagination' | translate">
+    <span class="muted">{{ 'my-payslips.range' | translate: {start: rangeStart(), end: rangeEnd(), total: filteredPayslips().length} }}</span>
+    <span class="spacer"></span>
+    <button class="page-button" type="button" [disabled]="page() === 0" (click)="page.set(page() - 1)">{{ 'my-payslips.previous' | translate }}</button>
+    @for (index of pages(); track index) { <button class="page-button" type="button" [class.current]="index === page()" (click)="page.set(index)">{{ index + 1 }}</button> }
+    <button class="page-button" type="button" [disabled]="page() >= pageCount() - 1" (click)="page.set(page() + 1)">{{ 'my-payslips.next' | translate }}</button>
+  </nav>
+</section>

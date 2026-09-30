@@ -1,0 +1,43 @@
+<form class="dialog" [formGroup]="form" (ngSubmit)="confirm()" novalidate>
+  <header class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">{{ 'payroll.payment-dialog.title' | translate }}</h2>
+    <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
+  </header>
+
+  <section class="summary-card">
+    <div class="person-row">
+      <span class="avatar">{{ employee?.firstName?.charAt(0) }}{{ employee?.lastName?.charAt(0) }}</span>
+      <div>
+        <strong>{{ employee?.fullName }}</strong>
+        <span>{{ employee?.position?.title ?? '—' }} · {{ employee?.area?.name ?? '—' }}</span>
+      </div>
+    </div>
+    <div class="summary-divider"></div>
+    <div class="summary-line"><span>{{ 'payroll.period' | translate }}</span><strong>{{ period?.label() }}</strong></div>
+    <div class="summary-line"><span>{{ 'payroll.net-amount' | translate }}</span><strong>{{ data.payslip.netAmount.amount | number:'1.2-2' }}</strong></div>
+    <div class="summary-line"><span>{{ 'payroll.current-status' | translate }}</span><strong>{{ 'payroll.payment-status.' + data.payslip.payment.status | translate }}</strong></div>
+  </section>
+
+  <div class="field">
+    <label for="paidOn">{{ 'payroll.payment-dialog.deposit-date' | translate }}</label>
+    <input id="paidOn" class="input" type="date" formControlName="paidOn" [class.invalid]="form.controls.paidOn.invalid && form.controls.paidOn.touched"/>
+  </div>
+
+  <div class="field">
+    <label for="reference">{{ 'payroll.payment-dialog.reference' | translate }}</label>
+    <input id="reference" class="input" type="text" [placeholder]="'payroll.payment-dialog.reference-placeholder' | translate"/>
+  </div>
+
+  <div class="info-banner">
+    <mat-icon>info</mat-icon>
+    <span>{{ 'payroll.payment-dialog.info' | translate }}</span>
+  </div>
+  @if (error) { <p class="field-error" role="alert">{{ error }}</p> }
+
+  <footer class="dialog-actions">
+    <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.cancel' | translate }}</button>
+    <button mat-flat-button type="submit" [disabled]="store.loading()">
+      <mat-icon>check</mat-icon>{{ 'payroll.payment-dialog.confirm' | translate }}
+    </button>
+  </footer>
+</form>

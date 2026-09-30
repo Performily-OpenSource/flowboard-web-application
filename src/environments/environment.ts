@@ -9,4 +9,6 @@ export const environment = {
   platformProviderBenefitTypesEndpointPath: '/benefit-types',
   platformProviderBenefitAssignmentsEndpointPath: '/benefit-assignments',
   platformProviderVacationBalancesEndpointPath: '/vacation-balances',
+  platformProviderPayrollPeriodsEndpointPath: '/payroll-periods',
+  platformProviderPayslipsEndpointPath: '/payslips',
 };

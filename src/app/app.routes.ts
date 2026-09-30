@@ -11,6 +11,8 @@ const workspaceRoutes = () =>
 
 const benefitsRoutes = () =>
   import('./benefits/presentation/benefits.routes').then(m => m.benefitsRoutes);
+const payrollRoutes = () =>
+  import('./payroll/presentation/payroll.routes').then(m => m.payrollRoutes);
 
 const baseTitle = 'Flowboard';
 
@@ -19,6 +21,7 @@ export const routes: Routes = [
   { path: 'about', loadComponent: about, title: `${baseTitle} - About`, data: { breadcrumb: ['breadcrumb.about'] } },
   { path: 'workspace', loadChildren: workspaceRoutes, title: `${baseTitle} - Workspace` },
   { path: 'benefits', loadChildren: benefitsRoutes, title: `${baseTitle} - Benefits` },
+  { path: 'payroll', loadChildren: payrollRoutes, title: `${baseTitle} - Payroll` },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', loadComponent: pageNotFound, title: `${baseTitle} - Page Not Found`, data: { breadcrumb: ['breadcrumb.page-not-found'] } }
 ];

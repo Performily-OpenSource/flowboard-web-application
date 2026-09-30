@@ -1,0 +1,28 @@
+.payroll-page { max-width: 1200px; }
+.page-info { display:flex; align-items:flex-start; gap:9px; padding:12px 14px; margin-bottom:20px; border-radius:9px; background:var(--fb-primary-container); color:var(--fb-on-primary-container); font-size:12px; line-height:1.45; }
+.page-info mat-icon { flex:none; font-size:20px; }
+.error-banner { display:flex; gap:8px; align-items:center; margin:10px 0; padding:10px 12px; border-radius:8px; background:var(--fb-error-container); color:var(--fb-on-error-container); font-size:12px; }
+.filters-row { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:20px; }
+.select-filter { position:relative; display:inline-flex; align-items:center; min-width:120px; border:1px solid var(--fb-outline); border-radius:9px; background:var(--fb-surface); }
+.select-filter.active { background:var(--fb-primary-container); border-color:transparent; }
+.select-filter span { display:none; }
+.select-filter select { appearance:none; min-height:34px; padding:0 30px 0 12px; border:0; outline:0; background:transparent; color:var(--fb-text-secondary); font:inherit; font-size:12.5px; cursor:pointer; }
+.select-filter.active select { color:var(--fb-on-primary-container); }
+.select-filter mat-icon { position:absolute; right:7px; pointer-events:none; font-size:18px; }
+.result-count { margin-left:auto; color:var(--fb-text-muted); font-size:12px; }
+.table-card { overflow:hidden; border:1px solid var(--fb-border); border-radius:12px; background:var(--fb-surface); }
+.table-scroll { overflow-x:auto; }
+table { width:100%; }
+.employee-cell { display:flex; align-items:center; gap:10px; }
+.avatar { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:50%; background:var(--fb-primary-container); color:var(--fb-on-primary-container); font-size:11px; font-weight:600; flex:none; }
+.action-cell { display:flex; align-items:center; gap:8px; white-space:nowrap; }
+.review-badge { padding:3px 7px; border-radius:999px; background:var(--fb-surface-muted); color:var(--fb-text-muted); font-size:10px; }
+.observed-link { color:var(--fb-error); }
+.payment-paid { background:var(--fb-success-container); }
+.payment-pending { background:var(--fb-warning-container); }
+.payment-observed { background:var(--fb-error-container); }
+.pagination { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-top:18px; }
+.page-button { min-width:32px; height:30px; padding:0 12px; border:1px solid var(--fb-outline); border-radius:6px; background:var(--fb-surface); color:var(--fb-text-secondary); font:inherit; font-size:12.5px; cursor:pointer; }
+.page-button:disabled { opacity:.5; cursor:default; }
+.page-button.current { border-color:var(--fb-primary); background:var(--fb-primary); color:var(--fb-on-primary); }
+@media (max-width:700px) { .result-count { width:100%; margin-left:0; } }
