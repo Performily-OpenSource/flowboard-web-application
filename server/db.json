@@ -299,38 +299,351 @@
     }
   ],
   "benefit-types": [
-    {"id": 1, "name": "Vacaciones", "description": "Descanso vacacional anual de 30 días por año de servicio.", "hasBalance": true, "unit": "DAYS", "periodicity": "ANNUAL", "active": true},
-    {"id": 2, "name": "Gratificación de julio", "description": "Gratificación legal por Fiestas Patrias.", "hasBalance": false, "unit": "MONEY", "periodicity": "SEMIANNUAL", "active": true},
-    {"id": 3, "name": "Gratificación de diciembre", "description": "Gratificación legal por Navidad.", "hasBalance": false, "unit": "MONEY", "periodicity": "SEMIANNUAL", "active": true},
-    {"id": 4, "name": "Canasta navideña", "description": "Canasta de productos entregada en diciembre.", "hasBalance": true, "unit": "UNITS", "periodicity": "ANNUAL", "active": true},
-    {"id": 5, "name": "Vales de consumo", "description": "Vales para supermercados afiliados.", "hasBalance": true, "unit": "MONEY", "periodicity": "MONTHLY", "active": true},
-    {"id": 6, "name": "Adelanto de sueldo", "description": "Adelanto a cuenta de la remuneración del mes.", "hasBalance": true, "unit": "MONEY", "periodicity": "MONTHLY", "active": true},
-    {"id": 7, "name": "Días libres adicionales", "description": "Días de descanso adicionales por desempeño.", "hasBalance": true, "unit": "DAYS", "periodicity": "ANNUAL", "active": true},
-    {"id": 8, "name": "Subsidio de movilidad", "description": "Apoyo mensual para transporte.", "hasBalance": false, "unit": "MONEY", "periodicity": "MONTHLY", "active": true},
-    {"id": 9, "name": "Bono por cumpleaños", "description": "Monto de regalo en el mes de cumpleaños.", "hasBalance": false, "unit": "MONEY", "periodicity": "ANNUAL", "active": true},
-    {"id": 10, "name": "Seguro oncológico", "description": "Cobertura oncológica complementaria (suspendido).", "hasBalance": false, "unit": "MONEY", "periodicity": "ANNUAL", "active": false},
-    {"id": 11, "name": "Vales de alimentación", "description": "Vales para almuerzo del personal", "hasBalance": false, "unit": "MONEY", "periodicity": "MONTHLY", "active": true}
+    {
+      "id": 1,
+      "name": "Vacaciones",
+      "description": "Descanso vacacional anual de 30 días por año de servicio.",
+      "hasBalance": true,
+      "unit": "DAYS",
+      "periodicity": "ANNUAL",
+      "active": true
+    },
+    {
+      "id": 2,
+      "name": "Gratificación de julio",
+      "description": "Gratificación legal por Fiestas Patrias.",
+      "hasBalance": false,
+      "unit": "MONEY",
+      "periodicity": "SEMIANNUAL",
+      "active": true
+    },
+    {
+      "id": 3,
+      "name": "Gratificación de diciembre",
+      "description": "Gratificación legal por Navidad.",
+      "hasBalance": false,
+      "unit": "MONEY",
+      "periodicity": "SEMIANNUAL",
+      "active": true
+    },
+    {
+      "id": 4,
+      "name": "Canasta navideña",
+      "description": "Canasta de productos entregada en diciembre.",
+      "hasBalance": true,
+      "unit": "UNITS",
+      "periodicity": "ANNUAL",
+      "active": true
+    },
+    {
+      "id": 5,
+      "name": "Vales de consumo",
+      "description": "Vales para supermercados afiliados.",
+      "hasBalance": true,
+      "unit": "MONEY",
+      "periodicity": "MONTHLY",
+      "active": true
+    },
+    {
+      "id": 6,
+      "name": "Adelanto de sueldo",
+      "description": "Adelanto a cuenta de la remuneración del mes.",
+      "hasBalance": true,
+      "unit": "MONEY",
+      "periodicity": "MONTHLY",
+      "active": true
+    },
+    {
+      "id": 7,
+      "name": "Días libres adicionales",
+      "description": "Días de descanso adicionales por desempeño.",
+      "hasBalance": true,
+      "unit": "DAYS",
+      "periodicity": "ANNUAL",
+      "active": true
+    },
+    {
+      "id": 8,
+      "name": "Subsidio de movilidad",
+      "description": "Apoyo mensual para transporte.",
+      "hasBalance": false,
+      "unit": "MONEY",
+      "periodicity": "MONTHLY",
+      "active": true
+    },
+    {
+      "id": 9,
+      "name": "Bono por cumpleaños",
+      "description": "Monto de regalo en el mes de cumpleaños.",
+      "hasBalance": false,
+      "unit": "MONEY",
+      "periodicity": "ANNUAL",
+      "active": true
+    },
+    {
+      "id": 10,
+      "name": "Seguro oncológico",
+      "description": "Cobertura oncológica complementaria (suspendido).",
+      "hasBalance": false,
+      "unit": "MONEY",
+      "periodicity": "ANNUAL",
+      "active": false
+    },
+    {
+      "id": 11,
+      "name": "Vales de alimentación",
+      "description": "Vales para almuerzo del personal",
+      "hasBalance": false,
+      "unit": "MONEY",
+      "periodicity": "MONTHLY",
+      "active": true
+    }
   ],
   "benefit-assignments": [
-    {"id": 1, "benefitTypeId": 4, "employeeId": 1, "sourceAreaId": null, "validFrom": "2025-12-01", "validTo": "2025-12-31", "quantity": 1, "status": "DELIVERED", "delivery": {"id": 1, "deliveredOn": "2025-12-20", "registeredBy": 1, "notes": "Entregada en la oficina principal."}},
-    {"id": 2, "benefitTypeId": 4, "employeeId": 1, "sourceAreaId": null, "validFrom": "2026-12-01", "validTo": "2026-12-31", "quantity": 1, "status": "ASSIGNED", "delivery": null},
-    {"id": 3, "benefitTypeId": 4, "employeeId": 2, "sourceAreaId": null, "validFrom": "2026-12-01", "validTo": "2026-12-31", "quantity": 1, "status": "ASSIGNED", "delivery": null},
-    {"id": 4, "benefitTypeId": 4, "employeeId": 3, "sourceAreaId": null, "validFrom": "2026-12-01", "validTo": "2026-12-31", "quantity": 1, "status": "ASSIGNED", "delivery": null},
-    {"id": 5, "benefitTypeId": 4, "employeeId": 4, "sourceAreaId": null, "validFrom": "2026-12-01", "validTo": "2026-12-31", "quantity": 1, "status": "ASSIGNED", "delivery": null},
-    {"id": 6, "benefitTypeId": 5, "employeeId": 2, "sourceAreaId": 2, "validFrom": "2026-10-01", "validTo": "2026-12-31", "quantity": 300, "status": "ASSIGNED", "delivery": null},
-    {"id": 7, "benefitTypeId": 5, "employeeId": 3, "sourceAreaId": 2, "validFrom": "2026-10-01", "validTo": "2026-12-31", "quantity": 300, "status": "ASSIGNED", "delivery": null},
-    {"id": 8, "benefitTypeId": 8, "employeeId": 6, "sourceAreaId": null, "validFrom": "2026-01-01", "validTo": "2026-12-31", "quantity": 150, "status": "ASSIGNED", "delivery": null},
-    {"id": 9, "benefitTypeId": 2, "employeeId": 1, "sourceAreaId": null, "validFrom": "2026-07-01", "validTo": "2026-07-31", "quantity": 3750, "status": "DELIVERED", "delivery": {"id": 2, "deliveredOn": "2026-07-15", "registeredBy": 1, "notes": "Pagada en planilla de julio."}},
-    {"id": 10, "benefitTypeId": 7, "employeeId": 3, "sourceAreaId": null, "validFrom": "2026-01-01", "validTo": "2026-12-31", "quantity": 2, "status": "CANCELLED", "delivery": null}
+    {
+      "id": 1,
+      "benefitTypeId": 4,
+      "employeeId": 1,
+      "sourceAreaId": null,
+      "validFrom": "2025-12-01",
+      "validTo": "2025-12-31",
+      "quantity": 1,
+      "status": "DELIVERED",
+      "delivery": {
+        "id": 1,
+        "deliveredOn": "2025-12-20",
+        "registeredBy": 1,
+        "notes": "Entregada en la oficina principal."
+      }
+    },
+    {
+      "id": 2,
+      "benefitTypeId": 4,
+      "employeeId": 1,
+      "sourceAreaId": null,
+      "validFrom": "2026-12-01",
+      "validTo": "2026-12-31",
+      "quantity": 1,
+      "status": "ASSIGNED",
+      "delivery": null
+    },
+    {
+      "id": 3,
+      "benefitTypeId": 4,
+      "employeeId": 2,
+      "sourceAreaId": null,
+      "validFrom": "2026-12-01",
+      "validTo": "2026-12-31",
+      "quantity": 1,
+      "status": "ASSIGNED",
+      "delivery": null
+    },
+    {
+      "id": 4,
+      "benefitTypeId": 4,
+      "employeeId": 3,
+      "sourceAreaId": null,
+      "validFrom": "2026-12-01",
+      "validTo": "2026-12-31",
+      "quantity": 1,
+      "status": "ASSIGNED",
+      "delivery": null
+    },
+    {
+      "id": 5,
+      "benefitTypeId": 4,
+      "employeeId": 4,
+      "sourceAreaId": null,
+      "validFrom": "2026-12-01",
+      "validTo": "2026-12-31",
+      "quantity": 1,
+      "status": "ASSIGNED",
+      "delivery": null
+    },
+    {
+      "id": 6,
+      "benefitTypeId": 5,
+      "employeeId": 2,
+      "sourceAreaId": 2,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-12-31",
+      "quantity": 300,
+      "status": "ASSIGNED",
+      "delivery": null
+    },
+    {
+      "id": 7,
+      "benefitTypeId": 5,
+      "employeeId": 3,
+      "sourceAreaId": 2,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-12-31",
+      "quantity": 300,
+      "status": "ASSIGNED",
+      "delivery": null
+    },
+    {
+      "id": 8,
+      "benefitTypeId": 8,
+      "employeeId": 6,
+      "sourceAreaId": null,
+      "validFrom": "2026-01-01",
+      "validTo": "2026-12-31",
+      "quantity": 150,
+      "status": "ASSIGNED",
+      "delivery": null
+    },
+    {
+      "id": 9,
+      "benefitTypeId": 2,
+      "employeeId": 1,
+      "sourceAreaId": null,
+      "validFrom": "2026-07-01",
+      "validTo": "2026-07-31",
+      "quantity": 3750,
+      "status": "DELIVERED",
+      "delivery": {
+        "id": 2,
+        "deliveredOn": "2026-07-15",
+        "registeredBy": 1,
+        "notes": "Pagada en planilla de julio."
+      }
+    },
+    {
+      "id": 10,
+      "benefitTypeId": 7,
+      "employeeId": 3,
+      "sourceAreaId": null,
+      "validFrom": "2026-01-01",
+      "validTo": "2026-12-31",
+      "quantity": 2,
+      "status": "CANCELLED",
+      "delivery": null
+    }
   ],
   "vacation-balances": [
-    {"id": 1, "employeeId": 1, "accruedDays": 30, "usedDays": 15, "movements": [{"id": 1, "type": "ACCRUAL", "days": 30, "reason": "Accrual by seniority", "authorId": null, "requestId": null, "occurredAt": "2026-01-02T09:00:00.000Z"}, {"id": 2, "type": "USAGE", "days": -15, "reason": "Approved vacation request", "authorId": null, "requestId": 101, "occurredAt": "2026-02-10T10:00:00.000Z"}]},
-    {"id": 2, "employeeId": 2, "accruedDays": 30, "usedDays": 28, "movements": [{"id": 3, "type": "ACCRUAL", "days": 30, "reason": "Accrual by seniority", "authorId": null, "requestId": null, "occurredAt": "2026-01-02T09:00:00.000Z"}, {"id": 4, "type": "USAGE", "days": -28, "reason": "Approved vacation request", "authorId": null, "requestId": 102, "occurredAt": "2026-03-02T10:00:00.000Z"}]},
-    {"id": 3, "employeeId": 3, "accruedDays": 15, "usedDays": 0, "movements": [{"id": 5, "type": "ACCRUAL", "days": 15, "reason": "Accrual by seniority", "authorId": null, "requestId": null, "occurredAt": "2026-01-02T09:00:00.000Z"}]},
-    {"id": 4, "employeeId": 4, "accruedDays": 30, "usedDays": 4, "movements": [{"id": 6, "type": "ACCRUAL", "days": 30, "reason": "Accrual by seniority", "authorId": null, "requestId": null, "occurredAt": "2026-01-02T09:00:00.000Z"}, {"id": 7, "type": "USAGE", "days": -4, "reason": "Approved vacation request", "authorId": null, "requestId": 103, "occurredAt": "2026-04-20T10:00:00.000Z"}]},
-    {"id": 5, "employeeId": 6, "accruedDays": 12.5, "usedDays": 3, "movements": [{"id": 8, "type": "ACCRUAL", "days": 12.5, "reason": "Accrual by seniority", "authorId": null, "requestId": null, "occurredAt": "2026-01-02T09:00:00.000Z"}, {"id": 9, "type": "USAGE", "days": -3, "reason": "Approved vacation request", "authorId": null, "requestId": 104, "occurredAt": "2026-06-05T10:00:00.000Z"}]}
+    {
+      "id": 1,
+      "employeeId": 1,
+      "accruedDays": 30,
+      "usedDays": 15,
+      "movements": [
+        {
+          "id": 1,
+          "type": "ACCRUAL",
+          "days": 30,
+          "reason": "Accrual by seniority",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-01-02T09:00:00.000Z"
+        },
+        {
+          "id": 2,
+          "type": "USAGE",
+          "days": -15,
+          "reason": "Approved vacation request",
+          "authorId": null,
+          "requestId": 101,
+          "occurredAt": "2026-02-10T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "employeeId": 2,
+      "accruedDays": 30,
+      "usedDays": 28,
+      "movements": [
+        {
+          "id": 3,
+          "type": "ACCRUAL",
+          "days": 30,
+          "reason": "Accrual by seniority",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-01-02T09:00:00.000Z"
+        },
+        {
+          "id": 4,
+          "type": "USAGE",
+          "days": -28,
+          "reason": "Approved vacation request",
+          "authorId": null,
+          "requestId": 102,
+          "occurredAt": "2026-03-02T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "employeeId": 3,
+      "accruedDays": 15,
+      "usedDays": 0,
+      "movements": [
+        {
+          "id": 5,
+          "type": "ACCRUAL",
+          "days": 15,
+          "reason": "Accrual by seniority",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-01-02T09:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "employeeId": 4,
+      "accruedDays": 30,
+      "usedDays": 4,
+      "movements": [
+        {
+          "id": 6,
+          "type": "ACCRUAL",
+          "days": 30,
+          "reason": "Accrual by seniority",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-01-02T09:00:00.000Z"
+        },
+        {
+          "id": 7,
+          "type": "USAGE",
+          "days": -4,
+          "reason": "Approved vacation request",
+          "authorId": null,
+          "requestId": 103,
+          "occurredAt": "2026-04-20T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "employeeId": 6,
+      "accruedDays": 12.5,
+      "usedDays": 3,
+      "movements": [
+        {
+          "id": 8,
+          "type": "ACCRUAL",
+          "days": 12.5,
+          "reason": "Accrual by seniority",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-01-02T09:00:00.000Z"
+        },
+        {
+          "id": 9,
+          "type": "USAGE",
+          "days": -3,
+          "reason": "Approved vacation request",
+          "authorId": null,
+          "requestId": 104,
+          "occurredAt": "2026-06-05T10:00:00.000Z"
+        }
+      ]
+    }
   ],
-
   "payroll-periods": [
     {
       "id": 1,
@@ -625,6 +938,453 @@
       "paymentStatus": "PAID",
       "paidOn": "2026-09-05",
       "observationReason": null
+    }
+  ],
+  "offices": [
+    {
+      "id": 1,
+      "name": "Sala de reuniones 1",
+      "building": "Sede Central Lima",
+      "floor": "Piso 2",
+      "locationReference": "12 personas",
+      "active": true
+    },
+    {
+      "id": 2,
+      "name": "Piso 3, area abierta",
+      "building": "Sede Central Lima",
+      "floor": "Piso 3",
+      "locationReference": "64 personas",
+      "active": true
+    },
+    {
+      "id": 3,
+      "name": "Sala de reuniones 2",
+      "building": "Sede Central Lima",
+      "floor": "Piso 2",
+      "locationReference": "8 personas",
+      "active": true
+    },
+    {
+      "id": 4,
+      "name": "Almacen central",
+      "building": "Sede Central Lima",
+      "floor": "Piso 1",
+      "locationReference": "20 personas",
+      "active": true
+    },
+    {
+      "id": 5,
+      "name": "Recepcion",
+      "building": "Sede Central Lima",
+      "floor": "Piso 1",
+      "locationReference": "6 personas",
+      "active": true
+    },
+    {
+      "id": 6,
+      "name": "Comedor",
+      "building": "Sede Central Lima",
+      "floor": "Piso 1",
+      "locationReference": "80 personas",
+      "active": true
+    },
+    {
+      "id": 7,
+      "name": "Oficina Surco",
+      "building": "Sede Surco",
+      "floor": "Piso 4",
+      "locationReference": "18 personas",
+      "active": true
+    },
+    {
+      "id": 8,
+      "name": "Deposito norte",
+      "building": "Almacen Central",
+      "floor": "Piso 1",
+      "locationReference": "15 personas",
+      "active": true
+    }
+  ],
+  "devices": [
+    {
+      "id": 1,
+      "code": "FB-SENSOR-001",
+      "officeId": 1,
+      "supportedMetrics": [
+        "TEMPERATURE",
+        "ILLUMINATION",
+        "AIR_QUALITY"
+      ],
+      "status": "LINKED"
+    },
+    {
+      "id": 2,
+      "code": "FB-SENSOR-002",
+      "officeId": 2,
+      "supportedMetrics": [
+        "TEMPERATURE",
+        "ILLUMINATION",
+        "AIR_QUALITY"
+      ],
+      "status": "LINKED"
+    },
+    {
+      "id": 3,
+      "code": "FB-SENSOR-003",
+      "officeId": 3,
+      "supportedMetrics": [
+        "TEMPERATURE",
+        "ILLUMINATION",
+        "AIR_QUALITY"
+      ],
+      "status": "LINKED"
+    },
+    {
+      "id": 4,
+      "code": "FB-SENSOR-004",
+      "officeId": 4,
+      "supportedMetrics": [
+        "TEMPERATURE",
+        "ILLUMINATION",
+        "AIR_QUALITY"
+      ],
+      "status": "LINKED"
+    },
+    {
+      "id": 5,
+      "code": "FB-SENSOR-005",
+      "officeId": 5,
+      "supportedMetrics": [
+        "TEMPERATURE",
+        "ILLUMINATION",
+        "AIR_QUALITY"
+      ],
+      "status": "LINKED"
+    },
+    {
+      "id": 6,
+      "code": "FB-SENSOR-006",
+      "officeId": 6,
+      "supportedMetrics": [
+        "TEMPERATURE",
+        "ILLUMINATION"
+      ],
+      "status": "LINKED"
+    },
+    {
+      "id": 7,
+      "code": "FB-SENSOR-007",
+      "officeId": null,
+      "supportedMetrics": [
+        "TEMPERATURE",
+        "AIR_QUALITY"
+      ],
+      "status": "IN_INVENTORY"
+    },
+    {
+      "id": 8,
+      "code": "FB-SENSOR-008",
+      "officeId": null,
+      "supportedMetrics": [
+        "ILLUMINATION",
+        "AIR_QUALITY"
+      ],
+      "status": "IN_INVENTORY"
+    }
+  ],
+  "metric-thresholds": [
+    {
+      "id": 1,
+      "metricType": "TEMPERATURE"
+    },
+    {
+      "id": 2,
+      "metricType": "ILLUMINATION"
+    },
+    {
+      "id": 3,
+      "metricType": "AIR_QUALITY"
+    }
+  ],
+  "threshold-ranges": [
+    {
+      "id": 1,
+      "metricThresholdId": 1,
+      "healthIndicator": "HAZARDOUS",
+      "minValue": -50,
+      "maxValue": 18
+    },
+    {
+      "id": 2,
+      "metricThresholdId": 1,
+      "healthIndicator": "POOR",
+      "minValue": 18,
+      "maxValue": 20
+    },
+    {
+      "id": 3,
+      "metricThresholdId": 1,
+      "healthIndicator": "OPTIMAL",
+      "minValue": 20,
+      "maxValue": 24
+    },
+    {
+      "id": 4,
+      "metricThresholdId": 1,
+      "healthIndicator": "ACCEPTABLE",
+      "minValue": 24,
+      "maxValue": 100
+    },
+    {
+      "id": 5,
+      "metricThresholdId": 2,
+      "healthIndicator": "HAZARDOUS",
+      "minValue": 0,
+      "maxValue": 200
+    },
+    {
+      "id": 6,
+      "metricThresholdId": 2,
+      "healthIndicator": "POOR",
+      "minValue": 200,
+      "maxValue": 400
+    },
+    {
+      "id": 7,
+      "metricThresholdId": 2,
+      "healthIndicator": "OPTIMAL",
+      "minValue": 400,
+      "maxValue": 600
+    },
+    {
+      "id": 8,
+      "metricThresholdId": 2,
+      "healthIndicator": "ACCEPTABLE",
+      "minValue": 600,
+      "maxValue": 10000
+    },
+    {
+      "id": 9,
+      "metricThresholdId": 3,
+      "healthIndicator": "OPTIMAL",
+      "minValue": 0,
+      "maxValue": 800
+    },
+    {
+      "id": 10,
+      "metricThresholdId": 3,
+      "healthIndicator": "ACCEPTABLE",
+      "minValue": 800,
+      "maxValue": 1000
+    },
+    {
+      "id": 11,
+      "metricThresholdId": 3,
+      "healthIndicator": "POOR",
+      "minValue": 1000,
+      "maxValue": 1400
+    },
+    {
+      "id": 12,
+      "metricThresholdId": 3,
+      "healthIndicator": "HAZARDOUS",
+      "minValue": 1400,
+      "maxValue": 5000
+    }
+  ],
+  "environmental-readings": [
+    {
+      "id": 1,
+      "officeId": 1,
+      "deviceId": 1,
+      "metricType": "TEMPERATURE",
+      "metricValue": 22.4,
+      "recordedAt": "2026-09-29T18:35:00"
+    },
+    {
+      "id": 2,
+      "officeId": 1,
+      "deviceId": 1,
+      "metricType": "ILLUMINATION",
+      "metricValue": 480,
+      "recordedAt": "2026-09-29T18:35:00"
+    },
+    {
+      "id": 3,
+      "officeId": 1,
+      "deviceId": 1,
+      "metricType": "AIR_QUALITY",
+      "metricValue": 620,
+      "recordedAt": "2026-09-29T18:35:00"
+    },
+    {
+      "id": 4,
+      "officeId": 2,
+      "deviceId": 2,
+      "metricType": "TEMPERATURE",
+      "metricValue": 26.8,
+      "recordedAt": "2026-09-29T18:42:00"
+    },
+    {
+      "id": 5,
+      "officeId": 2,
+      "deviceId": 2,
+      "metricType": "ILLUMINATION",
+      "metricValue": 310,
+      "recordedAt": "2026-09-29T18:42:00"
+    },
+    {
+      "id": 6,
+      "officeId": 2,
+      "deviceId": 2,
+      "metricType": "AIR_QUALITY",
+      "metricValue": 940,
+      "recordedAt": "2026-09-29T18:42:00"
+    },
+    {
+      "id": 7,
+      "officeId": 3,
+      "deviceId": 3,
+      "metricType": "TEMPERATURE",
+      "metricValue": 21.9,
+      "recordedAt": "2026-09-29T10:30:00"
+    },
+    {
+      "id": 8,
+      "officeId": 3,
+      "deviceId": 3,
+      "metricType": "ILLUMINATION",
+      "metricValue": 455,
+      "recordedAt": "2026-09-29T10:30:00"
+    },
+    {
+      "id": 9,
+      "officeId": 3,
+      "deviceId": 3,
+      "metricType": "AIR_QUALITY",
+      "metricValue": 580,
+      "recordedAt": "2026-09-29T10:30:00"
+    },
+    {
+      "id": 10,
+      "officeId": 4,
+      "deviceId": 4,
+      "metricType": "TEMPERATURE",
+      "metricValue": 29.1,
+      "recordedAt": "2026-09-29T18:39:00"
+    },
+    {
+      "id": 11,
+      "officeId": 4,
+      "deviceId": 4,
+      "metricType": "ILLUMINATION",
+      "metricValue": 220,
+      "recordedAt": "2026-09-29T18:39:00"
+    },
+    {
+      "id": 12,
+      "officeId": 4,
+      "deviceId": 4,
+      "metricType": "AIR_QUALITY",
+      "metricValue": 1180,
+      "recordedAt": "2026-09-29T18:39:00"
+    },
+    {
+      "id": 13,
+      "officeId": 5,
+      "deviceId": 5,
+      "metricType": "TEMPERATURE",
+      "metricValue": 23.6,
+      "recordedAt": "2026-09-29T18:37:00"
+    },
+    {
+      "id": 14,
+      "officeId": 5,
+      "deviceId": 5,
+      "metricType": "ILLUMINATION",
+      "metricValue": 520,
+      "recordedAt": "2026-09-29T18:37:00"
+    },
+    {
+      "id": 15,
+      "officeId": 5,
+      "deviceId": 5,
+      "metricType": "AIR_QUALITY",
+      "metricValue": 700,
+      "recordedAt": "2026-09-29T18:37:00"
+    },
+    {
+      "id": 16,
+      "officeId": 6,
+      "deviceId": 6,
+      "metricType": "TEMPERATURE",
+      "metricValue": 22.8,
+      "recordedAt": "2026-09-29T18:30:00"
+    },
+    {
+      "id": 17,
+      "officeId": 6,
+      "deviceId": 6,
+      "metricType": "ILLUMINATION",
+      "metricValue": 430,
+      "recordedAt": "2026-09-29T18:30:00"
+    },
+    {
+      "id": 18,
+      "officeId": 7,
+      "deviceId": 7,
+      "metricType": "TEMPERATURE",
+      "metricValue": 22.1,
+      "recordedAt": "2026-09-29T17:58:00"
+    },
+    {
+      "id": 19,
+      "officeId": 8,
+      "deviceId": 8,
+      "metricType": "AIR_QUALITY",
+      "metricValue": 1530,
+      "recordedAt": "2026-09-29T18:10:00"
+    },
+    {
+      "id": 20,
+      "officeId": 1,
+      "deviceId": 1,
+      "metricType": "TEMPERATURE",
+      "metricValue": 21.8,
+      "recordedAt": "2026-09-28T18:35:00"
+    },
+    {
+      "id": 21,
+      "officeId": 1,
+      "deviceId": 1,
+      "metricType": "TEMPERATURE",
+      "metricValue": 22.2,
+      "recordedAt": "2026-09-27T18:35:00"
+    },
+    {
+      "id": 22,
+      "officeId": 1,
+      "deviceId": 1,
+      "metricType": "TEMPERATURE",
+      "metricValue": 24.2,
+      "recordedAt": "2026-09-26T18:35:00"
+    },
+    {
+      "id": 23,
+      "officeId": 1,
+      "deviceId": 1,
+      "metricType": "TEMPERATURE",
+      "metricValue": 23.1,
+      "recordedAt": "2026-09-25T18:35:00"
+    },
+    {
+      "id": 24,
+      "officeId": 1,
+      "deviceId": 1,
+      "metricType": "TEMPERATURE",
+      "metricValue": 21.5,
+      "recordedAt": "2026-09-24T18:35:00"
     }
   ]
 }
