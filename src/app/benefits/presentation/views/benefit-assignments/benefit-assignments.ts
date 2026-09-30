@@ -23,7 +23,7 @@ import {ASSIGNMENT_STATUSES, AssignmentStatus, BenefitAssignment} from '../../..
 import {BenefitsHeader} from '../../components/benefits-header/benefits-header';
 import {BenefitsTabs} from '../../components/benefits-tabs/benefits-tabs';
 import {BenefitsFeedback} from '../../components/benefits-feedback/benefits-feedback';
-import {ListPagination} from '../../components/list-pagination/list-pagination';
+import {ListPagination} from '../../../../shared/presentation/components/list-pagination/list-pagination';
 import {BenefitQuantity} from '../../components/benefit-quantity/benefit-quantity';
 import {RegisterDeliveryDialog} from '../../components/register-delivery-dialog/register-delivery-dialog';
 

@@ -445,9 +445,6 @@
       "UNITS": "units"
     },
     "pagination": {
-      "showing": "Showing {{from}} to {{to}} of {{total}} {{items}}",
-      "previous": "Previous",
-      "next": "Next",
       "benefits": "benefits",
       "employees": "employees",
       "assignments": "assignments",
@@ -462,7 +459,16 @@
       "already-delivered-on": "This assignment was already delivered on {{date}}. A delivery can only be registered once.",
       "cancelled": "The assignment was cancelled and its delivery cannot be registered.",
       "cancel-delivered": "A delivered assignment cannot be cancelled.",
-      "negative-balance": "The available balance cannot be negative."
+      "negative-balance": "The available balance cannot be negative.",
+      "load-benefits": "The benefits catalog could not be loaded.",
+      "load-assignments": "The benefit assignments could not be loaded.",
+      "load-balances": "The vacation balances could not be loaded.",
+      "create-benefit": "The benefit could not be created.",
+      "update-benefit": "The benefit could not be updated.",
+      "assign-benefit": "The benefit could not be assigned.",
+      "register-delivery": "The delivery could not be registered.",
+      "cancel-assignment": "The assignment could not be cancelled.",
+      "adjust-balance": "The vacation balance adjustment could not be saved."
     }
   },
   "benefit-unit": {
@@ -1209,17 +1215,31 @@
     "type-duplicated": "A request type with that name already exists.",
     "type-in-use": "{{name}} has requests, so it cannot be deleted. You can deactivate it instead."
   },
-
   "my-profile": {
-  "request-update": "Request data update",
-  "data-tab": "My data",
-  "contract-tab": "My contract",
-  "documents-tab": "My documents",
-  "update-note": "Human Resources updates your personal data. Send an update request and attach the supporting document.",
-  "my-position": "My position",
-  "contract": "Contract",
-  "no-manager": "Not assigned",
-  "not-found": "We could not find your employee profile."
+    "request-update": "Request data update",
+    "data-tab": "My data",
+    "contract-tab": "My contract",
+    "documents-tab": "My documents",
+    "update-note": "Human Resources updates your personal data. Send an update request and attach the supporting document.",
+    "my-position": "My position",
+    "contract": "Contract",
+    "no-manager": "Not assigned",
+    "not-found": "We could not find your employee profile."
+  },
+  "pagination": {
+    "showing": "Showing {{from}} to {{to}} of {{total}} {{items}}",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "employee-benefits": {
+    "title": "Assigned benefits",
+    "empty": "This employee has no assigned benefits yet.",
+    "view-all": "View all assignments"
+  },
+  "vacation-card": {
+    "title": "Vacation balance",
+    "days": "days",
+    "empty": "This employee has no vacation balance yet.",
+    "view": "View balance per employee"
   }
-  
 }

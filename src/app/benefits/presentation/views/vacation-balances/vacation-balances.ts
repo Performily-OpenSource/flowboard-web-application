@@ -23,7 +23,7 @@ import {WorkspaceAcl, EmployeeSummary} from '../../../infrastructure/workspace-a
 import {VacationBalance} from '../../../domain/model/vacation-balance.entity';
 import {BenefitsTabs} from '../../components/benefits-tabs/benefits-tabs';
 import {BenefitsFeedback} from '../../components/benefits-feedback/benefits-feedback';
-import {ListPagination} from '../../components/list-pagination/list-pagination';
+import {ListPagination} from '../../../../shared/presentation/components/list-pagination/list-pagination';
 import {VacationAdjustmentDialog} from '../../components/vacation-adjustment-dialog/vacation-adjustment-dialog';
 import {VacationMovementsDialog} from '../../components/vacation-movements-dialog/vacation-movements-dialog';
 

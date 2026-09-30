@@ -21,7 +21,7 @@ import {BENEFIT_UNITS, BenefitType, BenefitUnit} from '../../../domain/model/ben
 import {BenefitsHeader} from '../../components/benefits-header/benefits-header';
 import {BenefitsTabs} from '../../components/benefits-tabs/benefits-tabs';
 import {BenefitsFeedback} from '../../components/benefits-feedback/benefits-feedback';
-import {ListPagination} from '../../components/list-pagination/list-pagination';
+import {ListPagination} from '../../../../shared/presentation/components/list-pagination/list-pagination';
 import {BenefitTypeFormDialog} from '../../components/benefit-type-form-dialog/benefit-type-form-dialog';
 import {AssignBenefitDialog} from '../../components/assign-benefit-dialog/assign-benefit-dialog';
 

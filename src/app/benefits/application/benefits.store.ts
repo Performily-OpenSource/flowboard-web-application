@@ -121,7 +121,7 @@ export class BenefitsStore {
         this.benefitTypesSignal.update(types => [...types, created]);
         this.loadingSignal.set(false);
       },
-      error: error => this.failOperation(error, 'Failed to create benefit')
+      error: error => this.failOperation(error, 'benefits.error.create-benefit')
     });
   }
 
@@ -136,7 +136,7 @@ export class BenefitsStore {
         this.benefitTypesSignal.update(types => types.map(type => type.id === updated.id ? updated : type));
         this.loadingSignal.set(false);
       },
-      error: error => this.failOperation(error, 'Failed to update benefit')
+      error: error => this.failOperation(error, 'benefits.error.update-benefit')
     });
   }
 
@@ -193,7 +193,7 @@ export class BenefitsStore {
           this.assignmentsSignal.update(current => [...current, ...created]);
           this.loadingSignal.set(false);
         },
-        error: error => this.failOperation(error, 'Failed to assign benefit')
+        error: error => this.failOperation(error, 'benefits.error.assign-benefit')
       });
   }
 
@@ -206,7 +206,7 @@ export class BenefitsStore {
       this.errorSignal.set(assignment.isDelivered() ? 'benefits.error.already-delivered' : 'benefits.error.cancelled');
       return;
     }
-    this.saveAssignment(copy, 'Failed to register delivery');
+    this.saveAssignment(copy, 'benefits.error.register-delivery');
   }
 
   cancelAssignment(assignment: BenefitAssignment): void {
@@ -217,7 +217,7 @@ export class BenefitsStore {
       this.errorSignal.set('benefits.error.cancel-delivered');
       return;
     }
-    this.saveAssignment(copy, 'Failed to cancel assignment');
+    this.saveAssignment(copy, 'benefits.error.cancel-assignment');
   }
 
   // ---------- Vacation balances ----------
@@ -237,7 +237,7 @@ export class BenefitsStore {
         this.balancesSignal.update(balances => balances.map(current => current.id === updated.id ? updated : current));
         this.loadingSignal.set(false);
       },
-      error: error => this.failOperation(error, 'Failed to adjust vacation balance')
+      error: error => this.failOperation(error, 'benefits.error.adjust-balance')
     });
   }
 
@@ -247,7 +247,7 @@ export class BenefitsStore {
 
   // ---------- Internals ----------
 
-  private saveAssignment(assignment: BenefitAssignment, failure: string): void {
+  private saveAssignment(assignment: BenefitAssignment, errorKey: string): void {
     this.startOperation();
     this.benefitsApi.updateBenefitAssignment(assignment).pipe(retry(2)).subscribe({
       next: updated => {
@@ -255,7 +255,7 @@ export class BenefitsStore {
           assignments.map(current => current.id === updated.id ? updated : current));
         this.loadingSignal.set(false);
       },
-      error: error => this.failOperation(error, failure)
+      error: error => this.failOperation(error, errorKey)
     });
   }
 
@@ -270,21 +270,21 @@ export class BenefitsStore {
         this.benefitTypesSignal.set(types);
         this.loadingSignal.set(false);
       },
-      error: error => this.failOperation(error, 'Failed to load benefits')
+      error: error => this.failOperation(error, 'benefits.error.load-benefits')
     });
   }
 
   private loadAssignments(): void {
     this.benefitsApi.getBenefitAssignments().pipe(takeUntilDestroyed()).subscribe({
       next: assignments => this.assignmentsSignal.set(assignments),
-      error: error => this.errorSignal.set(this.formatError(error, 'Failed to load benefit assignments'))
+      error: error => this.errorSignal.set(this.formatError(error, 'benefits.error.load-assignments'))
     });
   }
 
   private loadVacationBalances(): void {
     this.benefitsApi.getVacationBalances().pipe(takeUntilDestroyed()).subscribe({
       next: balances => this.balancesSignal.set(balances),
-      error: error => this.errorSignal.set(this.formatError(error, 'Failed to load vacation balances'))
+      error: error => this.errorSignal.set(this.formatError(error, 'benefits.error.load-balances'))
     });
   }
 
@@ -293,15 +293,15 @@ export class BenefitsStore {
     this.errorSignal.set(null);
   }
 
-  private failOperation(error: unknown, fallback: string): void {
-    this.errorSignal.set(this.formatError(error, fallback));
+  private failOperation(error: unknown, errorKey: string): void {
+    this.errorSignal.set(this.formatError(error, errorKey));
     this.loadingSignal.set(false);
   }
 
-  private formatError(error: unknown, fallback: string): string {
-    if (error instanceof Error) {
-      return error.message.includes('Resource not found') ? `${fallback}: Not found` : error.message;
-    }
-    return fallback;
+  /** Returns the i18n key of the failed operation; the raw HTTP message is only logged. */
+  private formatError(error: unknown, errorKey: string): string {
+    console.error(errorKey, error);
+    return errorKey;
   }
+
 }

@@ -11,7 +11,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 export class ListPagination {
   readonly total = input.required<number>();
   readonly pageSize = input(8);
-  /** i18n key of the plural noun shown in the summary, e.g. 'benefits.pagination.benefits'. */
+  /** i18n key of the plural noun shown in the summary, e.g. 'employees.pagination-items'. */
   readonly itemsKey = input.required<string>();
   readonly page = model(0);
 
