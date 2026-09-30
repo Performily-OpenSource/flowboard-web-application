@@ -53,6 +53,9 @@
       <button role="tab" type="button" [class.active]="tab() === 'personal'" [attr.aria-selected]="tab() === 'personal'" (click)="tab.set('personal')">{{ 'employee-detail.personal-tab' | translate }}</button>
       <button role="tab" type="button" [class.active]="tab() === 'employment'" [attr.aria-selected]="tab() === 'employment'" (click)="tab.set('employment')">{{ 'employee-detail.employment-tab' | translate }}</button>
       <button role="tab" type="button" [class.active]="tab() === 'documents'" [attr.aria-selected]="tab() === 'documents'" (click)="tab.set('documents')">{{ 'employee-detail.documents-tab' | translate }}</button>
+      @for (contextTab of contextTabs; track contextTab.tab) {
+        <button role="tab" type="button" [class.active]="tab() === contextTab.tab" [attr.aria-selected]="tab() === contextTab.tab" (click)="tab.set(contextTab.tab)">{{ contextTab.label | translate }}</button>
+      }
     </nav>
 
     <div class="detail-layout">
@@ -93,6 +96,9 @@
                     }
                   </dd>
                 </div>
+                @for (section of employmentSections; track $index) {
+                  <ng-container *ngComponentOutlet="section.component; inputs: { employeeId: employee.id }"/>
+                }
                 <div class="kv-row">
                   <dt>{{ 'employee-detail.reference-salary' | translate }}</dt>
                   <dd>{{ employee.position ? (employee.position.referenceSalaryAmount | currency: employee.position.referenceSalaryCurrency : (employee.position.referenceSalaryCurrency === 'PEN' ? 'S/ ' : 'symbol-narrow')) : '-' }}</dd>
@@ -116,10 +122,23 @@
           @case ('documents') {
             <app-employee-document-table [documents]="store.employeeDocuments()" (deleteDocument)="deleteDocument($event)"/>
           }
+          @default {
+            @for (section of tabSections(); track $index) {
+              <ng-container *ngComponentOutlet="section.component; inputs: { employeeId: employee.id }"/>
+            } @empty {
+              <section class="card empty-state">
+                <span class="empty-icon" aria-hidden="true"><mat-icon>hourglass_empty</mat-icon></span>
+                <h2 class="empty-title">{{ 'employee-detail.section-pending' | translate }}</h2>
+              </section>
+            }
+          }
         }
       </div>
 
       <aside class="detail-side">
+        @for (section of asideSections; track $index) {
+          <ng-container *ngComponentOutlet="section.component; inputs: { employeeId: employee.id }"/>
+        }
         <section class="card card-body">
           <div class="side-head">
             <h2 class="card-title">{{ 'employee-detail.file' | translate }}</h2>

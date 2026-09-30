@@ -1,14 +1,21 @@
-import {Component, computed, effect, inject, OnInit, signal} from '@angular/core';
-import {CurrencyPipe} from '@angular/common';
+import {Component, computed, effect, inject, signal} from '@angular/core';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {CurrencyPipe, NgComponentOutlet} from '@angular/common';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatProgressBar} from '@angular/material/progress-bar';
+import {map} from 'rxjs';
 import {TranslatePipe} from '@ngx-translate/core';
 import {LayoutStore} from '../../../../shared/application/layout.store';
 import {LocalDatePipe} from '../../../../shared/presentation/pipes/local-date-pipe';
+import {
+  EMPLOYEE_FILE_SECTIONS,
+  EmployeeFileSection,
+  EmployeeFileSlot
+} from '../../../../shared/presentation/components/employee-file-section/employee-file-section';
 import {WorkspaceStore} from '../../../application/workspace.store';
 import {Employee} from '../../../domain/model/employee.entity';
 import {EmployeeDocument} from '../../../domain/model/employee-document.entity';
@@ -19,12 +26,25 @@ import {EmployeeReinstatementDialog} from '../../components/employee-reinstateme
 import {EmployeeStatusDialog} from '../../components/employee-status-dialog/employee-status-dialog';
 import {DirectManagerDialog} from '../../components/direct-manager-dialog/direct-manager-dialog';
 
-type DetailTab = 'personal' | 'employment' | 'documents';
+type DetailTab = 'personal' | 'employment' | 'documents' | 'attendance' | 'requests' | 'benefits';
+
+interface ContextTab {
+  tab: DetailTab;
+  slot: EmployeeFileSlot;
+  label: string;
+}
+
+const CONTEXT_TABS: ContextTab[] = [
+  { tab: 'attendance', slot: 'attendance-tab', label: 'employee-detail.attendance-tab' },
+  { tab: 'requests', slot: 'requests-tab', label: 'employee-detail.requests-tab' },
+  { tab: 'benefits', slot: 'benefits-tab', label: 'employee-detail.benefits-tab' }
+];
 
 @Component({
   selector: 'app-employee-detail',
   imports: [
     CurrencyPipe,
+    NgComponentOutlet,
     RouterLink,
     MatButton,
     MatIcon,
@@ -40,16 +60,29 @@ type DetailTab = 'personal' | 'employment' | 'documents';
   templateUrl: './employee-detail.html',
   styleUrl: './employee-detail.css',
 })
-export class EmployeeDetail implements OnInit {
+export class EmployeeDetail {
   readonly store = inject(WorkspaceStore);
   private layoutStore = inject(LayoutStore);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private dialog = inject(MatDialog);
 
-  readonly employeeId: number = +this.route.snapshot.params['id'];
-  readonly employee = this.store.getEmployeeById(this.employeeId);
+  readonly employeeId = toSignal(
+    this.route.paramMap.pipe(map(params => Number(params.get('id')))),
+    { initialValue: Number(this.route.snapshot.paramMap.get('id')) });
+  readonly employee = computed(() => this.store.getEmployeeById(this.employeeId())());
   readonly tab = signal<DetailTab>('employment');
+
+  private readonly sections = [...(inject(EMPLOYEE_FILE_SECTIONS, { optional: true }) ?? [])]
+    .sort((a, b) => a.order - b.order);
+
+  readonly contextTabs = CONTEXT_TABS;
+  readonly employmentSections = this.sectionsFor('employment');
+  readonly asideSections = this.sectionsFor('aside');
+  readonly tabSections = computed(() => {
+    const contextTab = CONTEXT_TABS.find(item => item.tab === this.tab());
+    return contextTab ? this.sectionsFor(contextTab.slot) : [];
+  });
 
   readonly directManager = computed(() => {
     const managerId = this.employee()?.directManagerId;
@@ -60,18 +93,22 @@ export class EmployeeDetail implements OnInit {
 
   constructor() {
     effect(() => this.layoutStore.setBreadcrumbDetail(this.employee()?.fullName ?? null));
+    effect(() => {
+      const employeeId = this.employeeId();
+      this.tab.set('employment');
+      this.store.clearError();
+      this.store.loadEmployeeRecords(employeeId);
+    });
   }
 
-  ngOnInit(): void {
-    this.store.clearError();
-    this.store.loadEmployeeRecords(this.employeeId);
+  sectionsFor(slot: EmployeeFileSlot): EmployeeFileSection[] {
+    return this.sections.filter(section => section.slot === slot);
   }
 
   initials(employee: Employee): string {
     return `${employee.firstName.charAt(0)}${employee.lastName.charAt(0)}`.toUpperCase();
   }
 
-  /** "C. Gomez" style short name used in the header tags. */
   shortName(employee: Employee): string {
     return `${employee.firstName.charAt(0)}. ${employee.lastName.split(' ')[0]}`;
   }
@@ -101,7 +138,7 @@ export class EmployeeDetail implements OnInit {
   }
 
   openOrganizationChart() {
-    this.router.navigate(['/workspace/organization-chart'], { queryParams: { highlight: this.employeeId } }).then();
+    this.router.navigate(['/workspace/organization-chart'], { queryParams: { highlight: this.employeeId() } }).then();
   }
 
   deleteDocument(document: EmployeeDocument) {
