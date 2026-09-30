@@ -43,7 +43,8 @@ export class Layout {
       activeWhen: ['/workspace/organization-chart', '/workspace/organization-structure']
     },
     // Asistencia (Attendance) va aquí
-    // Solicitudes (Request) va aquí
+    { link: '/requests/inbox', label: 'option.requests', icon: 'assignment_turned_in', activeWhen: ['/requests/inbox', '/requests/types'] },
+    { link: '/requests/my-requests', label: 'option.my-requests', icon: 'description', activeWhen: ['/requests/my-requests'] },
     { link: '/benefits', label: 'option.benefits', icon: 'calendar_month', activeWhen: ['/benefits'] },
     { link: '/payroll/payslips', label: 'option.payroll', icon: 'receipt_long', activeWhen: ['/payroll/payslips'] },
     { link: '/payroll/my-payslips', label: 'option.my-payslips', icon: 'receipt_long', activeWhen: ['/payroll/my-payslips'] },
