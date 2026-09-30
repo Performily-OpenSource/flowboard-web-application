@@ -6,6 +6,7 @@ import {MatProgressBar} from '@angular/material/progress-bar';
 import {MatTable, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatCell, MatCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef} from '@angular/material/table';
 import {MatDialog} from '@angular/material/dialog';
 import {TranslatePipe} from '@ngx-translate/core';
+import {RouterLink} from '@angular/router';
 import {AttendanceStore} from '../../../application/attendance.store';
 import {AttendanceRecord, ATTENDANCE_STATUSES, AttendanceStatus} from '../../../domain/model/attendance-record.entity';
 import {AttendanceJustificationDialog} from '../../components/attendance-justification-dialog/attendance-justification-dialog';
@@ -13,7 +14,7 @@ import {WorkspaceStore} from '../../../../workspace/application/workspace.store'
 
 @Component({
   selector: 'app-attendance-records',
-  imports: [DecimalPipe, SlicePipe, MatButton, MatIcon, MatProgressBar, MatTable, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatCell, MatCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef, TranslatePipe],
+  imports: [DecimalPipe, SlicePipe, MatButton, MatIcon, MatProgressBar, MatTable, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatCell, MatCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef, TranslatePipe, RouterLink],
   templateUrl: './attendance-records.html',
   styleUrl: './attendance-records.css'
 })
