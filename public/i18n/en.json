@@ -836,7 +836,12 @@
     "area": "Area",
     "all": "All",
     "date": "Date",
-    "employee": "Employee",
+    "employee": {
+      "latest": "Latest records",
+      "empty": "There are no recent records for this collaborator.",
+      "weekly-schedule": "Weekly schedule",
+      "hours": "hours"
+    },
     "check-in": "Check-in",
     "check-out": "Check-out",
     "worked-hours": "Effective hours",
@@ -917,6 +922,11 @@
       "records": "Records",
       "summary": "Summary by area",
       "hours": "Hours and overtime"
+    },
+    "errors": {
+      "load": "We could not load attendance information.",
+      "update": "We could not update the attendance record.",
+      "delete": "We could not delete the attendance record."
     }
   },
   "request-status": {
@@ -1209,17 +1219,15 @@
     "type-duplicated": "A request type with that name already exists.",
     "type-in-use": "{{name}} has requests, so it cannot be deleted. You can deactivate it instead."
   },
-
   "my-profile": {
-  "request-update": "Request data update",
-  "data-tab": "My data",
-  "contract-tab": "My contract",
-  "documents-tab": "My documents",
-  "update-note": "Human Resources updates your personal data. Send an update request and attach the supporting document.",
-  "my-position": "My position",
-  "contract": "Contract",
-  "no-manager": "Not assigned",
-  "not-found": "We could not find your employee profile."
+    "request-update": "Request data update",
+    "data-tab": "My data",
+    "contract-tab": "My contract",
+    "documents-tab": "My documents",
+    "update-note": "Human Resources updates your personal data. Send an update request and attach the supporting document.",
+    "my-position": "My position",
+    "contract": "Contract",
+    "no-manager": "Not assigned",
+    "not-found": "We could not find your employee profile."
   }
-  
 }

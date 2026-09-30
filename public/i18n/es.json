@@ -836,7 +836,12 @@
     "area": "Área",
     "all": "Todos",
     "date": "Fecha",
-    "employee": "Colaborador",
+    "employee": {
+      "latest": "Últimos registros",
+      "empty": "No hay registros recientes para este colaborador.",
+      "weekly-schedule": "Jornada semanal",
+      "hours": "horas"
+    },
     "check-in": "Entrada",
     "check-out": "Salida",
     "worked-hours": "Horas efectivas",
@@ -918,6 +923,11 @@
       "records": "Registros",
       "summary": "Resumen por área",
       "hours": "Horas y sobretiempo"
+    },
+    "errors": {
+      "load": "No pudimos cargar la información de asistencia.",
+      "update": "No pudimos actualizar el registro de asistencia.",
+      "delete": "No pudimos eliminar el registro de asistencia."
     }
   },
   "request-status": {
