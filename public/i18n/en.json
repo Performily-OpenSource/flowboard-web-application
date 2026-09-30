@@ -438,7 +438,8 @@
       "preview": "Document preview",
       "print": "Print",
       "download": "Download PDF"
-    }
+    },
+    "upload-page": "Upload"
   },
   "my-payslips": {
     "title": "My payslips",

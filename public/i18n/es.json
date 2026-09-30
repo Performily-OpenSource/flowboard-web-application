@@ -438,7 +438,8 @@
       "preview": "Vista previa del documento",
       "print": "Imprimir",
       "download": "Descargar PDF"
-    }
+    },
+    "upload-page": "Cargar"
   },
   "my-payslips": {
     "title": "Mis boletas",
