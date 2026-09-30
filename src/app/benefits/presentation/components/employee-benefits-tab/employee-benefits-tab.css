@@ -1,10 +1,12 @@
-.count {
-  font-size: 13px;
-  color: var(--fb-text-secondary);
+.tab-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.tag {
-  margin-left: 6px;
+.table-card table {
+  min-width: 520px;
 }
 
 .pill-assigned {
@@ -12,12 +14,6 @@
   color: var(--fb-on-primary-container);
 }
 
-.text-link {
-  margin-right: 4px;
-}
-.icon-action {
-  vertical-align: middle;
-}
 .no-data {
   padding: 24px 16px;
   text-align: center;

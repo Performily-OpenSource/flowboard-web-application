@@ -1,0 +1,30 @@
+<section class="card card-body">
+  <h2 class="card-title">{{ 'vacation-card.title' | translate }}</h2>
+
+  @if (balance(); as balance) {
+    <div class="balance">
+      <div class="available" [attr.aria-label]="'vacation-balances.available' | translate">
+        <span class="available-days">{{ balance.availableDays() | number: '1.0-2' }}</span>
+        <span class="available-unit">{{ 'vacation-card.days' | translate }}</span>
+      </div>
+      <dl class="kv-list">
+        <div class="kv-row">
+          <dt>{{ 'vacation-balances.accrued' | translate }}</dt>
+          <dd>{{ 'benefits.days' | translate: { days: (balance.accruedDays | number: '1.0-2') } }}</dd>
+        </div>
+        <div class="kv-row">
+          <dt>{{ 'vacation-balances.used' | translate }}</dt>
+          <dd>{{ 'benefits.days' | translate: { days: (balance.usedDays | number: '1.0-2') } }}</dd>
+        </div>
+        <div class="kv-row">
+          <dt>{{ 'vacation-balances.usage' | translate }}</dt>
+          <dd>{{ balance.usagePercentage() }} %</dd>
+        </div>
+      </dl>
+    </div>
+  } @else {
+    <p class="muted">{{ 'vacation-card.empty' | translate }}</p>
+  }
+
+  <a class="text-link card-link" routerLink="/benefits/balances">{{ 'vacation-card.view' | translate }}</a>
+</section>

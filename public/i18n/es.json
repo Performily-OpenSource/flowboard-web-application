@@ -445,9 +445,6 @@
       "UNITS": "unid."
     },
     "pagination": {
-      "showing": "Mostrando {{from}} a {{to}} de {{total}} {{items}}",
-      "previous": "Anterior",
-      "next": "Siguiente",
       "benefits": "beneficios",
       "employees": "colaboradores",
       "assignments": "asignaciones",
@@ -462,7 +459,16 @@
       "already-delivered-on": "Esta asignación ya figura como entregada el {{date}}. Una entrega solo se registra una vez.",
       "cancelled": "La asignación fue cancelada y no se puede registrar su entrega.",
       "cancel-delivered": "Una asignación entregada no se puede cancelar.",
-      "negative-balance": "El saldo disponible no puede quedar en negativo."
+      "negative-balance": "El saldo disponible no puede quedar en negativo.",
+      "load-benefits": "No se pudo cargar el catálogo de beneficios.",
+      "load-assignments": "No se pudieron cargar las asignaciones de beneficios.",
+      "load-balances": "No se pudieron cargar los saldos de vacaciones.",
+      "create-benefit": "No se pudo crear el beneficio.",
+      "update-benefit": "No se pudo actualizar el beneficio.",
+      "assign-benefit": "No se pudo asignar el beneficio.",
+      "register-delivery": "No se pudo registrar la entrega.",
+      "cancel-assignment": "No se pudo cancelar la asignación.",
+      "adjust-balance": "No se pudo guardar el ajuste del saldo de vacaciones."
     }
   },
   "benefit-unit": {
@@ -1216,5 +1222,21 @@
     "contract": "Contrato",
     "no-manager": "No asignado",
     "not-found": "No encontramos tu ficha de colaborador."
+  },
+  "pagination": {
+    "showing": "Mostrando {{from}} a {{to}} de {{total}} {{items}}",
+    "previous": "Anterior",
+    "next": "Siguiente"
+  },
+  "employee-benefits": {
+    "title": "Beneficios asignados",
+    "empty": "Este colaborador todavía no tiene beneficios asignados.",
+    "view-all": "Ver todas las asignaciones"
+  },
+  "vacation-card": {
+    "title": "Saldo de vacaciones",
+    "days": "días",
+    "empty": "Este colaborador todavía no tiene saldo de vacaciones.",
+    "view": "Ver saldo por colaborador"
   }
 }

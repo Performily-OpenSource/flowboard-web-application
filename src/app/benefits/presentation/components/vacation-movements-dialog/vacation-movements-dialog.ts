@@ -5,7 +5,7 @@ import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {TranslatePipe} from '@ngx-translate/core';
 import {LocalDatePipe} from '../../../../shared/presentation/pipes/local-date-pipe';
-import {EmployeeDirectory} from '../../../application/employee-directory';
+import {WorkspaceAcl} from '../../../infrastructure/workspace-acl';
 import {VacationBalance} from '../../../domain/model/vacation-balance.entity';
 import {EmployeeSummaryPanel} from '../employee-summary-panel/employee-summary-panel';
 
@@ -22,7 +22,7 @@ export interface VacationMovementsData {
   styleUrl: './vacation-movements-dialog.css',
 })
 export class VacationMovementsDialog {
-  private directory = inject(EmployeeDirectory);
+  private directory = inject(WorkspaceAcl);
   readonly balance = inject<VacationMovementsData>(MAT_DIALOG_DATA).balance;
 
   readonly movements = computed(() =>

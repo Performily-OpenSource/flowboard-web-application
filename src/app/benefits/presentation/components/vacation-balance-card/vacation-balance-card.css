@@ -1,0 +1,44 @@
+.balance {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.available {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--fb-primary-container);
+  color: var(--fb-on-primary-container);
+}
+
+.available-days {
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.available-unit {
+  font-size: 11.5px;
+}
+
+.kv-list {
+  flex: 1;
+}
+
+.kv-row {
+  padding: 5px 0;
+  border-bottom: none;
+  font-size: 13px;
+}
+
+.card-link {
+  display: inline-block;
+  margin-top: 12px;
+  text-decoration: none;
+}

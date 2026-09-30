@@ -10,7 +10,7 @@ import {BaseForm} from '../../../../shared/presentation/components/base-form/bas
 import {LocalDatePipe} from '../../../../shared/presentation/pipes/local-date-pipe';
 import {DateRange} from '../../../../shared/domain/model/date-range';
 import {BenefitsStore} from '../../../application/benefits.store';
-import {EmployeeDirectory} from '../../../application/employee-directory';
+import {WorkspaceAcl} from '../../../infrastructure/workspace-acl';
 
 export interface AssignBenefitData {
   benefitTypeId?: number;
@@ -29,7 +29,7 @@ export class AssignBenefitDialog extends BaseForm {
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<AssignBenefitDialog>);
   readonly store = inject(BenefitsStore);
-  readonly directory = inject(EmployeeDirectory);
+  readonly directory = inject(WorkspaceAcl);
   readonly data = inject<AssignBenefitData>(MAT_DIALOG_DATA);
 
   readonly form = this.fb.group({
