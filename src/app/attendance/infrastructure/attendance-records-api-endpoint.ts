@@ -1,15 +1,12 @@
-export class AttendanceRecordsApiEndpoint {
-  private static readonly basePath = '/api/v1/attendance-records';
+import {HttpClient} from '@angular/common/http';
+import {BaseApiEndpoint} from '../../shared/infrastructure/base-api-endpoint';
+import {environment} from '../../../environments/environment';
+import {AttendanceRecord} from '../domain/model/attendance-record.entity';
+import {AttendanceRecordResource, AttendanceRecordsResponse} from './attendance-records-response';
+import {AttendanceRecordAssembler} from './attendance-record-assembler';
 
-  static byEmployee(employeeId: string): string {
-    return `${this.basePath}?employeeId=${employeeId}`;
-  }
-
-  static entry(): string {
-    return `${this.basePath}/entry`;
-  }
-
-  static exit(id: string): string {
-    return `${this.basePath}/${id}/exit`;
+export class AttendanceRecordsApiEndpoint extends BaseApiEndpoint<AttendanceRecord, AttendanceRecordResource, AttendanceRecordsResponse, AttendanceRecordAssembler> {
+  constructor(http: HttpClient) {
+    super(http, `${environment.platformProviderApiBaseUrl}${environment.platformProviderAttendanceRecordsEndpointPath}`, new AttendanceRecordAssembler());
   }
 }

@@ -1,9 +1,18 @@
-export interface AttendanceRecordResponse {
-  id: string;
-  employeeId: string;
+import {BaseResource, BaseResponse} from '../../shared/infrastructure/base-response';
+
+export interface AttendanceRecordResource extends BaseResource {
+  id: number;
+  employeeId: number;
   workDate: string;
-  entryTime: string | null;
-  exitTime: string | null;
-  effectiveHours: number | null;
+  checkInTime: string | null;
+  checkOutTime: string | null;
+  workedHours: number | null;
+  overtimeHours: number | null;
   status: string;
+  justificationReason: string | null;
+  justificationDocumentName: string | null;
+}
+
+export interface AttendanceRecordsResponse extends BaseResponse {
+  attendanceRecords: AttendanceRecordResource[];
 }
