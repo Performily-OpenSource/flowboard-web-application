@@ -79,7 +79,7 @@ export class MyRequests {
 
   readonly selectedRequest = computed(() => {
     const visible = this.visibleRequests();
-    return visible.find(request => request.id === this.selectedId()) ?? visible[0] ?? null;
+    return visible.find(request => request.id === this.selectedId()) ?? visible.at(0) ?? null;
   });
 
   constructor() {

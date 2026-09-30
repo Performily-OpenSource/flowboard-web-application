@@ -54,7 +54,7 @@ export class RequestTypeList {
 
   readonly selectedType = computed(() => {
     const types = this.store.requestTypes();
-    return types.find(type => type.id === this.selectedId()) ?? types[0] ?? null;
+    return types.find(type => type.id === this.selectedId()) ?? types.at(0) ?? null;
   });
 
   constructor() {
