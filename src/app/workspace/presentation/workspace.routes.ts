@@ -7,6 +7,7 @@ const employeeDocuments = () => import('./views/employee-documents/employee-docu
 const organizationChart = () => import('./views/organization-chart/organization-chart').then(m => m.OrganizationChart);
 const organizationStructure = () =>
   import('./views/organization-structure/organization-structure').then(m => m.OrganizationStructure);
+const myProfile = () => import('./views/my-profile/my-profile').then(m => m.MyProfile);
 
 export const workspaceRoutes: Routes = [
   { path: 'employees', loadComponent: employeeList, data: { breadcrumb: ['breadcrumb.employees'] } },
@@ -16,5 +17,6 @@ export const workspaceRoutes: Routes = [
   { path: 'employees/:id/documents', loadComponent: employeeDocuments, data: { breadcrumb: ['breadcrumb.employees'], breadcrumbSuffix: 'breadcrumb.file' } },
   { path: 'organization-chart', loadComponent: organizationChart, data: { breadcrumb: ['breadcrumb.organization', 'breadcrumb.organization-chart'] } },
   { path: 'organization-structure', loadComponent: organizationStructure, data: { breadcrumb: ['breadcrumb.organization', 'breadcrumb.organization-structure'] } },
+  { path: 'my-profile', loadComponent: myProfile, data: { breadcrumb: ['breadcrumb.my-profile'] } },
   { path: '', redirectTo: 'employees', pathMatch: 'full' }
 ];
