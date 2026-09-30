@@ -1,0 +1,110 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{{ 'request-types.title' | translate }}</h1>
+      <p class="page-subtitle">{{ 'request-types.subtitle' | translate }}</p>
+    </div>
+    <div class="page-actions">
+      <a mat-flat-button routerLink="/requests/types/new">
+        <mat-icon>add</mat-icon>
+        {{ 'request-types.new' | translate }}
+      </a>
+    </div>
+  </header>
+
+  @if (store.loading()) {
+    <mat-progress-bar mode="indeterminate"/>
+  }
+  @if (store.error(); as error) {
+    <div class="error-banner" role="alert">
+      <mat-icon>error</mat-icon>
+      <span>{{ error.key | translate: error.params }}</span>
+      @if (typeInUse(); as type) {
+        @if (type.active) {
+          <span class="spacer"></span>
+          <button mat-stroked-button type="button" (click)="deactivateInstead(type)">{{ 'request-types.deactivate-instead' | translate }}</button>
+        }
+      }
+    </div>
+  }
+
+  <div class="layout">
+    <div class="table-card">
+      <table mat-table [dataSource]="store.requestTypes()">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>{{ 'request-types.type' | translate }}</th>
+          <td mat-cell *matCellDef="let type" class="cell-strong">{{ type.name }}</td>
+        </ng-container>
+        <ng-container matColumnDef="attachment">
+          <th mat-header-cell *matHeaderCellDef>{{ 'request-types.attachment' | translate }}</th>
+          <td mat-cell *matCellDef="let type">{{ (type.requiresAttachment ? 'request-types.yes' : 'request-types.no') | translate }}</td>
+        </ng-container>
+        <ng-container matColumnDef="deduction">
+          <th mat-header-cell *matHeaderCellDef>{{ 'request-types.deduction' | translate }}</th>
+          <td mat-cell *matCellDef="let type">{{ 'balance-deduction.' + type.balanceDeduction | translate }}</td>
+        </ng-container>
+        <ng-container matColumnDef="fields">
+          <th mat-header-cell *matHeaderCellDef>{{ 'request-types.fields' | translate }}</th>
+          <td mat-cell *matCellDef="let type">{{ type.fields.length }}</td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>{{ 'request-types.status' | translate }}</th>
+          <td mat-cell *matCellDef="let type">
+            <span class="pill" [class.pill-active]="type.active">{{ (type.active ? 'request-types.active' : 'request-types.inactive') | translate }}</span>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns;" class="clickable"
+            [class.selected]="row.id === selectedType()?.id" (click)="select(row)"></tr>
+      </table>
+    </div>
+
+    @if (selectedType(); as type) {
+      <aside class="card card-body detail">
+        <header class="detail-header">
+          <h2 class="card-title">{{ type.name }}</h2>
+          <a class="icon-action" [routerLink]="['/requests/types', type.id, 'edit']" [attr.aria-label]="'common.edit' | translate">
+            <mat-icon>edit</mat-icon>
+          </a>
+          <button class="icon-action" type="button" [matMenuTriggerFor]="typeMenu" [attr.aria-label]="'request-types.more-actions' | translate">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #typeMenu="matMenu">
+            <button mat-menu-item (click)="toggleStatus(type)">{{ (type.active ? 'common.deactivate' : 'common.activate') | translate }}</button>
+            <button mat-menu-item (click)="delete(type)">{{ 'request-types.delete' | translate }}</button>
+          </mat-menu>
+        </header>
+        <p class="muted">{{ type.description }}</p>
+        <dl class="kv-list">
+          <div class="kv-row"><dt>{{ 'request-types.requires-attachment' | translate }}</dt><dd>{{ (type.requiresAttachment ? 'request-types.yes' : 'request-types.no') | translate }}</dd></div>
+          <div class="kv-row"><dt>{{ 'request-types.deduction' | translate }}</dt><dd>{{ 'balance-deduction.' + type.balanceDeduction | translate }}</dd></div>
+          <div class="kv-row"><dt>{{ 'request-types.approver' | translate }}</dt><dd>{{ 'request-types.approver-rule' | translate }}</dd></div>
+          <div class="kv-row"><dt>{{ 'request-types.status' | translate }}</dt><dd>{{ (type.active ? 'request-types.active' : 'request-types.inactive') | translate }}</dd></div>
+          <div class="kv-row"><dt>{{ 'request-types.requests' | translate }}</dt><dd>{{ store.countRequestsOfType(type.id) }}</dd></div>
+        </dl>
+
+        <h3 class="section-label">{{ 'request-types.form-fields' | translate }}</h3>
+        <ul class="field-list">
+          @for (field of type.fields; track field.key) {
+            <li>
+              <div>
+                <p class="field-name">{{ field.label }}</p>
+                <p class="muted">{{ 'request-types.data-type' | translate }}: {{ 'field-data-type.' + field.dataType | translate }}</p>
+              </div>
+              <span class="tag">{{ (field.required ? 'request-types.required' : 'request-types.optional') | translate }}</span>
+            </li>
+          }
+          @if (type.hasPeriod() && !type.isMeasuredInHours()) {
+            <li>
+              <div>
+                <p class="field-name">{{ 'request-types.requested-days' | translate }}</p>
+                <p class="muted">{{ 'request-types.data-type' | translate }}: {{ 'field-data-type.NUMBER' | translate }}</p>
+              </div>
+              <span class="tag">{{ 'request-types.calculated' | translate }}</span>
+            </li>
+          }
+        </ul>
+      </aside>
+    }
+  </div>
+</section>

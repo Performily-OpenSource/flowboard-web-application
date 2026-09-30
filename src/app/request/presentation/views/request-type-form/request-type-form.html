@@ -1,0 +1,180 @@
+<section class="page">
+  <a class="back-link" routerLink="/requests/types">
+    <mat-icon>chevron_left</mat-icon>
+    {{ 'request-type-form.back' | translate }}
+  </a>
+
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{{ (isEdit ? 'request-type-form.edit-title' : 'request-type-form.title') | translate }}</h1>
+      <p class="page-subtitle">{{ 'request-type-form.subtitle' | translate }}</p>
+    </div>
+    <div class="page-actions">
+      <a mat-stroked-button routerLink="/requests/types">{{ 'common.cancel' | translate }}</a>
+      <button mat-flat-button type="button" (click)="save()">{{ 'request-type-form.save' | translate }}</button>
+    </div>
+  </header>
+
+  @if (store.error(); as error) {
+    <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ error.key | translate: error.params }}</span></div>
+  }
+  @if (localError(); as error) {
+    <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ error.key | translate: error.params }}</span></div>
+  }
+
+  <div class="layout">
+    <div class="card card-body main-card">
+      <form class="section" [formGroup]="form" novalidate>
+        <h2 class="card-title">{{ 'request-type-form.behavior' | translate }}</h2>
+        <div class="field">
+          <label for="typeName">{{ 'request-type-form.name' | translate }}</label>
+          <input id="typeName" class="input" formControlName="name" maxlength="80"
+                 [placeholder]="'request-type-form.name-placeholder' | translate"
+                 [class.invalid]="isInvalidControl(form, 'name') || nameTaken()"/>
+          @if (isInvalidControl(form, 'name')) {
+            <p class="field-error">{{ errorKeyForControl(form, 'name') | translate }}</p>
+          } @else if (nameTaken()) {
+            <p class="field-error">{{ 'request-error.type-duplicated' | translate }}</p>
+          }
+        </div>
+        <div class="field">
+          <label for="typeDescription">{{ 'request-type-form.description' | translate }}</label>
+          <input id="typeDescription" class="input" formControlName="description" maxlength="250"/>
+        </div>
+
+        <div class="toggle-box">
+          <div>
+            <p class="toggle-title">{{ 'request-type-form.requires-attachment' | translate }}</p>
+            <p class="muted">{{ 'request-type-form.requires-attachment-hint' | translate }}</p>
+          </div>
+          <mat-slide-toggle formControlName="requiresAttachment" [attr.aria-label]="'request-type-form.requires-attachment' | translate"/>
+        </div>
+
+        <div class="toggle-box">
+          <div>
+            <p class="toggle-title">{{ 'request-type-form.deducts-balance' | translate }}</p>
+            <p class="muted">{{ 'request-type-form.deducts-balance-hint' | translate }}</p>
+          </div>
+          <mat-slide-toggle formControlName="deductsBalance" [attr.aria-label]="'request-type-form.deducts-balance' | translate"/>
+        </div>
+        @if (deductsBalance()) {
+          <div class="field">
+            <label for="balanceDeduction">{{ 'request-type-form.balance' | translate }}</label>
+            <select id="balanceDeduction" class="input" formControlName="balanceDeduction">
+              <option value="VACATION_DAYS">{{ 'balance-deduction.VACATION_DAYS' | translate }}</option>
+              <option value="BENEFIT_BALANCE">{{ 'balance-deduction.BENEFIT_BALANCE' | translate }}</option>
+            </select>
+            @if (form.controls.balanceDeduction.value === 'VACATION_DAYS') {
+              <p class="muted">{{ 'request-type-form.vacation-hint' | translate }}</p>
+            }
+          </div>
+        }
+
+        <div class="field">
+          <label for="approver">{{ 'request-type-form.approver' | translate }}</label>
+          <select id="approver" class="input" disabled>
+            <option>{{ 'request-types.approver-rule' | translate }}</option>
+          </select>
+        </div>
+      </form>
+
+      <hr class="divider"/>
+
+      <div class="section">
+        <div class="section-header">
+          <h2 class="card-title">{{ 'request-type-form.fields' | translate }}</h2>
+          <button mat-stroked-button type="button" (click)="startNewField()">
+            <mat-icon>add</mat-icon>
+            {{ 'request-type-form.add-field' | translate }}
+          </button>
+        </div>
+
+        @if (addingField()) {
+          <form class="new-field" [formGroup]="newFieldForm" (submit)="$event.preventDefault(); addField()" novalidate>
+            <div class="form-grid">
+              <div class="field">
+                <label for="fieldLabel">{{ 'request-type-form.field-label' | translate }}</label>
+                <input id="fieldLabel" class="input" formControlName="label" maxlength="60"
+                       [class.invalid]="isInvalidControl(newFieldForm, 'label')"/>
+                @if (isInvalidControl(newFieldForm, 'label')) {
+                  <p class="field-error">{{ errorKeyForControl(newFieldForm, 'label') | translate }}</p>
+                }
+              </div>
+              <div class="field">
+                <label for="fieldType">{{ 'request-type-form.field-type' | translate }}</label>
+                <select id="fieldType" class="input" formControlName="dataType">
+                  @for (dataType of dataTypes; track dataType) {
+                    <option [value]="dataType">{{ 'field-data-type.' + dataType | translate }}</option>
+                  }
+                </select>
+              </div>
+              <div class="field">
+                <label for="fieldKey">{{ 'request-type-form.field-key' | translate }}</label>
+                <input id="fieldKey" class="input" formControlName="key" maxlength="50" (input)="onKeyEdited()"
+                       [class.invalid]="isInvalidControl(newFieldForm, 'key') || newKeyTaken"/>
+                @if (isInvalidControl(newFieldForm, 'key')) {
+                  <p class="field-error">{{ 'request-error.field-key-invalid' | translate }}</p>
+                } @else if (newKeyTaken) {
+                  <p class="field-error">{{ 'request-error.field-key-duplicated' | translate: { key: newFieldForm.controls.key.value } }}</p>
+                }
+              </div>
+              <label class="checkbox">
+                <input type="checkbox" formControlName="required"/>
+                {{ 'request-type-form.field-required' | translate }}
+              </label>
+              <p class="muted full">{{ 'request-type-form.key-hint' | translate: { keys: periodKeys.join(', ') } }}</p>
+            </div>
+            <div class="new-field-actions">
+              <button mat-stroked-button type="button" (click)="addingField.set(false)">{{ 'common.cancel' | translate }}</button>
+              <button mat-flat-button type="submit">{{ 'request-type-form.add' | translate }}</button>
+            </div>
+          </form>
+        }
+
+        @for (field of fields(); track field.key; let index = $index, first = $first, last = $last) {
+          <div class="field-row">
+            <div class="order">
+              <button class="icon-action" type="button" [disabled]="first" (click)="moveField(index, -1)" [attr.aria-label]="'request-type-form.move-up' | translate">
+                <mat-icon>keyboard_arrow_up</mat-icon>
+              </button>
+              <button class="icon-action" type="button" [disabled]="last" (click)="moveField(index, 1)" [attr.aria-label]="'request-type-form.move-down' | translate">
+                <mat-icon>keyboard_arrow_down</mat-icon>
+              </button>
+            </div>
+            <div class="field-info">
+              <p class="field-name">{{ field.label }}</p>
+              <p class="muted">{{ 'request-types.data-type' | translate }}: {{ 'field-data-type.' + field.dataType | translate }} · {{ field.key }}</p>
+            </div>
+            <button class="tag tag-button" type="button" (click)="toggleRequired(index)">
+              {{ (field.required ? 'request-types.required' : 'request-types.optional') | translate }}
+            </button>
+            <button class="icon-action" type="button" (click)="removeField(index)" [attr.aria-label]="'request-type-form.remove-field' | translate">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        } @empty {
+          @if (!addingField()) {
+            <p class="muted" [class.field-error]="submitted()">{{ 'request-type-form.no-fields' | translate }}</p>
+          }
+        }
+      </div>
+    </div>
+
+    <aside class="card card-body preview">
+      <h2 class="card-title">{{ 'request-type-form.preview' | translate }}</h2>
+      <p class="muted">{{ 'request-type-form.preview-hint' | translate }}</p>
+      <div class="preview-box">
+        @for (item of preview(); track item.field.key) {
+          <app-dynamic-field [field]="item.field" [control]="item.control" idPrefix="preview"/>
+        }
+        @if (requiresAttachment()) {
+          <div class="upload-preview">
+            <mat-icon aria-hidden="true">upload</mat-icon>
+            <span>{{ 'request-form.upload' | translate }}</span>
+          </div>
+        }
+        <button mat-flat-button type="button" disabled>{{ 'request-form.submit' | translate }}</button>
+      </div>
+    </aside>
+  </div>
+</section>

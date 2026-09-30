@@ -1,0 +1,153 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  align-items: start;
+  gap: 20px;
+}
+
+.main-card,
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card-title {
+  margin: 0;
+}
+
+.divider {
+  width: 100%;
+  margin: 4px 0;
+  border: none;
+  border-top: 1px solid var(--fb-border);
+}
+
+.toggle-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--fb-border);
+  border-radius: 10px;
+  background: var(--fb-background);
+}
+
+.toggle-box p {
+  margin: 0;
+}
+
+.toggle-title {
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.new-field {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--fb-primary-container);
+  border-radius: 10px;
+  background: var(--fb-background);
+}
+
+.new-field .full {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.new-field-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--fb-border);
+  border-radius: 10px;
+}
+
+.order {
+  display: flex;
+  flex-direction: column;
+}
+
+.order .icon-action {
+  width: 24px;
+  height: 20px;
+}
+
+.order .icon-action:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.field-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.field-info p {
+  margin: 0;
+}
+
+.field-name {
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+.tag-button {
+  cursor: pointer;
+}
+
+.preview .muted {
+  margin: -8px 0 16px;
+}
+
+.preview-box {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--fb-border);
+  border-radius: 10px;
+  background: var(--fb-background);
+}
+
+.upload-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px;
+  border: 1px dashed var(--fb-outline);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--fb-text-secondary);
+}
+
+@media (max-width: 959px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
