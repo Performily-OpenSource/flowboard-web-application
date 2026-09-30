@@ -1,0 +1,60 @@
+.profile {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  padding: 22px 24px;
+  margin-bottom: 20px;
+}
+
+.profile-summary {
+  flex: 1 1 320px;
+}
+
+.profile-name-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-name {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.profile-subtitle {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--fb-text-secondary);
+}
+
+.profile-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 398px;
+  gap: 20px;
+  align-items: start;
+}
+
+.profile-main,
+.profile-side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-main .info-note {
+  margin-top: 16px;
+}
+
+.profile-side .kv-row {
+  padding: 10px 0;
+  font-size: 12.5px;
+}
+
+@media (max-width: 1100px) {
+  .profile-layout {
+    grid-template-columns: 1fr;
+  }
+}
