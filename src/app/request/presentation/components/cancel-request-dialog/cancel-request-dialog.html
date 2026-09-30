@@ -1,0 +1,24 @@
+<div class="dialog">
+  <header class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">{{ 'cancel-dialog.title' | translate }}</h2>
+    <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
+  </header>
+  <p class="dialog-text">{{ 'cancel-dialog.message' | translate }}</p>
+  <dl class="detail-box">
+    <div><dt>{{ 'cancel-dialog.number' | translate }}</dt><dd>{{ data.request.code }}</dd></div>
+    <div><dt>{{ 'request-dialog.type' | translate }}</dt><dd>{{ data.request.requestType?.name }}</dd></div>
+    <div><dt>{{ 'request-dialog.period' | translate }}</dt><dd>{{ data.request | requestPeriod: 'long' }}</dd></div>
+    <div><dt>{{ 'request-dialog.status' | translate }}</dt><dd>{{ 'request-status-long.' + data.request.status | translate }}</dd></div>
+  </dl>
+  <div class="info-note">
+    <mat-icon aria-hidden="true">info</mat-icon>
+    <span>{{ 'cancel-dialog.info' | translate }}</span>
+  </div>
+  @if (store.error(); as error) {
+    <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ error.key | translate: error.params }}</span></div>
+  }
+  <div class="dialog-actions">
+    <button mat-stroked-button type="button" mat-dialog-close>{{ 'cancel-dialog.back' | translate }}</button>
+    <button mat-flat-button class="danger-button" type="button" (click)="confirm()">{{ 'cancel-dialog.confirm' | translate }}</button>
+  </div>
+</div>

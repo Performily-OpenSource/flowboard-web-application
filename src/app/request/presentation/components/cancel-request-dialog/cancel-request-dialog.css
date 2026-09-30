@@ -1,0 +1,32 @@
+.dialog-text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--fb-text-secondary);
+}
+
+.detail-box {
+  margin: 0;
+  padding: 6px 18px;
+  border: 1px solid var(--fb-border);
+  border-radius: 10px;
+  background: var(--fb-background);
+}
+
+.detail-box div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 0;
+  font-size: 12.5px;
+}
+
+.detail-box dt {
+  color: var(--fb-text-secondary);
+}
+
+.detail-box dd {
+  margin: 0;
+  font-weight: 500;
+  text-align: right;
+}

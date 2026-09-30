@@ -1,0 +1,25 @@
+.acting-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+tr.clickable {
+  cursor: pointer;
+}
+
+tr.selected {
+  background: var(--fb-surface-muted);
+}
+
+.danger-link {
+  color: var(--fb-error);
+}
+
+.muted-link {
+  color: var(--fb-text-secondary);
+}
+
+.review-note {
+  margin-top: 20px;
+}
