@@ -1,0 +1,57 @@
+.balance {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.circle {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--fb-primary-container);
+  color: var(--fb-on-primary-container);
+}
+
+.circle strong {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.circle span {
+  font-size: 11px;
+}
+
+.rows {
+  flex: 1;
+  margin: 0;
+}
+
+.rows div {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 12.5px;
+}
+
+.rows dt {
+  color: var(--fb-text-secondary);
+}
+
+.rows dd {
+  margin: 0;
+  font-weight: 500;
+}
+
+.insufficient .circle {
+  background: var(--fb-error-container);
+  color: var(--fb-error);
+}
+
+.insufficient .requested {
+  color: var(--fb-error);
+}

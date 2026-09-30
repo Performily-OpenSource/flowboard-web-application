@@ -1,0 +1,18 @@
+<section class="card card-body">
+  <h2 class="card-title">{{ 'balance-card.title' | translate }}</h2>
+  @if (balance(); as balance) {
+    <div class="balance" [class.insufficient]="insufficient()">
+      <div class="circle">
+        <strong>{{ balance.availableDays }}</strong>
+        <span>{{ 'balance-card.days' | translate }}</span>
+      </div>
+      <dl class="rows">
+        <div><dt>{{ 'balance-card.accrued' | translate }}</dt><dd>{{ 'request-period.days' | translate: { count: balance.accruedDays } }}</dd></div>
+        <div><dt>{{ 'balance-card.used' | translate }}</dt><dd>{{ 'request-period.days' | translate: { count: balance.usedDays } }}</dd></div>
+        <div><dt>{{ 'balance-card.requested' | translate }}</dt><dd class="requested">{{ 'request-period.days' | translate: { count: requestedDays() } }}</dd></div>
+      </dl>
+    </div>
+  } @else {
+    <p class="muted">{{ 'balance-card.not-found' | translate }}</p>
+  }
+</section>

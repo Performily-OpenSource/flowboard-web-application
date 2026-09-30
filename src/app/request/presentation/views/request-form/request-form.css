@@ -1,0 +1,90 @@
+.top-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  align-items: start;
+  gap: 20px;
+}
+
+.main-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.divider {
+  width: 100%;
+  margin: 0;
+  border: none;
+  border-top: 1px solid var(--fb-border);
+}
+
+.period-error {
+  margin-top: -8px;
+}
+
+.attachment {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--fb-border);
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.attachment mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: var(--fb-text-secondary);
+}
+
+.upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px;
+  border: 1px dashed var(--fb-outline);
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.upload:hover {
+  background: var(--fb-surface-muted);
+}
+
+.upload.invalid {
+  border-color: var(--fb-error);
+}
+
+.upload input {
+  display: none;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+@media (max-width: 959px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}

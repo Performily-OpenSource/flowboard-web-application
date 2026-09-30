@@ -1,0 +1,42 @@
+<div class="field">
+  <label [for]="inputId">
+    {{ field().label }}
+    @if (!field().required) {
+      ({{ 'request-form.optional' | translate }})
+    }
+  </label>
+  @switch (field().dataType) {
+    @case ('DATE') {
+      <input [id]="inputId" class="input" type="date" [formControl]="control()" [class.invalid]="invalid"/>
+    }
+    @case ('TIME') {
+      <input [id]="inputId" class="input" type="time" [formControl]="control()" [class.invalid]="invalid"/>
+    }
+    @case ('NUMBER') {
+      <input [id]="inputId" class="input" type="number" [formControl]="control()" [class.invalid]="invalid"/>
+    }
+    @case ('MONEY') {
+      <div class="money">
+        <span class="currency" aria-hidden="true">S/</span>
+        <input [id]="inputId" class="input" type="number" min="0.01" step="0.01" [formControl]="control()"
+               [class.invalid]="invalid" placeholder="0.00"/>
+      </div>
+    }
+    @case ('BOOLEAN') {
+      <select [id]="inputId" class="input" [formControl]="control()" [class.invalid]="invalid">
+        <option value="">{{ 'common.select' | translate }}</option>
+        <option value="true">{{ 'request-form.yes' | translate }}</option>
+        <option value="false">{{ 'request-form.no' | translate }}</option>
+      </select>
+    }
+    @default {
+      <input [id]="inputId" class="input" type="text" maxlength="500" [formControl]="control()" [class.invalid]="invalid"
+             [placeholder]="'request-form.write' | translate: { label: field().label.toLowerCase() }"/>
+    }
+  }
+  @if (invalid) {
+    <p class="field-error">
+      {{ (control().hasError('required') ? 'validation.required' : 'validation.invalid') | translate }}
+    </p>
+  }
+</div>

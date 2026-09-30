@@ -1,0 +1,22 @@
+<section class="card card-body">
+  <h2 class="card-title">{{ 'approver-card.title' | translate }}</h2>
+  @if (manager(); as manager) {
+    <div class="person">
+      <span class="avatar" aria-hidden="true">{{ manager.initials }}</span>
+      <div>
+        <p class="name">{{ manager.fullName }}</p>
+        <p class="muted">{{ manager.positionTitle }} · {{ manager.areaName }}</p>
+      </div>
+    </div>
+    <p class="note">{{ 'approver-card.manager-note' | translate }}</p>
+  } @else {
+    <div class="person">
+      <span class="avatar" aria-hidden="true">RH</span>
+      <div>
+        <p class="name">{{ 'approver.HR_STAFF' | translate }}</p>
+        <p class="muted">{{ 'approver-card.hr-subtitle' | translate }}</p>
+      </div>
+    </div>
+    <p class="note">{{ 'approver-card.hr-note' | translate }}</p>
+  }
+</section>

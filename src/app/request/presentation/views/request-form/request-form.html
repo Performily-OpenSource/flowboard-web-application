@@ -1,0 +1,137 @@
+<section class="page">
+  <div class="top-row">
+    <a class="back-link" routerLink="/requests/my-requests">
+      <mat-icon>chevron_left</mat-icon>
+      {{ 'request-form.back' | translate }}
+    </a>
+    <app-acting-employee-selector/>
+  </div>
+
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{{ (isCompleting ? 'request-form.complete-title' : 'request-form.title') | translate }}</h1>
+      <p class="page-subtitle">{{ 'request-form.subtitle' | translate }}</p>
+    </div>
+  </header>
+
+  @if (store.loading()) {
+    <mat-progress-bar mode="indeterminate"/>
+  }
+
+  <div class="layout">
+    <form class="card card-body main-card" (submit)="$event.preventDefault(); submit()" novalidate>
+      @if (isCompleting) {
+        @if (existingRequest(); as existing) {
+          @if (existing.reviewComment) {
+            <div class="info-note">
+              <mat-icon aria-hidden="true">info</mat-icon>
+              <span>{{ 'request-form.review-comment' | translate: { code: existing.code, comment: existing.reviewComment } }}</span>
+            </div>
+          }
+        } @else if (!store.loading()) {
+          <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ 'request-form.not-found' | translate }}</span></div>
+        }
+      }
+
+      <div class="field">
+        <label for="requestType">{{ 'request-form.type' | translate }}</label>
+        <select id="requestType" class="input" [formControl]="typeControl">
+          @for (type of store.activeRequestTypes(); track type.id) {
+            <option [ngValue]="type.id">{{ type.name }}</option>
+          }
+        </select>
+        @if (requestType(); as type) {
+          <p class="muted">{{ type.description }}</p>
+        }
+      </div>
+
+      @if (requestType(); as type) {
+        <hr class="divider"/>
+
+        @if (periodFields().length > 0) {
+          <div class="form-grid">
+            @for (field of periodFields(); track field.key) {
+              <div [class.full]="!isHalfWidth(field)">
+                <app-dynamic-field [field]="field" [control]="form().controls[field.key]" [showErrors]="submitted()"/>
+              </div>
+            }
+          </div>
+          @if (periodError(); as periodProblem) {
+            <p class="field-error period-error">{{ periodProblem.key | translate }}</p>
+          }
+        }
+
+        @if (showsCalculatedDays()) {
+          <div class="field">
+            <label for="requestedDays">{{ 'request-form.requested-days' | translate }}</label>
+            <input id="requestedDays" class="input" readonly [class.invalid]="insufficientBalance()"
+                   [value]="'request-period.working-days' | translate: { count: requestedDays() }"/>
+            @if (insufficientBalance()) {
+              <p class="field-error">{{ 'request-error.insufficient-balance' | translate: { available: balance()?.availableDays, requested: requestedDays() } }}</p>
+            }
+          </div>
+        }
+
+        @if (otherFields().length > 0) {
+          <div class="form-grid">
+            @for (field of otherFields(); track field.key) {
+              <div [class.full]="!isHalfWidth(field)">
+                <app-dynamic-field [field]="field" [control]="form().controls[field.key]" [showErrors]="submitted()"/>
+              </div>
+            }
+          </div>
+        }
+
+        <div class="field">
+          <span class="field-label">
+            {{ 'request-form.attachment' | translate }}
+            ({{ (type.requiresAttachment ? 'request-form.required' : 'request-form.optional') | translate }})
+          </span>
+          @for (file of attachments(); track file.storageUrl) {
+            <div class="attachment">
+              <mat-icon aria-hidden="true">description</mat-icon>
+              <span>{{ file.fileName }} · {{ file.sizeInBytes | fileSize }}</span>
+              <span class="spacer"></span>
+              <button class="icon-action" type="button" (click)="removeAttachment(file)" [attr.aria-label]="'request-form.remove-file' | translate">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          }
+          <label class="upload" [class.invalid]="submitted() && type.requiresAttachment && attachments().length === 0">
+            <mat-icon aria-hidden="true">upload</mat-icon>
+            <span>{{ 'request-form.upload' | translate }}</span>
+            <span class="muted">{{ 'request-form.upload-hint' | translate }}</span>
+            <input type="file" accept=".pdf,.jpg,.jpeg,.png" (change)="onFileSelected($event)"/>
+          </label>
+          @if (fileError(); as fileErrorKey) {
+            <p class="field-error">{{ fileErrorKey | translate }}</p>
+          }
+        </div>
+
+        @if (insufficientBalance()) {
+          <div class="error-banner" role="alert">
+            <mat-icon>error</mat-icon>
+            <span>{{ 'request-form.insufficient-help' | translate: { available: balance()?.availableDays } }}</span>
+          </div>
+        }
+        @if (store.error(); as error) {
+          <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ error.key | translate: error.params }}</span></div>
+        }
+
+        <div class="form-actions">
+          <a mat-stroked-button routerLink="/requests/my-requests">{{ 'common.cancel' | translate }}</a>
+          <button mat-flat-button type="submit" [disabled]="insufficientBalance()">
+            {{ (isCompleting ? 'request-form.resubmit' : 'request-form.submit') | translate }}
+          </button>
+        </div>
+      }
+    </form>
+
+    <aside class="side">
+      @if (requestType()?.deductsVacationDays()) {
+        <app-vacation-balance-card [balance]="balance()" [requestedDays]="requestedDays()"/>
+      }
+      <app-approver-card [manager]="manager()"/>
+    </aside>
+  </div>
+</section>

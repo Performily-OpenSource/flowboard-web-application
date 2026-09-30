@@ -1,0 +1,16 @@
+.money {
+  position: relative;
+}
+
+.money .currency {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: var(--fb-text-muted);
+}
+
+.money .input {
+  padding-left: 34px;
+}
