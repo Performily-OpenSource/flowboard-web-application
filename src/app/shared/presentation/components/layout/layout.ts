@@ -36,6 +36,8 @@ export class Layout {
   readonly options = signal<NavigationOption[]>([
     { link: '/home', label: 'option.dashboard', icon: 'grid_view', activeWhen: ['/home'] },
     { link: '/workspace/employees', label: 'option.employees', icon: 'group', activeWhen: ['/workspace/employees'] },
+    { link: '/attendance/records', label: 'option.attendance', icon: 'schedule', activeWhen: ['/attendance/records', '/attendance/summary', '/attendance/hours'] },
+    { link: '/attendance/my-attendance', label: 'option.my-attendance', icon: 'schedule', activeWhen: ['/attendance/my-attendance'] },
     {
       link: '/workspace/organization-chart', label: 'option.organization', icon: 'account_tree',
       activeWhen: ['/workspace/organization-chart', '/workspace/organization-structure']
