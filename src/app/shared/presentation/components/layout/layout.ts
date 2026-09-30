@@ -44,8 +44,8 @@ export class Layout {
     // Solicitudes (Request) va aquí
     { link: '/benefits', label: 'option.benefits', icon: 'calendar_month', activeWhen: ['/benefits'] },
     { link: '/payroll/payslips', label: 'option.payroll', icon: 'receipt_long', activeWhen: ['/payroll/payslips'] },
-    { link: '/payroll/my-payslips', label: 'option.my-payslips', icon: 'receipt_long', activeWhen: ['/payroll/my-payslips'] }
-    // Bienestar (Wellbeing) va aquí
+    { link: '/payroll/my-payslips', label: 'option.my-payslips', icon: 'receipt_long', activeWhen: ['/payroll/my-payslips'] },
+    { link: '/wellbeing/dashboard', label: 'option.wellbeing', icon: 'health_and_safety', activeWhen: ['/wellbeing'] }
   ]);
 
   readonly isHandset = toSignal(
