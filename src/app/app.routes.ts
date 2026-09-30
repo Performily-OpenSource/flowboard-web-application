@@ -9,12 +9,16 @@ const pageNotFound = () =>
 const workspaceRoutes = () =>
   import('./workspace/presentation/workspace.routes').then(m => m.workspaceRoutes);
 
+const payrollRoutes = () =>
+  import('./payroll/presentation/payroll.routes').then(m => m.payrollRoutes);
+
 const baseTitle = 'Flowboard';
 
 export const routes: Routes = [
   { path: 'home', component: Home, title: `${baseTitle} - Home`, data: { breadcrumb: ['breadcrumb.dashboard'] } },
   { path: 'about', loadComponent: about, title: `${baseTitle} - About`, data: { breadcrumb: ['breadcrumb.about'] } },
   { path: 'workspace', loadChildren: workspaceRoutes, title: `${baseTitle} - Workspace` },
+  { path: 'payroll', loadChildren: payrollRoutes, title: `${baseTitle} - Payroll` },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', loadComponent: pageNotFound, title: `${baseTitle} - Page Not Found`, data: { breadcrumb: ['breadcrumb.page-not-found'] } },
 ];
