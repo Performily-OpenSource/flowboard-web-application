@@ -19,4 +19,8 @@ export const environment = {
   platformProviderAttendanceRecordsEndpointPath: '/attendance-records',
   platformProviderWorkSchedulesEndpointPath: '/work-schedules',
   platformProviderPunchesEndpointPath: '/punches',
+  platformProviderRequestsEndpointPath: '/requests',
+  platformProviderRequestTypesEndpointPath: '/request-types',
+  humanResourcesAreaId: 1,
+  defaultActingEmployeeId: 1,
 };

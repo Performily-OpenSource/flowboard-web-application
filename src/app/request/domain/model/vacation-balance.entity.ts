@@ -1,4 +1,4 @@
-/** Vacation balance of an employee, read from the Benefits bounded context. */
+
 export class VacationBalance {
   private _id: number;
   private _employeeId: number;

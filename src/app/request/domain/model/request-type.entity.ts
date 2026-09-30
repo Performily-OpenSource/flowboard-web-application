@@ -79,7 +79,6 @@ export class RequestType {
     this._active = value;
   }
 
-  /** Fields sorted by their display order. */
   get fields(): RequestField[] {
     return [...this._fields].sort((a, b) => a.displayOrder - b.displayOrder);
   }
@@ -96,12 +95,10 @@ export class RequestType {
     return this._balanceDeduction === 'VACATION_DAYS';
   }
 
-  /** The type asks for a start date, so its requests have a period. */
   hasPeriod(): boolean {
     return this._fields.some(field => field.key === 'startDate');
   }
-
-  /** The type asks for times, so its period is measured in hours (permission by hours). */
+  
   isMeasuredInHours(): boolean {
     return this._fields.some(field => field.key === 'startTime');
   }

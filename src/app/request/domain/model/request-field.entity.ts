@@ -2,10 +2,8 @@ export type FieldDataType = 'TEXT' | 'NUMBER' | 'DATE' | 'TIME' | 'MONEY' | 'BOO
 
 export const FIELD_DATA_TYPES: FieldDataType[] = ['TEXT', 'NUMBER', 'DATE', 'TIME', 'MONEY', 'BOOLEAN'];
 
-/** Keys that the form uses to build the period of a request (dates and times). */
 export const PERIOD_FIELD_KEYS = ['startDate', 'endDate', 'startTime', 'endTime'];
 
-/** Format of a field key: starts with a lowercase letter, then letters or numbers (2 to 50). */
 export const FIELD_KEY_PATTERN = /^[a-z][a-zA-Z0-9]{1,49}$/;
 
 export class RequestField {

@@ -1,7 +1,4 @@
-/**
- * Employee as the Request bounded context shows it (requester or approver).
- * It is built by the WorkspaceAcl from the Workspace employees, areas and positions.
- */
+
 export class Requester {
   private _id: number;
   private _fullName: string;
@@ -67,7 +64,6 @@ export class Requester {
     return this._active;
   }
 
-  /** Belongs to Human Resources, so it attends the requests routed to HR. */
   get hrStaff(): boolean {
     return this._hrStaff;
   }

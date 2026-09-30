@@ -6,13 +6,11 @@ export type ApproverType = 'DIRECT_MANAGER' | 'HR_STAFF';
 
 export const REQUEST_STATUSES: RequestStatus[] = ['IN_PROGRESS', 'UNDER_REVIEW', 'APPROVED', 'REJECTED', 'CANCELLED'];
 
-/** Value that the requester typed for one field of the request type. */
 export interface RequestFieldValue {
   key: string;
   value: string;
 }
 
-/** Supporting file attached to a request. */
 export interface RequestAttachment {
   fileName: string;
   contentType: string;
@@ -20,7 +18,6 @@ export interface RequestAttachment {
   storageUrl: string;
 }
 
-/** Working days (Monday to Friday) between two dates yyyy-MM-dd, both included. */
 export function countWorkingDays(startDate: string, endDate: string): number {
   const toDate = (value: string) => {
     const [year, month, day] = value.split('-').map(Number);
@@ -37,7 +34,6 @@ export function countWorkingDays(startDate: string, endDate: string): number {
   return days;
 }
 
-/** Hours between two times HH:mm, with two decimals. */
 export function countHours(startTime: string, endTime: string): number {
   const [startHour, startMinute] = startTime.split(':').map(Number);
   const [endHour, endMinute] = endTime.split(':').map(Number);
@@ -199,7 +195,6 @@ export class Request {
     this._submittedAt = value;
   }
 
-  /** History sorted from the oldest to the newest change. */
   get history(): RequestHistory[] {
     return [...this._history].sort((a, b) => a.occurredAt.localeCompare(b.occurredAt));
   }
@@ -208,7 +203,6 @@ export class Request {
     this._history = value;
   }
 
-  /** Type of the request, resolved by the store to show its name. */
   get requestType(): RequestType | null {
     return this._requestType;
   }
@@ -217,9 +211,6 @@ export class Request {
     this._requestType = value;
   }
 
-  // ----- Helpers for the views -----
-
-  /** Readable number, for example SOL-0412. */
   get code(): string {
     return `SOL-${String(this._id).padStart(4, '0')}`;
   }
@@ -236,7 +227,6 @@ export class Request {
     return this._startDate !== null && (this._endDate === null || this._endDate === this._startDate);
   }
 
-  /** Working days requested; 0 when there is no period or it is a permission by hours. */
   requestedDays(): number {
     if (!this._startDate || this.hasTimes()) return 0;
     return countWorkingDays(this._startDate, this._endDate ?? this._startDate);
@@ -274,7 +264,6 @@ export class Request {
     return this._approverType === 'HR_STAFF';
   }
 
-  /** Comment of the last time it was returned for review. */
   get reviewComment(): string | null {
     return [...this.history].reverse().find(entry => entry.newStatus === 'UNDER_REVIEW')?.comment ?? null;
   }
@@ -283,13 +272,11 @@ export class Request {
     return this.history.find(entry => entry.newStatus === 'REJECTED')?.comment ?? null;
   }
 
-  /** Date of the last change of status. */
   get lastUpdatedAt(): string {
     const history = this.history;
     return history.length > 0 ? history[history.length - 1].occurredAt : this._submittedAt;
   }
 
-  /** Hours the request has been waiting since it was sent. */
   waitingHours(now: Date = new Date()): number {
     return (now.getTime() - new Date(this._submittedAt).getTime()) / 3_600_000;
   }
