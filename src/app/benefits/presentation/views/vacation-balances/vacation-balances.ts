@@ -19,7 +19,7 @@ import {MatIcon} from '@angular/material/icon';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {BenefitsStore} from '../../../application/benefits.store';
-import {EmployeeDirectory, EmployeeSummary} from '../../../application/employee-directory';
+import {WorkspaceAcl, EmployeeSummary} from '../../../infrastructure/workspace-acl';
 import {VacationBalance} from '../../../domain/model/vacation-balance.entity';
 import {BenefitsTabs} from '../../components/benefits-tabs/benefits-tabs';
 import {BenefitsFeedback} from '../../components/benefits-feedback/benefits-feedback';
@@ -53,7 +53,7 @@ const HIGH_USAGE = 80;
 })
 export class VacationBalances {
   readonly store = inject(BenefitsStore);
-  readonly directory = inject(EmployeeDirectory);
+  readonly directory = inject(WorkspaceAcl);
   private dialog = inject(MatDialog);
   private translate = inject(TranslateService);
 

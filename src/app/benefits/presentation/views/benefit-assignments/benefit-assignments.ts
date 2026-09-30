@@ -18,7 +18,7 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {TranslatePipe} from '@ngx-translate/core';
 import {LocalDatePipe} from '../../../../shared/presentation/pipes/local-date-pipe';
 import {BenefitsStore} from '../../../application/benefits.store';
-import {EmployeeDirectory} from '../../../application/employee-directory';
+import {WorkspaceAcl} from '../../../infrastructure/workspace-acl';
 import {ASSIGNMENT_STATUSES, AssignmentStatus, BenefitAssignment} from '../../../domain/model/benefit-assignment.entity';
 import {BenefitsHeader} from '../../components/benefits-header/benefits-header';
 import {BenefitsTabs} from '../../components/benefits-tabs/benefits-tabs';
@@ -43,7 +43,7 @@ const PAGE_SIZE = 8;
 })
 export class BenefitAssignments {
   readonly store = inject(BenefitsStore);
-  readonly directory = inject(EmployeeDirectory);
+  readonly directory = inject(WorkspaceAcl);
   private dialog = inject(MatDialog);
 
   readonly statuses = ASSIGNMENT_STATUSES;

@@ -9,13 +9,8 @@ import {BenefitsApi} from '../infrastructure/benefits-api';
 import {BenefitTypeAssembler} from '../infrastructure/benefit-type-assembler';
 import {BenefitAssignmentAssembler} from '../infrastructure/benefit-assignment-assembler';
 import {VacationBalanceAssembler} from '../infrastructure/vacation-balance-assembler';
-import {EmployeeDirectory} from './employee-directory';
-
-/**
- * Employee that performs the HR actions (registers deliveries, adjusts balances).
- * Replace it with the signed-in user once the IAM context is integrated.
- */
-export const CURRENT_EMPLOYEE_ID = 1;
+import {WorkspaceAcl} from '../infrastructure/workspace-acl';
+import {CurrentEmployeeStore} from '../../shared/application/current-employee.store';
 
 export interface AssignBenefitCommand {
   benefitTypeId: number;
@@ -34,7 +29,8 @@ export interface AssignmentPlan {
 
 @Injectable({providedIn: 'root'})
 export class BenefitsStore {
-  private readonly directory = inject(EmployeeDirectory);
+  private readonly directory = inject(WorkspaceAcl);
+  private readonly currentEmployee = inject(CurrentEmployeeStore);
   private readonly typeAssembler = new BenefitTypeAssembler();
   private readonly assignmentAssembler = new BenefitAssignmentAssembler();
   private readonly balanceAssembler = new VacationBalanceAssembler();
@@ -205,7 +201,7 @@ export class BenefitsStore {
   registerDelivery(assignment: BenefitAssignment, deliveredOn: string, notes: string): void {
     const copy = this.copyAssignment(assignment);
     try {
-      copy.registerDelivery(deliveredOn, CURRENT_EMPLOYEE_ID, notes.trim());
+      copy.registerDelivery(deliveredOn, this.currentEmployee.employeeId(), notes.trim());
     } catch {
       this.errorSignal.set(assignment.isDelivered() ? 'benefits.error.already-delivered' : 'benefits.error.cancelled');
       return;
@@ -230,7 +226,7 @@ export class BenefitsStore {
   adjustVacationBalance(balance: VacationBalance, days: number, reason: string): void {
     const copy = this.balanceAssembler.toEntityFromResource(this.balanceAssembler.toResourceFromEntity(balance));
     try {
-      copy.adjust(days, reason, CURRENT_EMPLOYEE_ID);
+      copy.adjust(days, reason, this.currentEmployee.employeeId());
     } catch {
       this.errorSignal.set('benefits.error.negative-balance');
       return;
