@@ -1,0 +1,63 @@
+<form class="dialog" [formGroup]="form" (ngSubmit)="confirm()" novalidate>
+  <header class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">
+      {{ (isEdit ? 'benefit-dialog.edit-title' : 'benefit-dialog.new-title') | translate }}
+    </h2>
+    <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <div class="field">
+    <label for="benefitName">{{ 'benefit-dialog.name' | translate }}</label>
+    <input id="benefitName" class="input" formControlName="name"
+           [placeholder]="'benefit-dialog.name-placeholder' | translate"
+           [class.invalid]="isInvalidControl(form, 'name')"/>
+    @if (form.controls.name.hasError('taken')) {
+      <p class="field-error">{{ 'benefits.error.name-taken' | translate }}</p>
+    } @else if (isInvalidControl(form, 'name')) {
+      <p class="field-error">{{ errorKeyForControl(form, 'name') | translate }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="benefitDescription">{{ 'benefit-dialog.description' | translate }}</label>
+    <textarea id="benefitDescription" class="input" formControlName="description"
+              [placeholder]="'benefit-dialog.description-placeholder' | translate"></textarea>
+    @if (isInvalidControl(form, 'description')) {
+      <p class="field-error">{{ errorKeyForControl(form, 'description') | translate }}</p>
+    }
+  </div>
+
+  <div class="form-grid">
+    <div class="field">
+      <label for="benefitUnit">{{ 'benefit-dialog.unit' | translate }}</label>
+      <select id="benefitUnit" class="input" formControlName="unit">
+        @for (unit of units; track unit) {
+          <option [ngValue]="unit">{{ 'benefit-unit.' + unit | translate }}</option>
+        }
+      </select>
+    </div>
+    <div class="field">
+      <label for="benefitPeriodicity">{{ 'benefit-dialog.periodicity' | translate }}</label>
+      <select id="benefitPeriodicity" class="input" formControlName="periodicity">
+        @for (periodicity of periodicities; track periodicity) {
+          <option [ngValue]="periodicity">{{ 'benefit-periodicity.' + periodicity | translate }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="toggle-card">
+    <div>
+      <p class="toggle-title" id="hasBalanceLabel">{{ 'benefit-dialog.has-balance' | translate }}</p>
+      <p class="toggle-hint">{{ 'benefit-dialog.has-balance-hint' | translate }}</p>
+    </div>
+    <mat-slide-toggle formControlName="hasBalance" aria-labelledby="hasBalanceLabel"/>
+  </div>
+
+  <div class="dialog-actions">
+    <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.cancel' | translate }}</button>
+    <button mat-flat-button type="submit">{{ (isEdit ? 'common.save' : 'benefit-dialog.create') | translate }}</button>
+  </div>
+</form>

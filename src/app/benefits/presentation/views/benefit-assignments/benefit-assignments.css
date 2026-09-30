@@ -1,0 +1,23 @@
+.count {
+  font-size: 13px;
+  color: var(--fb-text-secondary);
+}
+
+.tag {
+  margin-left: 6px;
+}
+
+.pill-assigned {
+  background: var(--fb-primary-container);
+  color: var(--fb-on-primary-container);
+}
+
+.text-link {
+  margin-right: 4px;
+}
+
+.no-data {
+  padding: 24px 16px;
+  text-align: center;
+  color: var(--fb-text-muted);
+}

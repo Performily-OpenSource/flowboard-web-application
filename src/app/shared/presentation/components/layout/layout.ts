@@ -39,7 +39,8 @@ export class Layout {
     {
       link: '/workspace/organization-chart', label: 'option.organization', icon: 'account_tree',
       activeWhen: ['/workspace/organization-chart', '/workspace/organization-structure']
-    }
+    },
+    { link: '/benefits', label: 'option.benefits', icon: 'calendar_month', activeWhen: ['/benefits'] }
   ]);
 
   readonly isHandset = toSignal(

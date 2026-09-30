@@ -1,0 +1,16 @@
+.result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--fb-text-secondary);
+}
+
+.result strong {
+  font-size: 16px;
+  color: var(--fb-primary);
+}
+
+.result.negative strong {
+  color: var(--fb-error);
+}

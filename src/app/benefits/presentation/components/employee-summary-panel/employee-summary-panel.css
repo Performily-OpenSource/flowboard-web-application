@@ -1,0 +1,27 @@
+.summary-panel {
+  padding: 16px 20px 6px;
+  border: 1px solid var(--fb-border);
+  border-radius: 10px;
+  background: var(--fb-background);
+}
+
+.person {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--fb-border);
+}
+
+.name {
+  margin: 0 0 2px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.muted {
+  margin: 0;
+}
+
+:host ::ng-deep .kv-row {
+  padding: 8px 0;
+  border-bottom: none;
+  font-size: 13px;
+}

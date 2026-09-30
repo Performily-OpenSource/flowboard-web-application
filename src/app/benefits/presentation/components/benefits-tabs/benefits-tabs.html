@@ -1,0 +1,5 @@
+<nav class="segmented-tabs" [attr.aria-label]="'benefits.tabs.label' | translate">
+  @for (tab of tabs; track tab.link) {
+    <a [routerLink]="tab.link" routerLinkActive="active" ariaCurrentWhenActive="page">{{ tab.label | translate }}</a>
+  }
+</nav>

@@ -1,0 +1,12 @@
+<section class="summary-panel">
+  <div class="person">
+    <span class="avatar" aria-hidden="true">{{ employee()?.initials }}</span>
+    <div>
+      <p class="name">{{ employee()?.fullName }}</p>
+      <p class="muted">{{ employee()?.positionTitle }} · {{ employee()?.areaName }}</p>
+    </div>
+  </div>
+  <dl class="kv-list">
+    <ng-content/>
+  </dl>
+</section>

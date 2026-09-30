@@ -1,0 +1,13 @@
+@if (store.loading()) {
+  <mat-progress-bar mode="indeterminate"/>
+}
+@if (store.error(); as error) {
+  <div class="error-banner" role="alert">
+    <mat-icon>error</mat-icon>
+    <span>{{ error | translate }}</span>
+    <span class="spacer"></span>
+    <button class="icon-action" type="button" (click)="store.clearError()" [attr.aria-label]="'common.close' | translate">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+}

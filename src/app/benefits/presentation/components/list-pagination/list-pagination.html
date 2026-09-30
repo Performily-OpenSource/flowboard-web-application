@@ -1,0 +1,16 @@
+<div class="pagination">
+  <span class="summary">
+    {{ 'benefits.pagination.showing' | translate: { from: from(), to: to(), total: total(), items: (itemsKey() | translate) } }}
+  </span>
+  <span class="spacer"></span>
+  <button class="page-button" type="button" [disabled]="page() === 0" (click)="page.set(page() - 1)">
+    {{ 'benefits.pagination.previous' | translate }}
+  </button>
+  @for (index of pages(); track index) {
+    <button class="page-button" type="button" [class.current]="index === page()"
+            [attr.aria-current]="index === page() ? 'page' : null" (click)="page.set(index)">{{ index + 1 }}</button>
+  }
+  <button class="page-button" type="button" [disabled]="page() >= pageCount() - 1" (click)="page.set(page() + 1)">
+    {{ 'benefits.pagination.next' | translate }}
+  </button>
+</div>

@@ -1,0 +1,16 @@
+<header class="page-header">
+  <div>
+    <h1 class="page-title">{{ 'benefits.title' | translate }}</h1>
+    <p class="page-subtitle">{{ 'benefits.subtitle' | translate }}</p>
+  </div>
+  <div class="page-actions">
+    <button mat-stroked-button type="button" (click)="openAssignBenefit()">
+      <mat-icon>add</mat-icon>
+      {{ 'benefits.assign' | translate }}
+    </button>
+    <button mat-flat-button type="button" (click)="openNewBenefit()">
+      <mat-icon>add</mat-icon>
+      {{ 'benefits.new' | translate }}
+    </button>
+  </div>
+</header>

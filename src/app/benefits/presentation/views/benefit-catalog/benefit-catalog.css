@@ -1,0 +1,14 @@
+.count {
+  font-size: 13px;
+  color: var(--fb-text-secondary);
+}
+
+.pill {
+  margin-left: 8px;
+}
+
+.no-data {
+  padding: 24px 16px;
+  text-align: center;
+  color: var(--fb-text-muted);
+}

@@ -1,0 +1,102 @@
+<section class="page">
+  <app-benefits-header/>
+  <app-benefits-tabs/>
+
+  <app-benefits-feedback/>
+
+  <div class="filters">
+    <button class="filter-chip" type="button" [class.active]="unitFilter() !== null" [matMenuTriggerFor]="unitMenu">
+      {{ 'benefits.filter.type' | translate }}: {{ (unitFilter() !== null ? 'benefit-unit.' + unitFilter() : 'benefits.filter.all') | translate }}
+      <mat-icon>expand_more</mat-icon>
+    </button>
+    <mat-menu #unitMenu="matMenu">
+      <button mat-menu-item (click)="setUnit(null)">{{ 'benefits.filter.all' | translate }}</button>
+      @for (unit of units; track unit) {
+        <button mat-menu-item (click)="setUnit(unit)">{{ 'benefit-unit.' + unit | translate }}</button>
+      }
+    </mat-menu>
+
+    <button class="filter-chip" type="button" [class.active]="balanceFilter() !== 'ALL'" [matMenuTriggerFor]="balanceMenu">
+      {{ 'benefits.filter.with-balance' | translate }}: {{ 'benefits.filter.balance.' + balanceFilter() | translate }}
+      <mat-icon>expand_more</mat-icon>
+    </button>
+    <mat-menu #balanceMenu="matMenu">
+      @for (option of balanceOptions; track option) {
+        <button mat-menu-item (click)="setBalance(option)">{{ 'benefits.filter.balance.' + option | translate }}</button>
+      }
+    </mat-menu>
+
+    <button class="filter-chip" type="button" [class.active]="statusFilter() !== 'ALL'" [matMenuTriggerFor]="statusMenu">
+      {{ 'benefits.filter.status' | translate }}: {{ 'benefits.filter.status-option.' + statusFilter() | translate }}
+      <mat-icon>expand_more</mat-icon>
+    </button>
+    <mat-menu #statusMenu="matMenu">
+      @for (option of statusOptions; track option) {
+        <button mat-menu-item (click)="setStatus(option)">{{ 'benefits.filter.status-option.' + option | translate }}</button>
+      }
+    </mat-menu>
+
+    <span class="spacer"></span>
+    <span class="count">{{ 'benefits.catalog-count' | translate: { count: store.benefitTypes().length } }}</span>
+  </div>
+
+  <div class="table-card">
+    <table mat-table [dataSource]="pageTypes()">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>{{ 'benefits.column.benefit' | translate }}</th>
+        <td mat-cell *matCellDef="let type">
+          <span class="cell-strong">{{ type.name }}</span>
+          @if (!type.active) {
+            <span class="pill pill-inactive">{{ 'benefits.inactive' | translate }}</span>
+          }
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="unit">
+        <th mat-header-cell *matHeaderCellDef>{{ 'benefits.column.unit' | translate }}</th>
+        <td mat-cell *matCellDef="let type">{{ 'benefit-unit.' + type.unit | translate }}</td>
+      </ng-container>
+      <ng-container matColumnDef="balance">
+        <th mat-header-cell *matHeaderCellDef>{{ 'benefits.column.has-balance' | translate }}</th>
+        <td mat-cell *matCellDef="let type">
+          {{ (type.hasBalance ? 'benefits.has-balance.' + type.unit : 'benefits.has-balance.NO') | translate }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="reach">
+        <th mat-header-cell *matHeaderCellDef>{{ 'benefits.column.reach' | translate }}</th>
+        <td mat-cell *matCellDef="let type">{{ 'benefits.reach' | translate: { count: store.reachOf(type.id) } }}</td>
+      </ng-container>
+      <ng-container matColumnDef="periodicity">
+        <th mat-header-cell *matHeaderCellDef>{{ 'benefits.column.periodicity' | translate }}</th>
+        <td mat-cell *matCellDef="let type">{{ 'benefit-periodicity.' + type.periodicity | translate }}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>{{ 'benefits.column.actions' | translate }}</th>
+        <td mat-cell *matCellDef="let type">
+          <button class="icon-action" type="button" (click)="editBenefit(type)" [attr.aria-label]="'common.edit' | translate">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button class="icon-action" type="button" [matMenuTriggerFor]="rowMenu"
+                  [attr.aria-label]="'benefits.more-actions' | translate">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #rowMenu="matMenu" xPosition="before">
+            @if (type.active) {
+              <button mat-menu-item (click)="assignBenefit(type)">{{ 'benefits.assign' | translate }}</button>
+            }
+            <button mat-menu-item (click)="toggleStatus(type)">
+              {{ (type.active ? 'common.deactivate' : 'common.activate') | translate }}
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+      <tr class="mat-mdc-row" *matNoDataRow>
+        <td class="mat-mdc-cell no-data" [attr.colspan]="columns.length">{{ 'benefits.no-benefits' | translate }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <app-list-pagination [total]="filteredTypes().length" [pageSize]="pageSize"
+                       itemsKey="benefits.pagination.benefits" [(page)]="page"/>
+</section>

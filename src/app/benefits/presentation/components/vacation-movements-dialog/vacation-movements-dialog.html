@@ -1,0 +1,41 @@
+<div class="dialog">
+  <header class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">{{ 'movements-dialog.title' | translate }}</h2>
+    <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <app-employee-summary-panel [employeeId]="balance.employeeId"/>
+
+  <ul class="movements">
+    @for (movement of movements(); track movement.id) {
+      <li class="movement">
+        <div>
+          <p class="movement-type">{{ 'vacation-movement-type.' + movement.type | translate }}</p>
+          <p class="muted">
+            {{ movement.occurredAt | localDate }}
+            @if (movement.requestId !== null) {
+              · {{ 'movements-dialog.request' | translate: { id: movement.requestId } }}
+            }
+            @if (authorName(movement.authorId); as author) {
+              · {{ author }}
+            }
+          </p>
+          @if (movement.type === 'MANUAL_ADJUSTMENT') {
+            <p class="reason">{{ movement.reason }}</p>
+          }
+        </div>
+        <span class="days" [class.negative]="movement.days < 0">
+          {{ movement.days > 0 ? '+' : '' }}{{ 'benefits.days' | translate: { days: (movement.days | number: '1.0-2') } }}
+        </span>
+      </li>
+    } @empty {
+      <li class="muted">{{ 'movements-dialog.empty' | translate }}</li>
+    }
+  </ul>
+
+  <div class="dialog-actions">
+    <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.close' | translate }}</button>
+  </div>
+</div>

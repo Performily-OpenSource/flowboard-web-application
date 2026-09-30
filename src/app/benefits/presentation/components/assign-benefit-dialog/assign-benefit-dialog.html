@@ -1,0 +1,118 @@
+<form class="dialog" [formGroup]="form" (ngSubmit)="confirm()" novalidate>
+  <header class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">{{ 'assign-dialog.title' | translate }}</h2>
+    <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <div class="field">
+    <label for="assignBenefit">{{ 'assign-dialog.benefit' | translate }}</label>
+    <select id="assignBenefit" class="input" formControlName="benefitTypeId"
+            [class.invalid]="isInvalidControl(form, 'benefitTypeId')">
+      <option [ngValue]="null" disabled>{{ 'common.select' | translate }}</option>
+      @for (type of store.activeBenefitTypes(); track type.id) {
+        <option [ngValue]="type.id">{{ type.name }}</option>
+      }
+    </select>
+    @if (isInvalidControl(form, 'benefitTypeId')) {
+      <p class="field-error">{{ 'validation.required' | translate }}</p>
+    }
+  </div>
+
+  <div class="target-switch" role="radiogroup" [attr.aria-label]="'assign-dialog.target' | translate">
+    <button type="button" role="radio" [class.selected]="form.controls.target.value === 'EMPLOYEE'"
+            [attr.aria-checked]="form.controls.target.value === 'EMPLOYEE'" (click)="setTarget('EMPLOYEE')">
+      {{ 'assign-dialog.by-employee' | translate }}
+    </button>
+    <button type="button" role="radio" [class.selected]="form.controls.target.value === 'AREA'"
+            [attr.aria-checked]="form.controls.target.value === 'AREA'" (click)="setTarget('AREA')">
+      {{ 'assign-dialog.by-area' | translate }}
+    </button>
+  </div>
+
+  @if (form.controls.target.value === 'EMPLOYEE') {
+    <div class="field">
+      <label for="assignEmployee">{{ 'assign-dialog.employee' | translate }}</label>
+      <select id="assignEmployee" class="input" formControlName="employeeId"
+              [class.invalid]="isInvalidControl(form, 'employeeId')">
+        <option [ngValue]="null" disabled>{{ 'common.select' | translate }}</option>
+        @for (employee of directory.activeEmployees(); track employee.id) {
+          <option [ngValue]="employee.id">{{ employee.fullName }} · {{ employee.areaName }}</option>
+        }
+      </select>
+      @if (isInvalidControl(form, 'employeeId')) {
+        <p class="field-error">{{ 'validation.required' | translate }}</p>
+      }
+    </div>
+  } @else {
+    <div class="field">
+      <label for="assignArea">{{ 'assign-dialog.area' | translate }}</label>
+      <select id="assignArea" class="input" formControlName="areaId"
+              [class.invalid]="isInvalidControl(form, 'areaId')">
+        <option [ngValue]="null" disabled>{{ 'common.select' | translate }}</option>
+        @for (area of directory.activeAreas(); track area.id) {
+          <option [ngValue]="area.id">{{ area.name }}</option>
+        }
+      </select>
+      @if (isInvalidControl(form, 'areaId')) {
+        <p class="field-error">{{ 'validation.required' | translate }}</p>
+      }
+    </div>
+  }
+
+  <div class="form-grid">
+    <div class="field">
+      <label for="assignFrom">{{ 'assign-dialog.valid-from' | translate }}</label>
+      <input id="assignFrom" class="input" type="date" formControlName="validFrom"
+             [class.invalid]="isInvalidControl(form, 'validFrom')"/>
+    </div>
+    <div class="field">
+      <label for="assignTo">{{ 'assign-dialog.valid-to' | translate }}</label>
+      <input id="assignTo" class="input" type="date" formControlName="validTo"
+             [class.invalid]="isInvalidControl(form, 'validTo') || invalidRange()"/>
+    </div>
+    @if (invalidRange()) {
+      <p class="field-error full">{{ 'assign-dialog.error.invalid-range' | translate }}</p>
+    } @else if (isInvalidControl(form, 'validFrom') || isInvalidControl(form, 'validTo')) {
+      <p class="field-error full">{{ 'validation.required' | translate }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="assignQuantity">{{ 'assign-dialog.quantity.' + (selectedType()?.unit ?? 'UNITS') | translate }}</label>
+    <input id="assignQuantity" class="input" type="number" min="0.01" step="0.01" formControlName="quantity"
+           [placeholder]="selectedType()?.unit === 'MONEY' ? 'S/ 0.00' : '0'"
+           [class.invalid]="isInvalidControl(form, 'quantity') || !!conflict()"/>
+    @if (isInvalidControl(form, 'quantity')) {
+      <p class="field-error">{{ 'assign-dialog.error.quantity' | translate }}</p>
+    }
+  </div>
+
+  @if (conflict(); as conflict) {
+    <p class="field-error" role="alert">
+      {{ 'assign-dialog.error.overlap' | translate: { employee: conflict.employee, from: (conflict.from | localDate), to: (conflict.to | localDate) } }}
+    </p>
+  } @else if (areaHasNoActiveEmployees()) {
+    <p class="field-error" role="alert">{{ 'benefits.error.no-active-employees' | translate }}</p>
+  } @else if (form.controls.target.value === 'AREA' && plan(); as plan) {
+    @if (plan.employeeIds.length === 0) {
+      <p class="field-error" role="alert">{{ 'assign-dialog.error.area-all-overlap' | translate }}</p>
+    } @else {
+      <div class="info-note">
+        <mat-icon aria-hidden="true">info</mat-icon>
+        <span>
+          {{ 'assign-dialog.area-summary' | translate: { count: plan.employeeIds.length, area: areaName(form.controls.areaId.value) } }}
+          @if (plan.conflictingEmployeeIds.length > 0) {
+            {{ 'assign-dialog.area-skipped' | translate: { count: plan.conflictingEmployeeIds.length } }}
+          }
+        </span>
+      </div>
+    }
+  }
+
+  <div class="dialog-actions">
+    <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.cancel' | translate }}</button>
+    <button mat-flat-button type="submit" [disabled]="blocked()">{{ 'assign-dialog.assign' | translate }}</button>
+  </div>
+</form>

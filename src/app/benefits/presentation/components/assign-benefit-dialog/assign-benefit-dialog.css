@@ -1,0 +1,30 @@
+.target-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  border: 1px solid var(--fb-outline);
+  border-radius: 8px;
+}
+
+.target-switch button {
+  height: 40px;
+  padding: 0 16px;
+  border: none;
+  background: var(--fb-surface);
+  color: var(--fb-text-secondary);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.target-switch button.selected {
+  background: var(--fb-primary);
+  color: var(--fb-on-primary);
+  font-weight: 600;
+}
+
+.target-switch button:focus-visible {
+  outline: 2px solid var(--fb-primary);
+  outline-offset: -2px;
+}

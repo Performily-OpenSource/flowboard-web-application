@@ -1,0 +1,60 @@
+<form class="dialog" [formGroup]="form" (ngSubmit)="confirm()" novalidate>
+  <header class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">{{ 'delivery-dialog.title' | translate }}</h2>
+    <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <app-employee-summary-panel [employeeId]="assignment.employeeId">
+    <div class="kv-row">
+      <dt>{{ 'delivery-dialog.benefit' | translate }}</dt>
+      <dd>{{ assignment.benefitType?.name }}</dd>
+    </div>
+    <div class="kv-row">
+      <dt>{{ 'delivery-dialog.period' | translate }}</dt>
+      <dd>{{ assignment.validity.startDate | localDate }} – {{ assignment.validity.endDate | localDate }}</dd>
+    </div>
+    <div class="kv-row">
+      <dt>{{ 'delivery-dialog.assigned.' + (assignment.benefitType?.unit ?? 'UNITS') | translate }}</dt>
+      <dd><app-benefit-quantity [quantity]="assignment.quantity" [unit]="assignment.benefitType?.unit"/></dd>
+    </div>
+  </app-employee-summary-panel>
+
+  <div class="field">
+    <label for="deliveredOn">{{ 'delivery-dialog.delivered-on' | translate }}</label>
+    <input id="deliveredOn" class="input" type="date" formControlName="deliveredOn"
+           [class.invalid]="isInvalidControl(form, 'deliveredOn')"/>
+    @if (form.controls.deliveredOn.hasError('beforeValidity')) {
+      <p class="field-error">{{ 'delivery-dialog.error.before-validity' | translate }}</p>
+    } @else if (isInvalidControl(form, 'deliveredOn')) {
+      <p class="field-error">{{ 'validation.required' | translate }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="deliveryNotes">{{ 'delivery-dialog.notes' | translate }}</label>
+    <textarea id="deliveryNotes" class="input" formControlName="notes"
+              [placeholder]="'delivery-dialog.notes-placeholder' | translate"></textarea>
+  </div>
+
+  @if (assignment.delivery; as delivery) {
+    <div class="error-banner" role="alert">
+      <mat-icon>error</mat-icon>
+      <span>{{ 'benefits.error.already-delivered-on' | translate: { date: (delivery.deliveredOn | localDate) } }}</span>
+    </div>
+  } @else if (assignment.isCancelled()) {
+    <div class="error-banner" role="alert">
+      <mat-icon>error</mat-icon>
+      <span>{{ 'benefits.error.cancelled' | translate }}</span>
+    </div>
+  }
+
+  <div class="dialog-actions">
+    <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.cancel' | translate }}</button>
+    <button mat-flat-button type="submit" [disabled]="blocked">
+      <mat-icon>check</mat-icon>
+      {{ 'delivery-dialog.register' | translate }}
+    </button>
+  </div>
+</form>

@@ -1,0 +1,14 @@
+.error-banner {
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.error-banner .icon-action {
+  width: 24px;
+  height: 24px;
+  color: inherit;
+}
+
+mat-progress-bar {
+  margin-bottom: 12px;
+}

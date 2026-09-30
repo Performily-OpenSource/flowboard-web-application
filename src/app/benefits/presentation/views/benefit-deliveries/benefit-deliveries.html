@@ -1,0 +1,51 @@
+<section class="page">
+  <app-benefits-header/>
+  <app-benefits-tabs/>
+  <app-benefits-feedback/>
+
+  <div class="table-card">
+    <table mat-table [dataSource]="pageDeliveries()">
+      <ng-container matColumnDef="employee">
+        <th mat-header-cell *matHeaderCellDef>{{ 'vacation-balances.employee' | translate }}</th>
+        <td mat-cell *matCellDef="let assignment">
+          @if (employee(assignment.employeeId); as employee) {
+            <span class="person">
+              <span class="avatar" aria-hidden="true">{{ employee.initials }}</span>
+              <span class="cell-strong">{{ employee.fullName }}</span>
+            </span>
+          }
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="benefit">
+        <th mat-header-cell *matHeaderCellDef>{{ 'benefits.column.benefit' | translate }}</th>
+        <td mat-cell *matCellDef="let assignment">{{ assignment.benefitType?.name }}</td>
+      </ng-container>
+      <ng-container matColumnDef="deliveredOn">
+        <th mat-header-cell *matHeaderCellDef>{{ 'benefit-deliveries.delivered-on' | translate }}</th>
+        <td mat-cell *matCellDef="let assignment">{{ assignment.delivery?.deliveredOn | localDate }}</td>
+      </ng-container>
+      <ng-container matColumnDef="quantity">
+        <th mat-header-cell *matHeaderCellDef>{{ 'benefit-assignments.quantity' | translate }}</th>
+        <td mat-cell *matCellDef="let assignment">
+          <app-benefit-quantity [quantity]="assignment.quantity" [unit]="assignment.benefitType?.unit"/>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="registeredBy">
+        <th mat-header-cell *matHeaderCellDef>{{ 'benefit-deliveries.registered-by' | translate }}</th>
+        <td mat-cell *matCellDef="let assignment">{{ employee(assignment.delivery?.registeredBy)?.fullName }}</td>
+      </ng-container>
+      <ng-container matColumnDef="notes">
+        <th mat-header-cell *matHeaderCellDef>{{ 'benefit-deliveries.notes' | translate }}</th>
+        <td mat-cell *matCellDef="let assignment" class="notes">{{ assignment.delivery?.notes || '-' }}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+      <tr class="mat-mdc-row" *matNoDataRow>
+        <td class="mat-mdc-cell no-data" [attr.colspan]="columns.length">{{ 'benefit-deliveries.empty' | translate }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <app-list-pagination [total]="store.deliveredAssignments().length" [pageSize]="pageSize"
+                       itemsKey="benefits.pagination.deliveries" [(page)]="page"/>
+</section>

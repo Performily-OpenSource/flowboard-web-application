@@ -297,5 +297,38 @@
       "storageUrl": "",
       "uploadedAt": "2024-02-01T10:00:00Z"
     }
+  ],
+  "benefit-types": [
+    {"id": 1, "name": "Vacaciones", "description": "Descanso vacacional anual de 30 días por año de servicio.", "hasBalance": true, "unit": "DAYS", "periodicity": "ANNUAL", "active": true},
+    {"id": 2, "name": "Gratificación de julio", "description": "Gratificación legal por Fiestas Patrias.", "hasBalance": false, "unit": "MONEY", "periodicity": "SEMIANNUAL", "active": true},
+    {"id": 3, "name": "Gratificación de diciembre", "description": "Gratificación legal por Navidad.", "hasBalance": false, "unit": "MONEY", "periodicity": "SEMIANNUAL", "active": true},
+    {"id": 4, "name": "Canasta navideña", "description": "Canasta de productos entregada en diciembre.", "hasBalance": true, "unit": "UNITS", "periodicity": "ANNUAL", "active": true},
+    {"id": 5, "name": "Vales de consumo", "description": "Vales para supermercados afiliados.", "hasBalance": true, "unit": "MONEY", "periodicity": "MONTHLY", "active": true},
+    {"id": 6, "name": "Adelanto de sueldo", "description": "Adelanto a cuenta de la remuneración del mes.", "hasBalance": true, "unit": "MONEY", "periodicity": "MONTHLY", "active": true},
+    {"id": 7, "name": "Días libres adicionales", "description": "Días de descanso adicionales por desempeño.", "hasBalance": true, "unit": "DAYS", "periodicity": "ANNUAL", "active": true},
+    {"id": 8, "name": "Subsidio de movilidad", "description": "Apoyo mensual para transporte.", "hasBalance": false, "unit": "MONEY", "periodicity": "MONTHLY", "active": true},
+    {"id": 9, "name": "Bono por cumpleaños", "description": "Monto de regalo en el mes de cumpleaños.", "hasBalance": false, "unit": "MONEY", "periodicity": "ANNUAL", "active": true},
+    {"id": 10, "name": "Seguro oncológico", "description": "Cobertura oncológica complementaria (suspendido).", "hasBalance": false, "unit": "MONEY", "periodicity": "ANNUAL", "active": false},
+    {"id": 11, "name": "Vales de alimentación", "description": "Vales para almuerzo del personal", "hasBalance": false, "unit": "MONEY", "periodicity": "MONTHLY", "active": true}
+  ],
+  "benefit-assignments": [
+    {"id": 1, "benefitTypeId": 4, "employeeId": 1, "sourceAreaId": null, "validFrom": "2025-12-01", "validTo": "2025-12-31", "quantity": 1, "status": "DELIVERED", "delivery": {"id": 1, "deliveredOn": "2025-12-20", "registeredBy": 1, "notes": "Entregada en la oficina principal."}},
+    {"id": 2, "benefitTypeId": 4, "employeeId": 1, "sourceAreaId": null, "validFrom": "2026-12-01", "validTo": "2026-12-31", "quantity": 1, "status": "ASSIGNED", "delivery": null},
+    {"id": 3, "benefitTypeId": 4, "employeeId": 2, "sourceAreaId": null, "validFrom": "2026-12-01", "validTo": "2026-12-31", "quantity": 1, "status": "ASSIGNED", "delivery": null},
+    {"id": 4, "benefitTypeId": 4, "employeeId": 3, "sourceAreaId": null, "validFrom": "2026-12-01", "validTo": "2026-12-31", "quantity": 1, "status": "ASSIGNED", "delivery": null},
+    {"id": 5, "benefitTypeId": 4, "employeeId": 4, "sourceAreaId": null, "validFrom": "2026-12-01", "validTo": "2026-12-31", "quantity": 1, "status": "ASSIGNED", "delivery": null},
+    {"id": 6, "benefitTypeId": 5, "employeeId": 2, "sourceAreaId": 2, "validFrom": "2026-10-01", "validTo": "2026-12-31", "quantity": 300, "status": "ASSIGNED", "delivery": null},
+    {"id": 7, "benefitTypeId": 5, "employeeId": 3, "sourceAreaId": 2, "validFrom": "2026-10-01", "validTo": "2026-12-31", "quantity": 300, "status": "ASSIGNED", "delivery": null},
+    {"id": 8, "benefitTypeId": 8, "employeeId": 6, "sourceAreaId": null, "validFrom": "2026-01-01", "validTo": "2026-12-31", "quantity": 150, "status": "ASSIGNED", "delivery": null},
+    {"id": 9, "benefitTypeId": 2, "employeeId": 1, "sourceAreaId": null, "validFrom": "2026-07-01", "validTo": "2026-07-31", "quantity": 3750, "status": "DELIVERED", "delivery": {"id": 2, "deliveredOn": "2026-07-15", "registeredBy": 1, "notes": "Pagada en planilla de julio."}},
+    {"id": 10, "benefitTypeId": 7, "employeeId": 3, "sourceAreaId": null, "validFrom": "2026-01-01", "validTo": "2026-12-31", "quantity": 2, "status": "CANCELLED", "delivery": null}
+  ],
+  "vacation-balances": [
+    {"id": 1, "employeeId": 1, "accruedDays": 30, "usedDays": 15, "movements": [{"id": 1, "type": "ACCRUAL", "days": 30, "reason": "Accrual by seniority", "authorId": null, "requestId": null, "occurredAt": "2026-01-02T09:00:00.000Z"}, {"id": 2, "type": "USAGE", "days": -15, "reason": "Approved vacation request", "authorId": null, "requestId": 101, "occurredAt": "2026-02-10T10:00:00.000Z"}]},
+    {"id": 2, "employeeId": 2, "accruedDays": 30, "usedDays": 28, "movements": [{"id": 3, "type": "ACCRUAL", "days": 30, "reason": "Accrual by seniority", "authorId": null, "requestId": null, "occurredAt": "2026-01-02T09:00:00.000Z"}, {"id": 4, "type": "USAGE", "days": -28, "reason": "Approved vacation request", "authorId": null, "requestId": 102, "occurredAt": "2026-03-02T10:00:00.000Z"}]},
+    {"id": 3, "employeeId": 3, "accruedDays": 15, "usedDays": 0, "movements": [{"id": 5, "type": "ACCRUAL", "days": 15, "reason": "Accrual by seniority", "authorId": null, "requestId": null, "occurredAt": "2026-01-02T09:00:00.000Z"}]},
+    {"id": 4, "employeeId": 4, "accruedDays": 30, "usedDays": 4, "movements": [{"id": 6, "type": "ACCRUAL", "days": 30, "reason": "Accrual by seniority", "authorId": null, "requestId": null, "occurredAt": "2026-01-02T09:00:00.000Z"}, {"id": 7, "type": "USAGE", "days": -4, "reason": "Approved vacation request", "authorId": null, "requestId": 103, "occurredAt": "2026-04-20T10:00:00.000Z"}]},
+    {"id": 5, "employeeId": 6, "accruedDays": 12.5, "usedDays": 3, "movements": [{"id": 8, "type": "ACCRUAL", "days": 12.5, "reason": "Accrual by seniority", "authorId": null, "requestId": null, "occurredAt": "2026-01-02T09:00:00.000Z"}, {"id": 9, "type": "USAGE", "days": -3, "reason": "Approved vacation request", "authorId": null, "requestId": 104, "occurredAt": "2026-06-05T10:00:00.000Z"}]}
   ]
+
 }

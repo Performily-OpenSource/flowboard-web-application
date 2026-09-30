@@ -6,4 +6,7 @@ export const environment = {
   platformProviderPositionsEndpointPath: '/positions',
   platformProviderJobAssignmentsEndpointPath: '/job-assignments',
   platformProviderEmployeeDocumentsEndpointPath: '/employee-documents',
+  platformProviderBenefitTypesEndpointPath: '/benefit-types',
+  platformProviderBenefitAssignmentsEndpointPath: '/benefit-assignments',
+  platformProviderVacationBalancesEndpointPath: '/vacation-balances',
 };
