@@ -8,7 +8,9 @@
     "benefits": "Benefits",
     "payroll": "Payslips",
     "my-payslips": "My payslips",
-    "wellbeing": "Wellbeing"
+    "wellbeing": "Wellbeing",
+    "attendance": "Attendance",
+    "my-attendance": "My attendance"
   },
   "breadcrumb": {
     "dashboard": "Dashboard",
@@ -27,7 +29,12 @@
     "vacation-balances": "Balance per employee",
     "payroll": "Payslips",
     "my-payslips": "My payslips",
-    "wellbeing": "Wellbeing"
+    "wellbeing": "Wellbeing",
+    "attendance": "Attendance",
+    "attendance-records": "Records",
+    "my-attendance": "My attendance",
+    "attendance-summary": "Summary by area",
+    "attendance-hours": "Hours and overtime"
   },
   "toolbar": {
     "search": "Search",
@@ -805,6 +812,98 @@
     "errors": {
       "load": "We could not load wellbeing information.",
       "generic": "We could not complete the operation."
+    }
+  },
+  "attendance": {
+    "export": "Export",
+    "period": "From",
+    "until": "Until",
+    "month": "Period",
+    "compare": "Compare with",
+    "area": "Area",
+    "all": "All",
+    "date": "Date",
+    "employee": "Employee",
+    "check-in": "Check-in",
+    "check-out": "Check-out",
+    "worked-hours": "Effective hours",
+    "overtime": "Overtime",
+    "actions": "Actions",
+    "justify": "Justify absence",
+    "invalid-range": "The start date is later than the end date. Correct the range to consult the history.",
+    "clear-filters": "Clear filters",
+    "previous": "Previous",
+    "next": "Next",
+    "range": "Showing {{ start }} to {{ end }} of {{ total }} records",
+    "empty": {
+      "title": "No records in the selected period",
+      "content": "No attendance mark was registered in the selected period. Try another date range or clear the filters."
+    },
+    "summary": {
+      "punctuality": "punctuality",
+      "records": "records",
+      "lates": "late arrivals",
+      "absences": "absences",
+      "justified": "justified",
+      "period": "in the period",
+      "overtime": "Overtime",
+      "accumulated": "accumulated",
+      "title": "Summary by area",
+      "subtitle": "Period comparison. See where late arrivals are concentrated before talking with each manager."
+    },
+    "records": {
+      "title": "Attendance",
+      "subtitle": "Attendance records for the period. The platform records and classifies; it does not derive deductions or payments."
+    },
+    "my": {
+      "title": "My attendance",
+      "subtitle": "Only you can see this history. If a record is incorrect, submit a justification.",
+      "justify": "Justify absence",
+      "worked-days": "Worked days",
+      "lates": "Late arrivals",
+      "absences": "Absences",
+      "unjustified": "unjustified",
+      "empty": "There are no attendance records for the selected period."
+    },
+    "status": {
+      "label": "Status",
+      "ON_TIME": "On time",
+      "LATE": "Late",
+      "ABSENT": "Absent",
+      "JUSTIFIED": "Justified",
+      "INCOMPLETE": "Incomplete"
+    },
+    "justification": {
+      "title": "Justify absence",
+      "date": "Date",
+      "status": "Current status",
+      "record": "Record",
+      "reason": "Reason for absence",
+      "reason-placeholder": "Explain what happened that day",
+      "support": "Supporting document",
+      "upload": "Drop the file or browse your computer",
+      "note": "Submitting creates a justification request. Your direct manager will review it and you can follow its status in My requests.",
+      "submit": "Submit justification"
+    },
+    "hours": {
+      "title": "Hours and overtime",
+      "subtitle": "Effective hours compared with the expected schedule for the position. Overtime is informational and does not automatically generate payment.",
+      "order": "Order",
+      "order-overtime": "highest overtime",
+      "order-effective": "highest effective hours",
+      "note": "Overtime is shown as the difference between registered effective hours and the expected schedule. Any compensation is managed outside Flowboard.",
+      "expected": "Expected schedule",
+      "variation": "Variation",
+      "level": "Level",
+      "high": "High",
+      "normal": "Normal",
+      "low": "Low",
+      "footer": "Showing {{count}} collaborators in the area"
+    },
+    "tabs": {
+      "records": "Records",
+      "summary": "Summary by area",
+      "hours": "Hours and overtime"
     }
   }
 }

@@ -1,0 +1,50 @@
+<section class="page attendance-page">
+  <header class="page-header">
+    <div><h1 class="page-title">{{ 'attendance.records.title' | translate }}</h1><p class="page-subtitle">{{ 'attendance.records.subtitle' | translate }}</p></div>
+    <div class="page-actions"><button mat-stroked-button type="button"><mat-icon>upload</mat-icon>{{ 'attendance.export' | translate }}</button></div>
+  </header>
+
+  <nav class="attendance-tabs" aria-label="Attendance views">
+    <a class="attendance-tab active" routerLink="/attendance/records">{{ 'attendance.tabs.records' | translate }}</a>
+    <a class="attendance-tab" routerLink="/attendance/summary">{{ 'attendance.tabs.summary' | translate }}</a>
+    <a class="attendance-tab" routerLink="/attendance/hours">{{ 'attendance.tabs.hours' | translate }}</a>
+  </nav>
+
+  <div class="filters">
+    <label>{{ 'attendance.period' | translate }} <input type="date" [value]="fromDate()" (change)="setFrom($any($event.target).value)"></label>
+    <label>{{ 'attendance.until' | translate }} <input type="date" [value]="toDate()" (change)="setTo($any($event.target).value)"></label>
+    <label>{{ 'attendance.area' | translate }} <select [value]="areaFilter() ?? ''" (change)="setArea($any($event.target).value)"><option value="">{{ 'attendance.all' | translate }}</option>@for(area of workspace.areas(); track area.id){<option [value]="area.id">{{area.name}}</option>}</select></label>
+    <label>{{ 'attendance.status.label' | translate }} <select [value]="statusFilter() ?? ''" (change)="setStatus($any($event.target).value)"><option value="">{{ 'attendance.all' | translate }}</option>@for(status of statuses; track status){<option [value]="status">{{ 'attendance.status.' + status | translate }}</option>}</select></label>
+  </div>
+
+  @if (fromDate() > toDate()) { <div class="error-banner" role="alert"><mat-icon>error</mat-icon>{{ 'attendance.invalid-range' | translate }}</div> }
+  @if (store.error()) { <div class="error-banner" role="alert"><mat-icon>error</mat-icon>{{ store.error() }}</div> }
+  @if (store.loading()) { <mat-progress-bar mode="indeterminate"/> }
+
+  @if (fromDate() <= toDate()) {
+    <div class="summary-grid">
+      <article class="summary-card"><span>{{ 'attendance.summary.punctuality' | translate }}</span><strong>{{ punctuality() | number:'1.1-1' }} %</strong><small>{{ employeeCount() }} {{ 'attendance.summary.records' | translate }}</small></article>
+      <article class="summary-card"><span>{{ 'attendance.summary.lates' | translate }}</span><strong>{{ latenessCount() }}</strong><small>{{ 'attendance.summary.period' | translate }}</small></article>
+      <article class="summary-card"><span>{{ 'attendance.summary.absences' | translate }}</span><strong>{{ absenceCount() }}</strong><small>{{ justifiedCount() }} {{ 'attendance.summary.justified' | translate }}</small></article>
+      <article class="summary-card"><span>{{ 'attendance.summary.overtime' | translate }}</span><strong>{{ hours(overtime()) }}</strong><small>{{ 'attendance.summary.accumulated' | translate }}</small></article>
+    </div>
+
+    @if (periodRecords().length) {
+      <div class="table-card">
+        <table mat-table [dataSource]="pageRows()">
+          <ng-container matColumnDef="employee"><th mat-header-cell *matHeaderCellDef>{{ 'attendance.employee' | translate }}</th><td mat-cell *matCellDef="let row"><span class="person"><span class="avatar">{{ initials(row.employeeName) }}</span><span class="cell-strong">{{ row.employeeName }}</span></span></td></ng-container>
+          <ng-container matColumnDef="date"><th mat-header-cell *matHeaderCellDef>{{ 'attendance.date' | translate }}</th><td mat-cell *matCellDef="let row">{{ row.record.workDate | slice:8:10 }}/{{ row.record.workDate | slice:5:7 }}/{{ row.record.workDate | slice:0:4 }}</td></ng-container>
+          <ng-container matColumnDef="checkIn"><th mat-header-cell *matHeaderCellDef>{{ 'attendance.check-in' | translate }}</th><td mat-cell *matCellDef="let row">{{ row.record.checkInTime || '—' }}</td></ng-container>
+          <ng-container matColumnDef="checkOut"><th mat-header-cell *matHeaderCellDef>{{ 'attendance.check-out' | translate }}</th><td mat-cell *matCellDef="let row">{{ row.record.checkOutTime || '—' }}</td></ng-container>
+          <ng-container matColumnDef="workedHours"><th mat-header-cell *matHeaderCellDef>{{ 'attendance.worked-hours' | translate }}</th><td mat-cell *matCellDef="let row">{{ hours(row.record.workedHours) }}</td></ng-container>
+          <ng-container matColumnDef="status"><th mat-header-cell *matHeaderCellDef>{{ 'attendance.status.label' | translate }}</th><td mat-cell *matCellDef="let row"><span class="status-pill status-{{statusClass(row.record.status)}}">{{ statusLabel(row.record.status) }}</span></td></ng-container>
+          <ng-container matColumnDef="actions"><th mat-header-cell *matHeaderCellDef>{{ 'attendance.actions' | translate }}</th><td mat-cell *matCellDef="let row"><button class="icon-action" type="button" (click)="openJustification(row)" [attr.aria-label]="'attendance.justify' | translate"><mat-icon>edit</mat-icon></button></td></ng-container>
+          <tr mat-header-row *matHeaderRowDef="columns"></tr><tr mat-row *matRowDef="let row; columns: columns"></tr>
+        </table>
+      </div>
+      <nav class="pagination"><span class="muted">{{ 'attendance.range' | translate:{start:rangeStart(),end:rangeEnd(),total:periodRecords().length} }}</span><span class="spacer"></span><button class="page-button" type="button" [disabled]="page()===0" (click)="page.set(page()-1)">{{'attendance.previous'|translate}}</button>@for(i of pages();track i){<button class="page-button" [class.current]="i===page()" type="button" (click)="page.set(i)">{{i+1}}</button>}<button class="page-button" type="button" [disabled]="page()>=pageCount()-1" (click)="page.set(page()+1)">{{'attendance.next'|translate}}</button></nav>
+    } @else {
+      <div class="card empty-state"><span class="empty-icon"><mat-icon>search</mat-icon></span><h2 class="empty-title">{{ 'attendance.empty.title' | translate }}</h2><p>{{ 'attendance.empty.content' | translate }}</p><button mat-stroked-button type="button" (click)="clearFilters()">{{ 'attendance.clear-filters' | translate }}</button></div>
+    }
+  }
+</section>

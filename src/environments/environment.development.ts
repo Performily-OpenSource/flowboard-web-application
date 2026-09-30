@@ -16,4 +16,7 @@ export const environment = {
   platformProviderVacationBalancesEndpointPath: '/vacation-balances',
   platformProviderPayrollPeriodsEndpointPath: '/payroll-periods',
   platformProviderPayslipsEndpointPath: '/payslips',
+  platformProviderAttendanceRecordsEndpointPath: '/attendance-records',
+  platformProviderWorkSchedulesEndpointPath: '/work-schedules',
+  platformProviderPunchesEndpointPath: '/punches',
 };
