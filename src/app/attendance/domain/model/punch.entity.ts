@@ -4,12 +4,14 @@ import type {PunchType} from './attendance-record.entity';
 export class Punch implements BaseEntity {
   private _id: number;
   private _employeeId: number;
+  private _attendanceRecordId: number;
   private _punchedAt: string;
   private _type: PunchType;
 
-  constructor(props: { id: number; employeeId: number; punchedAt: string; type: PunchType }) {
+  constructor(props: { id: number; employeeId: number; attendanceRecordId: number; punchedAt: string; type: PunchType }) {
     this._id = props.id;
     this._employeeId = props.employeeId;
+    this._attendanceRecordId = props.attendanceRecordId;
     this._punchedAt = props.punchedAt;
     this._type = props.type;
   }
@@ -18,6 +20,8 @@ export class Punch implements BaseEntity {
   set id(value: number) { this._id = value; }
   get employeeId(): number { return this._employeeId; }
   set employeeId(value: number) { this._employeeId = value; }
+  get attendanceRecordId(): number { return this._attendanceRecordId; }
+  set attendanceRecordId(value: number) { this._attendanceRecordId = value; }
   get punchedAt(): string { return this._punchedAt; }
   set punchedAt(value: string) { this._punchedAt = value; }
   get type(): PunchType { return this._type; }

@@ -13,7 +13,7 @@ export class AttendanceRecord implements BaseEntity {
   private _workDate: string;
   private _checkInTime: string | null;
   private _checkOutTime: string | null;
-  private _workedHours: number | null;
+  private _effectiveHours: number | null;
   private _overtimeHours: number | null;
   private _status: AttendanceStatus;
   private _justificationReason: string | null;
@@ -25,7 +25,7 @@ export class AttendanceRecord implements BaseEntity {
     workDate: string;
     checkInTime?: string | null;
     checkOutTime?: string | null;
-    workedHours?: number | null;
+    effectiveHours?: number | null;
     overtimeHours?: number | null;
     status: AttendanceStatus;
     justificationReason?: string | null;
@@ -36,7 +36,7 @@ export class AttendanceRecord implements BaseEntity {
     this._workDate = props.workDate;
     this._checkInTime = props.checkInTime ?? null;
     this._checkOutTime = props.checkOutTime ?? null;
-    this._workedHours = props.workedHours ?? null;
+    this._effectiveHours = props.effectiveHours ?? null;
     this._overtimeHours = props.overtimeHours ?? null;
     this._status = props.status;
     this._justificationReason = props.justificationReason ?? null;
@@ -53,8 +53,8 @@ export class AttendanceRecord implements BaseEntity {
   set checkInTime(value: string | null) { this._checkInTime = value; }
   get checkOutTime(): string | null { return this._checkOutTime; }
   set checkOutTime(value: string | null) { this._checkOutTime = value; }
-  get workedHours(): number | null { return this._workedHours; }
-  set workedHours(value: number | null) { this._workedHours = value; }
+  get effectiveHours(): number | null { return this._effectiveHours; }
+  set effectiveHours(value: number | null) { this._effectiveHours = value; }
   get overtimeHours(): number | null { return this._overtimeHours; }
   set overtimeHours(value: number | null) { this._overtimeHours = value; }
   get status(): AttendanceStatus { return this._status; }
@@ -79,10 +79,10 @@ export class AttendanceRecord implements BaseEntity {
     const checkOutTime = checkOut.punchedAt.slice(11, 16);
     const start = AttendanceRecord.toMinutes(checkInTime);
     const end = AttendanceRecord.toMinutes(checkOutTime);
-    const workedHours = Math.max(0, (end - start) / 60 - 1);
-    const overtimeHours = Math.max(0, workedHours - schedule.expectedHours());
+    const effectiveHours = Math.max(0, (end - start) / 60 - 1);
+    const overtimeHours = Math.max(0, effectiveHours - schedule.expectedHours());
     const status: AttendanceStatus = schedule.isLate(checkInTime) ? 'LATE' : 'ON_TIME';
-    return new AttendanceRecord({ id, employeeId, workDate, checkInTime, checkOutTime, workedHours, overtimeHours, status });
+    return new AttendanceRecord({ id, employeeId, workDate, checkInTime, checkOutTime, effectiveHours, overtimeHours, status });
   }
 
   private static toMinutes(time: string): number {
