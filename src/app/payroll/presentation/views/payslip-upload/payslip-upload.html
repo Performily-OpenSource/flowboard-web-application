@@ -1,36 +1,43 @@
 <section class="page upload-page">
-  <button class="back-link" type="button" (click)="goBack()"><mat-icon>arrow_back</mat-icon>Volver a boletas</button>
   <button class="back-link" type="button" (click)="goBack()"><mat-icon>arrow_back</mat-icon>{{ 'payroll.upload-page-ui.back' | translate }}</button>
   <div class="upload-layout">
     <div class="main-column">
-      <header class="page-header upload-header"><div><h1 class="page-title">Cargar boletas del periodo</h1><p class="page-subtitle">Sube los archivos que emitió tu sistema de planilla. Flowboard los asocia por documento de identidad.</p></div></header>
+      <header class="page-header upload-header">
+        <div>
+          <h1 class="page-title">{{ 'payroll.upload-page-ui.title' | translate }}</h1>
+          <p class="page-subtitle">{{ 'payroll.upload-page-ui.subtitle' | translate }}</p>
+        </div>
+      </header>
       <div class="upload-card card">
         <div class="filters">
-          <label class="field"><span>PERIODO</span><select [value]="selectedPeriodId()" (change)="onPeriodChange($any($event.target).value)">@for (period of store.periods(); track period.id) {<option [value]="period.id">{{ period.label() }}</option>}</select><mat-icon>expand_more</mat-icon></label>
-          <label class="field"><span>TIPO DE DOCUMENTO</span><select [value]="documentType()" (change)="onDocumentTypeChange($any($event.target).value)"><option value="PAYSLIP">Boleta de pago</option></select><mat-icon>expand_more</mat-icon></label>
+          <label class="field"><span>{{ 'payroll.upload-page-ui.period' | translate }}</span><select [value]="effectivePeriodId()" (change)="onPeriodChange($any($event.target).value)">@for (period of store.periods(); track period.id) {<option [value]="period.id">{{ period.label() }}</option>}</select><mat-icon>expand_more</mat-icon></label>
+          <label class="field"><span>{{ 'payroll.upload-page-ui.document-type' | translate }}</span><select [value]="documentType()" (change)="onDocumentTypeChange($any($event.target).value)"><option value="PAYSLIP">{{ 'payroll.upload-page-ui.payslip' | translate }}</option></select><mat-icon>expand_more</mat-icon></label>
         </div>
         <div class="dropzone" [class.dragging]="dragging()" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
-          <mat-icon class="upload-icon">file_upload</mat-icon><strong>Arrastra los archivos o busca en tu equipo</strong><p>Un PDF por colaborador, con el documento de identidad en el nombre del archivo. Hasta 500 archivos por carga.</p>
-          <label class="browse-button">Buscar archivos<input type="file" accept="application/pdf,.pdf" multiple (change)="onFileChange($event)" /></label>
+          <mat-icon class="upload-icon">file_upload</mat-icon>
+          <strong>{{ 'payroll.upload-page-ui.drop-title' | translate }}</strong>
+          <p>{{ 'payroll.upload-page-ui.drop-description' | translate }}</p>
+          <label class="browse-button">{{ 'payroll.upload-page-ui.browse' | translate }}<input type="file" accept="application/pdf,.pdf" multiple (change)="onFileChange($event)" /></label>
         </div>
-        <div class="list-heading"><h2>Archivos listos para cargar</h2><span>{{ files().length }} seleccionados</span></div>
+        <div class="list-heading"><h2>{{ 'payroll.upload-page-ui.ready' | translate }}</h2><span>{{ files().length }} {{ 'payroll.upload-page-ui.selected' | translate }}</span></div>
         <div class="file-list">
           @for (item of files(); track item.file.name) {
             <article class="file-row" [class.unrecognized]="item.status === 'unrecognized'">
-              <div class="file-icon"><mat-icon>description</mat-icon></div><div class="file-info"><strong>{{ item.file.name }}</strong><span>{{ item.status === 'recognized' ? employeeName(item.employeeId) : 'Sin coincidencia' }} · {{ fileSize(item.file) }}</span></div>
-              <span class="status" [class.ok]="item.status === 'recognized'" [class.error]="item.status === 'unrecognized'">{{ item.status === 'recognized' ? 'Reconocido' : 'No reconocido' }}</span>
-              <button class="remove-button" type="button" (click)="removeFile(item)" aria-label="Quitar archivo"><mat-icon>close</mat-icon></button>
+              <div class="file-icon"><mat-icon>description</mat-icon></div>
+              <div class="file-info"><strong>{{ item.file.name }}</strong><span>{{ item.status === 'recognized' ? employeeName(item.employeeId) : ('payroll.upload-page-ui.no-match' | translate) }} · {{ fileSize(item.file) }}</span></div>
+              <span class="status" [class.ok]="item.status === 'recognized'" [class.error]="item.status === 'unrecognized'">{{ item.status === 'recognized' ? ('payroll.upload-page-ui.recognized' | translate) : ('payroll.upload-page-ui.unrecognized' | translate) }}</span>
+              <button class="remove-button" type="button" (click)="removeFile(item)" [attr.aria-label]="'payroll.upload-page-ui.remove' | translate"><mat-icon>close</mat-icon></button>
             </article>
-          } @empty {<div class="empty-list"><mat-icon>description</mat-icon><span>Aún no has seleccionado archivos.</span></div>}
+          } @empty {<div class="empty-list"><mat-icon>description</mat-icon><span>{{ 'payroll.upload-page-ui.empty' | translate }}</span></div>}
         </div>
         @if (error()) {<div class="message error-message" role="alert"><mat-icon>error_outline</mat-icon><span>{{ error() }}</span></div>}
         @if (success()) {<div class="message success-message" role="status"><mat-icon>check_circle</mat-icon><span>{{ success() }}</span></div>}
-        <footer class="upload-actions"><button mat-stroked-button type="button" (click)="goBack()">Cancelar</button><button mat-flat-button type="button" [disabled]="uploading() || !files().length" (click)="upload()"><mat-icon>file_upload</mat-icon>{{ uploading() ? 'Cargando…' : 'Cargar ' + recognizedCount() + (recognizedCount() === 1 ? ' boleta' : ' boletas') }}</button></footer>
+        <footer class="upload-actions"><button mat-stroked-button type="button" (click)="goBack()">{{ 'payroll.upload-page-ui.cancel' | translate }}</button><button mat-flat-button type="button" [disabled]="uploading() || !files().length" (click)="upload()"><mat-icon>file_upload</mat-icon>{{ uploading() ? ('payroll.upload-page-ui.loading' | translate) : ('payroll.upload-page-ui.upload' | translate) + ' ' + recognizedCount() + (recognizedCount() === 1 ? ' ' + ('payroll.upload-page-ui.payslip-singular' | translate) : ' ' + ('payroll.upload-page-ui.payslip-plural' | translate)) }}</button></footer>
       </div>
     </div>
     <aside class="side-column">
-      <section class="summary-card card"><h2>Resumen de la carga</h2><dl><div><dt>Archivos seleccionados</dt><dd>{{ files().length }}</dd></div><div><dt>Reconocidos</dt><dd>{{ recognizedCount() }}</dd></div><div class="danger-row"><dt>Sin coincidencia</dt><dd>{{ unrecognizedCount() }}</dd></div><div><dt>Colaboradores sin boleta</dt><dd>{{ employeesWithoutPayslip() }}</dd></div></dl></section>
-      <section class="summary-card card association-card"><h2>Cómo se asocian</h2><p>El nombre del archivo debe empezar con el documento de identidad del colaborador. El resto del nombre es libre.</p><div class="examples"><span>45872136_agosto.pdf</span><span>41236587_boleta-08-2026.pdf</span></div></section>
+      <section class="summary-card card"><h2>{{ 'payroll.upload-page-ui.summary' | translate }}</h2><dl><div><dt>{{ 'payroll.upload-page-ui.selected-files' | translate }}</dt><dd>{{ files().length }}</dd></div><div><dt>{{ 'payroll.upload-page-ui.recognized-files' | translate }}</dt><dd>{{ recognizedCount() }}</dd></div><div class="danger-row"><dt>{{ 'payroll.upload-page-ui.unrecognized-files' | translate }}</dt><dd>{{ unrecognizedCount() }}</dd></div><div><dt>{{ 'payroll.upload-page-ui.missing-payslips' | translate }}</dt><dd>{{ employeesWithoutPayslip() }}</dd></div></dl></section>
+      <section class="summary-card card association-card"><h2>{{ 'payroll.upload-page-ui.association-title' | translate }}</h2><p>{{ 'payroll.upload-page-ui.association-description' | translate }}</p><div class="examples"><span>45872136_agosto.pdf</span><span>41236587_boleta-08-2026.pdf</span></div></section>
     </aside>
   </div>
 </section>
