@@ -2,7 +2,7 @@ import {BaseAssembler} from '../../shared/infrastructure/base-assembler';
 import {Role} from '../domain/model/role.entity';
 import {RoleResource, RolesResponse} from './roles-response';
 
-export class RoleAssembler extends BaseAssembler<Role, RoleResource, RolesResponse> {
+export class RoleAssembler implements BaseAssembler<Role, RoleResource, RolesResponse> {
   toEntityFromResource(resource: RoleResource): Role {
     return new Role(resource);
   }

@@ -2,7 +2,7 @@ import {BaseAssembler} from '../../shared/infrastructure/base-assembler';
 import {UserAccount} from '../domain/model/user-account.entity';
 import {UserAccountResource, UserAccountsResponse} from './user-accounts-response';
 
-export class UserAccountAssembler extends BaseAssembler<UserAccount, UserAccountResource, UserAccountsResponse> {
+export class UserAccountAssembler implements BaseAssembler<UserAccount, UserAccountResource, UserAccountsResponse> {
   toEntityFromResource(resource: UserAccountResource): UserAccount {
     return new UserAccount(resource);
   }
