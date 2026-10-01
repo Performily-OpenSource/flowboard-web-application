@@ -11,6 +11,10 @@
       </p>
     </div>
     <div class="page-actions">
+      <a mat-stroked-button routerLink="/workspace/accounts">
+        <mat-icon>manage_accounts</mat-icon>
+        {{ 'employees.accounts' | translate }}
+      </a>
       <button mat-stroked-button (click)="exportEmployees()">
         <mat-icon>upload</mat-icon>
         {{ 'employees.export' | translate }}
