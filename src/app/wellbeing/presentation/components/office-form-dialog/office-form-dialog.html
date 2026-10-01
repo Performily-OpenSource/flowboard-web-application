@@ -1,8 +1,46 @@
 <form class="dialog" [formGroup]="form" (ngSubmit)="save()" novalidate>
-  <header class="dialog-header"><h2 mat-dialog-title class="dialog-title">{{ 'wellbeing.office-dialog.title' | translate }}</h2><button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'wellbeing.close' | translate"><mat-icon>close</mat-icon></button></header>
-  <p class="dialog-subtitle">{{ 'wellbeing.office-dialog.subtitle' | translate }}</p>
-  <div class="field"><label for="office-name">{{ 'wellbeing.office-dialog.name' | translate }}</label><input id="office-name" class="input" formControlName="name" [class.invalid]="form.controls.name.invalid && form.controls.name.touched" [placeholder]="'wellbeing.office-dialog.name-placeholder' | translate">@if (form.controls.name.invalid && form.controls.name.touched) {<p class="field-error">{{ 'wellbeing.office-dialog.name-required' | translate }}</p>} @if (store.error() === 'wellbeing.office-dialog.duplicate') {<p class="field-error">{{ 'wellbeing.office-dialog.duplicate' | translate }}</p>}</div>
-  <div class="field"><label for="office-building">{{ 'wellbeing.office-dialog.site' | translate }}</label><select id="office-building" class="input" formControlName="building">@for (building of buildings(); track building) {<option [value]="building">{{ building }}</option>}</select></div>
-  <div class="field-grid"><div class="field"><label for="office-floor">{{ 'wellbeing.office-dialog.floor' | translate }}</label><input id="office-floor" class="input" formControlName="floor"></div><div class="field"><label for="office-reference">{{ 'wellbeing.office-dialog.capacity' | translate }}</label><input id="office-reference" class="input" formControlName="reference" [placeholder]="'wellbeing.office-dialog.capacity-placeholder' | translate"></div></div>
-  <div class="dialog-actions"><button mat-stroked-button type="button" mat-dialog-close>{{ 'wellbeing.office-dialog.cancel' | translate }}</button><button mat-flat-button type="submit">{{ 'wellbeing.office-dialog.save' | translate }}</button></div>
+    <header class="dialog-header">
+        <h2 mat-dialog-title class="dialog-title">{{ 'wellbeing.office-dialog.title' | translate }}</h2>
+        <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'wellbeing.close' | translate">
+            <mat-icon>close</mat-icon>
+        </button>
+    </header>
+    
+    <p class="dialog-subtitle">{{ 'wellbeing.office-dialog.subtitle' | translate }}</p>
+    
+    <div class="field">
+        <label for="office-name">{{ 'wellbeing.office-dialog.name' | translate }}</label>
+        <input id="office-name" class="input" formControlName="name" [class.invalid]="form.controls.name.invalid && form.controls.name.touched" [placeholder]="'wellbeing.office-dialog.name-placeholder' | translate">
+        @if (form.controls.name.invalid && form.controls.name.touched) {
+            <p class="field-error">{{ 'wellbeing.office-dialog.name-required' | translate }}</p>
+        } 
+        @if (store.error() === 'wellbeing.office-dialog.duplicate') {
+            <p class="field-error">{{ 'wellbeing.office-dialog.duplicate' | translate }}</p>
+        }
+    </div>
+    
+    <div class="field">
+        <label for="office-building">{{ 'wellbeing.office-dialog.site' | translate }}</label>
+        <select id="office-building" class="input" formControlName="building">
+            @for (building of buildings(); track building) {
+                <option [value]="building">{{ building }}</option>
+            }
+        </select>
+    </div>
+    
+    <div class="field-grid">
+        <div class="field">
+            <label for="office-floor">{{ 'wellbeing.office-dialog.floor' | translate }}</label>
+            <input id="office-floor" class="input" formControlName="floor">
+        </div>
+        <div class="field">
+            <label for="office-reference">{{ 'wellbeing.office-dialog.capacity' | translate }}</label>
+            <input id="office-reference" class="input" formControlName="reference" [placeholder]="'wellbeing.office-dialog.capacity-placeholder' | translate">
+        </div>
+    </div>
+    
+    <div class="dialog-actions">
+        <button mat-stroked-button type="button" mat-dialog-close>{{ 'wellbeing.office-dialog.cancel' | translate }}</button>
+        <button mat-flat-button type="submit">{{ 'wellbeing.office-dialog.save' | translate }}</button>
+    </div>
 </form>
