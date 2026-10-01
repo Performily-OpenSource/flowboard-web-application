@@ -4638,5 +4638,186 @@
         }
       ]
     }
-  ]
+  ],
+  "roles": [
+    {
+      "id": 1,
+      "name": "HR_STAFF"
+    },
+    {
+      "id": 2,
+      "name": "EMPLOYEE"
+    }
+  ],
+  "user-accounts": [
+    {
+      "id": 1,
+      "employeeId": 1,
+      "username": "maria.quispe@flowboard.pe",
+      "passwordHash": "sha256$1d707811988069ca760826861d6d63a10e8c3b7f171c4441a6472ea58c11711b",
+      "role": "HR_STAFF",
+      "status": "ACTIVE",
+      "mustChangePassword": false,
+      "lastSignInAt": "2026-09-30T12:20:00.000Z",
+      "createdAt": "2019-03-01T09:00:00.000Z",
+      "updatedAt": "2026-09-30T12:20:00.000Z"
+    },
+    {
+      "id": 2,
+      "employeeId": 2,
+      "username": "jorge.salazar@flowboard.pe",
+      "passwordHash": "sha256$04f07ba491e9c534b93153ae4a1df943a52bec3d9da788bf8d0729d9a63c1043",
+      "role": "EMPLOYEE",
+      "status": "ACTIVE",
+      "mustChangePassword": true,
+      "lastSignInAt": null,
+      "createdAt": "2020-06-15T09:00:00.000Z",
+      "updatedAt": "2026-09-30T12:20:00.000Z"
+    },
+    {
+      "id": 3,
+      "employeeId": 3,
+      "username": "lucia.fernandez@flowboard.pe",
+      "passwordHash": "sha256$1d707811988069ca760826861d6d63a10e8c3b7f171c4441a6472ea58c11711b",
+      "role": "EMPLOYEE",
+      "status": "ACTIVE",
+      "mustChangePassword": false,
+      "lastSignInAt": "2026-09-30T12:20:00.000Z",
+      "createdAt": "2024-02-01T09:00:00.000Z",
+      "updatedAt": "2026-09-30T12:20:00.000Z"
+    },
+    {
+      "id": 4,
+      "employeeId": 4,
+      "username": "carlos.mendoza@flowboard.pe",
+      "passwordHash": "sha256$1d707811988069ca760826861d6d63a10e8c3b7f171c4441a6472ea58c11711b",
+      "role": "HR_STAFF",
+      "status": "ACTIVE",
+      "mustChangePassword": false,
+      "lastSignInAt": "2026-09-30T12:20:00.000Z",
+      "createdAt": "2022-08-01T09:00:00.000Z",
+      "updatedAt": "2026-09-30T12:20:00.000Z"
+    },
+    {
+      "id": 5,
+      "employeeId": 5,
+      "username": "ana.ramirez@flowboard.pe",
+      "passwordHash": "sha256$1d707811988069ca760826861d6d63a10e8c3b7f171c4441a6472ea58c11711b",
+      "role": "EMPLOYEE",
+      "status": "DISABLED",
+      "mustChangePassword": false,
+      "lastSignInAt": null,
+      "createdAt": "2021-05-10T09:00:00.000Z",
+      "updatedAt": "2026-09-30T12:20:00.000Z"
+    },
+    {
+      "id": 6,
+      "employeeId": 6,
+      "username": "diego.torres@flowboard.pe",
+      "passwordHash": "sha256$1d707811988069ca760826861d6d63a10e8c3b7f171c4441a6472ea58c11711b",
+      "role": "EMPLOYEE",
+      "status": "ACTIVE",
+      "mustChangePassword": false,
+      "lastSignInAt": "2026-09-30T12:20:00.000Z",
+      "createdAt": "2025-03-01T09:00:00.000Z",
+      "updatedAt": "2026-09-30T12:20:00.000Z"
+    },
+    {
+      "id": 7,
+      "employeeId": 7,
+      "username": "luis.ramos@flowboard.pe",
+      "passwordHash": "sha256$1d707811988069ca760826861d6d63a10e8c3b7f171c4441a6472ea58c11711b",
+      "role": "EMPLOYEE",
+      "status": "ACTIVE",
+      "mustChangePassword": false,
+      "lastSignInAt": "2026-09-30T12:20:00.000Z",
+      "createdAt": "2023-01-10T09:00:00.000Z",
+      "updatedAt": "2026-09-30T12:20:00.000Z"
+    },
+    {
+      "id": 8,
+      "employeeId": 8,
+      "username": "ana.quispe@flowboard.pe",
+      "passwordHash": "sha256$1d707811988069ca760826861d6d63a10e8c3b7f171c4441a6472ea58c11711b",
+      "role": "EMPLOYEE",
+      "status": "ACTIVE",
+      "mustChangePassword": false,
+      "lastSignInAt": "2026-09-30T12:20:00.000Z",
+      "createdAt": "2022-01-10T09:00:00.000Z",
+      "updatedAt": "2026-09-30T12:20:00.000Z"
+    },
+    {
+      "id": 9,
+      "employeeId": 9,
+      "username": "carla.mendoza@flowboard.pe",
+      "passwordHash": "sha256$1d707811988069ca760826861d6d63a10e8c3b7f171c4441a6472ea58c11711b",
+      "role": "EMPLOYEE",
+      "status": "ACTIVE",
+      "mustChangePassword": false,
+      "lastSignInAt": "2026-09-30T12:20:00.000Z",
+      "createdAt": "2022-04-11T09:00:00.000Z",
+      "updatedAt": "2026-09-30T12:20:00.000Z"
+    },
+    {
+      "id": 10,
+      "employeeId": 10,
+      "username": "jorge.salas@flowboard.pe",
+      "passwordHash": "sha256$1d707811988069ca760826861d6d63a10e8c3b7f171c4441a6472ea58c11711b",
+      "role": "EMPLOYEE",
+      "status": "ACTIVE",
+      "mustChangePassword": false,
+      "lastSignInAt": "2026-09-30T12:20:00.000Z",
+      "createdAt": "2021-05-10T09:00:00.000Z",
+      "updatedAt": "2026-09-30T12:20:00.000Z"
+    },
+    {
+      "id": 11,
+      "employeeId": 11,
+      "username": "rosa.diaz@flowboard.pe",
+      "passwordHash": "sha256$1d707811988069ca760826861d6d63a10e8c3b7f171c4441a6472ea58c11711b",
+      "role": "EMPLOYEE",
+      "status": "ACTIVE",
+      "mustChangePassword": false,
+      "lastSignInAt": "2026-09-30T12:20:00.000Z",
+      "createdAt": "2020-08-03T09:00:00.000Z",
+      "updatedAt": "2026-09-30T12:20:00.000Z"
+    },
+    {
+      "id": 12,
+      "employeeId": 12,
+      "username": "marta.ruiz@flowboard.pe",
+      "passwordHash": "sha256$1d707811988069ca760826861d6d63a10e8c3b7f171c4441a6472ea58c11711b",
+      "role": "EMPLOYEE",
+      "status": "ACTIVE",
+      "mustChangePassword": false,
+      "lastSignInAt": "2026-09-30T12:20:00.000Z",
+      "createdAt": "2019-08-05T09:00:00.000Z",
+      "updatedAt": "2026-09-30T12:20:00.000Z"
+    },
+    {
+      "id": 13,
+      "employeeId": 13,
+      "username": "pedro.chavez@flowboard.pe",
+      "passwordHash": "sha256$1d707811988069ca760826861d6d63a10e8c3b7f171c4441a6472ea58c11711b",
+      "role": "HR_STAFF",
+      "status": "ACTIVE",
+      "mustChangePassword": false,
+      "lastSignInAt": "2026-09-30T12:20:00.000Z",
+      "createdAt": "2021-11-01T09:00:00.000Z",
+      "updatedAt": "2026-09-30T12:20:00.000Z"
+    },
+    {
+      "id": 14,
+      "employeeId": 14,
+      "username": "henry.cabrera@flowboard.pe",
+      "passwordHash": "sha256$1d707811988069ca760826861d6d63a10e8c3b7f171c4441a6472ea58c11711b",
+      "role": "EMPLOYEE",
+      "status": "ACTIVE",
+      "mustChangePassword": false,
+      "lastSignInAt": "2026-09-30T12:20:00.000Z",
+      "createdAt": "2018-03-12T09:00:00.000Z",
+      "updatedAt": "2026-09-30T12:20:00.000Z"
+    }
+  ],
+  "revoked-tokens": []
 }
