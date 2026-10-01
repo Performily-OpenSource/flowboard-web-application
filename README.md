@@ -54,10 +54,23 @@ npx json-server --watch server/db.json --routes server/routes.json --port 3000
 With the fake API running, start a local development server:
 
 ```bash
-ng serve
+npm start
 ```
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+
+## Users
+To use the web application, you can log in with the following usernames.
+
+```
+For rrhh: 
+    user: maria.quispe@flowboard.pe 
+    password: Password1! 
+
+For collaborator:
+    user: lucia.fernandez@flowboard.pe 
+    password: Password1! 
+```
 
 ## Building
 
