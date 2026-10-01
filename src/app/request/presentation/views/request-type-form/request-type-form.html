@@ -164,8 +164,8 @@
       <h2 class="card-title">{{ 'request-type-form.preview' | translate }}</h2>
       <p class="muted">{{ 'request-type-form.preview-hint' | translate }}</p>
       <div class="preview-box">
-        @for (item of preview(); track item.field.key) {
-          <app-dynamic-field [field]="item.field" [control]="item.control" idPrefix="preview"/>
+        @for (field of preview().fields; track field.key) {
+          <app-dynamic-field [field]="field" [form]="preview().form" idPrefix="preview"/>
         }
         @if (requiresAttachment()) {
           <div class="upload-preview">

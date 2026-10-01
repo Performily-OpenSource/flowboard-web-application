@@ -1,6 +1,6 @@
 import {Component, computed, effect, inject, signal, untracked} from '@angular/core';
 import {toSignal} from '@angular/core/rxjs-interop';
-import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
@@ -69,10 +69,15 @@ export class RequestTypeForm extends BaseForm {
   readonly requiresAttachment = computed(() => !!this.formValue().requiresAttachment);
   readonly deductsBalance = computed(() => !!this.formValue().deductsBalance);
 
-  readonly preview = computed(() => this.fields().map((draft, index) => ({
-    field: new RequestField({ id: index + 1, key: draft.key, label: draft.label, dataType: draft.dataType, required: draft.required, displayOrder: index + 1 }),
-    control: new FormControl<string>({ value: '', disabled: true }, { nonNullable: true })
-  })));
+  /** Disabled form that shows how the fields will look for the employee. */
+  readonly preview = computed(() => {
+    const fields = this.fields().map((draft, index) => new RequestField({
+      id: index + 1, key: draft.key, label: draft.label, dataType: draft.dataType, required: draft.required, displayOrder: index + 1
+    }));
+    const controls: Record<string, FormControl<string>> = {};
+    fields.forEach(field => controls[field.key] = new FormControl<string>({ value: '', disabled: true }, { nonNullable: true }));
+    return { fields, form: new FormGroup(controls) };
+  });
 
   readonly nameTaken = computed(() => {
     const name = this.formValue().name ?? '';
