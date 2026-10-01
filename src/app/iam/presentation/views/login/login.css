@@ -1,5 +1,6 @@
 :host { display:block; min-height:100vh; }
-.auth-shell { min-height:100vh; display:grid; grid-template-columns:43% 57%; background:#f8f9fc; }
+.auth-shell { position:fixed; inset:0; width:100vw; height:100vh; min-height:100vh; overflow:auto; z-index:1000; }
+.auth-shell { display:grid; grid-template-columns:43% 57%; background:#f8f9fc; }
 .brand-panel { background:#3f6798; color:#fff; display:flex; align-items:center; padding:64px 11%; }
 .brand-copy { max-width:500px; }
 .brand { display:flex; align-items:center; gap:12px; font-size:25px; margin-bottom:38px; }
