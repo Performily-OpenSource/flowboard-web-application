@@ -1,2 +1,12 @@
-import {BaseAssembler} from '../../shared/infrastructure/base-assembler'; import {MetricThreshold} from '../domain/model/metric-threshold.entity'; import {ThresholdResource,MetricThresholdsResponse} from './metric-thresholds-response';
-export class MetricThresholdAssembler implements BaseAssembler<MetricThreshold,ThresholdResource,MetricThresholdsResponse>{toEntityFromResource(r:ThresholdResource):MetricThreshold{return new MetricThreshold(r.id,r.metricType,[]);}toResourceFromEntity(e:MetricThreshold):ThresholdResource{return{id:e.id,metricType:e.metricType};}toEntitiesFromResponse(r:MetricThresholdsResponse):MetricThreshold[]{return r.metricThresholds.map(x=>this.toEntityFromResource(x));}}
+import {BaseAssembler} from '../../shared/infrastructure/base-assembler'; 
+import {MetricThreshold} from '../domain/model/metric-threshold.entity'; 
+import {ThresholdResource,MetricThresholdsResponse} from './metric-thresholds-response';
+
+export class MetricThresholdAssembler implements BaseAssembler<MetricThreshold,ThresholdResource,MetricThresholdsResponse>{
+    toEntityFromResource(r:ThresholdResource):MetricThreshold{
+        return new MetricThreshold(r.id,r.metricType,[]);
+    }
+        toResourceFromEntity(e:MetricThreshold):ThresholdResource{return{
+            id:e.id,metricType:e.metricType};
+        }
+            toEntitiesFromResponse(r:MetricThresholdsResponse):MetricThreshold[]{return r.metricThresholds.map(x=>this.toEntityFromResource(x));}}
