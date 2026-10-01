@@ -1,0 +1,30 @@
+.page{padding:28px 28px 40px;box-sizing:border-box}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:22px}
+.page-title{margin:0 0 5px;font-size:22px;letter-spacing:-.4px}
+.page-subtitle{margin:0;color:#707782;font-size:13px}
+.page-header button{display:flex;gap:5px;align-items:center}
+.notice.info{display:flex;gap:8px;align-items:center;padding:12px 14px;background:#dce9fa;color:#315b8d;border-radius:7px;font-size:12px;margin-bottom:20px}
+.filters{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.filter{height:35px;border:1px solid #c7cfdb;border-radius:8px;background:#fff;padding:0 10px;display:flex;align-items:center;gap:6px;color:#4f5660;cursor:pointer}
+.filter mat-icon{font-size:18px}
+.spacer{flex:1}
+.count{font-size:12px;color:#6c7480}
+.table-card{border:1px solid #dfe3ea;border-radius:13px;overflow:hidden;background:#fff}
+.table-card table{width:100%;border-collapse:collapse}
+.table-card th{background:#f5f6fa;color:#5f6771;text-transform:uppercase;letter-spacing:.65px;font-size:11px;text-align:left;padding:13px 18px;font-weight:600}
+.table-card td{padding:13px 18px;border-top:1px solid #e3e6ec;font-size:13px;color:#4d555f}
+.person{display:flex;align-items:center;gap:10px;color:#252a31}
+.avatar{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#dce8f8;color:#315b8d;font-size:11px;font-weight:700}
+.role-pill,.status-pill{display:inline-flex;align-items:center;padding:4px 11px;border-radius:999px;background:#f0f2f6;color:#5d6470;font-size:11px}
+.role-pill.hr{background:#d7e5f8;color:#315b8d}
+.status-pill.active{background:#bfe1b8;color:#18361b}
+.status-pill.disabled{background:#ffc8c2;color:#6f1d1d}
+.icon-action{border:0;background:transparent;color:#626a75;cursor:pointer;vertical-align:middle;padding:5px}
+.icon-action mat-icon{font-size:20px}
+.error{display:flex;gap:8px;align-items:center;background:#ffd4ce;color:#a51d17;border-radius:7px;padding:11px 13px;margin-bottom:14px;font-size:12px}
+.empty{text-align:center;padding:40px;color:#727985}
+.table-card td:last-child{white-space:nowrap}@media(max-width:800px){.page{padding:20px 14px}
+.table-card{overflow:auto}
+.table-card table{min-width:760px}
+.page-header{align-items:stretch;flex-direction:column}
+.count{display:none}}
