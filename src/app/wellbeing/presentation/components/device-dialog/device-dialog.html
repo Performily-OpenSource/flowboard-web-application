@@ -1,6 +1,66 @@
 <div class="dialog">
-<header class="dialog-header"><div><h2 mat-dialog-title class="dialog-title">{{ 'wellbeing.device-dialog.title' | translate: {space: data.office.name} }}</h2><p class="dialog-subtitle">{{ 'wellbeing.device-dialog.subtitle' | translate }}</p></div><button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'wellbeing.close' | translate"><mat-icon>close</mat-icon></button></header>
-<section><h3>{{ 'wellbeing.device-dialog.linked' | translate }}</h3>@if (!linkedDevices().length){<p class="muted">{{ 'wellbeing.device-dialog.linked-empty' | translate }}</p>} @for (device of linkedDevices(); track device.id){<div class="device-row"><div><strong>{{device.code.value}}</strong><span>{{metrics(device)}}</span></div><button mat-stroked-button type="button" (click)="unlink(device)">{{ 'wellbeing.device-dialog.unlink' | translate }}</button></div>}</section>
-<section><h3>{{ 'wellbeing.device-dialog.inventory' | translate }}</h3>@if (!availableDevices().length){<p class="muted">{{ 'wellbeing.device-dialog.inventory-empty' | translate }}</p>} @for (device of availableDevices(); track device.id){<div class="device-row"><div><strong>{{device.code.value}}</strong><span>{{metrics(device)}}</span></div><button mat-flat-button type="button" (click)="link(device)">{{ 'wellbeing.device-dialog.link' | translate }}</button></div>}</section>
-<div class="divider"></div><section><h3>{{ 'wellbeing.device-dialog.register' | translate }}</h3><form [formGroup]="form" (ngSubmit)="registerAndLink()"><div class="field"><label for="device-code">{{ 'wellbeing.device-dialog.code' | translate }}</label><input id="device-code" class="input" formControlName="code" [placeholder]="'wellbeing.device-dialog.code-placeholder' | translate"></div><div class="checks"><label><input type="checkbox" formControlName="temperature"> {{ 'wellbeing.device-dialog.temperature' | translate }}</label><label><input type="checkbox" formControlName="illumination"> {{ 'wellbeing.device-dialog.illumination' | translate }}</label><label><input type="checkbox" formControlName="airQuality"> {{ 'wellbeing.device-dialog.air-quality' | translate }}</label></div><button mat-flat-button type="submit">{{ 'wellbeing.device-dialog.register-link' | translate }}</button></form></section>
-<div class="dialog-actions"><button mat-stroked-button type="button" mat-dialog-close>{{ 'wellbeing.device-dialog.close' | translate }}</button></div></div>
+    <header class="dialog-header">
+        <div>
+            <h2 mat-dialog-title class="dialog-title">{{ 'wellbeing.device-dialog.title' | translate: {space: data.office.name} }}</h2>
+            <p class="dialog-subtitle">{{ 'wellbeing.device-dialog.subtitle' | translate }}</p>
+        </div>
+        <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'wellbeing.close' | translate">
+            <mat-icon>close</mat-icon>
+        </button>
+    </header>
+    <section>
+        <h3>{{ 'wellbeing.device-dialog.linked' | translate }}</h3>
+        @if (!linkedDevices().length){
+            <p class="muted">{{ 'wellbeing.device-dialog.linked-empty' | translate }}</p>
+        } 
+        @for (device of linkedDevices(); track device.id){
+            <div class="device-row">
+                <div>
+                    <strong>{{device.code.value}}</strong>
+                    <span>{{metrics(device)}}</span>
+                </div>
+                <button mat-stroked-button type="button" (click)="unlink(device)">{{ 'wellbeing.device-dialog.unlink' | translate }}</button>
+            </div>
+        }
+    </section>
+    <section>
+        <h3>{{ 'wellbeing.device-dialog.inventory' | translate }}</h3>
+        @if (!availableDevices().length){
+            <p class="muted">{{ 'wellbeing.device-dialog.inventory-empty' | translate }}</p>
+        } 
+        @for (device of availableDevices(); track device.id){
+            <div class="device-row">
+                <div>
+                    <strong>{{device.code.value}}</strong>
+                    <span>{{metrics(device)}}</span>
+                </div>
+                <button mat-flat-button type="button" (click)="link(device)">{{ 'wellbeing.device-dialog.link' | translate }}</button>
+            </div>
+        }
+    </section>
+    <div class="divider"></div>
+    <section>
+        <h3>{{ 'wellbeing.device-dialog.register' | translate }}</h3>
+        <form [formGroup]="form" (ngSubmit)="registerAndLink()">
+            <div class="field">
+                <label for="device-code">{{ 'wellbeing.device-dialog.code' | translate }}</label>
+                <input id="device-code" class="input" formControlName="code" [placeholder]="'wellbeing.device-dialog.code-placeholder' | translate">
+            </div>
+            <div class="checks">
+                <label>
+                    <input type="checkbox" formControlName="temperature"> {{ 'wellbeing.device-dialog.temperature' | translate }}
+                </label>
+                <label>
+                    <input type="checkbox" formControlName="illumination"> {{ 'wellbeing.device-dialog.illumination' | translate }}
+                </label>
+                <label>
+                    <input type="checkbox" formControlName="airQuality"> {{ 'wellbeing.device-dialog.air-quality' | translate }}
+                </label>
+            </div>
+            <button mat-flat-button type="submit">{{ 'wellbeing.device-dialog.register-link' | translate }}</button>
+        </form>
+    </section>
+    <div class="dialog-actions">
+        <button mat-stroked-button type="button" mat-dialog-close>{{ 'wellbeing.device-dialog.close' | translate }}</button>
+    </div>
+</div>
