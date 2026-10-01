@@ -11,8 +11,8 @@
   @if (store.error()) { <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ store.error() }}</span></div> }
 
   <div class="filters-row">
-    <label class="select-filter active"><span>{{ 'my-payslips.year' | translate }}</span><select [value]="yearFilter()" (change)="setYear($any($event.target).value)">@for (year of years(); track year) { <option [value]="year">{{ 'my-payslips.year' | translate }}: {{ year }}</option> }</select><mat-icon>expand_more</mat-icon></label>
-    <label class="select-filter"><span>{{ 'payroll.period' | translate }}</span><select [value]="periodFilter() ?? ''" (change)="setPeriod($any($event.target).value)"><option value="">{{ 'my-payslips.all-periods' | translate }}</option>@for (period of store.periods(); track period.id) { @if (period.year === yearFilter()) { <option [value]="period.id">{{ period.label() }}</option> } }</select><mat-icon>expand_more</mat-icon></label>
+    <label class="select-filter active"><span>{{ 'my-payslips.year' | translate }}</span><select [value]="effectiveYear()" (change)="setYear($any($event.target).value)">@for (year of years(); track year) { <option [value]="year">{{ 'my-payslips.year' | translate }}: {{ year }}</option> }</select><mat-icon>expand_more</mat-icon></label>
+    <label class="select-filter"><span>{{ 'payroll.period' | translate }}</span><select [value]="periodFilter() ?? ''" (change)="setPeriod($any($event.target).value)"><option value="">{{ 'my-payslips.all-periods' | translate }}</option>@for (period of store.periods(); track period.id) { @if (period.periodYear === effectiveYear()) { <option [value]="period.id">{{ period.label() }}</option> } }</select><mat-icon>expand_more</mat-icon></label>
   </div>
 
   <div class="table-card">

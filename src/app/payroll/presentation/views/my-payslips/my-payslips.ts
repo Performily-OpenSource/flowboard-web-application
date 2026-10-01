@@ -22,14 +22,15 @@ export class MyPayslips {
   readonly store = inject(PayrollStore);
   private readonly dialog = inject(MatDialog);
   readonly columns = ['period', 'issueDate', 'netAmount', 'status', 'actions'];
-  readonly yearFilter = signal(2026);
+  readonly yearFilter = signal<number | null>(null);
   readonly periodFilter = signal<number | null>(null);
   readonly page = signal(0);
-  readonly years = computed(() => [...new Set(this.store.periods().map(period => period.year))].sort((a, b) => b - a));
-  readonly filteredPayslips = computed(() => this.store.visiblePayslipsForEmployee(this.store.currentEmployeeId)
+  readonly years = computed(() => [...new Set(this.store.periods().map(period => period.periodYear))].sort((a, b) => b - a));
+  readonly effectiveYear = computed(() => this.yearFilter() ?? this.years()[0] ?? new Date().getFullYear());
+  readonly filteredPayslips = computed(() => this.store.visiblePayslipsForEmployee(this.store.currentEmployeeId())
     .filter(payslip => {
       const period = this.store.getPeriodById(payslip.payrollPeriodId);
-      return period?.year === this.yearFilter() && (this.periodFilter() === null || payslip.payrollPeriodId === this.periodFilter());
+      return period?.periodYear === this.effectiveYear() && (this.periodFilter() === null || payslip.payrollPeriodId === this.periodFilter());
     }));
   readonly pageCount = computed(() => Math.max(1, Math.ceil(this.filteredPayslips().length / PAGE_SIZE)));
   readonly pages = computed(() => Array.from({length: this.pageCount()}, (_, index) => index));
@@ -37,7 +38,7 @@ export class MyPayslips {
   readonly rangeStart = computed(() => this.filteredPayslips().length ? this.page() * PAGE_SIZE + 1 : 0);
   readonly rangeEnd = computed(() => Math.min((this.page() + 1) * PAGE_SIZE, this.filteredPayslips().length));
 
-  employeeName(): string { return this.store.getEmployeeById(this.store.currentEmployeeId)?.fullName ?? '—'; }
+  employeeName(): string { return this.store.getEmployeeById(this.store.currentEmployeeId())?.fullName ?? '—'; }
   periodLabel(id: number): string { return this.store.getPeriodById(id)?.label() ?? '—'; }
   money(payslip: Payslip): string { return `S/ ${payslip.netAmount.amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`; }
   setYear(value: string) { this.yearFilter.set(Number(value)); this.periodFilter.set(null); this.page.set(0); }
