@@ -12,10 +12,6 @@ export class MetricThreshold implements BaseEntity {
     this.id = id;
     this.metricType = metricType;
 
-    // The metric-threshold resource and its ranges are returned by two
-    // different endpoints. During infrastructure assembly the metric can
-    // therefore exist temporarily without ranges; the store combines both
-    // resources before the entity is used by the dashboard.
     if (ranges.length > 0) {
       this.redefineRanges(ranges);
     }
