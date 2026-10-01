@@ -28,7 +28,7 @@ export const routes: Routes = [
   { path: 'workspace', loadChildren: workspaceRoutes, title: `${baseTitle} - Workspace` },
   { path: 'benefits', loadChildren: benefitsRoutes, title: `${baseTitle} - Benefits` },
   { path: 'payroll', loadChildren: payrollRoutes, title: `${baseTitle} - Payroll` },
-  { path: 'wellbeing', loadChildren: wellbeingRoutes, title: `${baseTitle} - Bienestar` },
+  { path: 'wellbeing', loadChildren: wellbeingRoutes, title: `${baseTitle} - Wellbeing`, data: { breadcrumb: ['breadcrumb.wellbeing'] } },
   { path: 'attendance', loadChildren: attendanceRoutes, title: `${baseTitle} - Attendance` },
   { path: 'requests', loadChildren: requestRoutes, title: `${baseTitle} - Requests` },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
