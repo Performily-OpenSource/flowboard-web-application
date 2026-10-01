@@ -1,8 +1,8 @@
 import {BaseResponse, BaseResource} from '../../shared/infrastructure/base-response';
 
 export interface PayrollPeriodResource extends BaseResource {
-  year: number;
-  month: number;
+  periodYear: number;
+  periodMonth: number;
   scheduledPaymentDate: string;
 }
 
