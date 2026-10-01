@@ -43,7 +43,10 @@
     "request-types": "Tipos",
     "my-requests": "Mis solicitudes",
     "new-female": "Nueva",
-    "complete": "Completar"
+    "complete": "Completar",
+    "wellbeing-dashboard": "Panel de Bienestar",
+    "wellbeing-spaces": "Espacios de Bienestar",
+    "wellbeing-thresholds": "Umbrales de Bienestar"
   },
   "toolbar": {
     "search": "Buscar",
@@ -883,7 +886,8 @@
     },
     "errors": {
       "load": "No pudimos cargar la información de bienestar.",
-      "generic": "No pudimos completar la operación."
+      "generic": "No pudimos completar la operación.",
+      "invalid-count": "La configuración de umbrales no tiene el número esperado de rangos."
     }
   },
   "attendance": {

@@ -43,7 +43,10 @@
     "request-types": "Types",
     "my-requests": "My requests",
     "new-female": "New",
-    "complete": "Complete"
+    "complete": "Complete",
+    "wellbeing-dashboard": "Wellbeing dashboard",
+    "wellbeing-spaces": "Wellbeing spaces",
+    "wellbeing-thresholds": "Wellbeing thresholds"
   },
   "toolbar": {
     "search": "Search",
@@ -883,7 +886,8 @@
     },
     "errors": {
       "load": "We could not load wellbeing information.",
-      "generic": "We could not complete the operation."
+      "generic": "We could not complete the operation.",
+      "invalid-count": "The threshold configuration does not contain the expected number of ranges."
     }
   },
   "attendance": {
