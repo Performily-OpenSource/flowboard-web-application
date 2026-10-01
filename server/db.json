@@ -24,7 +24,7 @@
       "id": 1,
       "title": "HR Manager",
       "areaId": 1,
-      "referenceSalaryAmount": 7500.0,
+      "referenceSalaryAmount": 7500,
       "referenceSalaryCurrency": "PEN",
       "active": true
     },
@@ -32,7 +32,7 @@
       "id": 2,
       "title": "HR Analyst",
       "areaId": 1,
-      "referenceSalaryAmount": 3800.0,
+      "referenceSalaryAmount": 3800,
       "referenceSalaryCurrency": "PEN",
       "active": true
     },
@@ -40,7 +40,7 @@
       "id": 3,
       "title": "Tech Lead",
       "areaId": 2,
-      "referenceSalaryAmount": 9000.0,
+      "referenceSalaryAmount": 9000,
       "referenceSalaryCurrency": "PEN",
       "active": true
     },
@@ -48,7 +48,7 @@
       "id": 4,
       "title": "Software Developer",
       "areaId": 2,
-      "referenceSalaryAmount": 5200.0,
+      "referenceSalaryAmount": 5200,
       "referenceSalaryCurrency": "PEN",
       "active": true
     },
@@ -56,7 +56,7 @@
       "id": 5,
       "title": "Sales Executive",
       "areaId": 3,
-      "referenceSalaryAmount": 3200.0,
+      "referenceSalaryAmount": 3200,
       "referenceSalaryCurrency": "PEN",
       "active": true
     }
@@ -1590,11 +1590,11 @@
       "workDate": "2026-09-01",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 3,
@@ -1602,11 +1602,11 @@
       "workDate": "2026-09-01",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 4,
@@ -1614,11 +1614,11 @@
       "workDate": "2026-09-01",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 5,
@@ -1626,11 +1626,11 @@
       "workDate": "2026-09-01",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 6,
@@ -1638,11 +1638,11 @@
       "workDate": "2026-09-01",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 7,
@@ -1650,11 +1650,11 @@
       "workDate": "2026-09-01",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 8,
@@ -1662,11 +1662,11 @@
       "workDate": "2026-09-01",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 9,
@@ -1686,11 +1686,11 @@
       "workDate": "2026-09-02",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 11,
@@ -1698,11 +1698,11 @@
       "workDate": "2026-09-02",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 12,
@@ -1710,11 +1710,11 @@
       "workDate": "2026-09-02",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 13,
@@ -1722,11 +1722,11 @@
       "workDate": "2026-09-02",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 14,
@@ -1734,11 +1734,11 @@
       "workDate": "2026-09-02",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 15,
@@ -1746,11 +1746,11 @@
       "workDate": "2026-09-02",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 16,
@@ -1758,11 +1758,11 @@
       "workDate": "2026-09-02",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 17,
@@ -1782,11 +1782,11 @@
       "workDate": "2026-09-03",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 19,
@@ -1794,11 +1794,11 @@
       "workDate": "2026-09-03",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 20,
@@ -1806,11 +1806,11 @@
       "workDate": "2026-09-03",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 21,
@@ -1818,11 +1818,11 @@
       "workDate": "2026-09-03",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 22,
@@ -1830,11 +1830,11 @@
       "workDate": "2026-09-03",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 23,
@@ -1842,11 +1842,11 @@
       "workDate": "2026-09-03",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 24,
@@ -1854,11 +1854,11 @@
       "workDate": "2026-09-03",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 25,
@@ -1878,11 +1878,11 @@
       "workDate": "2026-09-04",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 27,
@@ -1890,11 +1890,11 @@
       "workDate": "2026-09-04",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 28,
@@ -1902,11 +1902,11 @@
       "workDate": "2026-09-04",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 29,
@@ -1914,11 +1914,11 @@
       "workDate": "2026-09-04",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 30,
@@ -1926,11 +1926,11 @@
       "workDate": "2026-09-04",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 31,
@@ -1938,11 +1938,11 @@
       "workDate": "2026-09-04",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 32,
@@ -1950,11 +1950,11 @@
       "workDate": "2026-09-04",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 33,
@@ -1974,11 +1974,11 @@
       "workDate": "2026-09-05",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 35,
@@ -1986,11 +1986,11 @@
       "workDate": "2026-09-05",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 36,
@@ -1998,11 +1998,11 @@
       "workDate": "2026-09-05",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 37,
@@ -2010,11 +2010,11 @@
       "workDate": "2026-09-05",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 38,
@@ -2022,11 +2022,11 @@
       "workDate": "2026-09-05",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 39,
@@ -2034,11 +2034,11 @@
       "workDate": "2026-09-05",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 40,
@@ -2046,11 +2046,11 @@
       "workDate": "2026-09-05",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 41,
@@ -2058,11 +2058,11 @@
       "workDate": "2026-09-07",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 42,
@@ -2070,11 +2070,11 @@
       "workDate": "2026-09-07",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 43,
@@ -2082,11 +2082,11 @@
       "workDate": "2026-09-07",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 44,
@@ -2094,11 +2094,11 @@
       "workDate": "2026-09-07",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 45,
@@ -2106,11 +2106,11 @@
       "workDate": "2026-09-07",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 46,
@@ -2118,11 +2118,11 @@
       "workDate": "2026-09-07",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 47,
@@ -2130,11 +2130,11 @@
       "workDate": "2026-09-07",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 48,
@@ -2142,11 +2142,11 @@
       "workDate": "2026-09-07",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 49,
@@ -2166,11 +2166,11 @@
       "workDate": "2026-09-08",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 51,
@@ -2178,11 +2178,11 @@
       "workDate": "2026-09-08",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 52,
@@ -2190,11 +2190,11 @@
       "workDate": "2026-09-08",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 53,
@@ -2202,11 +2202,11 @@
       "workDate": "2026-09-08",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 54,
@@ -2214,11 +2214,11 @@
       "workDate": "2026-09-08",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 55,
@@ -2226,11 +2226,11 @@
       "workDate": "2026-09-08",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 56,
@@ -2238,11 +2238,11 @@
       "workDate": "2026-09-08",
       "checkInTime": "08:00",
       "checkOutTime": "17:00",
-      "overtimeHours": 0.0,
+      "overtimeHours": 0,
       "status": "ON_TIME",
       "justificationReason": null,
       "justificationDocumentName": null,
-      "effectiveHours": 8.0
+      "effectiveHours": 8
     },
     {
       "id": 57,
@@ -4658,21 +4658,17 @@
       "role": "HR_STAFF",
       "status": "ACTIVE",
       "mustChangePassword": false,
-      "lastSignInAt": "2026-09-30T12:20:00.000Z",
-      "createdAt": "2019-03-01T09:00:00.000Z",
-      "updatedAt": "2026-09-30T12:20:00.000Z"
+      "lastSignInAt": "2026-10-01T03:22:11.876Z"
     },
     {
       "id": 2,
       "employeeId": 2,
       "username": "jorge.salazar@flowboard.pe",
-      "passwordHash": "sha256$04f07ba491e9c534b93153ae4a1df943a52bec3d9da788bf8d0729d9a63c1043",
+      "passwordHash": "sha256$a2390c41c1d977b8ecc11111c9bf490aad38260ff74bbb841feb2f2380866cac",
       "role": "EMPLOYEE",
       "status": "ACTIVE",
-      "mustChangePassword": true,
-      "lastSignInAt": null,
-      "createdAt": "2020-06-15T09:00:00.000Z",
-      "updatedAt": "2026-09-30T12:20:00.000Z"
+      "mustChangePassword": false,
+      "lastSignInAt": "2026-10-01T03:31:54.987Z"
     },
     {
       "id": 3,

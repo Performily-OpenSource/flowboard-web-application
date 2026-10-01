@@ -17,7 +17,7 @@ export class Login {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly iam = inject(IamStore);
+  readonly iam = inject(IamStore);
 
   readonly submitted = signal(false);
   readonly showPassword = signal(false);

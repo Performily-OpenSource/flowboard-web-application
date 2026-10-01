@@ -18,7 +18,7 @@ import {LanguageSwitcher} from '../../../../shared/presentation/components/langu
 export class ChangePassword {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
-  private readonly iam = inject(IamStore);
+  readonly iam = inject(IamStore);
   readonly session = inject(SessionStore);
   readonly submitted = signal(false);
   readonly form = this.fb.nonNullable.group({
