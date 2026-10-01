@@ -1,4 +1,38 @@
-<form class="dialog" [formGroup]="form" (ngSubmit)="save()"><header class="dialog-header"><div><h2 mat-dialog-title class="dialog-title">{{ 'wellbeing.threshold-dialog.title' | translate }}</h2><p class="dialog-subtitle">{{ 'wellbeing.threshold-dialog.subtitle' | translate }}</p></div><button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'wellbeing.close' | translate"><mat-icon>close</mat-icon></button></header>
-@if (form.errors?.['business']) {<div class="form-error" role="alert">{{ form.errors?.['business'] }}</div>}
-<div class="range-form" formArrayName="ranges">@for (range of data.threshold.ranges; track $index){<div class="range-line" [formGroupName]="$index"><div><strong>{{label(range.indicator)}}</strong></div><input type="number" class="input" formControlName="minValue" [attr.aria-label]="'wellbeing.threshold-dialog.min' | translate"><span>{{ 'wellbeing.history-dialog.from' | translate }}</span><input type="number" class="input" formControlName="maxValue" [attr.aria-label]="'wellbeing.threshold-dialog.max' | translate"></div>}</div>
-<div class="note"><mat-icon>info_outline</mat-icon><span>{{ 'wellbeing.threshold-dialog.note' | translate }}</span></div><div class="dialog-actions"><button mat-stroked-button type="button" mat-dialog-close>{{ 'wellbeing.threshold-dialog.cancel' | translate }}</button><button mat-flat-button type="submit">{{ 'wellbeing.threshold-dialog.save' | translate }}</button></div></form>
+<form class="dialog" [formGroup]="form" (ngSubmit)="save()">
+    <header class="dialog-header">
+        <div>
+            <h2 mat-dialog-title class="dialog-title">{{ 'wellbeing.threshold-dialog.title' | translate }}</h2>
+            <p class="dialog-subtitle">{{ 'wellbeing.threshold-dialog.subtitle' | translate }}</p>
+        </div>
+        <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'wellbeing.close' | translate">
+            <mat-icon>close</mat-icon>
+        </button>
+    </header>
+    
+    @if (form.errors?.['business']) {
+        <div class="form-error" role="alert">{{ form.errors?.['business'] }}</div>
+    }
+    
+    <div class="range-form" formArrayName="ranges">
+        @for (range of data.threshold.ranges; track $index){
+            <div class="range-line" [formGroupName]="$index">
+                <div>
+                    <strong>{{label(range.indicator)}}</strong>
+                </div>
+                <input type="number" class="input" formControlName="minValue" [attr.aria-label]="'wellbeing.threshold-dialog.min' | translate">
+                <span>{{ 'wellbeing.history-dialog.from' | translate }}</span>
+                <input type="number" class="input" formControlName="maxValue" [attr.aria-label]="'wellbeing.threshold-dialog.max' | translate">
+            </div>
+        }
+    </div>
+    
+    <div class="note">
+        <mat-icon>info_outline</mat-icon>
+        <span>{{ 'wellbeing.threshold-dialog.note' | translate }}</span>
+    </div>
+    
+    <div class="dialog-actions">
+        <button mat-stroked-button type="button" mat-dialog-close>{{ 'wellbeing.threshold-dialog.cancel' | translate }}</button>
+        <button mat-flat-button type="submit">{{ 'wellbeing.threshold-dialog.save' | translate }}</button>
+    </div>
+</form>
