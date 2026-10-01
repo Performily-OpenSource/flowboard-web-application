@@ -6,6 +6,7 @@ import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import {TranslatePipe} from '@ngx-translate/core';
+import {BaseForm} from '../../../../shared/presentation/components/base-form/base-form';
 import {RequestStore} from '../../../application/request.store';
 import {RequestAttachment, RequestFieldValue} from '../../../domain/model/request.entity';
 import {RequestType} from '../../../domain/model/request-type.entity';
@@ -37,7 +38,7 @@ type FieldsForm = FormGroup<Record<string, FormControl<string>>>;
   templateUrl: './request-form.html',
   styleUrl: './request-form.css',
 })
-export class RequestForm {
+export class RequestForm extends BaseForm {
   readonly store = inject(RequestStore);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -88,6 +89,7 @@ export class RequestForm {
   });
 
   constructor() {
+    super();
     inject(DestroyRef).onDestroy(() => this.valueChanges?.unsubscribe());
     this.store.clearError();
 

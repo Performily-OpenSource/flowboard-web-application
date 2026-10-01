@@ -4,10 +4,14 @@
     <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
   </header>
   <app-requester-summary-card [requester]="requester()" [rows]="rows()"/>
-  <div class="field">
+  <div class="field" [formGroup]="form">
     <label for="approveComment">{{ 'approve-dialog.comment' | translate }}</label>
-    <textarea id="approveComment" class="input" maxlength="500" [formControl]="comment"
+    <textarea id="approveComment" class="input" maxlength="500" formControlName="comment"
+              [class.invalid]="isInvalidControl(form, 'comment')"
               [placeholder]="'approve-dialog.comment-placeholder' | translate"></textarea>
+    @if (isInvalidControl(form, 'comment')) {
+      <p class="field-error">{{ errorKeyForControl(form, 'comment') | translate }}</p>
+    }
   </div>
   <div class="info-note">
     <mat-icon aria-hidden="true">check</mat-icon>

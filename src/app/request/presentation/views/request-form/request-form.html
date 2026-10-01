@@ -49,7 +49,7 @@
           <div class="form-grid">
             @for (field of periodFields(); track field.key) {
               <div [class.full]="!isHalfWidth(field)">
-                <app-dynamic-field [field]="field" [control]="form().controls[field.key]" [showErrors]="submitted()"/>
+                <app-dynamic-field [field]="field" [form]="form()"/>
               </div>
             }
           </div>
@@ -73,7 +73,7 @@
           <div class="form-grid">
             @for (field of otherFields(); track field.key) {
               <div [class.full]="!isHalfWidth(field)">
-                <app-dynamic-field [field]="field" [control]="form().controls[field.key]" [showErrors]="submitted()"/>
+                <app-dynamic-field [field]="field" [form]="form()"/>
               </div>
             }
           </div>

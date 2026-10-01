@@ -4,11 +4,11 @@
     <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
   </header>
   <app-requester-summary-card [requester]="requester()" [rows]="rows()"/>
-  <div class="field">
+  <div class="field" [formGroup]="form">
     <label for="rejectReason">{{ 'reject-dialog.reason' | translate }}</label>
-    <textarea id="rejectReason" class="input" maxlength="500" [formControl]="reason" [class.invalid]="showReasonError"
+    <textarea id="rejectReason" class="input" maxlength="500" formControlName="reason" [class.invalid]="isInvalidControl(form, 'reason')"
               [placeholder]="'reject-dialog.reason-placeholder' | translate"></textarea>
-    @if (showReasonError) {
+    @if (isInvalidControl(form, 'reason')) {
       <p class="field-error">{{ 'reject-dialog.reason-required' | translate }}</p>
     }
   </div>

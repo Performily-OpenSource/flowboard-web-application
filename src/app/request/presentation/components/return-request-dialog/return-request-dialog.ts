@@ -1,9 +1,10 @@
 import {Component, computed, inject} from '@angular/core';
-import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogClose, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {BaseForm} from '../../../../shared/presentation/components/base-form/base-form';
 import {RequestStore} from '../../../application/request.store';
 import {formatRequestPeriod} from '../../pipes/request-period-pipe';
 import {RequesterSummaryCard, SummaryRow} from '../requester-summary-card/requester-summary-card';
@@ -15,7 +16,8 @@ import {RequestDialogData} from '../approve-request-dialog/approve-request-dialo
   templateUrl: './return-request-dialog.html',
   styleUrl: './return-request-dialog.css',
 })
-export class ReturnRequestDialog {
+export class ReturnRequestDialog extends BaseForm {
+  private fb = inject(FormBuilder);
   readonly store = inject(RequestStore);
   private translate = inject(TranslateService);
   private dialogRef = inject(MatDialogRef<ReturnRequestDialog>);
@@ -29,22 +31,21 @@ export class ReturnRequestDialog {
     { label: this.translate.instant('request-dialog.current-status'), value: this.translate.instant(`request-status.${this.data.request.status}`) }
   ]);
 
-  readonly comment = new FormControl<string>('', {
-    nonNullable: true,
-    validators: [Validators.required, Validators.pattern(/\S/), Validators.maxLength(500)]
+  readonly form = this.fb.group({
+    comment: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.pattern(/\S/), Validators.maxLength(500)]
+    })
   });
 
   constructor() {
+    super();
     this.store.clearError();
   }
 
-  get showCommentError(): boolean {
-    return this.comment.invalid && this.comment.touched;
-  }
-
   confirm() {
-    this.comment.markAsTouched();
-    if (this.comment.invalid) return;
-    if (this.store.returnRequestForReview(this.data.request, this.comment.value)) this.dialogRef.close(true);
+    this.form.markAllAsTouched();
+    if (this.form.invalid) return;
+    if (this.store.returnRequestForReview(this.data.request, this.form.controls.comment.value)) this.dialogRef.close(true);
   }
 }

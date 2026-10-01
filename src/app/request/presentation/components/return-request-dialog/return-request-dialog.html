@@ -4,11 +4,11 @@
     <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
   </header>
   <app-requester-summary-card [requester]="requester()" [rows]="rows()"/>
-  <div class="field">
+  <div class="field" [formGroup]="form">
     <label for="returnComment">{{ 'return-dialog.comment' | translate }}</label>
-    <textarea id="returnComment" class="input" maxlength="500" [formControl]="comment" [class.invalid]="showCommentError"
+    <textarea id="returnComment" class="input" maxlength="500" formControlName="comment" [class.invalid]="isInvalidControl(form, 'comment')"
               [placeholder]="'return-dialog.comment-placeholder' | translate"></textarea>
-    @if (showCommentError) {
+    @if (isInvalidControl(form, 'comment')) {
       <p class="field-error">{{ 'return-dialog.comment-required' | translate }}</p>
     }
   </div>
