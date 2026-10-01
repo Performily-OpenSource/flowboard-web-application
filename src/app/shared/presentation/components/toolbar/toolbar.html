@@ -45,4 +45,12 @@
       <p class="notifications-empty">{{ 'toolbar.no-notifications' | translate }}</p>
     </div>
   </mat-menu>
+
+  <button class="profile" type="button" [matMenuTriggerFor]="profileMenu" [attr.aria-label]="'toolbar.profile' | translate">
+    <span class="profile-avatar">{{ initials() }}</span>
+    <span class="profile-copy"><strong>{{ session.displayName() }}</strong><small>{{ roleLabel() | translate }}</small></span>
+  </button>
+  <mat-menu #profileMenu="matMenu" xPosition="before">
+    <button mat-menu-item type="button" (click)="logout()"><mat-icon>logout</mat-icon>{{ 'toolbar.logout' | translate }}</button>
+  </mat-menu>
 </header>

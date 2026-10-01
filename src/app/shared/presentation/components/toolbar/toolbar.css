@@ -124,3 +124,4 @@
     display: none;
   }
 }
+.profile{display:flex;align-items:center;gap:9px;border:0;background:transparent;padding:3px 0 3px 3px;cursor:pointer;color:var(--fb-text);text-align:left}.profile-avatar{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--fb-primary-container);color:var(--fb-on-primary-container);font-size:11px;font-weight:700}.profile-copy{display:flex;flex-direction:column;gap:2px;min-width:0}.profile-copy strong{font-size:12.5px;font-weight:600;white-space:nowrap}.profile-copy small{font-size:11px;color:var(--fb-text-muted);white-space:nowrap}@media(max-width:700px){.profile-copy{display:none}}
