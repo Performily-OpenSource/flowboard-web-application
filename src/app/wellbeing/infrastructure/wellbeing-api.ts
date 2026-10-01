@@ -1,67 +1,58 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {forkJoin, map, Observable, switchMap} from 'rxjs';
-import {environment} from '../../../environments/environment';
-import {DeviceResource, OfficeResource, ReadingResource, ThresholdRangeResource, ThresholdResource} from '../domain/model/wellbeing.model';
+import {forkJoin, Observable, switchMap} from 'rxjs';
+import {BaseApi} from '../../shared/infrastructure/base-api';
+import {Office} from '../domain/model/office.entity';
+import {Device} from '../domain/model/device.entity';
+import {EnvironmentalReading} from '../domain/model/environmental-reading.entity';
+import {MetricThreshold} from '../domain/model/metric-threshold.entity';
+import {ThresholdRange} from '../domain/model/threshold-range.entity';
+import {OfficesApiEndpoint} from './offices-api-endpoint';
+import {DevicesApiEndpoint} from './devices-api-endpoint';
+import {EnvironmentalReadingsApiEndpoint} from './environmental-readings-api-endpoint';
+import {MetricThresholdsApiEndpoint} from './metric-thresholds-api-endpoint';
+import {ThresholdRangesApiEndpoint} from './threshold-ranges-api-endpoint';
+import {DeviceResource} from './devices-response';
+import {OfficeResource} from './offices-response';
+import {ThresholdRangeResource} from './threshold-ranges-response';
 
 @Injectable({providedIn: 'root'})
-export class WellbeingApi {
-  private readonly http = inject(HttpClient);
-  private readonly base = environment.platformProviderApiBaseUrl;
+export class WellbeingApi extends BaseApi {
+  private readonly offices: OfficesApiEndpoint;
+  private readonly devices: DevicesApiEndpoint;
+  private readonly readings: EnvironmentalReadingsApiEndpoint;
+  private readonly thresholds: MetricThresholdsApiEndpoint;
+  private readonly ranges: ThresholdRangesApiEndpoint;
 
-  getOffices(): Observable<OfficeResource[]> {
-    return this.http.get<OfficeResource[]>(`${this.base}/offices`);
+  constructor() {
+    super();
+    const http = inject(HttpClient);
+    this.offices = new OfficesApiEndpoint(http);
+    this.devices = new DevicesApiEndpoint(http);
+    this.readings = new EnvironmentalReadingsApiEndpoint(http);
+    this.thresholds = new MetricThresholdsApiEndpoint(http);
+    this.ranges = new ThresholdRangesApiEndpoint(http);
   }
 
-  createOffice(resource: Omit<OfficeResource, 'id'>): Observable<OfficeResource> {
-    return this.http.post<OfficeResource>(`${this.base}/offices`, resource);
-  }
-
-  updateOffice(resource: OfficeResource): Observable<OfficeResource> {
-    return this.http.put<OfficeResource>(`${this.base}/offices/${resource.id}`, resource);
-  }
-
-  getDevices(): Observable<DeviceResource[]> {
-    return this.http.get<DeviceResource[]>(`${this.base}/devices`);
-  }
-
-  createDevice(resource: Omit<DeviceResource, 'id'>): Observable<DeviceResource> {
-    return this.http.post<DeviceResource>(`${this.base}/devices`, resource);
-  }
-
-  updateDevice(resource: DeviceResource): Observable<DeviceResource> {
-    return this.http.put<DeviceResource>(`${this.base}/devices/${resource.id}`, resource);
-  }
-
-  getReadings(): Observable<ReadingResource[]> {
-    return this.http.get<ReadingResource[]>(`${this.base}/environmental-readings`);
-  }
-
-  getThresholds(): Observable<ThresholdResource[]> {
-    return this.http.get<ThresholdResource[]>(`${this.base}/metric-thresholds`);
-  }
-
-  getThresholdRanges(): Observable<ThresholdRangeResource[]> {
-    return this.http.get<ThresholdRangeResource[]>(`${this.base}/threshold-ranges`);
-  }
-
-  updateThreshold(threshold: ThresholdResource): Observable<ThresholdResource> {
-    return this.http.put<ThresholdResource>(`${this.base}/metric-thresholds/${threshold.id}`, threshold);
-  }
-
-  updateThresholdRanges(thresholdId: number, ranges: Array<Pick<ThresholdRangeResource, 'healthIndicator' | 'minValue' | 'maxValue'>>): Observable<ThresholdRangeResource[]> {
-    return this.getThresholdRanges().pipe(
-      map(resources => resources.filter(resource => resource.metricThresholdId === thresholdId).sort((a, b) => a.minValue - b.minValue)),
+  getOffices(): Observable<Office[]> { return this.offices.getAll(); }
+  createOffice(resource: Omit<OfficeResource, 'id'>): Observable<Office> { return this.offices.createResource(resource); }
+  updateOffice(entity: Office): Observable<Office> { return this.offices.update(entity, entity.id); }
+  getDevices(): Observable<Device[]> { return this.devices.getAll(); }
+  createDevice(resource: Omit<DeviceResource, 'id'>): Observable<Device> { return this.devices.createResource(resource); }
+  updateDevice(entity: Device): Observable<Device> { return this.devices.update(entity, entity.id); }
+  getReadings(): Observable<EnvironmentalReading[]> { return this.readings.getAll(); }
+  getThresholds(): Observable<MetricThreshold[]> { return this.thresholds.getAll(); }
+  getThresholdRanges(): Observable<ThresholdRange[]> { return this.ranges.getAll(); }
+  updateThreshold(entity: MetricThreshold): Observable<MetricThreshold> { return this.thresholds.update(entity, entity.id); }
+  updateThresholdRanges(thresholdId: number, ranges: Array<Pick<ThresholdRangeResource, 'healthIndicator' | 'minValue' | 'maxValue'>>): Observable<ThresholdRange[]> {
+    return this.ranges.getAll().pipe(
       switchMap(current => {
-        if (current.length !== ranges.length) {
-          throw new Error('La configuración de umbrales no tiene el número esperado de rangos.');
-        }
-        return forkJoin(current.map((resource, index) => this.http.put<ThresholdRangeResource>(`${this.base}/threshold-ranges/${resource.id}`, {
-          ...resource,
-          healthIndicator: ranges[index].healthIndicator,
-          minValue: ranges[index].minValue,
-          maxValue: ranges[index].maxValue
-        })));
+        const matching = current.filter(item => item.metricThresholdId === thresholdId).sort((a,b) => a.minValue - b.minValue);
+        if (matching.length !== ranges.length) throw new Error('wellbeing.thresholds.invalid-count');
+        return forkJoin(matching.map((resource, index) => this.ranges.update(
+          new ThresholdRange({id: resource.id, metricThresholdId: thresholdId, indicator: ranges[index].healthIndicator, minValue: ranges[index].minValue, maxValue: ranges[index].maxValue}),
+          resource.id
+        )));
       })
     );
   }
