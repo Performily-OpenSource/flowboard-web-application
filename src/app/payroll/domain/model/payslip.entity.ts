@@ -1,61 +1,11 @@
 import {BaseEntity} from '../../../shared/domain/model/base-entity';
+import {FileReference} from './file-reference.vo';
+import {Money} from './Money';
+import {PaymentDetails, PaymentStatus} from './payment-details.vo';
 
+export {FileReference, Money, PaymentDetails};
+export type {PaymentStatus};
 export type PublicationStatus = 'UNDER_REVIEW' | 'PUBLISHED';
-export type PaymentStatus = 'PENDING' | 'PAID' | 'OBSERVED';
-
-export class Money {
-  readonly amount: number;
-  readonly currency: string;
-
-  constructor(amount: number, currency = 'PEN') {
-    if (amount < 0) throw new Error('The net amount cannot be negative.');
-    this.amount = amount;
-    this.currency = currency;
-  }
-}
-
-export class FileReference {
-  readonly fileName: string;
-  readonly contentType: string;
-  readonly sizeInBytes: number;
-  readonly storageUrl: string;
-
-  constructor(props: { fileName: string; contentType: string; sizeInBytes: number; storageUrl: string }) {
-    if (props.contentType !== 'application/pdf') throw new Error('Payslips must be PDF files.');
-    this.fileName = props.fileName;
-    this.contentType = props.contentType;
-    this.sizeInBytes = props.sizeInBytes;
-    this.storageUrl = props.storageUrl;
-  }
-}
-
-export class PaymentDetails {
-  readonly status: PaymentStatus;
-  readonly paidOn: string | null;
-  readonly observationReason: string | null;
-
-  private constructor(status: PaymentStatus, paidOn: string | null, observationReason: string | null) {
-    this.status = status;
-    this.paidOn = paidOn;
-    this.observationReason = observationReason;
-  }
-
-  static pending(): PaymentDetails {
-    return new PaymentDetails('PENDING', null, null);
-  }
-
-  paid(paidOn: string): PaymentDetails {
-    if (!paidOn) throw new Error('The payment date is required.');
-    return new PaymentDetails('PAID', paidOn, null);
-  }
-
-  observed(reason: string): PaymentDetails {
-    const normalized = reason.trim();
-    if (!normalized) throw new Error('The observation reason is required.');
-    if (normalized.length > 500) throw new Error('The observation reason cannot exceed 500 characters.');
-    return new PaymentDetails('OBSERVED', null, normalized);
-  }
-}
 
 export class Payslip implements BaseEntity {
   id: number;
@@ -104,15 +54,7 @@ export class Payslip implements BaseEntity {
     this.payment = PaymentDetails.pending();
   }
 
-  markAsPaid(paidOn: string): void {
-    this.payment = this.payment.paid(paidOn);
-  }
-
-  markAsObserved(reason: string): void {
-    this.payment = this.payment.observed(reason);
-  }
-
-  isVisibleTo(employeeId: number): boolean {
-    return this.publicationStatus === 'PUBLISHED' && this.employeeId === employeeId;
-  }
+  markAsPaid(paidOn: string): void { this.payment = this.payment.paid(paidOn); }
+  markAsObserved(reason: string): void { this.payment = this.payment.observed(reason); }
+  isVisibleTo(employeeId: number): boolean { return this.publicationStatus === 'PUBLISHED' && this.employeeId === employeeId; }
 }
