@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, effect, inject} from '@angular/core';
 import {DecimalPipe} from '@angular/common';
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogClose, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
@@ -28,14 +28,19 @@ export class ObservationDialog {
     reason: new FormControl(this.data.payslip.payment.observationReason ?? '', {nonNullable: true, validators: [Validators.required, Validators.maxLength(500)]})
   });
   error = '';
+  private readonly initialOperationVersion = this.store.operationVersion();
+  private readonly operationEffect = effect(() => {
+    const version = this.store.operationVersion();
+    if (version <= this.initialOperationVersion) return;
+    const operationError = this.store.operationError();
+    if (operationError) this.error = operationError;
+    else this.dialogRef.close(true);
+  });
 
   confirm(): void {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
     this.error = '';
-    this.store.markAsObserved(this.data.payslip, this.form.controls.reason.value).subscribe({
-      next: () => this.dialogRef.close(true),
-      error: error => this.error = error instanceof Error ? error.message : 'No se pudo registrar la observación.'
-    });
+    this.store.markAsObserved(this.data.payslip, this.form.controls.reason.value);
   }
 }
