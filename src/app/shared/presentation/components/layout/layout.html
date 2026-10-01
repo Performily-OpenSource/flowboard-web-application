@@ -7,7 +7,7 @@
       <span class="brand-name">Flowboard</span>
     </a>
     <nav class="nav" [attr.aria-label]="'option.main-navigation' | translate">
-      @for (option of options(); track option.link) {
+      @for (option of visibleOptions(); track option.link) {
         <a class="nav-item" [class.active]="isActive(option)" [routerLink]="option.link"
            [attr.aria-current]="isActive(option) ? 'page' : null"
            (click)="isHandset() && sidenav.close()">

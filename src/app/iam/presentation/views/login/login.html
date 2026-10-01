@@ -1,0 +1,43 @@
+<div class="auth-shell">
+  <section class="brand-panel">
+    <div class="brand-copy">
+      <div class="brand"><span class="brand-mark"><span></span><span></span><span></span></span><strong>Flowboard</strong></div>
+      <h1>{{ 'iam.login.brand-title' | translate }}</h1>
+      <p>{{ 'iam.login.brand-subtitle' | translate }}</p>
+      <ul>
+        <li>{{ 'iam.login.brand-feature-1' | translate }}</li>
+        <li>{{ 'iam.login.brand-feature-2' | translate }}</li>
+        <li>{{ 'iam.login.brand-feature-3' | translate }}</li>
+      </ul>
+    </div>
+  </section>
+
+  <main class="auth-content">
+    <div class="auth-language"><app-language-switcher/></div>
+    <section class="auth-card">
+      <h2>{{ 'iam.login.title' | translate }}</h2>
+      <p class="subtitle">{{ 'iam.login.subtitle' | translate }}</p>
+
+      @if (submitted() && form.invalid) {
+        <div class="alert error" role="alert"><mat-icon>error_outline</mat-icon><span>{{ 'iam.login.invalid-credentials' | translate }}</span></div>
+      }
+      @if (submitted() && form.valid && iam.error()) {
+        <div class="alert error" role="alert"><mat-icon>error_outline</mat-icon><span>{{ iam.error() | translate }}</span></div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <label>{{ 'iam.login.email' | translate }}</label>
+        <input type="email" formControlName="username" autocomplete="username" [placeholder]="'iam.login.email-placeholder' | translate"/>
+        <label>{{ 'iam.login.password' | translate }}</label>
+        <div class="password-field">
+          <input [type]="showPassword() ? 'text' : 'password'" formControlName="password" autocomplete="current-password" [class.invalid]="submitted() && form.controls.password.invalid || (submitted() && iam.error())"/>
+          <button type="button" (click)="togglePassword()">{{ (showPassword() ? 'iam.login.hide' : 'iam.login.show') | translate }}</button>
+        </div>
+        <a class="forgot" routerLink="/login">{{ 'iam.login.forgot' | translate }}</a>
+        <button class="primary" mat-flat-button type="submit">{{ 'iam.login.submit' | translate }}</button>
+      </form>
+
+      <div class="terms">{{ 'iam.login.terms' | translate }}</div>
+    </section>
+  </main>
+</div>

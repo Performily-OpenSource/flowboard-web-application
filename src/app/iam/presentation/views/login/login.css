@@ -1,0 +1,36 @@
+:host { display:block; min-height:100vh; }
+.auth-shell { position:fixed; inset:0; width:100vw; height:100vh; min-height:100vh; overflow:auto; z-index:1000; }
+.auth-shell { display:grid; grid-template-columns:43% 57%; background:#f8f9fc; }
+.brand-panel { background:#3f6798; color:#fff; display:flex; align-items:center; padding:64px 11%; }
+.brand-copy { max-width:500px; }
+.brand { display:flex; align-items:center; gap:12px; font-size:25px; margin-bottom:38px; }
+.brand-mark { display:flex; flex-direction:column; gap:3px; justify-content:center; width:30px; height:30px; padding:0 7px; box-sizing:border-box; border-radius:8px; background:#fff; }
+.brand-mark span { height:2px; border-radius:2px; background:#3f6798; }
+.brand-mark span:nth-child(1){width:15px}
+.brand-mark span:nth-child(2){width:11px}
+.brand-mark span:nth-child(3){width:7px}
+.brand-copy h1 { margin:0 0 20px; font-size:42px; line-height:1.08; letter-spacing:-1.4px; }
+.brand-copy p { margin:0 0 22px; font-size:17px; line-height:1.55; color:#e2ebf7; }
+.brand-copy ul { margin:0; padding-left:18px; color:#fff; line-height:1.8; }
+.auth-content { position:relative; display:flex; align-items:center; justify-content:center; padding:64px 7%; }
+.auth-language { position:absolute; top:28px; right:32px; }
+.auth-card { width:min(400px,100%); }
+.auth-card h2 { margin:0 0 10px; font-size:28px; letter-spacing:-.5px; color:#1f2329; }
+.subtitle { margin:0 0 26px; color:#69717d; line-height:1.5; }
+form { display:flex; flex-direction:column; gap:9px; }
+label { margin-top:7px; font-size:12px; font-weight:600; letter-spacing:.7px; color:#5e6570; text-transform:uppercase; }
+input { width:100%; box-sizing:border-box; height:48px; border:1px solid #bdc5d2; border-radius:8px; padding:0 14px; background:#fff; color:#252a31; font:inherit; outline:none; }
+input.invalid { border-color:#d93025; }
+input:focus { border-color:#3f6798; box-shadow:0 0 0 2px rgba(63,103,152,.12); }
+.password-field { position:relative; }
+.password-field input { padding-right:78px; }
+.password-field button { position:absolute; right:10px; top:8px; height:32px; border:0; background:transparent; color:#2e5b94; font-weight:600; cursor:pointer; }
+.forgot { align-self:flex-end; color:#2e5b94; font-size:13px; text-decoration:none; margin:8px 0 7px; }
+.primary { height:48px; width:100%; background:#3f6798 !important; color:#fff !important; }
+.alert { display:flex; gap:9px; padding:13px; border-radius:8px; margin-bottom:18px; font-size:13px; line-height:1.45; }
+.alert.error { background:#ffd0ca; color:#a61b1b; }
+.alert mat-icon { flex:none; }
+.terms { margin-top:18px; padding-top:18px; border-top:1px solid #dde1e8; color:#737b86; font-size:12px; line-height:1.5; }
+@media (max-width:800px){.auth-shell{grid-template-columns:1fr}
+.brand-panel{display:none}
+.auth-content{padding:80px 24px 40px}.auth-language{right:20px}}

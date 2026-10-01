@@ -13,7 +13,8 @@
     "attendance": "Attendance",
     "my-attendance": "My attendance",
     "requests": "Requests",
-    "my-requests": "My requests"
+    "my-requests": "My requests",
+    "accounts": "Accounts & roles"
   },
   "breadcrumb": {
     "dashboard": "Dashboard",
@@ -46,13 +47,18 @@
     "complete": "Complete",
     "wellbeing-dashboard": "Wellbeing dashboard",
     "wellbeing-spaces": "Wellbeing spaces",
-    "wellbeing-thresholds": "Wellbeing thresholds"
+    "wellbeing-thresholds": "Wellbeing thresholds",
+    "accounts": "Accounts & roles"
   },
   "toolbar": {
     "search": "Search",
     "search-hint": "Search employees by name or document and press Enter",
     "notifications": "Notifications",
-    "no-notifications": "You have no new notifications."
+    "no-notifications": "You have no new notifications.",
+    "hr-role": "Human Resources",
+    "employee-role": "Employee",
+    "profile": "User profile",
+    "logout": "Sign out"
   },
   "home": {
     "title": "Welcome to Flowboard",
@@ -116,7 +122,8 @@
     "next": "Next",
     "no-results-title": "No employee matches these filters",
     "no-results-content": "Try removing some of the filters or search by name and document.",
-    "search-by-name": "Search by name"
+    "search-by-name": "Search by name",
+    "accounts": "Accounts & roles"
   },
   "employee": {
     "first-name": "First names",
@@ -1321,5 +1328,102 @@
     "days": "days",
     "empty": "This employee has no vacation balance yet.",
     "view": "View balance per employee"
+  },
+  "iam": {
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Enter the credentials Human Resources sent you by email.",
+      "email": "Corporate email",
+      "email-placeholder": "ana.martinez@empresa.com.pe",
+      "password": "Password",
+      "show": "Show",
+      "hide": "Hide",
+      "forgot": "Forgot my password",
+      "submit": "Sign in",
+      "invalid-credentials": "The username or password does not match. You have 3 attempts left before the account is locked for security.",
+      "terms": "By signing in you accept the terms of service and privacy policy. Your data is processed according to Law No. 29733.",
+      "brand-title": "One record for every person in your organization",
+      "brand-subtitle": "Employee profile, attendance, benefits and requests on the same record. Everyone sees their own information.",
+      "brand-feature-1": "Single employee record",
+      "brand-feature-2": "Approvals routed by hierarchy",
+      "brand-feature-3": "Vacation balance always up to date"
+    },
+    "change-password": {
+      "title": "Create your password",
+      "subtitle": "This is your first sign-in, so replace the temporary password we sent by email.",
+      "temporary": "Temporary password",
+      "new": "New password",
+      "repeat": "Repeat new password",
+      "mismatch": "Passwords do not match.",
+      "submit": "Save and enter"
+    },
+    "password": {
+      "requirement-length": "At least 10 characters",
+      "requirement-case": "One uppercase and one lowercase letter",
+      "requirement-number": "At least one number",
+      "requirement-symbol": "At least one symbol"
+    },
+    "disabled": {
+      "title": "Your account is disabled",
+      "subtitle": "Access was closed because your employment status is terminated. For security, you cannot retry sign-in from here.",
+      "error-title": "If you think this is an error",
+      "error-content": "Write to Human Resources with your full name and identity document. If you are reinstated, your account is reactivated with the same username.",
+      "cta": "Write to Human Resources"
+    },
+    "accounts": {
+      "title": "Accounts & roles",
+      "subtitle": "Credentials are generated when an employee is registered. Roles and account status are managed here.",
+      "export": "Export",
+      "role-note": "There are only two roles: Human Resources and Employee. Being a manager is not a role; it is derived from having subordinates in the organization chart.",
+      "role-filter": "Role",
+      "status-filter": "Status",
+      "all": "all",
+      "count": "{{count}} accounts · {{hr}} with Human Resources role",
+      "employee": "Employee",
+      "username": "Username",
+      "role": "Role",
+      "status": "Account status",
+      "actions": "Actions",
+      "active": "Active",
+      "disabled": "Disabled",
+      "reset": "Reset password",
+      "more": "More actions",
+      "change-role": "Change role",
+      "empty": "No accounts match the selected filters."
+    },
+    "role": {
+      "hr": "Human Resources",
+      "employee": "Employee",
+      "hr-description": "Accesses information for the entire organization.",
+      "employee-description": "Accesses only their own information."
+    },
+    "role-dialog": {
+      "title": "Change account role",
+      "new-role": "New role",
+      "last-hr": "This would leave only one Human Resources account. The system does not allow downgrading the last one.",
+      "hr-access": "This account will have administrative access to organization information.",
+      "save": "Save role"
+    },
+    "reset-dialog": {
+      "title": "Reset password",
+      "last-sign-in": "Last sign-in",
+      "never": "Never",
+      "copy": "A temporary password is generated and sent to the corporate email. The current password stops working immediately and a new one must be created at the next sign-in.",
+      "notice": "No one, including Human Resources, can see an employee password: it is stored encrypted. This is the only way to restore access.",
+      "submit": "Reset and send"
+    },
+    "error": {
+      "load": "Accounts could not be loaded.",
+      "change-password": "The password could not be updated.",
+      "reset-password": "The password could not be reset.",
+      "disabled-reset": "A disabled account cannot reset its password.",
+      "last-hr": "At least one active Human Resources account must exist.",
+      "change-role": "The role could not be updated.",
+      "invalid-temporary": "The temporary password does not match."
+    },
+    "validation": {
+      "username": "Username is not valid.",
+      "password-hash": "Password hash is not valid."
+    }
   }
 }

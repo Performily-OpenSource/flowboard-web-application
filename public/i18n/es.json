@@ -13,7 +13,8 @@
     "attendance": "Asistencia",
     "my-attendance": "Mi asistencia",
     "requests": "Solicitudes",
-    "my-requests": "Mis solicitudes"
+    "my-requests": "Mis solicitudes",
+    "accounts": "Cuentas y roles"
   },
   "breadcrumb": {
     "dashboard": "Dashboard",
@@ -46,13 +47,18 @@
     "complete": "Completar",
     "wellbeing-dashboard": "Panel de Bienestar",
     "wellbeing-spaces": "Espacios de Bienestar",
-    "wellbeing-thresholds": "Umbrales de Bienestar"
+    "wellbeing-thresholds": "Umbrales de Bienestar",
+    "accounts": "Cuentas y roles"
   },
   "toolbar": {
     "search": "Buscar",
     "search-hint": "Busca colaboradores por nombre o documento y presiona Enter",
     "notifications": "Notificaciones",
-    "no-notifications": "No tienes notificaciones nuevas."
+    "no-notifications": "No tienes notificaciones nuevas.",
+    "hr-role": "Recursos Humanos",
+    "employee-role": "Colaborador",
+    "profile": "Perfil de usuario",
+    "logout": "Cerrar sesión"
   },
   "home": {
     "title": "Bienvenido a Flowboard",
@@ -116,7 +122,8 @@
     "next": "Siguiente",
     "no-results-title": "Ningún colaborador coincide con esos filtros",
     "no-results-content": "Prueba quitando alguno de los filtros o busca por nombre y documento.",
-    "search-by-name": "Buscar por nombre"
+    "search-by-name": "Buscar por nombre",
+    "accounts": "Cuentas y roles"
   },
   "employee": {
     "first-name": "Nombres",
@@ -1322,5 +1329,102 @@
     "days": "días",
     "empty": "Este colaborador todavía no tiene saldo de vacaciones.",
     "view": "Ver saldo por colaborador"
+  },
+  "iam": {
+    "login": {
+      "title": "Iniciar sesión",
+      "subtitle": "Ingresa con las credenciales que Recursos Humanos te envió por correo.",
+      "email": "Correo corporativo",
+      "email-placeholder": "ana.martinez@empresa.com.pe",
+      "password": "Contraseña",
+      "show": "Mostrar",
+      "hide": "Ocultar",
+      "forgot": "Olvidé mi contraseña",
+      "submit": "Ingresar",
+      "invalid-credentials": "El usuario o la contraseña no coinciden. Te quedan 3 intentos antes de que la cuenta se bloquee por seguridad.",
+      "terms": "Al ingresar aceptas los términos del servicio y la política de privacidad. Tus datos se tratan conforme a la Ley N.° 29733.",
+      "brand-title": "Un solo expediente para cada persona de tu organización",
+      "brand-subtitle": "La ficha, la asistencia, los beneficios y las solicitudes sobre un mismo registro. Cada persona ve lo suyo.",
+      "brand-feature-1": "Ficha única del colaborador",
+      "brand-feature-2": "Aprobaciones ruteadas por jerarquía",
+      "brand-feature-3": "Saldo de vacaciones siempre al día"
+    },
+    "change-password": {
+      "title": "Crea tu contraseña",
+      "subtitle": "Es tu primer ingreso, así que tienes que reemplazar la contraseña temporal que te enviamos por correo.",
+      "temporary": "Contraseña temporal",
+      "new": "Nueva contraseña",
+      "repeat": "Repetir nueva contraseña",
+      "mismatch": "Las contraseñas no coinciden.",
+      "submit": "Guardar y entrar"
+    },
+    "password": {
+      "requirement-length": "Al menos 10 caracteres",
+      "requirement-case": "Una mayúscula y una minúscula",
+      "requirement-number": "Al menos un número",
+      "requirement-symbol": "Al menos un símbolo"
+    },
+    "disabled": {
+      "title": "Tu cuenta esta inhabilitada",
+      "subtitle": "El acceso quedó cerrado porque tu vínculo laboral figura como cesado. Por seguridad no es posible reintentar el ingreso desde aquí.",
+      "error-title": "Si crees que se trata de un error",
+      "error-content": "Escribe a Recursos Humanos con tu nombre completo y tu documento de identidad. Si te reincorporan, tu cuenta se reactiva con el mismo usuario.",
+      "cta": "Escribir a Recursos Humanos"
+    },
+    "accounts": {
+      "title": "Cuentas y roles",
+      "subtitle": "Las credenciales se generan al registrar al colaborador. Aquí se administra el rol y el estado de cada cuenta.",
+      "export": "Exportar",
+      "role-note": "Solo hay dos roles: Recursos Humanos y Colaborador. La condición de jefe no es un rol, se deriva de tener subordinados asignados en el organigrama.",
+      "role-filter": "Rol",
+      "status-filter": "Estado",
+      "all": "todos",
+      "count": "{{count}} cuentas · {{hr}} con rol de Recursos Humanos",
+      "employee": "Colaborador",
+      "username": "Usuario",
+      "role": "Rol",
+      "status": "Estado de la cuenta",
+      "actions": "Acciones",
+      "active": "Activa",
+      "disabled": "Inhabilitada",
+      "reset": "Restablecer contraseña",
+      "more": "Más acciones",
+      "change-role": "Cambiar rol",
+      "empty": "No hay cuentas que coincidan con los filtros."
+    },
+    "role": {
+      "hr": "Recursos Humanos",
+      "employee": "Colaborador",
+      "hr-description": "Accede a la información de toda la organización.",
+      "employee-description": "Accede únicamente a su propia información."
+    },
+    "role-dialog": {
+      "title": "Cambiar rol de la cuenta",
+      "new-role": "Nuevo rol",
+      "last-hr": "Quedaría una sola cuenta con rol de Recursos Humanos. El sistema no permite degradar la última: siempre debe existir al menos una.",
+      "hr-access": "Esta cuenta tendrá acceso administrativo a la información de la organización.",
+      "save": "Guardar rol"
+    },
+    "reset-dialog": {
+      "title": "Restablecer contraseña",
+      "last-sign-in": "Último ingreso",
+      "never": "Nunca",
+      "copy": "Se genera una contraseña temporal y se envía a su correo corporativo. La contraseña actual deja de funcionar de inmediato y tendrá que crear una nueva en su siguiente ingreso.",
+      "notice": "Nadie, ni Recursos Humanos, puede ver la contraseña de un colaborador: se almacena cifrada. Esta es la única forma de darle acceso otra vez.",
+      "submit": "Restablecer y enviar"
+    },
+    "error": {
+      "load": "No se pudieron cargar las cuentas.",
+      "change-password": "No se pudo actualizar la contraseña.",
+      "reset-password": "No se pudo restablecer la contraseña.",
+      "disabled-reset": "Una cuenta inhabilitada no puede restablecer su contraseña.",
+      "last-hr": "Debe existir al menos una cuenta activa con rol de Recursos Humanos.",
+      "change-role": "No se pudo actualizar el rol.",
+      "invalid-temporary": "La contraseña temporal no coincide."
+    },
+    "validation": {
+      "username": "El usuario no es válido.",
+      "password-hash": "El hash de contraseña no es válido."
+    }
   }
 }

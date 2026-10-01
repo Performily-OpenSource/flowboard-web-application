@@ -1,0 +1,7 @@
+@import '../login/login.css';
+.lock{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:#ffc9c3;color:#e33d3d;margin-bottom:18px}
+.lock mat-icon{font-size:27px;width:27px;height:27px}
+.info{border:1px solid #dfe3ea;border-radius:8px;padding:14px;margin:20px 0 18px;color:#646d79;font-size:13px;line-height:1.45}
+.info strong{display:block;color:#30343a;margin-bottom:7px}
+.info p{margin:0}
+.email{color:#315d95;font-size:13px;margin-top:18px}

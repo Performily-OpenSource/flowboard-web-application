@@ -1,0 +1,14 @@
+<div class="backdrop" (click)="close.emit()"><section class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+  <button class="close" type="button" (click)="close.emit()" [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
+  <h2>{{ 'iam.role-dialog.title' | translate }}</h2>
+  <div class="person"><span class="avatar">{{ initials() }}</span><div><strong>{{ employeeName() }}</strong><span>{{ username() }}</span></div></div>
+  <label class="eyebrow">{{ 'iam.role-dialog.new-role' | translate }}</label>
+  <button class="role-option" [class.selected]="effectiveRole === 'HR_STAFF'" type="button" (click)="setRole('HR_STAFF')"><span class="radio"></span><div><strong>{{ 'iam.role.hr' | translate }}</strong><span>{{ 'iam.role.hr-description' | translate }}</span></div></button>
+  <button class="role-option" [class.selected]="effectiveRole === 'EMPLOYEE'" type="button" (click)="setRole('EMPLOYEE')"><span class="radio"></span><div><strong>{{ 'iam.role.employee' | translate }}</strong><span>{{ 'iam.role.employee-description' | translate }}</span></div></button>
+  @if (effectiveRole === 'EMPLOYEE' && currentRole() === 'HR_STAFF' && remainingHr() <= 1) {
+    <div class="notice"><mat-icon>info_outline</mat-icon><span>{{ 'iam.role-dialog.last-hr' | translate }}</span></div>
+  } @else if (effectiveRole === 'HR_STAFF' && currentRole() === 'EMPLOYEE') {
+    <div class="notice"><mat-icon>info_outline</mat-icon><span>{{ 'iam.role-dialog.hr-access' | translate }}</span></div>
+  }
+  <div class="actions"><button mat-stroked-button type="button" (click)="close.emit()">{{ 'common.cancel' | translate }}</button><button mat-flat-button type="button" (click)="save.emit(effectiveRole)">{{ 'iam.role-dialog.save' | translate }}</button></div>
+</section></div>

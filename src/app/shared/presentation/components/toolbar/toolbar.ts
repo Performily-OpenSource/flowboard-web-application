@@ -9,6 +9,8 @@ import {MatTooltip} from '@angular/material/tooltip';
 import {TranslatePipe} from '@ngx-translate/core';
 import {LanguageSwitcher} from '../language-switcher/language-switcher';
 import {LayoutStore} from '../../../application/layout.store';
+import {SessionStore} from '../../../application/session.store';
+import {CurrentEmployeeStore} from '../../../application/current-employee.store';
 
 @Component({
   selector: 'app-toolbar',
@@ -28,6 +30,8 @@ export class Toolbar {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   readonly layoutStore = inject(LayoutStore);
+  readonly session = inject(SessionStore);
+  private readonly currentEmployee = inject(CurrentEmployeeStore);
 
   readonly showMenuButton = input(false);
   readonly menuToggle = output<void>();
@@ -54,6 +58,12 @@ export class Toolbar {
       .pipe(filter(event => event instanceof NavigationStart))
       .subscribe(() => this.layoutStore.setBreadcrumbDetail(null));
   }
+
+  initials(): string { return this.session.displayName().split(' ').map(part => part.charAt(0)).slice(0, 2).join('').toUpperCase(); }
+
+  roleLabel(): string { return this.session.role() === 'HR_STAFF' ? 'toolbar.hr-role' : 'toolbar.employee-role'; }
+
+  logout(): void { this.session.clear(); this.currentEmployee.setEmployeeId(1); this.router.navigate(['/login']).then(); }
 
   onSearch(searchInput: HTMLInputElement) {
     const text = searchInput.value.trim();

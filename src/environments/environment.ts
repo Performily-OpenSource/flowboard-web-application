@@ -20,6 +20,8 @@ export const environment = {
   platformProviderWorkSchedulesEndpointPath: '/work-schedules',
   platformProviderPunchesEndpointPath: '/punches',
   platformProviderRequestsEndpointPath: '/requests',
+  platformProviderUserAccountsEndpointPath: '/user-accounts',
+  platformProviderRolesEndpointPath: '/roles',
   platformProviderRequestTypesEndpointPath: '/request-types',
   humanResourcesAreaId: 1,
   defaultActingEmployeeId: 1,
