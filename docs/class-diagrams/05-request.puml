@@ -1,0 +1,588 @@
+@startuml 05-request
+title Request Bounded Context - Class Diagram (Angular frontend)
+!pragma layout smetana
+set separator none
+skinparam dpi 110
+skinparam shadowing false
+skinparam defaultFontName Inter, Arial
+skinparam defaultFontSize 12
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam ArrowColor #43474E
+skinparam class {
+  BorderColor #43474E
+  HeaderBackgroundColor #FFFFFF
+  BackgroundColor<<ACL>> #D9D9F3
+  BackgroundColor<<Api>> #FAD4C0
+  BackgroundColor<<Assembler>> #FCE4EC
+  BackgroundColor<<Component>> #DDEEF0
+  BackgroundColor<<Endpoint>> #FAD4C0
+  BackgroundColor<<Entity>> #D3E4FF
+  BackgroundColor<<Enumeration>> #EADCF2
+  BackgroundColor<<Interface>> #EAEAEA
+  BackgroundColor<<Pipe>> #EAEAEA
+  BackgroundColor<<Read Model>> #F3E9D2
+  BackgroundColor<<Resource>> #F3E9D2
+  BackgroundColor<<Store>> #FFE8A3
+  BackgroundColor<<View>> #DDEEF0
+  BackgroundColor<<Shared Kernel>> #F2F2F2
+}
+skinparam package {
+  BorderColor #73777F
+  FontColor #191C20
+}
+skinparam note {
+  BackgroundColor #FFFBE6
+  BorderColor #C3C6CF
+}
+legend top left
+  |<#D9D9F3> **L** | ACL |
+  |<#FAD4C0> **I** | Api |
+  |<#FCE4EC> **A** | Assembler |
+  |<#DDEEF0> **C** | Component |
+  |<#FAD4C0> **P** | Endpoint |
+  |<#D3E4FF> **E** | Entity |
+  |<#EADCF2> **N** | Enumeration |
+  |<#EAEAEA> **I** | Interface |
+  |<#EAEAEA> **F** | Pipe |
+  |<#F3E9D2> **M** | Read Model |
+  |<#F3E9D2> **R** | Resource |
+  |<#FFE8A3> **S** | Store |
+  |<#DDEEF0> **W** | View |
+endlegend
+
+package "request/domain/model" {
+  enum "ApproverType" as request__ApproverType <<(N,#9C6FB7) Enumeration>> {
+    DIRECT_MANAGER
+    HR_STAFF
+  }
+  enum "BalanceDeduction" as request__BalanceDeduction <<(N,#9C6FB7) Enumeration>> {
+    NONE
+    VACATION_DAYS
+    BENEFIT_BALANCE
+  }
+  enum "FieldDataType" as request__FieldDataType <<(N,#9C6FB7) Enumeration>> {
+    TEXT
+    NUMBER
+    DATE
+    TIME
+    MONEY
+    BOOLEAN
+  }
+  class "Request" as request__Request <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - requesterId : number
+    - requestTypeId : number
+    - startDate : string | null
+    - endDate : string | null
+    - startTime : string | null
+    - endTime : string | null
+    - fieldValues : RequestFieldValue[]
+    - attachments : RequestAttachment[]
+    - approverType : ApproverType
+    - approverId : number | null
+    - status : RequestStatus
+    - submittedAt : string
+    - history : RequestHistory[]
+    - requestType : RequestType | null
+    + code : string
+    + reviewComment : string | null
+    + rejectionReason : string | null
+    + lastUpdatedAt : string
+    --
+    + Request(props)
+    + hasPeriod() : boolean
+    + hasTimes() : boolean
+    + isSingleDay() : boolean
+    + requestedDays() : number
+    + requestedHours() : number
+    + fieldValue(key : string) : string | null
+    + isPending() : boolean
+    + isUnderReview() : boolean
+    + isResolved() : boolean
+    + canBeCancelled() : boolean
+    + isOwnedBy(employeeId : number) : boolean
+    + isRoutedToHr() : boolean
+    + waitingHours(now : Date) : number
+  }
+  class "RequestAttachment" as request__RequestAttachment <<(I,#808080) Interface>> {
+    + fileName : string
+    + contentType : string
+    + sizeInBytes : number
+    + storageUrl : string
+  }
+  class "RequestField" as request__RequestField <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - key : string
+    - label : string
+    - dataType : FieldDataType
+    - required : boolean
+    - displayOrder : number
+    --
+    + RequestField(props)
+    + isPeriodField() : boolean
+  }
+  class "RequestFieldValue" as request__RequestFieldValue <<(I,#808080) Interface>> {
+    + key : string
+    + value : string
+  }
+  class "RequestHistory" as request__RequestHistory <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - previousStatus : RequestStatus | null
+    - newStatus : RequestStatus
+    - actorId : number
+    - comment : string | null
+    - occurredAt : string
+    --
+    + RequestHistory(props)
+  }
+  enum "RequestStatus" as request__RequestStatus <<(N,#9C6FB7) Enumeration>> {
+    IN_PROGRESS
+    UNDER_REVIEW
+    APPROVED
+    REJECTED
+    CANCELLED
+  }
+  class "RequestType" as request__RequestType <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - name : string
+    - description : string
+    - requiresAttachment : boolean
+    - balanceDeduction : BalanceDeduction
+    - active : boolean
+    - fields : RequestField[]
+    --
+    + RequestType(props)
+    + deductsBalance() : boolean
+    + deductsVacationDays() : boolean
+    + hasPeriod() : boolean
+    + isMeasuredInHours() : boolean
+  }
+  class "Requester" as request__Requester <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - fullName : string
+    - initials : string
+    - positionTitle : string
+    - areaId : number
+    - areaName : string
+    - directManagerId : number | null
+    - active : boolean
+    - hrStaff : boolean
+    --
+    + Requester(props)
+  }
+  class "VacationBalance" as request__VacationBalance <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - employeeId : number
+    - accruedDays : number
+    - usedDays : number
+    + availableDays : number
+    --
+    + VacationBalance(props)
+    + hasEnough(days : number) : boolean
+    + availableAfter(days : number) : number
+  }
+}
+
+package "request/application" {
+  class "RequestError" as request__RequestError <<(M,#B8993A) Read Model>> {
+    + key : string
+    + params : Record<string, unknown>
+  }
+  class "RequestPeriodValues" as request__RequestPeriodValues <<(M,#B8993A) Read Model>> {
+    + startDate : string | null
+    + endDate : string | null
+    + startTime : string | null
+    + endTime : string | null
+  }
+  class "RequestStore" as request__RequestStore <<(S,#E0A800) Store>> {
+    + loading : Signal<boolean>
+    + error : Signal<RequestError | null>
+    + currentEmployeeId
+    + requesters : Signal<Requester[]>
+    + currentEmployee : Signal
+    + requestTypes : Signal
+    + activeRequestTypes : Signal
+    + requests : Signal
+    + myRequests : Signal
+    + inboxRequests : Signal
+    + myVacationBalance : Signal
+    --
+    + getRequestTypeById(id : number) : Signal<RequestType | undefine…
+    + getRequester(id : number | null) : Requester | null
+    + requestsOf(employeeId : number) : Request[]
+    + getVacationBalance(employeeId : number) : VacationBalance | null
+    + resolveApprover(requester : Requester | null) : ( approverType: ApproverType;…
+    + approverName(request : Request) : string | null
+    + countRequestsOfType(requestTypeId : number) : number
+    + isRequestTypeNameTaken(name : string, excludedId : number | null) : boolean
+    + periodFrom(fieldValues : RequestFieldValue[]) : RequestPeriodValues
+    + periodError(period : RequestPeriodValues) : RequestError | null
+    + requestedDays(requestType : RequestType | null, period : RequestPeriodValues) : number
+    + checkBeforeSubmit(requestType : RequestType, fieldValues : RequestFieldValue[], attachments : RequestAttachment[]) : RequestError | null
+    + submitRequest(requestType : RequestType, fieldValues : RequestFieldValue[], attachments : RequestAttachment[]) : boolean
+    + resubmitRequest(request : Request, requestType : RequestType, fieldValues : RequestFieldValue[], …) : boolean
+    + … 10 more methods
+  }
+}
+
+package "request/infrastructure" {
+  class "ApproverResource" as request__ApproverResource <<(R,#B8993A) Resource>> {
+    + type : string
+    + employeeId : number | null
+  }
+  class "AttachmentResource" as request__AttachmentResource <<(R,#B8993A) Resource>> {
+    + fileName : string
+    + contentType : string
+    + sizeInBytes : number
+    + storageUrl : string
+  }
+  class "BenefitsAcl" as request__BenefitsAcl <<(L,#6A6AC4) ACL>> {
+    + vacationBalances : Signal
+    --
+    + debitVacationDays(employeeId : number, days : number, requestId : number) : void
+  }
+  class "FieldValueResource" as request__FieldValueResource <<(R,#B8993A) Resource>> {
+    + key : string
+    + value : string
+  }
+  class "RequestApi" as request__RequestApi <<(I,#E07B39) Api>> {
+    + getRequests() : Observable<Request[]>
+    + createRequest(request : Request) : Observable<Request>
+    + updateRequest(request : Request) : Observable<Request>
+    + getRequestTypes() : Observable<RequestType[]>
+    + createRequestType(requestType : RequestType) : Observable<RequestType>
+    + updateRequestType(requestType : RequestType) : Observable<RequestType>
+    + deleteRequestType(id : number) : Observable<void>
+  }
+  class "RequestAssembler" as request__RequestAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(resource : RequestResource) : Request
+    + toResourceFromEntity(entity : Request) : RequestResource
+    + toEntitiesFromResponse(response : RequestsResponse) : Request[]
+  }
+  class "RequestFieldResource" as request__RequestFieldResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + key : string
+    + label : string
+    + dataType : string
+    + required : boolean
+    + displayOrder : number
+  }
+  class "RequestHistoryResource" as request__RequestHistoryResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + previousStatus : string | null
+    + newStatus : string
+    + actorId : number
+    + comment : string | null
+    + occurredAt : string
+  }
+  class "RequestPeriodResource" as request__RequestPeriodResource <<(R,#B8993A) Resource>> {
+    + startDate : string
+    + endDate : string
+    + startTime : string | null
+    + endTime : string | null
+  }
+  class "RequestResource" as request__RequestResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + requesterId : number
+    + requestTypeId : number
+    + period : RequestPeriodResource | null
+    + fieldValues : FieldValueResource[]
+    + attachments : AttachmentResource[]
+    + approver : ApproverResource
+    + status : string
+    + submittedAt : string
+    + history : RequestHistoryResource[]
+  }
+  class "RequestTypeAssembler" as request__RequestTypeAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(resource : RequestTypeResource) : RequestType
+    + toResourceFromEntity(entity : RequestType) : RequestTypeResource
+    + toEntitiesFromResponse(response : RequestTypesResponse) : RequestType[]
+  }
+  class "RequestTypeResource" as request__RequestTypeResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + name : string
+    + description : string
+    + requiresAttachment : boolean
+    + balanceDeduction : string
+    + active : boolean
+    + fields : RequestFieldResource[]
+  }
+  class "RequestTypesApiEndpoint" as request__RequestTypesApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "RequestTypesResponse" as request__RequestTypesResponse <<(R,#B8993A) Resource>> {
+    + requestTypes : RequestTypeResource[]
+  }
+  class "RequestsApiEndpoint" as request__RequestsApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "RequestsResponse" as request__RequestsResponse <<(R,#B8993A) Resource>> {
+    + requests : RequestResource[]
+  }
+  class "WorkspaceAcl" as request__WorkspaceAcl <<(L,#6A6AC4) ACL>> {
+    + getRequesters() : Observable<Requester[]>
+  }
+}
+
+package "request/presentation/components/approve-request-dialog" {
+  class "ApproveRequestDialog" as request__ApproveRequestDialog <<(C,#3A9CA6) Component>> {
+    + confirm()
+  }
+  class "RequestDialogData" as request__RequestDialogData <<(I,#808080) Interface>> {
+    + request : Request
+  }
+}
+
+package "request/presentation/components/approver-card" {
+  class "ApproverCard" as request__ApproverCard <<(C,#3A9CA6) Component>> {
+    + manager : InputSignal<Requester | null>
+  }
+}
+
+package "request/presentation/components/cancel-request-dialog" {
+  class "CancelRequestDialog" as request__CancelRequestDialog <<(C,#3A9CA6) Component>> {
+    + confirm()
+  }
+}
+
+package "request/presentation/components/dynamic-field" {
+  class "DynamicField" as request__DynamicField <<(C,#3A9CA6) Component>> {
+    + field : InputSignal<RequestField>
+    + form : InputSignal<FormGroup>
+    + idPrefix : InputSignal
+  }
+}
+
+package "request/presentation/components/employee-requests-tab" {
+  class "EmployeeRequestsTab" as request__EmployeeRequestsTab <<(C,#3A9CA6) Component>> {
+    + employeeId : InputSignal<number>
+  }
+}
+
+package "request/presentation/components/latest-requests-card" {
+  class "LatestRequestsCard" as request__LatestRequestsCard <<(C,#3A9CA6) Component>> {
+    + employeeId : InputSignal<number>
+  }
+}
+
+package "request/presentation/components/reject-request-dialog" {
+  class "RejectRequestDialog" as request__RejectRequestDialog <<(C,#3A9CA6) Component>> {
+    + confirm()
+  }
+}
+
+package "request/presentation/components/request-status-badge" {
+  class "RequestStatusBadge" as request__RequestStatusBadge <<(C,#3A9CA6) Component>> {
+    + status : InputSignal<RequestStatus>
+  }
+}
+
+package "request/presentation/components/request-timeline" {
+  class "RequestTimeline" as request__RequestTimeline <<(C,#3A9CA6) Component>> {
+    + request : InputSignal<Request>
+    --
+    + actorName(actorId : number) : string
+  }
+}
+
+package "request/presentation/components/requester-summary-card" {
+  class "RequesterSummaryCard" as request__RequesterSummaryCard <<(C,#3A9CA6) Component>> {
+    + requester : InputSignal<Requester | null>
+    + rows : InputSignal<SummaryRow[]>
+  }
+  class "SummaryRow" as request__SummaryRow <<(I,#808080) Interface>> {
+    + label : string
+    + value : string
+  }
+}
+
+package "request/presentation/components/return-request-dialog" {
+  class "ReturnRequestDialog" as request__ReturnRequestDialog <<(C,#3A9CA6) Component>> {
+    + confirm()
+  }
+}
+
+package "request/presentation/components/vacation-balance-card" {
+  class "VacationBalanceCard" as request__VacationBalanceCard <<(C,#3A9CA6) Component>> {
+    + balance : InputSignal<VacationBalance | nul…
+    + requestedDays : InputSignal
+  }
+}
+
+package "request/presentation/pipes" {
+  class "FileSizePipe" as request__FileSizePipe <<(F,#808080) Pipe>> {
+    + transform(bytes : number | null | undefined) : string
+  }
+  enum "PeriodFormat" as request__PeriodFormat <<(N,#9C6FB7) Enumeration>> {
+    short
+    long
+  }
+  class "RelativeTimePipe" as request__RelativeTimePipe <<(F,#808080) Pipe>> {
+    + transform(value : string | null | undefined) : string
+  }
+  class "RequestPeriodPipe" as request__RequestPeriodPipe <<(F,#808080) Pipe>> {
+    + transform(request : Request | null | undefined, format : PeriodFormat) : string
+  }
+}
+
+package "request/presentation/views/my-requests" {
+  class "MyRequests" as request__MyRequests <<(W,#3A9CA6) View>> {
+    + setTab(tab : MyRequestsTab)
+    + select(request : Request)
+    + approverName(request : Request) : string
+    + cancel(request : Request)
+    + complete(request : Request)
+  }
+}
+
+package "request/presentation/views/request-form" {
+  class "RequestForm" as request__RequestForm <<(W,#3A9CA6) View>> {
+    + isHalfWidth(field : RequestField) : boolean
+    + onFileSelected(event : Event)
+    + removeAttachment(file : RequestAttachment)
+    + submit()
+  }
+}
+
+package "request/presentation/views/request-inbox" {
+  class "RequestInbox" as request__RequestInbox <<(W,#3A9CA6) View>> {
+    + setTab(tab : InboxTab)
+    + setType(typeId : number | null)
+    + setArea(areaId : number | null)
+    + setAge(age : AgeFilter | null)
+    + clearFilters()
+    + typeName(typeId : number) : string
+    + areaName(areaId : number) : string
+    + requesterOf(request : Request)
+    + toggleDetail(request : Request)
+    + approve(request : Request)
+    + … 2 more methods
+  }
+}
+
+package "request/presentation/views/request-type-form" {
+  class "RequestTypeForm" as request__RequestTypeForm <<(W,#3A9CA6) View>> {
+    + startNewField()
+    + onKeyEdited()
+    + addField()
+    + removeField(index : number)
+    + moveField(index : number, direction : -1 | 1)
+    + toggleRequired(index : number)
+    + save()
+  }
+}
+
+package "request/presentation/views/request-type-list" {
+  class "RequestTypeList" as request__RequestTypeList <<(W,#3A9CA6) View>> {
+    + select(type : RequestType)
+    + toggleStatus(type : RequestType)
+    + delete(type : RequestType)
+    + deactivateInstead(type : RequestType)
+  }
+}
+
+package "shared" <<Shared Kernel>> {
+  abstract class "BaseApi" as shared__BaseApi <<(I,#E07B39) Api>>
+  abstract class "BaseApiEndpoint" as shared__BaseApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "BaseAssembler" as shared__BaseAssembler <<(I,#808080) Interface>>
+  class "BaseForm" as shared__BaseForm <<(C,#3A9CA6) Component>>
+  class "CurrentEmployeeStore" as shared__CurrentEmployeeStore <<(S,#E0A800) Store>>
+  class "LocalDatePipe" as shared__LocalDatePipe <<(F,#808080) Pipe>>
+}
+
+package "benefits (external)" <<Shared Kernel>> {
+  class "BenefitsStore" as benefits__BenefitsStore <<(S,#E0A800) Store>>
+}
+
+package "workspace (external)" <<Shared Kernel>> {
+  class "WorkspaceApi" as workspace__WorkspaceApi <<(I,#E07B39) Api>>
+}
+
+request__RequestStore --> "0..*" request__Request
+request__RequestStore --> "0..*" request__RequestType
+request__RequestStore --> "0..*" request__Requester
+request__RequestStore --> request__RequestError
+request__RequestStore ..> shared__CurrentEmployeeStore
+request__RequestStore ..> request__RequestApi
+request__RequestStore ..> request__WorkspaceAcl
+request__RequestStore ..> request__BenefitsAcl
+request__RequestField --> request__FieldDataType
+request__RequestHistory --> request__RequestStatus
+request__RequestType --> request__BalanceDeduction
+request__RequestType --> "0..*" request__RequestField
+request__Request --> "0..*" request__RequestFieldValue
+request__Request --> "0..*" request__RequestAttachment
+request__Request --> request__ApproverType
+request__Request --> request__RequestStatus
+request__Request --> "0..*" request__RequestHistory
+request__Request --> request__RequestType
+request__BenefitsAcl ..> benefits__BenefitsStore
+request__RequestApi --|> shared__BaseApi
+request__RequestApi --> request__RequestsApiEndpoint
+request__RequestApi --> request__RequestTypesApiEndpoint
+request__RequestAssembler ..|> shared__BaseAssembler
+request__RequestAssembler ..> request__Request
+request__RequestAssembler ..> request__RequestResource
+request__RequestAssembler ..> request__RequestsResponse
+request__RequestTypeAssembler ..|> shared__BaseAssembler
+request__RequestTypeAssembler ..> request__RequestType
+request__RequestTypeAssembler ..> request__RequestTypeResource
+request__RequestTypeAssembler ..> request__RequestTypesResponse
+request__RequestTypesApiEndpoint --|> shared__BaseApiEndpoint
+request__RequestTypesApiEndpoint ..> request__RequestTypeAssembler
+request__RequestTypeResource --> "0..*" request__RequestFieldResource
+request__RequestTypesResponse --> "0..*" request__RequestTypeResource
+request__RequestsApiEndpoint --|> shared__BaseApiEndpoint
+request__RequestsApiEndpoint ..> request__RequestAssembler
+request__RequestResource --> request__RequestPeriodResource
+request__RequestResource --> "0..*" request__FieldValueResource
+request__RequestResource --> "0..*" request__AttachmentResource
+request__RequestResource --> request__ApproverResource
+request__RequestResource --> "0..*" request__RequestHistoryResource
+request__RequestsResponse --> "0..*" request__RequestResource
+request__WorkspaceAcl ..> workspace__WorkspaceApi
+request__RequestDialogData --> request__Request
+request__ApproveRequestDialog --|> shared__BaseForm
+request__ApproveRequestDialog ..> request__RequestStore
+request__ApproveRequestDialog ..> request__RequesterSummaryCard
+request__CancelRequestDialog ..> request__RequestStore
+request__CancelRequestDialog ..> request__RequestPeriodPipe
+request__DynamicField --|> shared__BaseForm
+request__EmployeeRequestsTab ..> request__RequestStore
+request__EmployeeRequestsTab ..> shared__LocalDatePipe
+request__EmployeeRequestsTab ..> request__RequestStatusBadge
+request__EmployeeRequestsTab ..> request__RequestPeriodPipe
+request__LatestRequestsCard ..> request__RequestStore
+request__LatestRequestsCard ..> request__RequestStatusBadge
+request__LatestRequestsCard ..> request__RequestPeriodPipe
+request__RejectRequestDialog --|> shared__BaseForm
+request__RejectRequestDialog ..> request__RequestStore
+request__RejectRequestDialog ..> request__RequesterSummaryCard
+request__RequestTimeline ..> request__RequestStore
+request__RequestTimeline ..> request__RequestStatusBadge
+request__ReturnRequestDialog --|> shared__BaseForm
+request__ReturnRequestDialog ..> request__RequestStore
+request__ReturnRequestDialog ..> request__RequesterSummaryCard
+request__MyRequests ..> request__RequestStore
+request__MyRequests ..> request__RequestStatusBadge
+request__MyRequests ..> request__RequestTimeline
+request__MyRequests ..> request__RequestPeriodPipe
+request__MyRequests ..> request__CancelRequestDialog : opens
+request__RequestForm --|> shared__BaseForm
+request__RequestForm ..> request__RequestStore
+request__RequestForm ..> request__DynamicField
+request__RequestForm ..> request__VacationBalanceCard
+request__RequestForm ..> request__ApproverCard
+request__RequestForm ..> request__FileSizePipe
+request__RequestInbox ..> request__RequestStore
+request__RequestInbox ..> request__RequestStatusBadge
+request__RequestInbox ..> request__RequestTimeline
+request__RequestInbox ..> request__RelativeTimePipe
+request__RequestInbox ..> request__RequestPeriodPipe
+request__RequestInbox ..> request__ApproveRequestDialog : opens
+request__RequestInbox ..> request__RejectRequestDialog : opens
+request__RequestInbox ..> request__ReturnRequestDialog : opens
+request__RequestTypeForm --|> shared__BaseForm
+request__RequestTypeForm ..> request__RequestStore
+request__RequestTypeForm ..> request__DynamicField
+request__RequestTypeList ..> request__RequestStore
+
+@enduml

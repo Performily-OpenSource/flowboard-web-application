@@ -1,0 +1,346 @@
+@startuml 04-attendance
+title Attendance Bounded Context - Class Diagram (Angular frontend)
+!pragma layout smetana
+set separator none
+skinparam dpi 110
+skinparam shadowing false
+skinparam defaultFontName Inter, Arial
+skinparam defaultFontSize 12
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam ArrowColor #43474E
+skinparam class {
+  BorderColor #43474E
+  HeaderBackgroundColor #FFFFFF
+  BackgroundColor<<ACL>> #D9D9F3
+  BackgroundColor<<Api>> #FAD4C0
+  BackgroundColor<<Assembler>> #FCE4EC
+  BackgroundColor<<Component>> #DDEEF0
+  BackgroundColor<<Endpoint>> #FAD4C0
+  BackgroundColor<<Entity>> #D3E4FF
+  BackgroundColor<<Enumeration>> #EADCF2
+  BackgroundColor<<Interface>> #EAEAEA
+  BackgroundColor<<Read Model>> #F3E9D2
+  BackgroundColor<<Resource>> #F3E9D2
+  BackgroundColor<<Store>> #FFE8A3
+  BackgroundColor<<View>> #DDEEF0
+  BackgroundColor<<Shared Kernel>> #F2F2F2
+}
+skinparam package {
+  BorderColor #73777F
+  FontColor #191C20
+}
+skinparam note {
+  BackgroundColor #FFFBE6
+  BorderColor #C3C6CF
+}
+legend top left
+  |<#D9D9F3> **L** | ACL |
+  |<#FAD4C0> **I** | Api |
+  |<#FCE4EC> **A** | Assembler |
+  |<#DDEEF0> **C** | Component |
+  |<#FAD4C0> **P** | Endpoint |
+  |<#D3E4FF> **E** | Entity |
+  |<#EADCF2> **N** | Enumeration |
+  |<#EAEAEA> **I** | Interface |
+  |<#F3E9D2> **M** | Read Model |
+  |<#F3E9D2> **R** | Resource |
+  |<#FFE8A3> **S** | Store |
+  |<#DDEEF0> **W** | View |
+endlegend
+
+package "attendance/domain/model" {
+  class "AttendanceArea" as attendance__AttendanceArea <<(E,#4A7BD0) Entity>> {
+    + AttendanceArea(id : number, name : string)
+  }
+  class "AttendanceEmployee" as attendance__AttendanceEmployee <<(E,#4A7BD0) Entity>> {
+    + AttendanceEmployee(id : number, fullName : string, areaId : number)
+  }
+  class "AttendanceRecord" as attendance__AttendanceRecord <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - employeeId : number
+    - workDate : string
+    - checkInTime : string | null
+    - checkOutTime : string | null
+    - effectiveHours : number | null
+    - overtimeHours : number | null
+    - status : AttendanceStatus
+    - justificationReason : string | null
+    - justificationDocumentName : string | null
+    --
+    + AttendanceRecord(props)
+    + {static} fromPunches(employeeId : number, workDate : string, punches : Punch[], …) : AttendanceRecord
+    + isComplete() : boolean
+    + isIncomplete() : boolean
+    + isAbsent() : boolean
+    + isJustified() : boolean
+  }
+  enum "AttendanceStatus" as attendance__AttendanceStatus <<(N,#9C6FB7) Enumeration>> {
+    ON_TIME
+    LATE
+    ABSENT
+    JUSTIFIED
+    INCOMPLETE
+  }
+  class "Punch" as attendance__Punch <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - employeeId : number
+    - attendanceRecordId : number
+    - punchedAt : string
+    - type : PunchType
+    --
+    + Punch(props)
+  }
+  enum "PunchType" as attendance__PunchType <<(N,#9C6FB7) Enumeration>> {
+    CHECK_IN
+    CHECK_OUT
+  }
+  class "WorkSchedule" as attendance__WorkSchedule <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - positionId : number
+    - shiftStartTime : string
+    - shiftEndTime : string
+    - lateToleranceMinutes : number
+    - workingDays : number[]
+    --
+    + WorkSchedule(props)
+    + expectedHours() : number
+    + isWorkingDay(date : string) : boolean
+    + isLate(checkInTime : string) : boolean
+  }
+}
+
+package "attendance/application" {
+  class "AttendanceRecordRow" as attendance__AttendanceRecordRow <<(M,#B8993A) Read Model>> {
+    + record : AttendanceRecord
+    + employeeName : string
+    + areaId : number
+    + areaName : string
+    + positionId : number
+  }
+  class "AttendanceStore" as attendance__AttendanceStore <<(S,#E0A800) Store>> {
+    + loading : Signal<boolean>
+    + error : Signal<string | null>
+    + records : Signal<AttendanceRecord[]>
+    + schedules : Signal<WorkSchedule[]>
+    + punches : Signal<Punch[]>
+    + employees : Signal<AttendanceEmployee[]>
+    + areas : Signal<AttendanceArea[]>
+    + rows : Signal<AttendanceRecordRow[]>
+    --
+    + load() : void
+    + getEmployee(employeeId : number) : AttendanceEmployee | undefined
+    + getScheduleForEmployee(employeeId : number) : WorkSchedule | undefined
+    + getRecord(id : number) : AttendanceRecord | undefined
+    + updateRecord(record : AttendanceRecord) : void
+    + justify(record : AttendanceRecord, reason : string, documentName : string | null) : void
+    + deleteRecord(id : number) : void
+    + clearError() : void
+    + {static} hoursToLabel(hours : number | null) : string
+    + {static} percent(value : number) : string
+    + {static} statusLabel(status : AttendanceStatus) : string
+  }
+}
+
+package "attendance/infrastructure" {
+  class "AttendanceApi" as attendance__AttendanceApi <<(I,#E07B39) Api>> {
+    + getAttendanceRecords() : Observable<AttendanceRecord[]>
+    + createAttendanceRecord(record : AttendanceRecord) : Observable<AttendanceRecord>
+    + updateAttendanceRecord(record : AttendanceRecord) : Observable<AttendanceRecord>
+    + deleteAttendanceRecord(id : number) : Observable<void>
+    + getWorkSchedules() : Observable<WorkSchedule[]>
+    + getPunches() : Observable<Punch[]>
+  }
+  class "AttendanceRecordAssembler" as attendance__AttendanceRecordAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(resource : AttendanceRecordResource) : AttendanceRecord
+    + toResourceFromEntity(entity : AttendanceRecord) : AttendanceRecordResource
+    + toEntitiesFromResponse(response : AttendanceRecordsResponse) : AttendanceRecord[]
+  }
+  class "AttendanceRecordResource" as attendance__AttendanceRecordResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + employeeId : number
+    + workDate : string
+    + checkInTime : string | null
+    + checkOutTime : string | null
+    + effectiveHours : number | null
+    + overtimeHours : number | null
+    + status : string
+    + justificationReason : string | null
+    + justificationDocumentName : string | null
+  }
+  class "AttendanceRecordsApiEndpoint" as attendance__AttendanceRecordsApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "AttendanceRecordsResponse" as attendance__AttendanceRecordsResponse <<(R,#B8993A) Resource>> {
+    + attendanceRecords : AttendanceRecordResource[]
+  }
+  class "PunchAssembler" as attendance__PunchAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(resource : PunchResource) : Punch
+    + toResourceFromEntity(entity : Punch) : PunchResource
+    + toEntitiesFromResponse(response : PunchesResponse) : Punch[]
+  }
+  class "PunchResource" as attendance__PunchResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + employeeId : number
+    + attendanceRecordId : number
+    + punchedAt : string
+    + type : string
+  }
+  class "PunchesApiEndpoint" as attendance__PunchesApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "PunchesResponse" as attendance__PunchesResponse <<(R,#B8993A) Resource>> {
+    + punches : PunchResource[]
+  }
+  class "WorkScheduleAssembler" as attendance__WorkScheduleAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(resource : WorkScheduleResource) : WorkSchedule
+    + toResourceFromEntity(entity : WorkSchedule) : WorkScheduleResource
+    + toEntitiesFromResponse(response : WorkSchedulesResponse) : WorkSchedule[]
+  }
+  class "WorkScheduleResource" as attendance__WorkScheduleResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + positionId : number
+    + shiftStartTime : string
+    + shiftEndTime : string
+    + lateToleranceMinutes : number
+    + workingDays : number[]
+  }
+  class "WorkSchedulesApiEndpoint" as attendance__WorkSchedulesApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "WorkSchedulesResponse" as attendance__WorkSchedulesResponse <<(R,#B8993A) Resource>> {
+    + workSchedules : WorkScheduleResource[]
+  }
+  class "WorkspaceAcl" as attendance__WorkspaceAcl <<(L,#6A6AC4) ACL>> {
+    + getEmployees() : Observable<AttendanceEmployee…
+    + getAreas() : Observable<AttendanceArea[]>
+  }
+}
+
+package "attendance/presentation/components/attendance-justification-dialog" {
+  class "AttendanceJustificationDialog" as attendance__AttendanceJustificationDialog <<(C,#3A9CA6) Component>> {
+    + selectFile(event : Event) : void
+    + submit() : void
+    + close() : void
+  }
+}
+
+package "attendance/presentation/components/employee-attendance-employment" {
+  class "EmployeeAttendanceEmployment" as attendance__EmployeeAttendanceEmployment <<(C,#3A9CA6) Component>> {
+    + employeeId : InputSignal<number>
+  }
+}
+
+package "attendance/presentation/components/employee-attendance-tab" {
+  class "EmployeeAttendanceTab" as attendance__EmployeeAttendanceTab <<(C,#3A9CA6) Component>> {
+    + employeeId : InputSignal<number>
+    --
+    + hours(value : number | null) : string
+  }
+}
+
+package "attendance/presentation/views/attendance-hours" {
+  class "AttendanceHours" as attendance__AttendanceHours <<(W,#3A9CA6) View>> {
+    + expectedHours(employeeId : number) : number
+    + level(variation : number) : string
+    + hours(value : number) : string
+    + {static} currentMonth() : string
+  }
+}
+
+package "attendance/presentation/views/attendance-records" {
+  class "AttendanceRecords" as attendance__AttendanceRecords <<(W,#3A9CA6) View>> {
+    + setFrom(value : string)
+    + setTo(value : string)
+    + setArea(value : string)
+    + setStatus(value : string)
+    + clearFilters()
+    + openJustification(row : (record: AttendanceRecord…)
+    + statusClass(status : AttendanceStatus) : string
+    + statusLabel(status : AttendanceStatus) : string
+    + hours(value : number | null) : string
+    + initials(name : string) : string
+    + … 3 more methods
+  }
+}
+
+package "attendance/presentation/views/attendance-summary" {
+  class "AttendanceSummary" as attendance__AttendanceSummary <<(W,#3A9CA6) View>> {
+    + {static} currentMonth() : string
+    + {static} previousMonth() : string
+  }
+}
+
+package "attendance/presentation/views/my-attendance" {
+  class "MyAttendance" as attendance__MyAttendance <<(W,#3A9CA6) View>> {
+    + setFrom(v : string)
+    + setTo(v : string)
+    + clear()
+    + openJustification(row : any)
+    + openFirstJustification()
+    + statusClass(s : AttendanceStatus)
+    + statusLabel(s : AttendanceStatus)
+    + hours(v : number|null)
+    + {static} today() : string
+    + {static} monthStart() : string
+  }
+}
+
+package "shared" <<Shared Kernel>> {
+  abstract class "BaseApi" as shared__BaseApi <<(I,#E07B39) Api>>
+  abstract class "BaseApiEndpoint" as shared__BaseApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "BaseAssembler" as shared__BaseAssembler <<(I,#808080) Interface>>
+  class "CurrentEmployeeStore" as shared__CurrentEmployeeStore <<(S,#E0A800) Store>>
+}
+
+package "workspace (external)" <<Shared Kernel>> {
+  class "WorkspaceApi" as workspace__WorkspaceApi <<(I,#E07B39) Api>>
+}
+
+attendance__AttendanceRecordRow --> attendance__AttendanceRecord
+attendance__AttendanceStore --> "0..*" attendance__AttendanceRecord
+attendance__AttendanceStore --> "0..*" attendance__WorkSchedule
+attendance__AttendanceStore --> "0..*" attendance__Punch
+attendance__AttendanceStore --> "0..*" attendance__AttendanceEmployee
+attendance__AttendanceStore --> "0..*" attendance__AttendanceArea
+attendance__AttendanceStore --> "0..*" attendance__AttendanceRecordRow
+attendance__AttendanceStore ..> attendance__AttendanceApi
+attendance__AttendanceStore ..> attendance__WorkspaceAcl
+attendance__AttendanceRecord --> attendance__AttendanceStatus
+attendance__AttendanceRecord ..> attendance__Punch
+attendance__AttendanceRecord ..> attendance__WorkSchedule
+attendance__Punch --> attendance__PunchType
+attendance__AttendanceApi --|> shared__BaseApi
+attendance__AttendanceApi --> attendance__AttendanceRecordsApiEndpoint
+attendance__AttendanceApi --> attendance__WorkSchedulesApiEndpoint
+attendance__AttendanceApi --> attendance__PunchesApiEndpoint
+attendance__AttendanceRecordAssembler ..|> shared__BaseAssembler
+attendance__AttendanceRecordAssembler ..> attendance__AttendanceRecord
+attendance__AttendanceRecordAssembler ..> attendance__AttendanceRecordResource
+attendance__AttendanceRecordAssembler ..> attendance__AttendanceRecordsResponse
+attendance__AttendanceRecordsApiEndpoint --|> shared__BaseApiEndpoint
+attendance__AttendanceRecordsApiEndpoint ..> attendance__AttendanceRecordAssembler
+attendance__AttendanceRecordsResponse --> "0..*" attendance__AttendanceRecordResource
+attendance__PunchAssembler ..|> shared__BaseAssembler
+attendance__PunchAssembler ..> attendance__Punch
+attendance__PunchAssembler ..> attendance__PunchResource
+attendance__PunchAssembler ..> attendance__PunchesResponse
+attendance__PunchesApiEndpoint --|> shared__BaseApiEndpoint
+attendance__PunchesApiEndpoint ..> attendance__PunchAssembler
+attendance__PunchesResponse --> "0..*" attendance__PunchResource
+attendance__WorkScheduleAssembler ..|> shared__BaseAssembler
+attendance__WorkScheduleAssembler ..> attendance__WorkSchedule
+attendance__WorkScheduleAssembler ..> attendance__WorkScheduleResource
+attendance__WorkScheduleAssembler ..> attendance__WorkSchedulesResponse
+attendance__WorkSchedulesApiEndpoint --|> shared__BaseApiEndpoint
+attendance__WorkSchedulesApiEndpoint ..> attendance__WorkScheduleAssembler
+attendance__WorkSchedulesResponse --> "0..*" attendance__WorkScheduleResource
+attendance__WorkspaceAcl ..> workspace__WorkspaceApi
+attendance__AttendanceJustificationDialog ..> attendance__AttendanceStore
+attendance__AttendanceJustificationDialog ..> attendance__AttendanceRecord
+attendance__EmployeeAttendanceEmployment ..> attendance__AttendanceStore
+attendance__EmployeeAttendanceTab ..> attendance__AttendanceStore
+attendance__AttendanceHours ..> attendance__AttendanceStore
+attendance__AttendanceRecords ..> attendance__AttendanceStore
+attendance__AttendanceRecords ..> attendance__AttendanceJustificationDialog : opens
+attendance__AttendanceSummary ..> attendance__AttendanceStore
+attendance__MyAttendance ..> attendance__AttendanceStore
+attendance__MyAttendance ..> shared__CurrentEmployeeStore
+attendance__MyAttendance ..> attendance__AttendanceJustificationDialog : opens
+
+@enduml

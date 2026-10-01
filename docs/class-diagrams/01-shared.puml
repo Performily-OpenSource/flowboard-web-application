@@ -1,0 +1,197 @@
+@startuml 01-shared
+title Shared Kernel - Class Diagram (Angular frontend)
+!pragma layout smetana
+set separator none
+skinparam dpi 110
+skinparam shadowing false
+skinparam defaultFontName Inter, Arial
+skinparam defaultFontSize 12
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam ArrowColor #43474E
+skinparam class {
+  BorderColor #43474E
+  HeaderBackgroundColor #FFFFFF
+  BackgroundColor<<Api>> #FAD4C0
+  BackgroundColor<<Component>> #DDEEF0
+  BackgroundColor<<Endpoint>> #FAD4C0
+  BackgroundColor<<Enumeration>> #EADCF2
+  BackgroundColor<<Interface>> #EAEAEA
+  BackgroundColor<<Pipe>> #EAEAEA
+  BackgroundColor<<Read Model>> #F3E9D2
+  BackgroundColor<<Resource>> #F3E9D2
+  BackgroundColor<<Store>> #FFE8A3
+  BackgroundColor<<Value Object>> #D8F0D2
+  BackgroundColor<<View>> #DDEEF0
+  BackgroundColor<<Shared Kernel>> #F2F2F2
+}
+skinparam package {
+  BorderColor #73777F
+  FontColor #191C20
+}
+skinparam note {
+  BackgroundColor #FFFBE6
+  BorderColor #C3C6CF
+}
+legend top left
+  |<#FAD4C0> **I** | Api |
+  |<#DDEEF0> **C** | Component |
+  |<#FAD4C0> **P** | Endpoint |
+  |<#EADCF2> **N** | Enumeration |
+  |<#EAEAEA> **I** | Interface |
+  |<#EAEAEA> **F** | Pipe |
+  |<#F3E9D2> **M** | Read Model |
+  |<#F3E9D2> **R** | Resource |
+  |<#FFE8A3> **S** | Store |
+  |<#D8F0D2> **V** | Value Object |
+  |<#DDEEF0> **W** | View |
+endlegend
+
+package "shared/domain/model" {
+  class "BaseEntity" as shared__BaseEntity <<(I,#808080) Interface>> {
+    + id : number
+  }
+  class "DateRange" as shared__DateRange <<(V,#6FB764) Value Object>> {
+    - startDate : string
+    - endDate : string
+    --
+    + DateRange(startDate : string, endDate : string)
+    + {static} isValid(startDate : string | null | undefined, endDate : string | null | undefined) : boolean
+    + contains(date : string) : boolean
+    + overlaps(other : DateRange) : boolean
+    + lengthInDays() : number
+  }
+}
+
+package "shared/application" {
+  class "AuthenticatedSession" as shared__AuthenticatedSession <<(M,#B8993A) Read Model>> {
+    + token : string
+    + accountId : number
+    + employeeId : number
+    + displayName : string
+    + role : SessionRole
+    + mustChangePassword : boolean
+  }
+  class "CurrentEmployeeStore" as shared__CurrentEmployeeStore <<(S,#E0A800) Store>> {
+    + employeeId : Signal<number>
+    --
+    + setEmployeeId(employeeId : number) : void
+  }
+  class "LayoutStore" as shared__LayoutStore <<(S,#E0A800) Store>> {
+    + breadcrumbDetail : Signal<string | null>
+    --
+    + setBreadcrumbDetail(detail : string | null) : void
+  }
+  enum "SessionRole" as shared__SessionRole <<(N,#9C6FB7) Enumeration>> {
+    HR_STAFF
+    EMPLOYEE
+  }
+  class "SessionStore" as shared__SessionStore <<(S,#E0A800) Store>> {
+    + session : Signal<AuthenticatedSession | nul…
+    + isAuthenticated
+    + role
+    + employeeId
+    + displayName
+    + mustChangePassword
+    --
+    + setSession(session : AuthenticatedSession) : void
+    + updateMustChangePassword(value : boolean) : void
+    + clear() : void
+  }
+}
+
+package "shared/infrastructure" {
+  abstract class "BaseApi" as shared__BaseApi <<(I,#E07B39) Api>>
+  abstract class "BaseApiEndpoint" as shared__BaseApiEndpoint <<(P,#E07B39) Endpoint>> {
+    # handleError(operation : string)
+    + delete(id : number) : Observable<void>
+    + update(entity : TEntity, id : number) : Observable<TEntity>
+    + create(entity : TEntity) : Observable<TEntity>
+    + getAll() : Observable<TEntity[]>
+    + getById(id : number) : Observable<TEntity>
+  }
+  class "BaseAssembler" as shared__BaseAssembler <<(I,#808080) Interface>>{
+    + toEntityFromResource(resource: TResource): TEntity
+    + toResourceFromEntity(entity: TEntity): TResource
+    + toEntitiesFromResponse(response: TResponse): TEntity[]
+  }
+  class "BaseResource" as shared__BaseResource <<(R,#B8993A) Resource>> {
+    + id : number
+  }
+  class "BaseResponse" as shared__BaseResponse <<(R,#B8993A) Resource>>
+}
+
+package "shared/presentation/components" {
+  class "BaseForm" as shared__BaseForm <<(C,#3A9CA6) Component>> {
+    # isInvalidControl(form : FormGroup, controlName : string) : boolean
+    # errorMessagesForControl(form : FormGroup, controlName : string) : string
+    # errorKeyForControl(form : FormGroup, controlName : string) : string
+  }
+  class "EmployeeFileSection" as shared__EmployeeFileSection <<(I,#808080) Interface>> {
+    + slot : EmployeeFileSlot
+    + order : number
+    + component : Type<unknown>
+  }
+  enum "EmployeeFileSlot" as shared__EmployeeFileSlot <<(N,#9C6FB7) Enumeration>> {
+    employment
+    aside
+    attendance-tab
+    requests-tab
+    benefits-tab
+  }
+  class "FooterContent" as shared__FooterContent <<(C,#3A9CA6) Component>>
+  class "LanguageSwitcher" as shared__LanguageSwitcher <<(C,#3A9CA6) Component>> {
+    + useLanguage(language : string)
+  }
+  class "Layout" as shared__Layout <<(C,#3A9CA6) Component>> {
+    + visibleOptions() : NavigationOption[]
+    + isActive(option : NavigationOption) : boolean
+    + searchEmployees(text : string)
+  }
+  class "ListPagination" as shared__ListPagination <<(C,#3A9CA6) Component>> {
+    + total : InputSignal<number>
+    + pageSize : InputSignal
+    + itemsKey : InputSignal<string>
+    + page : ModelSignal
+  }
+  class "Toolbar" as shared__Toolbar <<(C,#3A9CA6) Component>> {
+    + showMenuButton : InputSignal
+    + menuToggle : OutputEmitterRef<void>
+    + searchSubmit : OutputEmitterRef<string>
+    --
+    + initials() : string
+    + roleLabel() : string
+    + logout() : void
+    + onSearch(searchInput : HTMLInputElement)
+  }
+  
+
+}
+package "shared/presentation/pipes" {
+  class "LocalDatePipe" as shared__LocalDatePipe <<(F,#808080) Pipe>> {
+  + transform(value : string | null | undefined) : string
+  }
+}
+
+package "shared/presentation/views/about" {
+  class "About" as shared__About <<(W,#3A9CA6) View>>
+  class "Home" as shared__Home <<(W,#3A9CA6) View>>
+  class "PageNotFound" as shared__PageNotFound <<(W,#3A9CA6) View>> {
+    + ngOnInit() : void
+    # navigateToHome()
+  }
+}
+
+
+shared__AuthenticatedSession --> shared__SessionRole
+shared__SessionStore --> shared__AuthenticatedSession
+shared__EmployeeFileSection --> shared__EmployeeFileSlot
+shared__Layout ..> shared__SessionStore
+shared__Layout ..> shared__Toolbar
+shared__Toolbar ..> shared__LayoutStore
+shared__Toolbar ..> shared__SessionStore
+shared__Toolbar ..> shared__CurrentEmployeeStore
+shared__Toolbar ..> shared__LanguageSwitcher
+
+@enduml

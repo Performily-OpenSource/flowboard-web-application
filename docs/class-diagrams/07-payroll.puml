@@ -1,0 +1,362 @@
+@startuml 07-payroll
+title Payroll Bounded Context - Class Diagram (Angular frontend)
+!pragma layout smetana
+set separator none
+skinparam dpi 110
+skinparam shadowing false
+skinparam defaultFontName Inter, Arial
+skinparam defaultFontSize 12
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam ArrowColor #43474E
+skinparam class {
+  BorderColor #43474E
+  HeaderBackgroundColor #FFFFFF
+  BackgroundColor<<ACL>> #D9D9F3
+  BackgroundColor<<Api>> #FAD4C0
+  BackgroundColor<<Assembler>> #FCE4EC
+  BackgroundColor<<Component>> #DDEEF0
+  BackgroundColor<<Endpoint>> #FAD4C0
+  BackgroundColor<<Entity>> #D3E4FF
+  BackgroundColor<<Enumeration>> #EADCF2
+  BackgroundColor<<Interface>> #EAEAEA
+  BackgroundColor<<Pipe>> #EAEAEA
+  BackgroundColor<<Read Model>> #F3E9D2
+  BackgroundColor<<Resource>> #F3E9D2
+  BackgroundColor<<Store>> #FFE8A3
+  BackgroundColor<<Value Object>> #D8F0D2
+  BackgroundColor<<View>> #DDEEF0
+  BackgroundColor<<Shared Kernel>> #F2F2F2
+}
+skinparam package {
+  BorderColor #73777F
+  FontColor #191C20
+}
+skinparam note {
+  BackgroundColor #FFFBE6
+  BorderColor #C3C6CF
+}
+legend top left
+  |<#D9D9F3> **L** | ACL |
+  |<#FAD4C0> **I** | Api |
+  |<#FCE4EC> **A** | Assembler |
+  |<#DDEEF0> **C** | Component |
+  |<#FAD4C0> **P** | Endpoint |
+  |<#D3E4FF> **E** | Entity |
+  |<#EADCF2> **N** | Enumeration |
+  |<#EAEAEA> **I** | Interface |
+  |<#EAEAEA> **F** | Pipe |
+  |<#F3E9D2> **M** | Read Model |
+  |<#F3E9D2> **R** | Resource |
+  |<#FFE8A3> **S** | Store |
+  |<#D8F0D2> **V** | Value Object |
+  |<#DDEEF0> **W** | View |
+endlegend
+
+package "payroll/domain/model" {
+  class "FileReference" as payroll__FileReference <<(V,#6FB764) Value Object>> {
+    + fileName : string
+    + contentType : string
+    + sizeInBytes : number
+    + storageUrl : string
+    --
+    + FileReference(props)
+  }
+  class "Money" as payroll__Money <<(V,#6FB764) Value Object>> {
+    + amount : number
+    + currency : string
+    --
+    + Money(amount : number, currency)
+  }
+  class "PaymentDetails" as payroll__PaymentDetails <<(V,#6FB764) Value Object>> {
+    + status : PaymentStatus
+    + paidOn : string | null
+    + observationReason : string | null
+    --
+    + PaymentDetails(status : PaymentStatus, paidOn : string | null, observationReason : string | null)
+    + {static} pending() : PaymentDetails
+    + paid(paidOn : string) : PaymentDetails
+    + observed(reason : string) : PaymentDetails
+  }
+  enum "PaymentStatus" as payroll__PaymentStatus <<(N,#9C6FB7) Enumeration>> {
+    PENDING
+    PAID
+    OBSERVED
+  }
+  class "PayrollArea" as payroll__PayrollArea <<(M,#B8993A) Read Model>>
+  class "PayrollEmployee" as payroll__PayrollEmployee <<(M,#B8993A) Read Model>> {
+    + id : number
+    + fullName : string
+    + firstName : string
+    + lastName : string
+    + document : string
+    + areaId : number
+    + areaName : string
+    + positionTitle : string
+    + active : boolean
+    --
+    + isActive() : boolean
+  }
+  class "PayrollPeriod" as payroll__PayrollPeriod <<(E,#4A7BD0) Entity>> {
+    + id : number
+    + periodYear : number
+    + periodMonth : number
+    + scheduledPaymentDate : string
+    --
+    + PayrollPeriod(props)
+    + label() : string
+  }
+  class "Payslip" as payroll__Payslip <<(E,#4A7BD0) Entity>> {
+    + id : number
+    + employeeId : number
+    + payrollPeriodId : number
+    + file : FileReference
+    + issueDate : string
+    + netAmount : Money
+    + publicationStatus : PublicationStatus
+    + publishedAt : string | null
+    + payment : PaymentDetails
+    --
+    + Payslip(props)
+    + publish(publishedAt) : void
+    + replaceFile(file : FileReference, issueDate : string, netAmount : Money) : void
+    + markAsPaid(paidOn : string) : void
+    + markAsObserved(reason : string) : void
+    + isVisibleTo(employeeId : number) : boolean
+  }
+  enum "PublicationStatus" as payroll__PublicationStatus <<(N,#9C6FB7) Enumeration>> {
+    UNDER_REVIEW
+    PUBLISHED
+  }
+}
+
+package "payroll/application" {
+  class "PayrollStore" as payroll__PayrollStore <<(S,#E0A800) Store>> {
+    + periods : Signal<PayrollPeriod[]>
+    + payslips : Signal<Payslip[]>
+    + employees : Signal<PayrollEmployee[]>
+    + areas : Signal<PayrollArea[]>
+    + loading : Signal<boolean>
+    + error : Signal<string | null>
+    + operationError : Signal<string | null>
+    + operationVersion : Signal<number>
+    + currentEmployeeId : Signal
+    + latestPeriod : Signal
+    --
+    + getPeriodById(id : number) : PayrollPeriod | undefined
+    + getPayslipById(id : number) : Payslip | undefined
+    + getEmployeeById(id : number) : PayrollEmployee | undefined
+    + getAreaByEmployeeId(employeeId : number) : PayrollArea | undefined
+    + visiblePayslipsForEmployee(employeeId : number) : Payslip[]
+    + existsForEmployeePeriod(employeeId : number, payrollPeriodId : number, excludedId : number | null) : boolean
+    + createPayslip(payslip : Payslip) : void
+    + createPayslips(payslips : Payslip[]) : void
+    + replacePayslip(existing : Payslip, replacement : Payslip) : void
+    + publishPayslip(payslip : Payslip) : void
+    + markAsPaid(payslip : Payslip, paidOn : string) : void
+    + markAsObserved(payslip : Payslip, reason : string) : void
+    + clearError() : void
+  }
+}
+
+package "payroll/infrastructure" {
+  class "PayrollApi" as payroll__PayrollApi <<(I,#E07B39) Api>> {
+    + getPeriods() : Observable<PayrollPeriod[]>
+    + getPayslips() : Observable<Payslip[]>
+    + createPayslip(payslip : Payslip) : Observable<Payslip>
+    + updatePayslip(payslip : Payslip) : Observable<Payslip>
+  }
+  class "PayrollPeriodAssembler" as payroll__PayrollPeriodAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(resource : PayrollPeriodResource) : PayrollPeriod
+    + toResourceFromEntity(entity : PayrollPeriod) : PayrollPeriodResource
+    + toEntitiesFromResponse(response : PayrollPeriodsResponse) : PayrollPeriod[]
+  }
+  class "PayrollPeriodResource" as payroll__PayrollPeriodResource <<(R,#B8993A) Resource>> {
+    + periodYear : number
+    + periodMonth : number
+    + scheduledPaymentDate : string
+  }
+  class "PayrollPeriodsApiEndpoint" as payroll__PayrollPeriodsApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "PayrollPeriodsResponse" as payroll__PayrollPeriodsResponse <<(R,#B8993A) Resource>> {
+    + data : PayrollPeriodResource[]
+  }
+  class "PayslipAssembler" as payroll__PayslipAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(resource : PayslipResource) : Payslip
+    + toResourceFromEntity(entity : Payslip) : PayslipResource
+    + toEntitiesFromResponse(response : PayslipsResponse) : Payslip[]
+  }
+  class "PayslipResource" as payroll__PayslipResource <<(R,#B8993A) Resource>> {
+    + employeeId : number
+    + payrollPeriodId : number
+    + fileName : string
+    + contentType : string
+    + sizeBytes : number
+    + storageUrl : string
+    + issueDate : string
+    + netAmount : number
+    + netCurrency : string
+    + publicationStatus : PublicationStatus
+    + publishedAt : string | null
+    + paymentStatus : PaymentStatus
+    + paidOn : string | null
+    + observationReason : string | null
+  }
+  class "PayslipsApiEndpoint" as payroll__PayslipsApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "PayslipsResponse" as payroll__PayslipsResponse <<(R,#B8993A) Resource>> {
+    + data : PayslipResource[]
+  }
+  class "WorkspaceAcl" as payroll__WorkspaceAcl <<(L,#6A6AC4) ACL>> {
+    + getEmployees() : Observable<PayrollEmployee[]>
+    + getAreas() : Observable<PayrollArea[]>
+  }
+}
+
+package "payroll/presentation/components/observation-dialog" {
+  class "ObservationDialog" as payroll__ObservationDialog <<(C,#3A9CA6) Component>> {
+    + confirm() : void
+  }
+  class "ObservationDialogData" as payroll__ObservationDialogData <<(I,#808080) Interface>> {
+    + payslip : Payslip
+    + readOnly? : boolean
+  }
+}
+
+package "payroll/presentation/components/payment-dialog" {
+  class "PaymentDialog" as payroll__PaymentDialog <<(C,#3A9CA6) Component>> {
+    + confirm() : void
+  }
+  class "PaymentDialogData" as payroll__PaymentDialogData <<(I,#808080) Interface>> {
+    + payslip : Payslip
+  }
+}
+
+package "payroll/presentation/components/payslip-upload-dialog" {
+  class "PayslipUploadDialog" as payroll__PayslipUploadDialog <<(C,#3A9CA6) Component>> {
+    + submit(replace) : Promise<void>
+    + onFileChange(event : Event) : void
+    + employeeName(id : number) : string
+    + periodLabel(id : number) : string
+  }
+  class "PayslipUploadDialogData" as payroll__PayslipUploadDialogData <<(I,#808080) Interface>> {
+    + payslip? : Payslip
+  }
+}
+
+package "payroll/presentation/components/payslip-view-dialog" {
+  class "PayslipViewDialog" as payroll__PayslipViewDialog <<(C,#3A9CA6) Component>> {
+    + download() : void
+    + print() : void
+  }
+  class "PayslipViewDialogData" as payroll__PayslipViewDialogData <<(I,#808080) Interface>> {
+    + payslip : Payslip
+  }
+}
+
+package "payroll/presentation/views/my-payslips" {
+  class "MyPayslips" as payroll__MyPayslips <<(W,#3A9CA6) View>> {
+    + employeeName() : string
+    + periodLabel(id : number) : string
+    + money(payslip : Payslip) : string
+    + setYear(value : string)
+    + setPeriod(value : string)
+    + openViewer(payslip : Payslip)
+    + download(payslip : Payslip)
+  }
+}
+
+package "payroll/presentation/views/payroll-list" {
+  class "PayrollList" as payroll__PayrollList <<(W,#3A9CA6) View>> {
+    + setPeriod(value : string)
+    + setArea(value : string)
+    + setPaymentStatus(value : string)
+    + periodLabel(id : number) : string
+    + employeeName(id : number) : string
+    + initials(id : number) : string
+    + money(payslip : Payslip) : string
+    + openUpload()
+    + openReplace(payslip : Payslip)
+    + openPayment(payslip : Payslip)
+    + … 5 more methods
+  }
+}
+
+package "payroll/presentation/views/payslip-upload" {
+  class "PayslipUpload" as payroll__PayslipUpload <<(W,#3A9CA6) View>> {
+    + onPeriodChange(value : string) : void
+    + onDocumentTypeChange(value : string) : void
+    + onDragOver(event : DragEvent) : void
+    + onDragLeave(event : DragEvent) : void
+    + onDrop(event : DragEvent) : void
+    + onFileChange(event : Event) : void
+    + removeFile(item : UploadItem) : void
+    + employeeName(id : number | null) : string
+    + fileSize(file : File) : string
+    + goBack() : void
+    + … 1 more methods
+  }
+}
+
+package "shared" <<Shared Kernel>> {
+  abstract class "BaseApi" as shared__BaseApi <<(I,#E07B39) Api>>
+  abstract class "BaseApiEndpoint" as shared__BaseApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "BaseAssembler" as shared__BaseAssembler <<(I,#808080) Interface>>
+  class "CurrentEmployeeStore" as shared__CurrentEmployeeStore <<(S,#E0A800) Store>>
+  class "LocalDatePipe" as shared__LocalDatePipe <<(F,#808080) Pipe>>
+}
+
+package "workspace (external)" <<Shared Kernel>> {
+  class "WorkspaceApi" as workspace__WorkspaceApi <<(I,#E07B39) Api>>
+}
+
+payroll__PayrollStore --> "0..*" payroll__PayrollPeriod
+payroll__PayrollStore --> "0..*" payroll__Payslip
+payroll__PayrollStore --> "0..*" payroll__PayrollEmployee
+payroll__PayrollStore --> "0..*" payroll__PayrollArea
+payroll__PayrollStore ..> payroll__PayrollApi
+payroll__PayrollStore ..> payroll__WorkspaceAcl
+payroll__PayrollStore ..> shared__CurrentEmployeeStore
+payroll__PaymentDetails --> payroll__PaymentStatus
+payroll__Payslip *-- payroll__FileReference
+payroll__Payslip *-- payroll__Money
+payroll__Payslip --> payroll__PublicationStatus
+payroll__Payslip *-- payroll__PaymentDetails
+payroll__PayrollApi --|> shared__BaseApi
+payroll__PayrollApi --> payroll__PayrollPeriodsApiEndpoint
+payroll__PayrollApi --> payroll__PayslipsApiEndpoint
+payroll__PayrollPeriodAssembler ..|> shared__BaseAssembler
+payroll__PayrollPeriodAssembler ..> payroll__PayrollPeriod
+payroll__PayrollPeriodAssembler ..> payroll__PayrollPeriodResource
+payroll__PayrollPeriodAssembler ..> payroll__PayrollPeriodsResponse
+payroll__PayrollPeriodsApiEndpoint --|> shared__BaseApiEndpoint
+payroll__PayrollPeriodsApiEndpoint ..> payroll__PayrollPeriodAssembler
+payroll__PayrollPeriodsResponse --> "0..*" payroll__PayrollPeriodResource
+payroll__PayslipAssembler ..|> shared__BaseAssembler
+payroll__PayslipAssembler ..> payroll__Payslip
+payroll__PayslipAssembler ..> payroll__PayslipResource
+payroll__PayslipAssembler ..> payroll__PayslipsResponse
+payroll__PayslipsApiEndpoint --|> shared__BaseApiEndpoint
+payroll__PayslipsApiEndpoint ..> payroll__PayslipAssembler
+payroll__PayslipResource --> payroll__PublicationStatus
+payroll__PayslipsResponse --> "0..*" payroll__PayslipResource
+payroll__WorkspaceAcl ..> workspace__WorkspaceApi
+payroll__ObservationDialogData --> payroll__Payslip
+payroll__ObservationDialog ..> payroll__PayrollStore
+payroll__PaymentDialogData --> payroll__Payslip
+payroll__PaymentDialog ..> payroll__PayrollStore
+payroll__PayslipUploadDialogData --> payroll__Payslip
+payroll__PayslipUploadDialog ..> payroll__PayrollStore
+payroll__PayslipViewDialogData --> payroll__Payslip
+payroll__PayslipViewDialog ..> payroll__PayrollStore
+payroll__MyPayslips ..> payroll__PayrollStore
+payroll__MyPayslips ..> shared__LocalDatePipe
+payroll__MyPayslips ..> payroll__PayslipViewDialog : opens
+payroll__PayrollList ..> payroll__PayrollStore
+payroll__PayrollList ..> shared__LocalDatePipe
+payroll__PayrollList ..> payroll__PayslipUploadDialog : opens
+payroll__PayrollList ..> payroll__PaymentDialog : opens
+payroll__PayrollList ..> payroll__ObservationDialog : opens
+payroll__PayrollList ..> payroll__PayslipViewDialog : opens
+payroll__PayslipUpload ..> payroll__PayrollStore
+
+@enduml

@@ -1,0 +1,332 @@
+@startuml 02-iam
+title IAM Bounded Context - Class Diagram (Angular frontend)
+!pragma layout smetana
+set separator none
+skinparam dpi 110
+skinparam shadowing false
+skinparam defaultFontName Inter, Arial
+skinparam defaultFontSize 12
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam ArrowColor #43474E
+skinparam class {
+  BorderColor #43474E
+  HeaderBackgroundColor #FFFFFF
+  BackgroundColor<<ACL>> #D9D9F3
+  BackgroundColor<<Api>> #FAD4C0
+  BackgroundColor<<Assembler>> #FCE4EC
+  BackgroundColor<<Component>> #DDEEF0
+  BackgroundColor<<Endpoint>> #FAD4C0
+  BackgroundColor<<Entity>> #D3E4FF
+  BackgroundColor<<Enumeration>> #EADCF2
+  BackgroundColor<<Guard>> #EAEAEA
+  BackgroundColor<<Interface>> #EAEAEA
+  BackgroundColor<<Read Model>> #F3E9D2
+  BackgroundColor<<Resource>> #F3E9D2
+  BackgroundColor<<Store>> #FFE8A3
+  BackgroundColor<<Value Object>> #D8F0D2
+  BackgroundColor<<View>> #DDEEF0
+  BackgroundColor<<Shared Kernel>> #F2F2F2
+}
+skinparam package {
+  BorderColor #73777F
+  FontColor #191C20
+}
+skinparam note {
+  BackgroundColor #FFFBE6
+  BorderColor #C3C6CF
+}
+legend top left
+  |<#D9D9F3> **L** | ACL |
+  |<#FAD4C0> **I** | Api |
+  |<#FCE4EC> **A** | Assembler |
+  |<#DDEEF0> **C** | Component |
+  |<#FAD4C0> **P** | Endpoint |
+  |<#D3E4FF> **E** | Entity |
+  |<#EADCF2> **N** | Enumeration |
+  |<#EAEAEA> **G** | Guard |
+  |<#EAEAEA> **I** | Interface |
+  |<#F3E9D2> **M** | Read Model |
+  |<#F3E9D2> **R** | Resource |
+  |<#FFE8A3> **S** | Store |
+  |<#D8F0D2> **V** | Value Object |
+  |<#DDEEF0> **W** | View |
+endlegend
+
+package "iam/domain/model" {
+  enum "AccountStatus" as iam__AccountStatus <<(N,#9C6FB7) Enumeration>> {
+    ACTIVE
+    DISABLED
+  }
+  class "Credentials" as iam__Credentials <<(V,#6FB764) Value Object>> {
+    + username : Username
+    + passwordHash : PasswordHash
+    --
+    + Credentials(username : Username, passwordHash : PasswordHash)
+    + withPasswordHash(newHash : PasswordHash) : Credentials
+  }
+  class "PasswordHash" as iam__PasswordHash <<(V,#6FB764) Value Object>> {
+    + value : string
+    --
+    + PasswordHash(value : string)
+  }
+  class "PlainPassword" as iam__PlainPassword <<(V,#6FB764) Value Object>> {
+    + value : string
+    --
+    + PlainPassword(value : string)
+    + {static} validate(value : string) : string[]
+  }
+  class "Role" as iam__Role <<(E,#4A7BD0) Entity>> {
+    + id : number
+    + name : RoleType
+    --
+    + Role(props)
+    + getStringName() : string
+    + {static} getDefaultRole() : RoleType
+  }
+  enum "RoleType" as iam__RoleType <<(N,#9C6FB7) Enumeration>> {
+    HR_STAFF
+    EMPLOYEE
+  }
+  class "UserAccount" as iam__UserAccount <<(E,#4A7BD0) Entity>> {
+    + id : number
+    + employeeId : number
+    + credentials : Credentials
+    + role : RoleType
+    + status : AccountStatus
+    + mustChangePassword : boolean
+    + lastSignInAt : string | null
+    + username : string
+    + passwordHash : string
+    --
+    + UserAccount(props : UserAccountProps)
+    + changePassword(newPasswordHash : PasswordHash) : void
+    + resetPassword(temporaryPasswordHash : PasswordHash) : void
+    + changeRole(newRole : RoleType) : void
+    + disable() : void
+    + enable() : void
+    + registerSignIn() : void
+    + canSignIn() : boolean
+    + isHrStaff() : boolean
+    + toProps() : UserAccountProps
+  }
+  class "UserAccountProps" as iam__UserAccountProps <<(I,#808080) Interface>> {
+    + id : number
+    + employeeId : number
+    + username : string
+    + passwordHash : string
+    + role : RoleType
+    + status : AccountStatus
+    + mustChangePassword : boolean
+    + lastSignInAt : string | null
+  }
+  class "Username" as iam__Username <<(V,#6FB764) Value Object>> {
+    + value : string
+    --
+    + Username(value : string)
+  }
+}
+
+package "iam/application" {
+  class "AccountListItem" as iam__AccountListItem <<(M,#B8993A) Read Model>> {
+    + employeeName : string
+    + employeeEmail : string
+  }
+  class "IamStore" as iam__IamStore <<(S,#E0A800) Store>> {
+    + accounts : Signal<AccountListItem[]>
+    + roles : Signal
+    + loading : Signal<boolean>
+    + error : Signal<string | null>
+    + activeHrCount : Signal
+    --
+    + load() : void
+    + authenticate(username : string, password : string) : Promise<'success' | 'invalid'…
+    + changeCurrentPassword(temporaryPassword : string, newPassword : string) : Promise<boolean>
+    + resetPassword(accountId : number) : Promise<boolean>
+    + changeRole(accountId : number, role : RoleType) : Promise<boolean>
+    + signOut() : void
+  }
+}
+
+package "iam/infrastructure" {
+  class "IamApi" as iam__IamApi <<(I,#E07B39) Api>> {
+    + getAccounts() : Observable<UserAccount[]>
+    + updateAccount(account : UserAccount) : Observable<UserAccount>
+    + getRoles() : Observable<Role[]>
+  }
+  class "IamEmployee" as iam__IamEmployee <<(I,#808080) Interface>> {
+    + id : number
+    + fullName : string
+    + email : string
+    + status : string
+  }
+  class "RoleAssembler" as iam__RoleAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(resource : RoleResource) : Role
+    + toResourceFromEntity(entity : Role) : RoleResource
+    + toEntitiesFromResponse(response : RolesResponse) : Role[]
+  }
+  class "RoleResource" as iam__RoleResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + name : RoleType
+  }
+  class "RolesApiEndpoint" as iam__RolesApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "RolesResponse" as iam__RolesResponse <<(R,#B8993A) Resource>> {
+    + data : RoleResource[]
+  }
+  class "UserAccountAssembler" as iam__UserAccountAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(resource : UserAccountResource) : UserAccount
+    + toResourceFromEntity(entity : UserAccount) : UserAccountResource
+    + toEntitiesFromResponse(response : UserAccountsResponse) : UserAccount[]
+  }
+  class "UserAccountResource" as iam__UserAccountResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + employeeId : number
+    + username : string
+    + passwordHash : string
+    + role : RoleType
+    + status : AccountStatus
+    + mustChangePassword : boolean
+    + lastSignInAt : string | null
+    + createdAt? : string
+    + updatedAt? : string
+  }
+  class "UserAccountsApiEndpoint" as iam__UserAccountsApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "UserAccountsResponse" as iam__UserAccountsResponse <<(R,#B8993A) Resource>> {
+    + data : UserAccountResource[]
+  }
+  class "WorkspaceAcl" as iam__WorkspaceAcl <<(L,#6A6AC4) ACL>> {
+    + getEmployees() : Observable<IamEmployee[]>
+  }
+}
+
+package "iam/guards" {
+  class "authGuard" as iam__authGuard <<(G,#808080) Guard>>
+  class "passwordChangeGuard" as iam__passwordChangeGuard <<(G,#808080) Guard>>
+  class "roleGuard" as iam__roleGuard <<(G,#808080) Guard>>
+}
+
+package "iam/presentation/components/reset-password-dialog" {
+  class "ResetPasswordDialog" as iam__ResetPasswordDialog <<(C,#3A9CA6) Component>> {
+    + accountId : InputSignal<number>
+    + employeeName : InputSignal<string>
+    + username : InputSignal<string>
+    + status : InputSignal<string>
+    + lastSignInAt : InputSignal<string|null>
+    + close : OutputEmitterRef<void>
+    + completed : OutputEmitterRef<void>
+    --
+    + lastSignIn() : string
+    + initials() : string
+    + reset() : Promise<void>
+  }
+}
+
+package "iam/presentation/components/role-dialog" {
+  class "RoleDialog" as iam__RoleDialog <<(C,#3A9CA6) Component>> {
+    + employeeName : InputSignal<string>
+    + username : InputSignal<string>
+    + currentRole : InputSignal<RoleType>
+    + remainingHr : InputSignal<number>
+    + close : OutputEmitterRef<void>
+    + save : OutputEmitterRef<RoleType>
+    --
+    + ngOnInit() : void
+    + setRole(role : RoleType) : void
+    + initials() : string
+  }
+}
+
+package "iam/presentation/views/account-disabled" {
+  class "AccountDisabled" as iam__AccountDisabled <<(W,#3A9CA6) View>>
+}
+
+package "iam/presentation/views/account-list" {
+  class "AccountList" as iam__AccountList <<(W,#3A9CA6) View>> {
+    + selectRole(role : RoleType|null) : void
+    + selectStatus(status : 'ACTIVE'|'DISABLED'|null) : void
+    + openRole(account : AccountListItem) : void
+    + openReset(account : AccountListItem) : void
+    + closeModal() : void
+    + saveRole(role : RoleType) : Promise<void>
+    + resetCompleted() : Promise<void>
+    + initials(account : AccountListItem) : string
+    + roleLabel(role : RoleType) : string
+    + exportAccounts() : void
+  }
+}
+
+package "iam/presentation/views/change-password" {
+  class "ChangePassword" as iam__ChangePassword <<(W,#3A9CA6) View>> {
+    + updatePassword(value : string) : void
+    + submit() : Promise<void>
+  }
+}
+
+package "iam/presentation/views/login" {
+  class "Login" as iam__Login <<(W,#3A9CA6) View>> {
+    + togglePassword() : void
+    + submit() : Promise<void>
+  }
+}
+
+package "shared" <<Shared Kernel>> {
+  abstract class "BaseApi" as shared__BaseApi <<(I,#E07B39) Api>>
+  abstract class "BaseApiEndpoint" as shared__BaseApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "BaseAssembler" as shared__BaseAssembler <<(I,#808080) Interface>>
+  class "CurrentEmployeeStore" as shared__CurrentEmployeeStore <<(S,#E0A800) Store>>
+  class "LanguageSwitcher" as shared__LanguageSwitcher <<(C,#3A9CA6) Component>>
+  class "SessionStore" as shared__SessionStore <<(S,#E0A800) Store>>
+}
+
+iam__AccountListItem --|> iam__UserAccount
+iam__IamStore --> "0..*" iam__UserAccount
+iam__IamStore --> "0..*" iam__IamEmployee
+iam__IamStore --> "0..*" iam__AccountListItem
+iam__IamStore ..> iam__IamApi
+iam__IamStore ..> iam__WorkspaceAcl
+iam__IamStore ..> shared__CurrentEmployeeStore
+iam__IamStore ..> shared__SessionStore
+iam__Credentials --> iam__Username
+iam__Credentials --> iam__PasswordHash
+iam__Role --> iam__RoleType
+iam__UserAccountProps --> iam__RoleType
+iam__UserAccountProps --> iam__AccountStatus
+iam__UserAccount *-- iam__Credentials
+iam__UserAccount --> iam__RoleType
+iam__UserAccount --> iam__AccountStatus
+iam__UserAccount ..> iam__PasswordHash
+iam__UserAccount ..> iam__UserAccountProps
+iam__IamApi --|> shared__BaseApi
+iam__IamApi --> iam__UserAccountsApiEndpoint
+iam__IamApi --> iam__RolesApiEndpoint
+iam__RoleAssembler ..|> shared__BaseAssembler
+iam__RoleAssembler ..> iam__Role
+iam__RoleAssembler ..> iam__RoleResource
+iam__RoleAssembler ..> iam__RolesResponse
+iam__RolesApiEndpoint --|> shared__BaseApiEndpoint
+iam__RolesApiEndpoint ..> iam__RoleAssembler
+iam__RoleResource --> iam__RoleType
+iam__RolesResponse --> "0..*" iam__RoleResource
+iam__UserAccountAssembler ..|> shared__BaseAssembler
+iam__UserAccountAssembler ..> iam__UserAccount
+iam__UserAccountAssembler ..> iam__UserAccountResource
+iam__UserAccountAssembler ..> iam__UserAccountsResponse
+iam__UserAccountsApiEndpoint --|> shared__BaseApiEndpoint
+iam__UserAccountsApiEndpoint ..> iam__UserAccountAssembler
+iam__UserAccountResource --> iam__RoleType
+iam__UserAccountResource --> iam__AccountStatus
+iam__UserAccountsResponse --> "0..*" iam__UserAccountResource
+iam__ResetPasswordDialog ..> iam__IamStore
+iam__RoleDialog ..> iam__RoleType
+iam__AccountDisabled ..> shared__LanguageSwitcher
+iam__AccountList ..> iam__IamStore
+iam__AccountList ..> iam__RoleDialog
+iam__AccountList ..> iam__ResetPasswordDialog
+iam__ChangePassword ..> iam__IamStore
+iam__ChangePassword ..> shared__SessionStore
+iam__ChangePassword ..> shared__LanguageSwitcher
+iam__Login ..> iam__IamStore
+iam__Login ..> shared__LanguageSwitcher
+
+@enduml

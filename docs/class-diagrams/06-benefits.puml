@@ -1,0 +1,543 @@
+@startuml 06-benefits
+title Benefits Bounded Context - Class Diagram (Angular frontend)
+!pragma layout smetana
+set separator none
+skinparam dpi 110
+skinparam shadowing false
+skinparam defaultFontName Inter, Arial
+skinparam defaultFontSize 12
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam ArrowColor #43474E
+skinparam class {
+  BorderColor #43474E
+  HeaderBackgroundColor #FFFFFF
+  BackgroundColor<<ACL>> #D9D9F3
+  BackgroundColor<<Api>> #FAD4C0
+  BackgroundColor<<Assembler>> #FCE4EC
+  BackgroundColor<<Component>> #DDEEF0
+  BackgroundColor<<Endpoint>> #FAD4C0
+  BackgroundColor<<Entity>> #D3E4FF
+  BackgroundColor<<Enumeration>> #EADCF2
+  BackgroundColor<<Interface>> #EAEAEA
+  BackgroundColor<<Pipe>> #EAEAEA
+  BackgroundColor<<Read Model>> #F3E9D2
+  BackgroundColor<<Resource>> #F3E9D2
+  BackgroundColor<<Store>> #FFE8A3
+  BackgroundColor<<Value Object>> #D8F0D2
+  BackgroundColor<<View>> #DDEEF0
+  BackgroundColor<<Shared Kernel>> #F2F2F2
+}
+skinparam package {
+  BorderColor #73777F
+  FontColor #191C20
+}
+skinparam note {
+  BackgroundColor #FFFBE6
+  BorderColor #C3C6CF
+}
+legend top left
+  |<#D9D9F3> **L** | ACL |
+  |<#FAD4C0> **I** | Api |
+  |<#FCE4EC> **A** | Assembler |
+  |<#DDEEF0> **C** | Component |
+  |<#FAD4C0> **P** | Endpoint |
+  |<#D3E4FF> **E** | Entity |
+  |<#EADCF2> **N** | Enumeration |
+  |<#EAEAEA> **I** | Interface |
+  |<#EAEAEA> **F** | Pipe |
+  |<#F3E9D2> **M** | Read Model |
+  |<#F3E9D2> **R** | Resource |
+  |<#FFE8A3> **S** | Store |
+  |<#D8F0D2> **V** | Value Object |
+  |<#DDEEF0> **W** | View |
+endlegend
+
+package "benefits/domain/model" {
+  enum "AssignmentStatus" as benefits__AssignmentStatus <<(N,#9C6FB7) Enumeration>> {
+    ASSIGNED
+    DELIVERED
+    CANCELLED
+  }
+  class "BenefitAssignment" as benefits__BenefitAssignment <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - benefitTypeId : number
+    - employeeId : number
+    - sourceAreaId : number | null
+    - validity : DateRange
+    - quantity : number
+    - status : AssignmentStatus
+    - delivery : BenefitDelivery | null
+    - benefitType : BenefitType | null
+    --
+    + BenefitAssignment(props)
+    + {static} forArea(benefitTypeId : number, areaId : number, activeEmployeeIds : number[], …) : BenefitAssignment[]
+    + registerDelivery(deliveredOn : string, registeredBy : number, notes : string) : void
+    + cancel() : void
+    + isDelivered() : boolean
+    + isCancelled() : boolean
+    + isValidOn(date : string) : boolean
+    + conflictsWith(benefitTypeId : number, employeeId : number, validity : DateRange) : boolean
+  }
+  class "BenefitDelivery" as benefits__BenefitDelivery <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - deliveredOn : string
+    - registeredBy : number
+    - notes : string
+    --
+    + BenefitDelivery(props)
+  }
+  enum "BenefitPeriodicity" as benefits__BenefitPeriodicity <<(N,#9C6FB7) Enumeration>> {
+    MONTHLY
+    SEMIANNUAL
+    ANNUAL
+  }
+  class "BenefitType" as benefits__BenefitType <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - name : string
+    - description : string
+    - hasBalance : boolean
+    - unit : BenefitUnit
+    - periodicity : BenefitPeriodicity
+    - active : boolean
+    --
+    + BenefitType(props)
+    + activate() : void
+    + deactivate() : void
+    + hasSameName(name : string) : boolean
+  }
+  enum "BenefitUnit" as benefits__BenefitUnit <<(N,#9C6FB7) Enumeration>> {
+    MONEY
+    DAYS
+    UNITS
+  }
+  class "VacationBalance" as benefits__VacationBalance <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - employeeId : number
+    - accruedDays : number
+    - usedDays : number
+    - movements : VacationMovement[]
+    --
+    + VacationBalance(props)
+    + availableDays() : number
+    + usagePercentage() : number
+    + hasEnough(days : number) : boolean
+    + accrue(days : number) : void
+    + debit(days : number, requestId : number) : void
+    + revertDebit(days : number, requestId : number) : void
+    + availableAfterAdjustment(days : number) : number
+    + adjust(days : number, reason : string, authorId : number) : void
+  }
+  class "VacationMovement" as benefits__VacationMovement <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - type : VacationMovementType
+    - days : number
+    - reason : string
+    - authorId : number | null
+    - requestId : number | null
+    - occurredAt : string
+    --
+    + VacationMovement(props)
+  }
+  enum "VacationMovementType" as benefits__VacationMovementType <<(N,#9C6FB7) Enumeration>> {
+    ACCRUAL
+    USAGE
+    REVERSAL
+    MANUAL_ADJUSTMENT
+  }
+}
+
+package "benefits/application" {
+  class "AssignBenefitCommand" as benefits__AssignBenefitCommand <<(M,#B8993A) Read Model>> {
+    + benefitTypeId : number
+    + employeeId : number | null
+    + areaId : number | null
+    + validity : DateRange
+    + quantity : number
+  }
+  class "AssignmentPlan" as benefits__AssignmentPlan <<(M,#B8993A) Read Model>> {
+    + employeeIds : number[]
+    + conflictingEmployeeIds : number[]
+  }
+  class "BenefitsStore" as benefits__BenefitsStore <<(S,#E0A800) Store>> {
+    + loading : Signal<boolean>
+    + error : Signal<string | null>
+    + benefitTypes : Signal
+    + activeBenefitTypes : Signal
+    + assignments : Signal
+    + deliveredAssignments : Signal
+    + vacationBalances : Signal<VacationBalance[]>
+    --
+    + reachOf(benefitTypeId : number) : number
+    + isBenefitNameTaken(name : string, excludedId : number | null) : boolean
+    + planAssignment(benefitTypeId : number, employeeIds : number[], validity : DateRange) : AssignmentPlan
+    + findConflict(benefitTypeId : number, employeeId : number, validity : DateRange) : BenefitAssignment | undefined
+    + getBalanceByEmployeeId(employeeId : number) : VacationBalance | undefined
+    + addBenefitType(benefitType : BenefitType) : void
+    + updateBenefitType(benefitType : BenefitType) : void
+    + toggleBenefitTypeStatus(benefitType : BenefitType) : void
+    + assignBenefit(command : AssignBenefitCommand) : void
+    + registerDelivery(assignment : BenefitAssignment, deliveredOn : string, notes : string) : void
+    + cancelAssignment(assignment : BenefitAssignment) : void
+    + adjustVacationBalance(balance : VacationBalance, days : number, reason : string) : void
+    + debitVacationDays(employeeId : number, days : number, requestId : number) : void
+    + clearError() : void
+  }
+}
+
+package "benefits/infrastructure" {
+  class "AreaSummary" as benefits__AreaSummary <<(I,#808080) Interface>> {
+    + id : number
+    + name : string
+    + active : boolean
+  }
+  class "BenefitAssignmentAssembler" as benefits__BenefitAssignmentAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(resource : BenefitAssignmentResource) : BenefitAssignment
+    + toResourceFromEntity(entity : BenefitAssignment) : BenefitAssignmentResource
+    + toEntitiesFromResponse(response : BenefitAssignmentsResponse) : BenefitAssignment[]
+  }
+  class "BenefitAssignmentResource" as benefits__BenefitAssignmentResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + benefitTypeId : number
+    + employeeId : number
+    + sourceAreaId : number | null
+    + validFrom : string
+    + validTo : string
+    + quantity : number
+    + status : string
+    + delivery : BenefitDeliveryResource | null
+  }
+  class "BenefitAssignmentsApiEndpoint" as benefits__BenefitAssignmentsApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "BenefitAssignmentsResponse" as benefits__BenefitAssignmentsResponse <<(R,#B8993A) Resource>> {
+    + benefitAssignments : BenefitAssignmentResource[]
+  }
+  class "BenefitDeliveryResource" as benefits__BenefitDeliveryResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + deliveredOn : string
+    + registeredBy : number
+    + notes : string
+  }
+  class "BenefitTypeAssembler" as benefits__BenefitTypeAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(resource : BenefitTypeResource) : BenefitType
+    + toResourceFromEntity(entity : BenefitType) : BenefitTypeResource
+    + toEntitiesFromResponse(response : BenefitTypesResponse) : BenefitType[]
+  }
+  class "BenefitTypeResource" as benefits__BenefitTypeResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + name : string
+    + description : string
+    + hasBalance : boolean
+    + unit : string
+    + periodicity : string
+    + active : boolean
+  }
+  class "BenefitTypesApiEndpoint" as benefits__BenefitTypesApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "BenefitTypesResponse" as benefits__BenefitTypesResponse <<(R,#B8993A) Resource>> {
+    + benefitTypes : BenefitTypeResource[]
+  }
+  class "BenefitsApi" as benefits__BenefitsApi <<(I,#E07B39) Api>> {
+    + getBenefitTypes() : Observable<BenefitType[]>
+    + createBenefitType(benefitType : BenefitType) : Observable<BenefitType>
+    + updateBenefitType(benefitType : BenefitType) : Observable<BenefitType>
+    + getBenefitAssignments() : Observable<BenefitAssignment[…
+    + createBenefitAssignment(assignment : BenefitAssignment) : Observable<BenefitAssignment>
+    + updateBenefitAssignment(assignment : BenefitAssignment) : Observable<BenefitAssignment>
+    + getVacationBalances() : Observable<VacationBalance[]>
+    + updateVacationBalance(balance : VacationBalance) : Observable<VacationBalance>
+  }
+  class "EmployeeSummary" as benefits__EmployeeSummary <<(I,#808080) Interface>> {
+    + id : number
+    + fullName : string
+    + initials : string
+    + positionTitle : string
+    + areaId : number
+    + areaName : string
+    + active : boolean
+  }
+  class "VacationBalanceAssembler" as benefits__VacationBalanceAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(resource : VacationBalanceResource) : VacationBalance
+    + toResourceFromEntity(entity : VacationBalance) : VacationBalanceResource
+    + toEntitiesFromResponse(response : VacationBalancesResponse) : VacationBalance[]
+  }
+  class "VacationBalanceResource" as benefits__VacationBalanceResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + employeeId : number
+    + accruedDays : number
+    + usedDays : number
+    + movements : VacationMovementResource[]
+  }
+  class "VacationBalancesApiEndpoint" as benefits__VacationBalancesApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "VacationBalancesResponse" as benefits__VacationBalancesResponse <<(R,#B8993A) Resource>> {
+    + vacationBalances : VacationBalanceResource[]
+  }
+  class "VacationMovementResource" as benefits__VacationMovementResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + type : string
+    + days : number
+    + reason : string
+    + authorId : number | null
+    + requestId : number | null
+    + occurredAt : string
+  }
+  class "WorkspaceAcl" as benefits__WorkspaceAcl <<(L,#6A6AC4) ACL>> {
+    + employees : Signal<EmployeeSummary[]>
+    + activeEmployees : Signal
+    + areas : Signal<AreaSummary[]>
+    + activeAreas : Signal
+    --
+    + findEmployee(id : number) : EmployeeSummary | undefined
+    + activeEmployeeIdsOfArea(areaId : number) : number[]
+  }
+}
+
+package "benefits/presentation/components/assign-benefit-dialog" {
+  class "AssignBenefitData" as benefits__AssignBenefitData <<(I,#808080) Interface>> {
+    + benefitTypeId? : number
+  }
+  class "AssignBenefitDialog" as benefits__AssignBenefitDialog <<(C,#3A9CA6) Component>> {
+    + areaName(areaId : number | null) : string
+    + setTarget(target : AssignmentTarget)
+    + confirm()
+  }
+}
+
+package "benefits/presentation/components/benefit-quantity" {
+  class "BenefitQuantity" as benefits__BenefitQuantity <<(C,#3A9CA6) Component>> {
+    + quantity : InputSignal<number>
+    + unit : InputSignal<BenefitUnit | null | …
+  }
+}
+
+package "benefits/presentation/components/benefit-type-form-dialog" {
+  class "BenefitTypeFormData" as benefits__BenefitTypeFormData <<(I,#808080) Interface>> {
+    + benefitType? : BenefitType
+  }
+  class "BenefitTypeFormDialog" as benefits__BenefitTypeFormDialog <<(C,#3A9CA6) Component>> {
+    + confirm()
+  }
+}
+
+package "benefits/presentation/components/benefits-feedback" {
+  class "BenefitsFeedback" as benefits__BenefitsFeedback <<(C,#3A9CA6) Component>>
+}
+
+package "benefits/presentation/components/benefits-header" {
+  class "BenefitsHeader" as benefits__BenefitsHeader <<(C,#3A9CA6) Component>> {
+    + openNewBenefit()
+    + openAssignBenefit()
+  }
+}
+
+package "benefits/presentation/components/benefits-tabs" {
+  class "BenefitsTabs" as benefits__BenefitsTabs <<(C,#3A9CA6) Component>>
+}
+
+package "benefits/presentation/components/employee-benefits-tab" {
+  class "EmployeeBenefitsTab" as benefits__EmployeeBenefitsTab <<(C,#3A9CA6) Component>> {
+    + employeeId : InputSignal<number>
+  }
+}
+
+package "benefits/presentation/components/employee-summary-panel" {
+  class "EmployeeSummaryPanel" as benefits__EmployeeSummaryPanel <<(C,#3A9CA6) Component>> {
+    + employeeId : InputSignal<number>
+  }
+}
+
+package "benefits/presentation/components/register-delivery-dialog" {
+  class "RegisterDeliveryData" as benefits__RegisterDeliveryData <<(I,#808080) Interface>> {
+    + assignment : BenefitAssignment
+  }
+  class "RegisterDeliveryDialog" as benefits__RegisterDeliveryDialog <<(C,#3A9CA6) Component>> {
+    + confirm()
+  }
+}
+
+package "benefits/presentation/components/vacation-adjustment-dialog" {
+  class "VacationAdjustmentData" as benefits__VacationAdjustmentData <<(I,#808080) Interface>> {
+    + balance : VacationBalance
+  }
+  class "VacationAdjustmentDialog" as benefits__VacationAdjustmentDialog <<(C,#3A9CA6) Component>> {
+    + confirm()
+  }
+}
+
+package "benefits/presentation/components/vacation-balance-card" {
+  class "VacationBalanceCard" as benefits__VacationBalanceCard <<(C,#3A9CA6) Component>> {
+    + employeeId : InputSignal<number>
+  }
+}
+
+package "benefits/presentation/components/vacation-movements-dialog" {
+  class "VacationMovementsData" as benefits__VacationMovementsData <<(I,#808080) Interface>> {
+    + balance : VacationBalance
+  }
+  class "VacationMovementsDialog" as benefits__VacationMovementsDialog <<(C,#3A9CA6) Component>> {
+    + authorName(authorId : number | null) : string
+  }
+}
+
+package "benefits/presentation/views/benefit-assignments" {
+  class "BenefitAssignments" as benefits__BenefitAssignments <<(W,#3A9CA6) View>> {
+    + employee(employeeId : number)
+    + benefitName(benefitTypeId : number | null) : string
+    + setStatus(status : AssignmentStatus | null)
+    + setBenefit(benefitTypeId : number | null)
+    + registerDelivery(assignment : BenefitAssignment)
+    + cancel(assignment : BenefitAssignment)
+  }
+}
+
+package "benefits/presentation/views/benefit-catalog" {
+  class "BenefitCatalog" as benefits__BenefitCatalog <<(W,#3A9CA6) View>> {
+    + setUnit(unit : BenefitUnit | null)
+    + setBalance(filter : BalanceFilter)
+    + setStatus(filter : StatusFilter)
+    + editBenefit(benefitType : BenefitType)
+    + assignBenefit(benefitType : BenefitType)
+    + toggleStatus(benefitType : BenefitType)
+  }
+}
+
+package "benefits/presentation/views/benefit-deliveries" {
+  class "BenefitDeliveries" as benefits__BenefitDeliveries <<(W,#3A9CA6) View>> {
+    + employee(employeeId : number)
+  }
+}
+
+package "benefits/presentation/views/vacation-balances" {
+  class "VacationBalances" as benefits__VacationBalances <<(W,#3A9CA6) View>> {
+    + areaName(areaId : number | null) : string
+    + setArea(areaId : number | null)
+    + setAvailability(filter : AvailabilityFilter)
+    + setSort(order : SortOrder)
+    + adjust(balance : VacationBalance)
+    + showMovements(balance : VacationBalance)
+    + exportBalances()
+  }
+}
+
+package "shared" <<Shared Kernel>> {
+  abstract class "BaseApi" as shared__BaseApi <<(I,#E07B39) Api>>
+  abstract class "BaseApiEndpoint" as shared__BaseApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "BaseAssembler" as shared__BaseAssembler <<(I,#808080) Interface>>
+  class "BaseForm" as shared__BaseForm <<(C,#3A9CA6) Component>>
+  class "CurrentEmployeeStore" as shared__CurrentEmployeeStore <<(S,#E0A800) Store>>
+  class "DateRange" as shared__DateRange <<(V,#6FB764) Value Object>>
+  class "ListPagination" as shared__ListPagination <<(C,#3A9CA6) Component>>
+  class "LocalDatePipe" as shared__LocalDatePipe <<(F,#808080) Pipe>>
+}
+
+package "workspace (external)" <<Shared Kernel>> {
+  class "WorkspaceStore" as workspace__WorkspaceStore <<(S,#E0A800) Store>>
+}
+
+benefits__AssignBenefitCommand --> shared__DateRange
+benefits__BenefitsStore --> benefits__BenefitTypeAssembler
+benefits__BenefitsStore --> benefits__BenefitAssignmentAssembler
+benefits__BenefitsStore --> benefits__VacationBalanceAssembler
+benefits__BenefitsStore --> "0..*" benefits__BenefitType
+benefits__BenefitsStore --> "0..*" benefits__BenefitAssignment
+benefits__BenefitsStore --> "0..*" benefits__VacationBalance
+benefits__BenefitsStore ..> benefits__WorkspaceAcl
+benefits__BenefitsStore ..> shared__CurrentEmployeeStore
+benefits__BenefitsStore ..> benefits__BenefitsApi
+benefits__BenefitAssignment *-- shared__DateRange
+benefits__BenefitAssignment --> benefits__AssignmentStatus
+benefits__BenefitAssignment --> benefits__BenefitDelivery
+benefits__BenefitAssignment --> benefits__BenefitType
+benefits__BenefitType --> benefits__BenefitUnit
+benefits__BenefitType --> benefits__BenefitPeriodicity
+benefits__VacationBalance --> "0..*" benefits__VacationMovement
+benefits__VacationMovement --> benefits__VacationMovementType
+benefits__BenefitAssignmentAssembler ..|> shared__BaseAssembler
+benefits__BenefitAssignmentAssembler ..> benefits__BenefitAssignment
+benefits__BenefitAssignmentAssembler ..> benefits__BenefitAssignmentResource
+benefits__BenefitAssignmentAssembler ..> benefits__BenefitAssignmentsResponse
+benefits__BenefitAssignmentsApiEndpoint --|> shared__BaseApiEndpoint
+benefits__BenefitAssignmentsApiEndpoint ..> benefits__BenefitAssignmentAssembler
+benefits__BenefitAssignmentResource --> benefits__BenefitDeliveryResource
+benefits__BenefitAssignmentsResponse --> "0..*" benefits__BenefitAssignmentResource
+benefits__BenefitTypeAssembler ..|> shared__BaseAssembler
+benefits__BenefitTypeAssembler ..> benefits__BenefitType
+benefits__BenefitTypeAssembler ..> benefits__BenefitTypeResource
+benefits__BenefitTypeAssembler ..> benefits__BenefitTypesResponse
+benefits__BenefitTypesApiEndpoint --|> shared__BaseApiEndpoint
+benefits__BenefitTypesApiEndpoint ..> benefits__BenefitTypeAssembler
+benefits__BenefitTypesResponse --> "0..*" benefits__BenefitTypeResource
+benefits__BenefitsApi --|> shared__BaseApi
+benefits__BenefitsApi --> benefits__BenefitTypesApiEndpoint
+benefits__BenefitsApi --> benefits__BenefitAssignmentsApiEndpoint
+benefits__BenefitsApi --> benefits__VacationBalancesApiEndpoint
+benefits__VacationBalanceAssembler ..|> shared__BaseAssembler
+benefits__VacationBalanceAssembler ..> benefits__VacationBalance
+benefits__VacationBalanceAssembler ..> benefits__VacationBalanceResource
+benefits__VacationBalanceAssembler ..> benefits__VacationBalancesResponse
+benefits__VacationBalancesApiEndpoint --|> shared__BaseApiEndpoint
+benefits__VacationBalancesApiEndpoint ..> benefits__VacationBalanceAssembler
+benefits__VacationBalanceResource --> "0..*" benefits__VacationMovementResource
+benefits__VacationBalancesResponse --> "0..*" benefits__VacationBalanceResource
+benefits__WorkspaceAcl ..> workspace__WorkspaceStore
+benefits__AssignBenefitDialog --|> shared__BaseForm
+benefits__AssignBenefitDialog ..> benefits__BenefitsStore
+benefits__AssignBenefitDialog ..> benefits__WorkspaceAcl
+benefits__AssignBenefitDialog ..> shared__LocalDatePipe
+benefits__BenefitTypeFormData --> benefits__BenefitType
+benefits__BenefitTypeFormDialog --|> shared__BaseForm
+benefits__BenefitTypeFormDialog ..> benefits__BenefitsStore
+benefits__BenefitsFeedback ..> benefits__BenefitsStore
+benefits__BenefitsHeader ..> benefits__BenefitTypeFormDialog : opens
+benefits__BenefitsHeader ..> benefits__AssignBenefitDialog : opens
+benefits__EmployeeBenefitsTab ..> benefits__BenefitsStore
+benefits__EmployeeBenefitsTab ..> shared__LocalDatePipe
+benefits__EmployeeBenefitsTab ..> benefits__BenefitQuantity
+benefits__EmployeeSummaryPanel ..> benefits__WorkspaceAcl
+benefits__RegisterDeliveryData --> benefits__BenefitAssignment
+benefits__RegisterDeliveryDialog --|> shared__BaseForm
+benefits__RegisterDeliveryDialog ..> benefits__BenefitsStore
+benefits__RegisterDeliveryDialog ..> shared__LocalDatePipe
+benefits__RegisterDeliveryDialog ..> benefits__EmployeeSummaryPanel
+benefits__RegisterDeliveryDialog ..> benefits__BenefitQuantity
+benefits__VacationAdjustmentData --> benefits__VacationBalance
+benefits__VacationAdjustmentDialog --|> shared__BaseForm
+benefits__VacationAdjustmentDialog ..> benefits__BenefitsStore
+benefits__VacationAdjustmentDialog ..> benefits__EmployeeSummaryPanel
+benefits__VacationBalanceCard ..> benefits__BenefitsStore
+benefits__VacationMovementsData --> benefits__VacationBalance
+benefits__VacationMovementsDialog ..> benefits__WorkspaceAcl
+benefits__VacationMovementsDialog ..> shared__LocalDatePipe
+benefits__VacationMovementsDialog ..> benefits__EmployeeSummaryPanel
+benefits__BenefitAssignments ..> benefits__BenefitsStore
+benefits__BenefitAssignments ..> benefits__WorkspaceAcl
+benefits__BenefitAssignments ..> shared__LocalDatePipe
+benefits__BenefitAssignments ..> benefits__BenefitsHeader
+benefits__BenefitAssignments ..> benefits__BenefitsTabs
+benefits__BenefitAssignments ..> benefits__BenefitsFeedback
+benefits__BenefitAssignments ..> shared__ListPagination
+benefits__BenefitAssignments ..> benefits__BenefitQuantity
+benefits__BenefitAssignments ..> benefits__RegisterDeliveryDialog : opens
+benefits__BenefitCatalog ..> benefits__BenefitsStore
+benefits__BenefitCatalog ..> benefits__BenefitsHeader
+benefits__BenefitCatalog ..> benefits__BenefitsTabs
+benefits__BenefitCatalog ..> benefits__BenefitsFeedback
+benefits__BenefitCatalog ..> shared__ListPagination
+benefits__BenefitCatalog ..> benefits__BenefitTypeFormDialog : opens
+benefits__BenefitCatalog ..> benefits__AssignBenefitDialog : opens
+benefits__BenefitDeliveries ..> benefits__BenefitsStore
+benefits__BenefitDeliveries ..> benefits__WorkspaceAcl
+benefits__BenefitDeliveries ..> shared__LocalDatePipe
+benefits__BenefitDeliveries ..> benefits__BenefitsHeader
+benefits__BenefitDeliveries ..> benefits__BenefitsTabs
+benefits__BenefitDeliveries ..> benefits__BenefitsFeedback
+benefits__BenefitDeliveries ..> shared__ListPagination
+benefits__BenefitDeliveries ..> benefits__BenefitQuantity
+benefits__VacationBalances ..> benefits__BenefitsStore
+benefits__VacationBalances ..> benefits__WorkspaceAcl
+benefits__VacationBalances ..> benefits__BenefitsTabs
+benefits__VacationBalances ..> benefits__BenefitsFeedback
+benefits__VacationBalances ..> shared__ListPagination
+benefits__VacationBalances ..> benefits__VacationAdjustmentDialog : opens
+benefits__VacationBalances ..> benefits__VacationMovementsDialog : opens
+
+@enduml

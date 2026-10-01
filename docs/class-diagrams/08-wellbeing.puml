@@ -1,0 +1,431 @@
+@startuml 08-wellbeing
+title Wellbeing Bounded Context - Class Diagram (Angular frontend)
+!pragma layout smetana
+set separator none
+skinparam dpi 110
+skinparam shadowing false
+skinparam defaultFontName Inter, Arial
+skinparam defaultFontSize 12
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam ArrowColor #43474E
+skinparam class {
+  BorderColor #43474E
+  HeaderBackgroundColor #FFFFFF
+  BackgroundColor<<Api>> #FAD4C0
+  BackgroundColor<<Assembler>> #FCE4EC
+  BackgroundColor<<Component>> #DDEEF0
+  BackgroundColor<<Endpoint>> #FAD4C0
+  BackgroundColor<<Entity>> #D3E4FF
+  BackgroundColor<<Enumeration>> #EADCF2
+  BackgroundColor<<Interface>> #EAEAEA
+  BackgroundColor<<Read Model>> #F3E9D2
+  BackgroundColor<<Resource>> #F3E9D2
+  BackgroundColor<<Store>> #FFE8A3
+  BackgroundColor<<Value Object>> #D8F0D2
+  BackgroundColor<<View>> #DDEEF0
+  BackgroundColor<<Shared Kernel>> #F2F2F2
+}
+skinparam package {
+  BorderColor #73777F
+  FontColor #191C20
+}
+skinparam note {
+  BackgroundColor #FFFBE6
+  BorderColor #C3C6CF
+}
+legend top left
+  |<#FAD4C0> **I** | Api |
+  |<#FCE4EC> **A** | Assembler |
+  |<#DDEEF0> **C** | Component |
+  |<#FAD4C0> **P** | Endpoint |
+  |<#D3E4FF> **E** | Entity |
+  |<#EADCF2> **N** | Enumeration |
+  |<#EAEAEA> **I** | Interface |
+  |<#F3E9D2> **M** | Read Model |
+  |<#F3E9D2> **R** | Resource |
+  |<#FFE8A3> **S** | Store |
+  |<#D8F0D2> **V** | Value Object |
+  |<#DDEEF0> **W** | View |
+endlegend
+
+package "wellbeing/domain/model" {
+  class "Device" as wellbeing__Device <<(E,#4A7BD0) Entity>> {
+    + id : number
+    + code : DeviceCode
+    + supportedMetrics : Set<MetricType>
+    + status : DeviceStatus
+    + officeId : number|null
+    --
+    + Device(props)
+    + canSendReadings() : boolean
+    + supports(metricType : MetricType) : boolean
+  }
+  class "DeviceCode" as wellbeing__DeviceCode <<(V,#6FB764) Value Object>> {
+    + value : string
+    --
+    + DeviceCode(value : string)
+  }
+  enum "DeviceStatus" as wellbeing__DeviceStatus <<(N,#9C6FB7) Enumeration>> {
+    IN_INVENTORY
+    LINKED
+    INACTIVE
+  }
+  class "EnvironmentalReading" as wellbeing__EnvironmentalReading <<(E,#4A7BD0) Entity>> {
+    + id : number
+    + officeId : number
+    + deviceId : number
+    + measurement : MetricValue
+    + recordedAt : string
+    --
+    + EnvironmentalReading(props)
+    + isRecent(validityHours : number) : boolean
+    + classify(threshold : MetricThreshold) : HealthIndicator
+  }
+  enum "HealthIndicator" as wellbeing__HealthIndicator <<(N,#9C6FB7) Enumeration>> {
+    OPTIMAL
+    ACCEPTABLE
+    POOR
+    HAZARDOUS
+  }
+  class "MetricThreshold" as wellbeing__MetricThreshold <<(E,#4A7BD0) Entity>> {
+    + id : number
+    + metricType : MetricType
+    - ranges : ThresholdRange[]
+    --
+    + MetricThreshold(id : number, metricType : MetricType, ranges : ThresholdRange[])
+    + redefineRanges(ranges : ThresholdRange[]) : void
+    + classify(measurement : import('./metric-value').…) : HealthIndicator
+  }
+  enum "MetricType" as wellbeing__MetricType <<(N,#9C6FB7) Enumeration>> {
+    TEMPERATURE
+    ILLUMINATION
+    AIR_QUALITY
+  }
+  class "MetricValue" as wellbeing__MetricValue <<(V,#6FB764) Value Object>> {
+    + metricType : MetricType
+    + value : number
+    --
+    + MetricValue(metricType : MetricType, value : number)
+    + unit() : string
+  }
+  class "Office" as wellbeing__Office <<(E,#4A7BD0) Entity>> {
+    + id : number
+    + name : string
+    + location : OfficeLocation
+    + active : boolean
+    + devices : Device[]
+    --
+    + Office(props)
+    + linkDevice(device : Device) : void
+    + unlinkDevice(device : Device) : void
+    + deactivate() : void
+  }
+  class "OfficeLocation" as wellbeing__OfficeLocation <<(V,#6FB764) Value Object>> {
+    + building : string
+    + floor : string
+    + reference : string
+    --
+    + OfficeLocation(props : OfficeLocationProps)
+  }
+  class "OfficeLocationProps" as wellbeing__OfficeLocationProps <<(I,#808080) Interface>> {
+    + building : string
+    + floor : string
+    + reference? : string
+  }
+  class "ThresholdRange" as wellbeing__ThresholdRange <<(E,#4A7BD0) Entity>> {
+    + id : number
+    + metricThresholdId : number
+    + indicator : HealthIndicator
+    + minValue : number
+    + maxValue : number
+    --
+    + ThresholdRange(props : ThresholdRangeProps)
+    + contains(value : number) : boolean
+    + isContiguousWith(other : ThresholdRange) : boolean
+  }
+  class "ThresholdRangeProps" as wellbeing__ThresholdRangeProps <<(I,#808080) Interface>> {
+    + id : number
+    + metricThresholdId : number
+    + indicator : HealthIndicator
+    + minValue : number
+    + maxValue : number
+  }
+}
+
+package "wellbeing/application" {
+  class "DashboardMetric" as wellbeing__DashboardMetric <<(M,#B8993A) Read Model>> {
+    + metricType : MetricType
+    + value : number|null
+    + unit : string
+    + indicator : HealthIndicator|null
+    + recordedAt : string|null
+  }
+  class "DashboardOffice" as wellbeing__DashboardOffice <<(M,#B8993A) Read Model>> {
+    + office : Office
+    + metrics : DashboardMetric[]
+    + overallIndicator : HealthIndicator|'NO_DATA'
+  }
+  class "WellbeingStore" as wellbeing__WellbeingStore <<(S,#E0A800) Store>> {
+    + offices : Signal<Office[]>
+    + devices : Signal<Device[]>
+    + readings : Signal<EnvironmentalReading[]>
+    + thresholds : Signal<MetricThreshold[]>
+    + loading : Signal<boolean>
+    + error : Signal<string|null>
+    + activeOffices : Signal
+    + inventoryDevices : Signal
+    --
+    + loadAll() : void
+    + clearError() : void
+    + dashboardOffices() : DashboardOffice[]
+    + latestReading(officeId : number, metricType : MetricType, onlyRecent) : EnvironmentalReading|undefined
+    + readingsForHistory(officeId : number, metricType : MetricType, start : Date, …) : EnvironmentalReading[]
+    + thresholdFor(metricType : MetricType) : MetricThreshold|undefined
+    + createOffice(props : (name:string;building:str…) : void
+    + updateOffice(office : Office) : void
+    + createAndLinkDevice(code : string, metrics : MetricType[], officeId : number) : void
+    + linkDevice(device : Device, officeId : number) : void
+    + unlinkDevice(device : Device) : void
+    + updateThreshold(id : number, ranges : (indicator:HealthIndicato…) : void
+    + isStale(officeId : number) : boolean
+  }
+}
+
+package "wellbeing/infrastructure" {
+  class "DeviceAssembler" as wellbeing__DeviceAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(r : DeviceResource) : Device
+    + toResourceFromEntity(e : Device) : DeviceResource
+    + toEntitiesFromResponse(r : DevicesResponse) : Device[]
+  }
+  class "DeviceResource" as wellbeing__DeviceResource <<(R,#B8993A) Resource>> {
+    + code : string
+    + officeId : number|null
+    + supportedMetrics : MetricType[]
+    + status : DeviceStatus
+  }
+  class "DevicesApiEndpoint" as wellbeing__DevicesApiEndpoint <<(P,#E07B39) Endpoint>> {
+    + createResource(resource : Omit<DeviceResource, 'id'>) : Observable<Device>
+  }
+  class "DevicesResponse" as wellbeing__DevicesResponse <<(R,#B8993A) Resource>> {
+    + devices : DeviceResource[]
+  }
+  class "EnvironmentalReadingAssembler" as wellbeing__EnvironmentalReadingAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(r : ReadingResource) : EnvironmentalReading
+    + toResourceFromEntity(e : EnvironmentalReading) : ReadingResource
+    + toEntitiesFromResponse(r : EnvironmentalReadingsResp…) : EnvironmentalReading[]
+  }
+  class "EnvironmentalReadingsApiEndpoint" as wellbeing__EnvironmentalReadingsApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "EnvironmentalReadingsResponse" as wellbeing__EnvironmentalReadingsResponse <<(R,#B8993A) Resource>> {
+    + environmentalReadings : ReadingResource[]
+  }
+  class "MetricThresholdAssembler" as wellbeing__MetricThresholdAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(r : ThresholdResource) : MetricThreshold
+    + toResourceFromEntity(e : MetricThreshold) : ThresholdResource
+    + toEntitiesFromResponse(r : MetricThresholdsResponse) : MetricThreshold[]
+  }
+  class "MetricThresholdsApiEndpoint" as wellbeing__MetricThresholdsApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "MetricThresholdsResponse" as wellbeing__MetricThresholdsResponse <<(R,#B8993A) Resource>> {
+    + metricThresholds : ThresholdResource[]
+  }
+  class "OfficeAssembler" as wellbeing__OfficeAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(r : OfficeResource) : Office
+    + toResourceFromEntity(e : Office) : OfficeResource
+    + toEntitiesFromResponse(r : OfficesResponse) : Office[]
+  }
+  class "OfficeResource" as wellbeing__OfficeResource <<(R,#B8993A) Resource>> {
+    + name : string
+    + building : string
+    + floor : string
+    + locationReference : string
+    + active : boolean
+  }
+  class "OfficesApiEndpoint" as wellbeing__OfficesApiEndpoint <<(P,#E07B39) Endpoint>> {
+    + createResource(resource : Omit<OfficeResource, 'id'>) : Observable<Office>
+  }
+  class "OfficesResponse" as wellbeing__OfficesResponse <<(R,#B8993A) Resource>> {
+    + offices : OfficeResource[]
+  }
+  class "ReadingResource" as wellbeing__ReadingResource <<(R,#B8993A) Resource>> {
+    + officeId : number
+    + deviceId : number
+    + metricType : MetricType
+    + metricValue : number
+    + recordedAt : string
+  }
+  class "ThresholdRangeAssembler" as wellbeing__ThresholdRangeAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(r : ThresholdRangeResource) : ThresholdRange
+    + toResourceFromEntity(e : ThresholdRange) : ThresholdRangeResource
+    + toEntitiesFromResponse(r : ThresholdRangesResponse) : ThresholdRange[]
+  }
+  class "ThresholdRangeResource" as wellbeing__ThresholdRangeResource <<(R,#B8993A) Resource>> {
+    + metricThresholdId : number
+    + healthIndicator : HealthIndicator
+    + minValue : number
+    + maxValue : number
+  }
+  class "ThresholdRangesApiEndpoint" as wellbeing__ThresholdRangesApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "ThresholdRangesResponse" as wellbeing__ThresholdRangesResponse <<(R,#B8993A) Resource>> {
+    + thresholdRanges : ThresholdRangeResource[]
+  }
+  class "ThresholdResource" as wellbeing__ThresholdResource <<(R,#B8993A) Resource>> {
+    + metricType : MetricType
+  }
+  class "WellbeingApi" as wellbeing__WellbeingApi <<(I,#E07B39) Api>> {
+    + getOffices() : Observable<Office[]>
+    + createOffice(resource : Omit<OfficeResource, 'id'>) : Observable<Office>
+    + updateOffice(entity : Office) : Observable<Office>
+    + getDevices() : Observable<Device[]>
+    + createDevice(resource : Omit<DeviceResource, 'id'>) : Observable<Device>
+    + updateDevice(entity : Device) : Observable<Device>
+    + getReadings() : Observable<EnvironmentalReadi…
+    + getThresholds() : Observable<MetricThreshold[]>
+    + getThresholdRanges() : Observable<ThresholdRange[]>
+    + updateThreshold(entity : MetricThreshold) : Observable<MetricThreshold>
+    + updateThresholdRanges(thresholdId : number, ranges : Array<Pick<ThresholdRange…) : Observable<ThresholdRange[]>
+  }
+}
+
+package "wellbeing/presentation/components/device-dialog" {
+  class "DeviceDialog" as wellbeing__DeviceDialog <<(C,#3A9CA6) Component>> {
+    + availableDevices() : Device[]
+    + linkedDevices() : Device[]
+    + metrics(device : Device) : string
+    + link(device : Device) : void
+    + unlink(device : Device) : void
+    + registerAndLink() : void
+  }
+}
+
+package "wellbeing/presentation/components/history-dialog" {
+  class "HistoryDialog" as wellbeing__HistoryDialog <<(C,#3A9CA6) Component>> {
+    + selectMetric(metric : MetricType) : void
+    + labelKey(metric : MetricType) : string
+    + unit(metric : MetricType) : string
+    + format(reading : EnvironmentalReading) : string
+    + height(reading : EnvironmentalReading) : number
+    + translated(key : string) : string
+  }
+}
+
+package "wellbeing/presentation/components/office-form-dialog" {
+  class "OfficeFormDialog" as wellbeing__OfficeFormDialog <<(C,#3A9CA6) Component>> {
+    + save()
+  }
+}
+
+package "wellbeing/presentation/components/threshold-dialog" {
+  class "ThresholdDialog" as wellbeing__ThresholdDialog <<(C,#3A9CA6) Component>> {
+    + save() : void
+    + label(indicator : HealthIndicator) : string
+  }
+}
+
+package "wellbeing/presentation/views/wellbeing-dashboard" {
+  class "WellbeingDashboard" as wellbeing__WellbeingDashboard <<(W,#3A9CA6) View>> {
+    + setTab(tab : 'dashboard' | 'spaces' | …)
+    + openNewOffice() : void
+    + openDeviceDialog(office : Office) : void
+    + openHistory(office : Office, metricType : MetricType) : void
+    + openThreshold(metricType : MetricType) : void
+    + officeMetric(office : Office, metricType : MetricType)
+    + metricKey(metric : MetricType) : string
+    + indicatorKey(indicator : HealthIndicator | 'NO_DAT…) : string
+    + metricUnit(metric : MetricType) : string
+    + translateError(error : string | null) : string
+    + … 6 more methods
+  }
+}
+
+package "shared" <<Shared Kernel>> {
+  abstract class "BaseApi" as shared__BaseApi <<(I,#E07B39) Api>>
+  abstract class "BaseApiEndpoint" as shared__BaseApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "BaseAssembler" as shared__BaseAssembler <<(I,#808080) Interface>>
+  class "BaseForm" as shared__BaseForm <<(C,#3A9CA6) Component>>
+}
+
+wellbeing__DashboardMetric --> wellbeing__MetricType
+wellbeing__DashboardMetric --> wellbeing__HealthIndicator
+wellbeing__DashboardOffice --> wellbeing__Office
+wellbeing__DashboardOffice --> "0..*" wellbeing__DashboardMetric
+wellbeing__DashboardOffice --> wellbeing__HealthIndicator
+wellbeing__WellbeingStore --> "0..*" wellbeing__Office
+wellbeing__WellbeingStore --> "0..*" wellbeing__Device
+wellbeing__WellbeingStore --> "0..*" wellbeing__EnvironmentalReading
+wellbeing__WellbeingStore --> "0..*" wellbeing__MetricThreshold
+wellbeing__WellbeingStore ..> wellbeing__WellbeingApi
+wellbeing__Device *-- wellbeing__DeviceCode
+wellbeing__Device --> "0..*" wellbeing__MetricType
+wellbeing__Device --> wellbeing__DeviceStatus
+wellbeing__EnvironmentalReading *-- wellbeing__MetricValue
+wellbeing__EnvironmentalReading ..> wellbeing__MetricThreshold
+wellbeing__EnvironmentalReading ..> wellbeing__HealthIndicator
+wellbeing__MetricThreshold --> wellbeing__MetricType
+wellbeing__MetricThreshold --> "0..*" wellbeing__ThresholdRange
+wellbeing__MetricThreshold ..> wellbeing__HealthIndicator
+wellbeing__MetricValue --> wellbeing__MetricType
+wellbeing__Office *-- wellbeing__OfficeLocation
+wellbeing__Office --> "0..*" wellbeing__Device
+wellbeing__ThresholdRangeProps --> wellbeing__HealthIndicator
+wellbeing__ThresholdRange --> wellbeing__HealthIndicator
+wellbeing__DeviceAssembler ..|> shared__BaseAssembler
+wellbeing__DeviceAssembler ..> wellbeing__Device
+wellbeing__DeviceAssembler ..> wellbeing__DeviceResource
+wellbeing__DeviceAssembler ..> wellbeing__DevicesResponse
+wellbeing__DevicesApiEndpoint --|> shared__BaseApiEndpoint
+wellbeing__DevicesApiEndpoint ..> wellbeing__DeviceAssembler
+wellbeing__DeviceResource --> "0..*" wellbeing__MetricType
+wellbeing__DeviceResource --> wellbeing__DeviceStatus
+wellbeing__DevicesResponse --> "0..*" wellbeing__DeviceResource
+wellbeing__EnvironmentalReadingAssembler ..|> shared__BaseAssembler
+wellbeing__EnvironmentalReadingAssembler ..> wellbeing__EnvironmentalReading
+wellbeing__EnvironmentalReadingAssembler ..> wellbeing__ReadingResource
+wellbeing__EnvironmentalReadingAssembler ..> wellbeing__EnvironmentalReadingsResponse
+wellbeing__EnvironmentalReadingsApiEndpoint --|> shared__BaseApiEndpoint
+wellbeing__EnvironmentalReadingsApiEndpoint ..> wellbeing__EnvironmentalReadingAssembler
+wellbeing__ReadingResource --> wellbeing__MetricType
+wellbeing__EnvironmentalReadingsResponse --> "0..*" wellbeing__ReadingResource
+wellbeing__MetricThresholdAssembler ..|> shared__BaseAssembler
+wellbeing__MetricThresholdAssembler ..> wellbeing__MetricThreshold
+wellbeing__MetricThresholdAssembler ..> wellbeing__ThresholdResource
+wellbeing__MetricThresholdAssembler ..> wellbeing__MetricThresholdsResponse
+wellbeing__MetricThresholdsApiEndpoint --|> shared__BaseApiEndpoint
+wellbeing__MetricThresholdsApiEndpoint ..> wellbeing__MetricThresholdAssembler
+wellbeing__ThresholdResource --> wellbeing__MetricType
+wellbeing__MetricThresholdsResponse --> "0..*" wellbeing__ThresholdResource
+wellbeing__OfficeAssembler ..|> shared__BaseAssembler
+wellbeing__OfficeAssembler ..> wellbeing__Office
+wellbeing__OfficeAssembler ..> wellbeing__OfficeResource
+wellbeing__OfficeAssembler ..> wellbeing__OfficesResponse
+wellbeing__OfficesApiEndpoint --|> shared__BaseApiEndpoint
+wellbeing__OfficesApiEndpoint ..> wellbeing__OfficeAssembler
+wellbeing__OfficesResponse --> "0..*" wellbeing__OfficeResource
+wellbeing__ThresholdRangeAssembler ..|> shared__BaseAssembler
+wellbeing__ThresholdRangeAssembler ..> wellbeing__ThresholdRange
+wellbeing__ThresholdRangeAssembler ..> wellbeing__ThresholdRangeResource
+wellbeing__ThresholdRangeAssembler ..> wellbeing__ThresholdRangesResponse
+wellbeing__ThresholdRangesApiEndpoint --|> shared__BaseApiEndpoint
+wellbeing__ThresholdRangesApiEndpoint ..> wellbeing__ThresholdRangeAssembler
+wellbeing__ThresholdRangeResource --> wellbeing__HealthIndicator
+wellbeing__ThresholdRangesResponse --> "0..*" wellbeing__ThresholdRangeResource
+wellbeing__WellbeingApi --|> shared__BaseApi
+wellbeing__WellbeingApi --> wellbeing__OfficesApiEndpoint
+wellbeing__WellbeingApi --> wellbeing__DevicesApiEndpoint
+wellbeing__WellbeingApi --> wellbeing__EnvironmentalReadingsApiEndpoint
+wellbeing__WellbeingApi --> wellbeing__MetricThresholdsApiEndpoint
+wellbeing__WellbeingApi --> wellbeing__ThresholdRangesApiEndpoint
+wellbeing__DeviceDialog --|> shared__BaseForm
+wellbeing__DeviceDialog ..> wellbeing__WellbeingStore
+wellbeing__HistoryDialog ..> wellbeing__WellbeingStore
+wellbeing__OfficeFormDialog --|> shared__BaseForm
+wellbeing__OfficeFormDialog ..> wellbeing__WellbeingStore
+wellbeing__ThresholdDialog --|> shared__BaseForm
+wellbeing__ThresholdDialog ..> wellbeing__WellbeingStore
+wellbeing__WellbeingDashboard ..> wellbeing__WellbeingStore
+wellbeing__WellbeingDashboard ..> wellbeing__OfficeFormDialog : opens
+wellbeing__WellbeingDashboard ..> wellbeing__DeviceDialog : opens
+wellbeing__WellbeingDashboard ..> wellbeing__HistoryDialog : opens
+wellbeing__WellbeingDashboard ..> wellbeing__ThresholdDialog : opens
+
+@enduml

@@ -1,0 +1,643 @@
+@startuml 03-workspace
+title Workspace Bounded Context - Class Diagram (Angular frontend)
+!pragma layout smetana
+set separator none
+skinparam dpi 110
+skinparam shadowing false
+skinparam defaultFontName Inter, Arial
+skinparam defaultFontSize 12
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam ArrowColor #43474E
+skinparam class {
+  BorderColor #43474E
+  HeaderBackgroundColor #FFFFFF
+  BackgroundColor<<Api>> #FAD4C0
+  BackgroundColor<<Assembler>> #FCE4EC
+  BackgroundColor<<Component>> #DDEEF0
+  BackgroundColor<<Endpoint>> #FAD4C0
+  BackgroundColor<<Entity>> #D3E4FF
+  BackgroundColor<<Enumeration>> #EADCF2
+  BackgroundColor<<Interface>> #EAEAEA
+  BackgroundColor<<Pipe>> #EAEAEA
+  BackgroundColor<<Read Model>> #F3E9D2
+  BackgroundColor<<Resource>> #F3E9D2
+  BackgroundColor<<Store>> #FFE8A3
+  BackgroundColor<<View>> #DDEEF0
+  BackgroundColor<<Shared Kernel>> #F2F2F2
+}
+skinparam package {
+  BorderColor #73777F
+  FontColor #191C20
+}
+skinparam note {
+  BackgroundColor #FFFBE6
+  BorderColor #C3C6CF
+}
+legend top left
+  |<#FAD4C0> **I** | Api |
+  |<#FCE4EC> **A** | Assembler |
+  |<#DDEEF0> **C** | Component |
+  |<#FAD4C0> **P** | Endpoint |
+  |<#D3E4FF> **E** | Entity |
+  |<#EADCF2> **N** | Enumeration |
+  |<#EAEAEA> **I** | Interface |
+  |<#EAEAEA> **F** | Pipe |
+  |<#F3E9D2> **M** | Read Model |
+  |<#F3E9D2> **R** | Resource |
+  |<#FFE8A3> **S** | Store |
+  |<#DDEEF0> **W** | View |
+endlegend
+
+package "workspace/domain/model" {
+  class "Area" as workspace__Area <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - name : string
+    - description : string
+    - active : boolean
+    --
+    + Area(props)
+  }
+  enum "AssignmentChangeType" as workspace__AssignmentChangeType <<(N,#9C6FB7) Enumeration>> {
+    HIRE
+    REASSIGNMENT
+    REINSTATEMENT
+  }
+  enum "ContractType" as workspace__ContractType <<(N,#9C6FB7) Enumeration>> {
+    INDEFINITE
+    FIXED_TERM
+    PART_TIME
+    INTERNSHIP
+  }
+  enum "DocumentType" as workspace__DocumentType <<(N,#9C6FB7) Enumeration>> {
+    IDENTITY_DOCUMENT
+    EMPLOYMENT_CONTRACT
+    CONTRACT_ADDENDUM
+    PENSION_AFFILIATION
+    HEALTH_INSURANCE
+    EDUCATION_CERTIFICATE
+    CRIMINAL_RECORD_CERTIFICATE
+    WARNING_LETTER
+    COMMENDATION_LETTER
+  }
+  class "Employee" as workspace__Employee <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - firstName : string
+    - lastName : string
+    - identityDocumentType : IdentityDocumentType
+    - identityDocumentNumber : string
+    - birthDate : string
+    - email : string
+    - phoneNumber : string
+    - addressStreet : string
+    - addressDistrict : string
+    - addressProvince : string
+    - addressDepartment : string
+    - contractType : ContractType
+    - hireDate : string
+    - contractEndDate : string | null
+    - status : EmploymentStatus
+    - terminationReason : string | null
+    - terminationDate : string | null
+    - areaId : number
+    - positionId : number
+    - directManagerId : number | null
+    - area : Area | null
+    - position : Position | null
+    + fullName : string
+    + fullAddress : string
+    --
+    + Employee(props)
+    + isActive() : boolean
+    + isTerminated() : boolean
+    + hasDirectManager() : boolean
+  }
+  class "EmployeeDocument" as workspace__EmployeeDocument <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - employeeId : number
+    - documentType : DocumentType
+    - fileName : string
+    - contentType : string
+    - sizeInBytes : number
+    - storageUrl : string
+    - uploadedAt : string
+    --
+    + EmployeeDocument(props)
+    + isPdf() : boolean
+  }
+  enum "EmploymentStatus" as workspace__EmploymentStatus <<(N,#9C6FB7) Enumeration>> {
+    ACTIVE
+    SUSPENDED
+    TERMINATED
+  }
+  enum "IdentityDocumentType" as workspace__IdentityDocumentType <<(N,#9C6FB7) Enumeration>> {
+    DNI
+    CE
+    PASSPORT
+  }
+  class "JobAssignment" as workspace__JobAssignment <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - employeeId : number
+    - areaId : number
+    - positionId : number
+    - changeType : AssignmentChangeType
+    - startDate : string
+    - endDate : string | null
+    - area : Area | null
+    - position : Position | null
+    --
+    + JobAssignment(props)
+    + isCurrent() : boolean
+  }
+  class "Position" as workspace__Position <<(E,#4A7BD0) Entity>> {
+    - id : number
+    - title : string
+    - areaId : number
+    - referenceSalaryAmount : number
+    - referenceSalaryCurrency : string
+    - active : boolean
+    - area : Area | null
+    --
+    + Position(props)
+    + belongsTo(areaId : number) : boolean
+  }
+}
+
+package "workspace/application" {
+  class "OrganizationChart" as workspace__OrganizationChart <<(M,#B8993A) Read Model>> {
+    + roots : OrganizationChartNode[]
+    + pendingReassignment : Employee[]
+  }
+  class "OrganizationChartNode" as workspace__OrganizationChartNode <<(M,#B8993A) Read Model>> {
+    + employee : Employee
+    + subordinates : OrganizationChartNode[]
+  }
+  class "PendingEmployeeDocument" as workspace__PendingEmployeeDocument <<(M,#B8993A) Read Model>> {
+    + documentType : DocumentType
+    + file : File
+  }
+  class "WorkspaceStore" as workspace__WorkspaceStore <<(S,#E0A800) Store>> {
+    + loading : Signal<boolean>
+    + error : Signal<string | null>
+    + areas : Signal<Area[]>
+    + positions : Signal
+    + employees : Signal
+    + jobAssignments : Signal
+    + employeeDocuments : Signal
+    + activeEmployees : Signal
+    + statusSummary : Signal
+    + activeAreas : Signal
+    + activePositions : Signal
+    --
+    + getEmployeeById(id : number) : Signal<Employee | undefined>
+    + getAreaById(id : number) : Signal<Area | undefined>
+    + getPositionById(id : number) : Signal<Position | undefined>
+    + getSubordinates(managerId : number) : Signal<Employee[]>
+    + getReportingLine(employeeId : number) : Signal<Employee[]>
+    + getActivePositionsByArea(areaId : number | null) : Position[]
+    + countActiveEmployeesInArea(areaId : number) : number
+    + countPositionsInArea(areaId : number) : number
+    + isIdentityDocumentTaken(type : string, number : string, excludedEmployeeId : number | null) : boolean
+    + wouldCreateCycle(employeeId : number | null, managerId : number) : boolean
+    + getCyclePath(employeeId : number, managerId : number) : Employee[]
+    + buildOrganizationChart(areaId : number | null) : OrganizationChart
+    + addEmployee(employee : Employee, documents : PendingEmployeeDocument[]) : void
+    + updateEmployee(employee : Employee) : void
+    + … 14 more methods
+  }
+}
+
+package "workspace/infrastructure" {
+  class "AreaAssembler" as workspace__AreaAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(resource : AreaResource) : Area
+    + toResourceFromEntity(entity : Area) : AreaResource
+    + toEntitiesFromResponse(response : AreasResponse) : Area[]
+  }
+  class "AreaResource" as workspace__AreaResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + name : string
+    + description : string
+    + active : boolean
+  }
+  class "AreasApiEndpoint" as workspace__AreasApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "AreasResponse" as workspace__AreasResponse <<(R,#B8993A) Resource>> {
+    + areas : AreaResource[]
+  }
+  class "EmployeeAssembler" as workspace__EmployeeAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(resource : EmployeeResource) : Employee
+    + toResourceFromEntity(entity : Employee) : EmployeeResource
+    + toEntitiesFromResponse(response : EmployeesResponse) : Employee[]
+  }
+  class "EmployeeDocumentAssembler" as workspace__EmployeeDocumentAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(resource : EmployeeDocumentResource) : EmployeeDocument
+    + toResourceFromEntity(entity : EmployeeDocument) : EmployeeDocumentResource
+    + toEntitiesFromResponse(response : EmployeeDocumentsResponse) : EmployeeDocument[]
+  }
+  class "EmployeeDocumentResource" as workspace__EmployeeDocumentResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + employeeId : number
+    + documentType : string
+    + fileName : string
+    + contentType : string
+    + sizeInBytes : number
+    + storageUrl : string
+    + uploadedAt : string
+  }
+  class "EmployeeDocumentsApiEndpoint" as workspace__EmployeeDocumentsApiEndpoint <<(P,#E07B39) Endpoint>> {
+    + getByEmployeeId(employeeId : number) : Observable<EmployeeDocument[]>
+  }
+  class "EmployeeDocumentsResponse" as workspace__EmployeeDocumentsResponse <<(R,#B8993A) Resource>> {
+    + employeeDocuments : EmployeeDocumentResource[]
+  }
+  class "EmployeeResource" as workspace__EmployeeResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + firstName : string
+    + lastName : string
+    + identityDocumentType : string
+    + identityDocumentNumber : string
+    + birthDate : string
+    + email : string
+    + phoneNumber : string
+    + addressStreet : string
+    + addressDistrict : string
+    + addressProvince : string
+    + addressDepartment : string
+    + contractType : string
+    + hireDate : string
+    + contractEndDate : string | null
+    + status : string
+    + terminationReason : string | null
+    + terminationDate : string | null
+    + areaId : number
+    + positionId : number
+    + directManagerId : number | null
+  }
+  class "EmployeesApiEndpoint" as workspace__EmployeesApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "EmployeesResponse" as workspace__EmployeesResponse <<(R,#B8993A) Resource>> {
+    + employees : EmployeeResource[]
+  }
+  class "JobAssignmentAssembler" as workspace__JobAssignmentAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(resource : JobAssignmentResource) : JobAssignment
+    + toResourceFromEntity(entity : JobAssignment) : JobAssignmentResource
+    + toEntitiesFromResponse(response : JobAssignmentsResponse) : JobAssignment[]
+  }
+  class "JobAssignmentResource" as workspace__JobAssignmentResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + employeeId : number
+    + areaId : number
+    + positionId : number
+    + changeType : string
+    + startDate : string
+    + endDate : string | null
+  }
+  class "JobAssignmentsApiEndpoint" as workspace__JobAssignmentsApiEndpoint <<(P,#E07B39) Endpoint>> {
+    + getByEmployeeId(employeeId : number) : Observable<JobAssignment[]>
+  }
+  class "JobAssignmentsResponse" as workspace__JobAssignmentsResponse <<(R,#B8993A) Resource>> {
+    + jobAssignments : JobAssignmentResource[]
+  }
+  class "PositionAssembler" as workspace__PositionAssembler <<(A,#D6638C) Assembler>> {
+    + toEntityFromResource(resource : PositionResource) : Position
+    + toResourceFromEntity(entity : Position) : PositionResource
+    + toEntitiesFromResponse(response : PositionsResponse) : Position[]
+  }
+  class "PositionResource" as workspace__PositionResource <<(R,#B8993A) Resource>> {
+    + id : number
+    + title : string
+    + areaId : number
+    + referenceSalaryAmount : number
+    + referenceSalaryCurrency : string
+    + active : boolean
+  }
+  class "PositionsApiEndpoint" as workspace__PositionsApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "PositionsResponse" as workspace__PositionsResponse <<(R,#B8993A) Resource>> {
+    + positions : PositionResource[]
+  }
+  class "WorkspaceApi" as workspace__WorkspaceApi <<(I,#E07B39) Api>> {
+    + getEmployees() : Observable<Employee[]>
+    + getEmployee(id : number) : Observable<Employee>
+    + createEmployee(employee : Employee) : Observable<Employee>
+    + updateEmployee(employee : Employee) : Observable<Employee>
+    + getAreas() : Observable<Area[]>
+    + createArea(area : Area) : Observable<Area>
+    + updateArea(area : Area) : Observable<Area>
+    + getPositions() : Observable<Position[]>
+    + createPosition(position : Position) : Observable<Position>
+    + updatePosition(position : Position) : Observable<Position>
+    + getJobAssignmentsByEmployeeId(employeeId : number) : Observable<JobAssignment[]>
+    + getEmployeeDocumentsByEmployeeId(employeeId : number) : Observable<EmployeeDocument[]>
+    + createEmployeeDocument(document : EmployeeDocument) : Observable<EmployeeDocument>
+    + deleteEmployeeDocument(id : number) : Observable<void>
+  }
+}
+
+package "workspace/presentation/components/area-form-dialog" {
+  class "AreaFormData" as workspace__AreaFormData <<(I,#808080) Interface>> {
+    + area? : Area
+  }
+  class "AreaFormDialog" as workspace__AreaFormDialog <<(C,#3A9CA6) Component>> {
+    + confirm()
+  }
+}
+
+package "workspace/presentation/components/direct-manager-dialog" {
+  class "DirectManagerData" as workspace__DirectManagerData <<(I,#808080) Interface>> {
+    + employee : Employee
+  }
+  class "DirectManagerDialog" as workspace__DirectManagerDialog <<(C,#3A9CA6) Component>> {
+    + shortName(employee : Employee) : string
+    + onInput(event : Event)
+    + onSelected(event : MatAutocompleteSelectedEv…)
+    + removeManager()
+    + confirm()
+  }
+}
+
+package "workspace/presentation/components/document-upload-dialog" {
+  class "DocumentUploadData" as workspace__DocumentUploadData <<(I,#808080) Interface>> {
+    + employeeId : number
+  }
+  class "DocumentUploadDialog" as workspace__DocumentUploadDialog <<(C,#3A9CA6) Component>> {
+    + formatSize(sizeInBytes : number) : string
+    + onFileSelected(event : Event, input : HTMLInputElement)
+    + onDragOver(event : DragEvent)
+    + onDrop(event : DragEvent)
+    + removeFile()
+    + confirm()
+  }
+}
+
+package "workspace/presentation/components/employee-document-table" {
+  class "EmployeeDocumentTable" as workspace__EmployeeDocumentTable <<(C,#3A9CA6) Component>> {
+    + documents : InputSignal<EmployeeDocument[]>
+    + showActions : InputSignal
+    + deleteDocument : OutputEmitterRef<EmployeeDocument>
+    --
+    + {static} formatSize(sizeInBytes : number) : string
+    + formatSize(sizeInBytes : number) : string
+  }
+}
+
+package "workspace/presentation/components/employee-reinstatement-dialog" {
+  class "EmployeeReinstatementData" as workspace__EmployeeReinstatementData <<(I,#808080) Interface>> {
+    + employee : Employee
+  }
+  class "EmployeeReinstatementDialog" as workspace__EmployeeReinstatementDialog <<(C,#3A9CA6) Component>> {
+    + confirm()
+  }
+}
+
+package "workspace/presentation/components/employee-status-dialog" {
+  class "EmployeeStatusData" as workspace__EmployeeStatusData <<(I,#808080) Interface>> {
+    + employee : Employee
+  }
+  class "EmployeeStatusDialog" as workspace__EmployeeStatusDialog <<(C,#3A9CA6) Component>> {
+    + confirm()
+  }
+}
+
+package "workspace/presentation/components/employee-summary-card" {
+  class "EmployeeSummaryCard" as workspace__EmployeeSummaryCard <<(C,#3A9CA6) Component>> {
+    + employee : InputSignal<Employee>
+    + subtitle : InputSignal<string | null>
+    + rows : InputSignal<SummaryRow[]>
+    --
+    + initials(employee : Employee) : string
+  }
+  class "SummaryRow" as workspace__SummaryRow <<(I,#808080) Interface>> {
+    + label : string
+    + value : string
+  }
+}
+
+package "workspace/presentation/components/employee-termination-dialog" {
+  class "EmployeeTerminationData" as workspace__EmployeeTerminationData <<(I,#808080) Interface>> {
+    + employee : Employee
+  }
+  class "EmployeeTerminationDialog" as workspace__EmployeeTerminationDialog <<(C,#3A9CA6) Component>> {
+    + initials(employee : Employee) : string
+    + confirm()
+    + goToReassign()
+  }
+}
+
+package "workspace/presentation/components/job-assignment-history" {
+  class "JobAssignmentHistory" as workspace__JobAssignmentHistory <<(C,#3A9CA6) Component>> {
+    + assignments : InputSignal<JobAssignment[]>
+  }
+}
+
+package "workspace/presentation/components/position-form-dialog" {
+  class "PositionFormData" as workspace__PositionFormData <<(I,#808080) Interface>> {
+    + position? : Position
+    + areaId? : number | null
+  }
+  class "PositionFormDialog" as workspace__PositionFormDialog <<(C,#3A9CA6) Component>> {
+    + confirm()
+  }
+}
+
+package "workspace/presentation/views/employee-detail" {
+  class "EmployeeDetail" as workspace__EmployeeDetail <<(W,#3A9CA6) View>> {
+    + sectionsFor(slot : EmployeeFileSlot) : EmployeeFileSection[]
+    + initials(employee : Employee) : string
+    + shortName(employee : Employee) : string
+    + formatSize(sizeInBytes : number) : string
+    + fileExtension(document : EmployeeDocument) : string
+    + openTerminationDialog(employee : Employee)
+    + openReinstatementDialog(employee : Employee)
+    + openStatusDialog(employee : Employee)
+    + openDirectManagerDialog(employee : Employee)
+    + openOrganizationChart()
+    + … 1 more methods
+  }
+}
+
+package "workspace/presentation/views/employee-documents" {
+  class "EmployeeDocuments" as workspace__EmployeeDocuments <<(W,#3A9CA6) View>> {
+    + ngOnInit() : void
+    + openUploadDialog()
+    + deleteDocument(document : EmployeeDocument)
+  }
+}
+
+package "workspace/presentation/views/employee-form" {
+  class "EmployeeForm" as workspace__EmployeeForm <<(W,#3A9CA6) View>> {
+    + next()
+    + back()
+    + goToStep(index : number)
+    + onFileSelected(event : Event, input : HTMLInputElement)
+    + addPendingDocument()
+    + removePendingDocument(index : number)
+    + formatSize(sizeInBytes : number) : string
+    + areaName() : string
+    + positionTitle() : string
+    + managerName() : string
+    + … 1 more methods
+  }
+}
+
+package "workspace/presentation/views/employee-list" {
+  class "EmployeeList" as workspace__EmployeeList <<(W,#3A9CA6) View>> {
+    + onSearch(event : Event)
+    + setArea(areaId : number | null)
+    + setPosition(positionId : number | null)
+    + setStatus(status : EmploymentStatus | null)
+    + setContractType(contractType : ContractType | null)
+    + areaName(areaId : number) : string
+    + positionTitle(positionId : number) : string
+    + clearFilters(searchInput : HTMLInputElement)
+    + initials(employee : Employee) : string
+    + viewEmployee(employee : Employee)
+    + … 1 more methods
+  }
+}
+
+package "workspace/presentation/views/my-profile" {
+  class "MyProfile" as workspace__MyProfile <<(W,#3A9CA6) View>> {
+    + initials(employee : Employee) : string
+  }
+}
+
+package "workspace/presentation/views/organization-chart" {
+  class "OrganizationChart" as workspace__OrganizationChart_2 <<(W,#3A9CA6) View>> {
+    + areaName() : string
+    + initials(employee : Employee) : string
+    + exportChart()
+  }
+}
+
+package "workspace/presentation/views/organization-structure" {
+  class "OrganizationStructure" as workspace__OrganizationStructure <<(W,#3A9CA6) View>> {
+    + selectArea(area : Area)
+    + openAreaDialog(area : Area)
+    + openPositionDialog(position : Position)
+    + toggleArea(area : Area)
+    + togglePosition(position : Position)
+  }
+}
+
+package "shared" <<Shared Kernel>> {
+  abstract class "BaseApi" as shared__BaseApi <<(I,#E07B39) Api>>
+  abstract class "BaseApiEndpoint" as shared__BaseApiEndpoint <<(P,#E07B39) Endpoint>>
+  class "BaseAssembler" as shared__BaseAssembler <<(I,#808080) Interface>>
+  class "BaseForm" as shared__BaseForm <<(C,#3A9CA6) Component>>
+  class "CurrentEmployeeStore" as shared__CurrentEmployeeStore <<(S,#E0A800) Store>>
+  class "LayoutStore" as shared__LayoutStore <<(S,#E0A800) Store>>
+  class "LocalDatePipe" as shared__LocalDatePipe <<(F,#808080) Pipe>>
+}
+
+workspace__OrganizationChartNode --> workspace__Employee
+workspace__OrganizationChart --> "0..*" workspace__OrganizationChartNode
+workspace__OrganizationChart --> "0..*" workspace__Employee
+workspace__PendingEmployeeDocument --> workspace__DocumentType
+workspace__WorkspaceStore --> "0..*" workspace__Employee
+workspace__WorkspaceStore --> "0..*" workspace__Area
+workspace__WorkspaceStore --> "0..*" workspace__Position
+workspace__WorkspaceStore --> "0..*" workspace__JobAssignment
+workspace__WorkspaceStore --> "0..*" workspace__EmployeeDocument
+workspace__WorkspaceStore ..> workspace__WorkspaceApi
+workspace__EmployeeDocument --> workspace__DocumentType
+workspace__Employee --> workspace__IdentityDocumentType
+workspace__Employee --> workspace__ContractType
+workspace__Employee --> workspace__EmploymentStatus
+workspace__Employee --> workspace__Area
+workspace__Employee --> workspace__Position
+workspace__JobAssignment --> workspace__AssignmentChangeType
+workspace__JobAssignment --> workspace__Area
+workspace__JobAssignment --> workspace__Position
+workspace__Position --> workspace__Area
+workspace__AreaAssembler ..|> shared__BaseAssembler
+workspace__AreaAssembler ..> workspace__Area
+workspace__AreaAssembler ..> workspace__AreaResource
+workspace__AreaAssembler ..> workspace__AreasResponse
+workspace__AreasApiEndpoint --|> shared__BaseApiEndpoint
+workspace__AreasApiEndpoint ..> workspace__AreaAssembler
+workspace__AreasResponse --> "0..*" workspace__AreaResource
+workspace__EmployeeAssembler ..|> shared__BaseAssembler
+workspace__EmployeeAssembler ..> workspace__Employee
+workspace__EmployeeAssembler ..> workspace__EmployeeResource
+workspace__EmployeeAssembler ..> workspace__EmployeesResponse
+workspace__EmployeeDocumentAssembler ..|> shared__BaseAssembler
+workspace__EmployeeDocumentAssembler ..> workspace__EmployeeDocument
+workspace__EmployeeDocumentAssembler ..> workspace__EmployeeDocumentResource
+workspace__EmployeeDocumentAssembler ..> workspace__EmployeeDocumentsResponse
+workspace__EmployeeDocumentsApiEndpoint --|> shared__BaseApiEndpoint
+workspace__EmployeeDocumentsApiEndpoint ..> workspace__EmployeeDocumentAssembler
+workspace__EmployeeDocumentsResponse --> "0..*" workspace__EmployeeDocumentResource
+workspace__EmployeesApiEndpoint --|> shared__BaseApiEndpoint
+workspace__EmployeesApiEndpoint ..> workspace__EmployeeAssembler
+workspace__EmployeesResponse --> "0..*" workspace__EmployeeResource
+workspace__JobAssignmentAssembler ..|> shared__BaseAssembler
+workspace__JobAssignmentAssembler ..> workspace__JobAssignment
+workspace__JobAssignmentAssembler ..> workspace__JobAssignmentResource
+workspace__JobAssignmentAssembler ..> workspace__JobAssignmentsResponse
+workspace__JobAssignmentsApiEndpoint --|> shared__BaseApiEndpoint
+workspace__JobAssignmentsApiEndpoint ..> workspace__JobAssignmentAssembler
+workspace__JobAssignmentsResponse --> "0..*" workspace__JobAssignmentResource
+workspace__PositionAssembler ..|> shared__BaseAssembler
+workspace__PositionAssembler ..> workspace__Position
+workspace__PositionAssembler ..> workspace__PositionResource
+workspace__PositionAssembler ..> workspace__PositionsResponse
+workspace__PositionsApiEndpoint --|> shared__BaseApiEndpoint
+workspace__PositionsApiEndpoint ..> workspace__PositionAssembler
+workspace__PositionsResponse --> "0..*" workspace__PositionResource
+workspace__WorkspaceApi --|> shared__BaseApi
+workspace__WorkspaceApi --> workspace__EmployeesApiEndpoint
+workspace__WorkspaceApi --> workspace__AreasApiEndpoint
+workspace__WorkspaceApi --> workspace__PositionsApiEndpoint
+workspace__WorkspaceApi --> workspace__JobAssignmentsApiEndpoint
+workspace__WorkspaceApi --> workspace__EmployeeDocumentsApiEndpoint
+workspace__AreaFormData --> workspace__Area
+workspace__AreaFormDialog --|> shared__BaseForm
+workspace__AreaFormDialog ..> workspace__WorkspaceStore
+workspace__DirectManagerData --> workspace__Employee
+workspace__DirectManagerDialog ..> workspace__WorkspaceStore
+workspace__DirectManagerDialog ..> workspace__EmployeeSummaryCard
+workspace__DocumentUploadDialog ..> workspace__WorkspaceStore
+workspace__EmployeeDocumentTable ..> shared__LocalDatePipe
+workspace__EmployeeReinstatementData --> workspace__Employee
+workspace__EmployeeReinstatementDialog --|> shared__BaseForm
+workspace__EmployeeReinstatementDialog ..> workspace__WorkspaceStore
+workspace__EmployeeReinstatementDialog ..> workspace__EmployeeSummaryCard
+workspace__EmployeeStatusData --> workspace__Employee
+workspace__EmployeeStatusDialog ..> workspace__WorkspaceStore
+workspace__EmployeeStatusDialog ..> workspace__EmployeeSummaryCard
+workspace__EmployeeTerminationData --> workspace__Employee
+workspace__EmployeeTerminationDialog --|> shared__BaseForm
+workspace__EmployeeTerminationDialog ..> workspace__WorkspaceStore
+workspace__EmployeeTerminationDialog ..> workspace__EmployeeSummaryCard
+workspace__JobAssignmentHistory ..> shared__LocalDatePipe
+workspace__PositionFormData --> workspace__Position
+workspace__PositionFormDialog --|> shared__BaseForm
+workspace__PositionFormDialog ..> workspace__WorkspaceStore
+workspace__EmployeeDetail ..> workspace__WorkspaceStore
+workspace__EmployeeDetail ..> shared__LayoutStore
+workspace__EmployeeDetail ..> shared__LocalDatePipe
+workspace__EmployeeDetail ..> workspace__JobAssignmentHistory
+workspace__EmployeeDetail ..> workspace__EmployeeDocumentTable
+workspace__EmployeeDetail ..> workspace__EmployeeTerminationDialog : opens
+workspace__EmployeeDetail ..> workspace__EmployeeReinstatementDialog : opens
+workspace__EmployeeDetail ..> workspace__EmployeeStatusDialog : opens
+workspace__EmployeeDetail ..> workspace__DirectManagerDialog : opens
+workspace__EmployeeDocuments ..> workspace__WorkspaceStore
+workspace__EmployeeDocuments ..> shared__LayoutStore
+workspace__EmployeeDocuments ..> workspace__EmployeeDocumentTable
+workspace__EmployeeDocuments ..> workspace__DocumentUploadDialog : opens
+workspace__EmployeeForm --|> shared__BaseForm
+workspace__EmployeeForm ..> workspace__WorkspaceStore
+workspace__EmployeeForm ..> shared__LocalDatePipe
+workspace__EmployeeList ..> workspace__WorkspaceStore
+workspace__EmployeeList ..> shared__LocalDatePipe
+workspace__MyProfile ..> workspace__WorkspaceStore
+workspace__MyProfile ..> shared__CurrentEmployeeStore
+workspace__MyProfile ..> shared__LocalDatePipe
+workspace__MyProfile ..> workspace__JobAssignmentHistory
+workspace__MyProfile ..> workspace__EmployeeDocumentTable
+workspace__OrganizationChart_2 ..> workspace__WorkspaceStore
+workspace__OrganizationStructure ..> workspace__WorkspaceStore
+workspace__OrganizationStructure ..> workspace__AreaFormDialog : opens
+workspace__OrganizationStructure ..> workspace__PositionFormDialog : opens
+
+@enduml
