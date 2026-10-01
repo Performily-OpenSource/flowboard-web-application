@@ -1,9 +1,9 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, effect, inject, signal} from '@angular/core';
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogClose, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
-import {TranslatePipe} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {PayrollStore} from '../../../application/payroll.store';
 import {FileReference, Money, Payslip} from '../../../domain/model/payslip.entity';
 
@@ -20,17 +20,26 @@ export interface PayslipUploadDialogData { payslip?: Payslip; }
 export class PayslipUploadDialog {
   private readonly fb = inject(FormBuilder);
   readonly store = inject(PayrollStore);
+  private readonly translate = inject(TranslateService);
   private readonly dialogRef = inject(MatDialogRef<PayslipUploadDialog>);
   readonly data = inject<PayslipUploadDialogData>(MAT_DIALOG_DATA);
   readonly isReplacement = !!this.data.payslip;
   readonly selectedFile = signal<File | null>(null);
   readonly duplicate = signal<Payslip | null>(null);
   error = '';
+  private readonly initialOperationVersion = this.store.operationVersion();
+  private readonly operationEffect = effect(() => {
+    const version = this.store.operationVersion();
+    if (version <= this.initialOperationVersion) return;
+    const operationError = this.store.operationError();
+    if (operationError) this.error = operationError;
+    else this.dialogRef.close(true);
+  });
 
   readonly form = this.fb.group({
-    employeeId: new FormControl<number>(this.data.payslip?.employeeId ?? 1, {nonNullable: true, validators: [Validators.required]}),
-    payrollPeriodId: new FormControl<number>(this.data.payslip?.payrollPeriodId ?? 1, {nonNullable: true, validators: [Validators.required]}),
-    issueDate: new FormControl<string>(this.data.payslip?.issueDate ?? '2026-09-03', {nonNullable: true, validators: [Validators.required]}),
+    employeeId: new FormControl<number>(this.data.payslip?.employeeId ?? this.store.currentEmployeeId(), {nonNullable: true, validators: [Validators.required]}),
+    payrollPeriodId: new FormControl<number>(this.data.payslip?.payrollPeriodId ?? this.store.latestPeriod()?.id ?? 0, {nonNullable: true, validators: [Validators.required]}),
+    issueDate: new FormControl<string>(this.data.payslip?.issueDate ?? new Date().toISOString().slice(0, 10), {nonNullable: true, validators: [Validators.required]}),
     netAmount: new FormControl<number>(this.data.payslip?.netAmount.amount ?? 0, {nonNullable: true, validators: [Validators.required, Validators.min(0.01)]})
   });
 
@@ -41,15 +50,15 @@ export class PayslipUploadDialog {
 
     const file = this.selectedFile();
     if (!file) {
-      this.error = 'Selecciona el archivo PDF de la boleta.';
+      this.error = this.translate.instant('payroll.errors.select-file');
       return;
     }
     if (file.type !== 'application/pdf') {
-      this.error = 'El archivo debe estar en formato PDF.';
+      this.error = this.translate.instant('payroll.errors.pdf-only');
       return;
     }
     if (file.size > MAX_FILE_SIZE) {
-      this.error = 'El archivo supera el tamaño máximo configurado de 5 MB.';
+      this.error = this.translate.instant('payroll.errors.file-too-large');
       return;
     }
 
@@ -58,13 +67,13 @@ export class PayslipUploadDialog {
     if (!existing && this.store.existsForEmployeePeriod(value.employeeId, value.payrollPeriodId)) {
       this.duplicate.set(this.store.payslips().find(item =>
         item.employeeId === value.employeeId && item.payrollPeriodId === value.payrollPeriodId) ?? null);
-      this.error = 'Ya existe una boleta para ese colaborador y periodo.';
+      this.error = this.translate.instant('payroll.errors.duplicate');
       return;
     }
 
     if (existing && !replace && !this.isReplacement) {
       this.duplicate.set(existing);
-      this.error = 'Ya existe una boleta para ese colaborador y periodo. Puedes reemplazarla o cancelar.';
+      this.error = this.translate.instant('payroll.errors.duplicate-replace');
       return;
     }
 
@@ -79,14 +88,8 @@ export class PayslipUploadDialog {
       publicationStatus: 'UNDER_REVIEW'
     });
 
-    const request = existing
-      ? this.store.replacePayslip(existing, replacement)
-      : this.store.createPayslip(replacement);
-
-    request.subscribe({
-      next: () => this.dialogRef.close(true),
-      error: error => this.error = error instanceof Error ? error.message : 'No se pudo guardar la boleta.'
-    });
+    if (existing) this.store.replacePayslip(existing, replacement);
+    else this.store.createPayslip(replacement);
   }
 
   onFileChange(event: Event): void {
@@ -107,7 +110,7 @@ export class PayslipUploadDialog {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(String(reader.result));
-      reader.onerror = () => reject(new Error('No se pudo leer el archivo.'));
+      reader.onerror = () => reject(new Error(this.translate.instant('payroll.errors.read-file')));
       reader.readAsDataURL(file);
     });
   }

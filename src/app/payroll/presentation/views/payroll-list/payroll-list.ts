@@ -66,7 +66,7 @@ export class PayrollList {
   openViewer(payslip: Payslip) { this.dialog.open(PayslipViewDialog, {data: {payslip}, width: '900px', maxWidth: '96vw'}).afterClosed().subscribe(); }
 
   publish(payslip: Payslip) {
-    this.store.publishPayslip(payslip).subscribe();
+    this.store.publishPayslip(payslip);
   }
 
   statusKey(status: PaymentStatus): string { return `payroll.payment-status.${status}`; }

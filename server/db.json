@@ -831,57 +831,57 @@
   "payroll-periods": [
     {
       "id": 1,
-      "year": 2026,
-      "month": 1,
-      "scheduledPaymentDate": "2026-01-30"
+      "scheduledPaymentDate": "2026-01-30",
+      "periodYear": 2026,
+      "periodMonth": 1
     },
     {
       "id": 2,
-      "year": 2026,
-      "month": 2,
-      "scheduledPaymentDate": "2026-02-28"
+      "scheduledPaymentDate": "2026-02-28",
+      "periodYear": 2026,
+      "periodMonth": 2
     },
     {
       "id": 3,
-      "year": 2026,
-      "month": 3,
-      "scheduledPaymentDate": "2026-03-30"
+      "scheduledPaymentDate": "2026-03-30",
+      "periodYear": 2026,
+      "periodMonth": 3
     },
     {
       "id": 4,
-      "year": 2026,
-      "month": 4,
-      "scheduledPaymentDate": "2026-04-30"
+      "scheduledPaymentDate": "2026-04-30",
+      "periodYear": 2026,
+      "periodMonth": 4
     },
     {
       "id": 5,
-      "year": 2026,
-      "month": 5,
-      "scheduledPaymentDate": "2026-05-30"
+      "scheduledPaymentDate": "2026-05-30",
+      "periodYear": 2026,
+      "periodMonth": 5
     },
     {
       "id": 6,
-      "year": 2026,
-      "month": 6,
-      "scheduledPaymentDate": "2026-06-30"
+      "scheduledPaymentDate": "2026-06-30",
+      "periodYear": 2026,
+      "periodMonth": 6
     },
     {
       "id": 7,
-      "year": 2026,
-      "month": 7,
-      "scheduledPaymentDate": "2026-07-30"
+      "scheduledPaymentDate": "2026-07-30",
+      "periodYear": 2026,
+      "periodMonth": 7
     },
     {
       "id": 8,
-      "year": 2026,
-      "month": 8,
-      "scheduledPaymentDate": "2026-08-30"
+      "scheduledPaymentDate": "2026-08-30",
+      "periodYear": 2026,
+      "periodMonth": 8
     },
     {
       "id": 9,
-      "year": 2026,
-      "month": 9,
-      "scheduledPaymentDate": "2026-09-30"
+      "scheduledPaymentDate": "2026-09-30",
+      "periodYear": 2026,
+      "periodMonth": 9
     }
   ],
   "payslips": [
