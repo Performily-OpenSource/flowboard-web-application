@@ -4,17 +4,22 @@ import {MAT_DIALOG_DATA, MatDialogClose, MatDialogRef, MatDialogTitle} from '@an
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {Device, MetricType, Office} from '../../../domain/model/wellbeing.model';
+import {Device} from '../../../domain/model/device.entity';
+import {MetricType} from '../../../domain/model/metric-type';
+import {Office} from '../../../domain/model/office.entity';
+import {BaseForm} from '../../../../shared/presentation/components/base-form/base-form';
 import {WellbeingStore} from '../../../application/wellbeing.store';
 
 @Component({selector:'app-device-dialog', imports:[ReactiveFormsModule,MatDialogClose,MatDialogTitle,MatButton,MatIcon,TranslatePipe], templateUrl:'./device-dialog.html', styleUrl:'./device-dialog.css'})
-export class DeviceDialog {
+export class DeviceDialog extends BaseForm {
   readonly store = inject(WellbeingStore);
   readonly data = inject<{office: Office}>(MAT_DIALOG_DATA);
   private readonly dialogRef = inject(MatDialogRef<DeviceDialog>);
   private readonly fb = inject(FormBuilder);
   private readonly translate = inject(TranslateService);
   readonly form = this.fb.nonNullable.group({code:['', [Validators.required, Validators.minLength(4), Validators.maxLength(30), Validators.pattern(/^[a-zA-Z0-9-]+$/)]], temperature:[true], illumination:[true], airQuality:[true]});
+
+  constructor() { super(); }
 
   availableDevices(): Device[] { return this.store.devices().filter(device => device.status === 'IN_INVENTORY'); }
   linkedDevices(): Device[] { return this.store.devices().filter(device => device.officeId === this.data.office.id); }

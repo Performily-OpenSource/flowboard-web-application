@@ -4,7 +4,9 @@ import {MAT_DIALOG_DATA, MatDialogClose, MatDialogRef, MatDialogTitle} from '@an
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {EnvironmentalReading, MetricType, Office} from '../../../domain/model/wellbeing.model';
+import {EnvironmentalReading} from '../../../domain/model/environmental-reading.entity';
+import {MetricType} from '../../../domain/model/metric-type';
+import {Office} from '../../../domain/model/office.entity';
 import {WellbeingStore} from '../../../application/wellbeing.store';
 
 @Component({selector:'app-history-dialog', imports:[DatePipe,MatDialogClose,MatDialogTitle,MatButton,MatIcon,TranslatePipe], templateUrl:'./history-dialog.html', styleUrl:'./history-dialog.css'})
@@ -13,10 +15,12 @@ export class HistoryDialog {
   private readonly store = inject(WellbeingStore);
   private readonly translate = inject(TranslateService);
   readonly metricType = signal<MetricType>(this.data.metricType);
-  readonly start = signal('2026-09-01');
-  readonly end = signal('2026-09-29');
+  private readonly today = new Date();
+  readonly start = signal(this.toDateInput(new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate() - 28)));
+  readonly end = signal(this.toDateInput(this.today));
   readonly rows = computed(() => { const start = new Date(`${this.start()}T00:00:00`); const end = new Date(`${this.end()}T23:59:59`); return start <= end && end <= new Date() ? this.store.readingsForHistory(this.data.office.id, this.metricType(), start, end) : []; });
   readonly valid = computed(() => { const start = new Date(`${this.start()}T00:00:00`); const end = new Date(`${this.end()}T00:00:00`); const today = new Date(); today.setHours(0,0,0,0); return start <= end && start <= today && end <= today; });
+  private toDateInput(date: Date): string { return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`; }
   selectMetric(metric: MetricType): void { this.metricType.set(metric); }
   labelKey(metric: MetricType): string { return metric === 'TEMPERATURE' ? 'wellbeing.metric.temperature' : metric === 'ILLUMINATION' ? 'wellbeing.metric.illumination' : 'wellbeing.metric.air-quality'; }
   unit(metric: MetricType): string { return metric === 'TEMPERATURE' ? '°C' : metric === 'ILLUMINATION' ? 'lx' : 'ppm'; }
