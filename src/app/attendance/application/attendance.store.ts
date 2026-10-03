@@ -9,6 +9,12 @@ import {WorkSchedule} from '../domain/model/work-schedule.entity';
 import {Punch} from '../domain/model/punch.entity';
 import {WorkspaceAcl} from '../infrastructure/workspace-acl';
 
+/**
+ * Represents an attendance record enriched with employee and area information for presentation.
+ *
+ * @remarks Combines Attendance domain data with Workspace data so attendance views can display employee and area context.
+ * @author Dario Avila de la cruz
+ */
 export interface AttendanceRecordRow {
   record: AttendanceRecord;
   employeeName: string;
@@ -17,6 +23,12 @@ export interface AttendanceRecordRow {
   positionId: number;
 }
 
+/**
+ * Coordinates attendance state and operations for the application layer.
+ *
+ * @remarks Loads attendance records, schedules, punches and Workspace context, and exposes operations used by attendance views.
+ * @author Dario Avila de la cruz
+ */
 @Injectable({providedIn: 'root'})
 export class AttendanceStore {
   private readonly destroyRef = inject(DestroyRef);
@@ -54,10 +66,20 @@ export class AttendanceStore {
     });
   });
 
+/**
+ * Performs the constructor operation.
+ *
+ * @author Dario Avila de la cruz
+ */
   constructor() {
     this.load();
   }
 
+/**
+ * Loads the required data for the bounded context into the application store.
+ *
+ * @author Dario Avila de la cruz
+ */
   load(): void {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
@@ -86,19 +108,46 @@ export class AttendanceStore {
     });
   }
 
+/**
+ * Finds an employee by identifier.
+ *
+ * @param employeeId the employee identifier.
+ * @returns The matching employee, or `undefined` when no employee is found.
+ * @author Dario Avila de la cruz
+ */
   getEmployee(employeeId: number): AttendanceEmployee | undefined {
     return this.employees().find(employee => employee.id === employeeId);
   }
 
+/**
+ * Finds the work schedule associated with an employee position.
+ *
+ * @param employeeId the employee identifier.
+ * @returns The matching work schedule, or `undefined` when none is available.
+ * @author Dario Avila de la cruz
+ */
   getScheduleForEmployee(employeeId: number): WorkSchedule | undefined {
     const employee = this.getEmployee(employeeId);
     return employee ? this.schedules().find(schedule => schedule.positionId === employee.positionId) : undefined;
   }
 
+/**
+ * Finds an attendance record by identifier.
+ *
+ * @param id the identifier to look up or delete.
+ * @returns The matching attendance record, or `undefined` when no record is found.
+ * @author Dario Avila de la cruz
+ */
   getRecord(id: number): AttendanceRecord | undefined {
     return this.records().find(record => record.id === id);
   }
 
+/**
+ * Updates an attendance record through the attendance API and refreshes local state.
+ *
+ * @param record the attendance record to update or justify.
+ * @author Dario Avila de la cruz
+ */
   updateRecord(record: AttendanceRecord): void {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
@@ -117,6 +166,14 @@ export class AttendanceStore {
     });
   }
 
+/**
+ * Creates a justified version of an attendance record and persists it.
+ *
+ * @param record the attendance record to update or justify.
+ * @param reason the justification reason.
+ * @param documentName the optional justification document name.
+ * @author Dario Avila de la cruz
+ */
   justify(record: AttendanceRecord, reason: string, documentName: string | null): void {
     const updated = new AttendanceRecord({
       id: record.id,
@@ -133,6 +190,12 @@ export class AttendanceStore {
     this.updateRecord(updated);
   }
 
+/**
+ * Deletes an attendance record and removes it from local state.
+ *
+ * @param id the identifier to look up or delete.
+ * @author Dario Avila de la cruz
+ */
   deleteRecord(id: number): void {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
@@ -151,8 +214,20 @@ export class AttendanceStore {
     });
   }
 
+/**
+ * Clears the current attendance store error.
+ *
+ * @author Dario Avila de la cruz
+ */
   clearError(): void { this.errorSignal.set(null); }
 
+/**
+ * Formats a decimal hour value as a human-readable hour label.
+ *
+ * @param hours the hour value to format.
+ * @returns The formatted or calculated value.
+ * @author Dario Avila de la cruz
+ */
   static hoursToLabel(hours: number | null): string {
     if (hours === null || Number.isNaN(hours)) return '—';
     const whole = Math.floor(hours);
@@ -160,8 +235,22 @@ export class AttendanceStore {
     return `${whole} h${minutes ? ` ${minutes} min` : ''}`;
   }
 
+/**
+ * Formats a numeric value as a percentage string with one decimal place.
+ *
+ * @param value the value used by the operation.
+ * @returns The formatted or calculated value.
+ * @author Dario Avila de la cruz
+ */
   static percent(value: number): string { return `${value.toFixed(1)} %`; }
 
+/**
+ * Returns the display value associated with an attendance status.
+ *
+ * @param status the attendance status to format or evaluate.
+ * @returns The formatted or calculated value.
+ * @author Dario Avila de la cruz
+ */
   static statusLabel(status: AttendanceStatus): string {
     return `attendance.status.${status}`;
   }
