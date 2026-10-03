@@ -60,19 +60,9 @@ export class UserAccount implements BaseEntity {
     this.lastSignInAt = props.lastSignInAt;
   }
 
-/**
- * Performs the username operation.
- *
- * @returns The value produced by the `username` operation.
- * @author Dario Avila de la cruz
- */
+
   get username(): string { return this.credentials.username.value; }
-/**
- * Performs the passwordHash operation.
- *
- * @returns The value produced by the `passwordHash` operation.
- * @author Dario Avila de la cruz
- */
+
   get passwordHash(): string { return this.credentials.passwordHash.value; }
 
 /**

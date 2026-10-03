@@ -2,7 +2,6 @@
  * Represents the username used to identify an IAM account.
  *
  * @remarks Encapsulates the username value used by the credentials model.
- *
  * @author Dario Avila de la cruz
  */
 export class Username {

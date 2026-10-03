@@ -3,9 +3,7 @@ import {BaseEntity} from '../../../shared/domain/model/base-entity';
 /**
  * Defines the roles supported by the IAM bounded context.
  *
- * @remarks
- * Restricts account roles to Human Resources staff and employee access levels.
- *
+ * @remarks Restricts account roles to Human Resources staff and employee access levels.
  * @author Dario Avila de la cruz
  */
 export type RoleType = 'HR_STAFF' | 'EMPLOYEE';
@@ -31,22 +29,10 @@ export class Role implements BaseEntity {
     this.name = props.name;
   }
 
-/**
- * Returns the string representation of the role.
- *
- * @returns The formatted or calculated value.
- * @author Dario Avila de la cruz
- */
   getStringName(): string {
     return this.name;
   }
 
-/**
- * Returns the default role used for a newly managed account.
- *
- * @returns The value produced by the `getDefaultRole` operation.
- * @author Dario Avila de la cruz
- */
   static getDefaultRole(): RoleType {
     return 'EMPLOYEE';
   }

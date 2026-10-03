@@ -5,6 +5,12 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {RouterLink} from '@angular/router';
 import {AttendanceStore} from '../../../application/attendance.store';
 
+/**
+ * Presents attendance summary metrics grouped by area.
+ *
+ * @remarks Calculates punctuality and attendance counts for the selected monthly period.
+ * @author Dario Avila de la cruz
+ */
 @Component({
   selector: 'app-attendance-summary',
   imports: [MatButton, MatIcon, TranslatePipe, RouterLink],
@@ -32,11 +38,23 @@ export class AttendanceSummary {
     };
   }));
 
+/**
+ * Returns the current month in ISO year-month format.
+ *
+ * @returns The formatted or calculated value.
+ * @author Dario Avila de la cruz
+ */
   static currentMonth(): string {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
   }
 
+/**
+ * Returns the previous month in ISO year-month format.
+ *
+ * @returns The formatted or calculated value.
+ * @author Dario Avila de la cruz
+ */
   static previousMonth(): string {
     const now = new Date();
     return `${new Date(now.getFullYear(), now.getMonth() - 1, 1).getFullYear()}-${String(new Date(now.getFullYear(), now.getMonth() - 1, 1).getMonth() + 1).padStart(2, '0')}`;

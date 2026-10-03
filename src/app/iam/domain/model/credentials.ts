@@ -17,7 +17,6 @@ export class Credentials {
  * @param username the account username.
  * @param passwordHash the value used by the operation.
  * @author Dario Avila de la cruz
- * 
  */
   constructor(username: Username, passwordHash: PasswordHash) {
     this.username = username;
