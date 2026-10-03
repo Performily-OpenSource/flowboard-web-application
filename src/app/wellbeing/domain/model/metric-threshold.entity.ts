@@ -3,11 +3,24 @@ import {MetricType} from './metric-type';
 import {HealthIndicator} from './health-indicator';
 import {ThresholdRange} from './threshold-range.entity';
 
+/**
+ * Represents the thresholds configured to classify an environmental metric.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Diana Li
+ */
 export class MetricThreshold implements BaseEntity {
   readonly id: number;
   readonly metricType: MetricType;
   private _ranges: ThresholdRange[] = [];
 
+/**
+ * Initializes the instance with the data required for operation.
+ * @param id Parameter used by the operation.
+ * @param metricType Parameter used by the operation.
+ * @param ranges Parameter used by the operation.
+ * @author Diana Li
+ */
   constructor(id: number, metricType: MetricType, ranges: ThresholdRange[]) {
     this.id = id;
     this.metricType = metricType;
@@ -17,10 +30,19 @@ export class MetricThreshold implements BaseEntity {
     }
   }
 
+/**
+ * Executes the ranges operation of the component.
+ * @author Diana Li
+ */
   get ranges(): ThresholdRange[] {
     return [...this._ranges];
   }
 
+/**
+ * Updates the metric classification ranges.
+ * @param ranges Parameter used by the operation.
+ * @author Diana Li
+ */
   redefineRanges(ranges: ThresholdRange[]): void {
     if (ranges.length !== 4) {
       throw new Error('A metric requires exactly four health ranges.');
@@ -52,6 +74,11 @@ export class MetricThreshold implements BaseEntity {
     this._ranges = ordered;
   }
 
+/**
+ * Classifies a value according to the configured ranges.
+ * @param measurement Parameter used by the operation.
+ * @author Diana Li
+ */
   classify(measurement: import('./metric-value').MetricValue): HealthIndicator {
     if (measurement.metricType !== this.metricType) {
       throw new Error('Metric type mismatch.');

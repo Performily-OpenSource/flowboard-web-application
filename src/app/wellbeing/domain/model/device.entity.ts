@@ -3,6 +3,12 @@ import {DeviceCode} from './device-code';
 import {MetricType} from './metric-type';
 import {DeviceStatus} from './device-status';
 
+/**
+ * Represents a device used to obtain environmental readings.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Diana Li
+ */
 export class Device implements BaseEntity {
     readonly id:number;
     readonly code:DeviceCode;
@@ -26,10 +32,19 @@ export class Device implements BaseEntity {
         this.officeId=props.officeId??null;
     }
 
+/**
+ * Determines whether the device can send readings.
+ * @author Diana Li
+ */
     canSendReadings():boolean{
         return this.status==='LINKED'&&this.officeId!==null;
     }
 
+/**
+ * Determines whether the device supports a metric.
+ * @param metricType Parameter used by the operation.
+ * @author Diana Li
+ */
     supports(metricType:MetricType):boolean{
         return this.supportedMetrics.has(metricType);
     }
