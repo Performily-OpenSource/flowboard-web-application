@@ -9,6 +9,12 @@ import {SessionStore} from '../../../../shared/application/session.store';
 import {PlainPassword} from '../../../domain/model/plain-password';
 import {LanguageSwitcher} from '../../../../shared/presentation/components/language-switcher/language-switcher';
 
+/**
+ * Presents the first-login password-change flow.
+ *
+ * @remarks Validates the temporary password and new password requirements before completing the authenticated password change.
+ * @author Dario Avila de la cruz
+ */
 @Component({
   selector: 'app-change-password',
   imports: [ReactiveFormsModule, MatButton, MatIcon, TranslatePipe, LanguageSwitcher],
@@ -29,8 +35,20 @@ export class ChangePassword {
 
   readonly requirements = signal<string[]>(PlainPassword.validate(''));
 
+/**
+ * Updates the password requirement state from the supplied new password.
+ *
+ * @param value the value used by the operation.
+ * @author Dario Avila de la cruz
+ */
   updatePassword(value: string): void { this.requirements.set(PlainPassword.validate(value)); }
 
+/**
+ * Validates and submits the current form data.
+ *
+ * @returns The value produced by the `submit` operation.
+ * @author Dario Avila de la cruz
+ */
   async submit(): Promise<void> {
     this.submitted.set(true);
     const {temporaryPassword, password, repeatPassword} = this.form.getRawValue();

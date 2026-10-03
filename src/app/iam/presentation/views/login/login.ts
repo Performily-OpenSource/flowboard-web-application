@@ -7,6 +7,12 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {IamStore} from '../../../application/iam.store';
 import {LanguageSwitcher} from '../../../../shared/presentation/components/language-switcher/language-switcher';
 
+/**
+ * Presents the application sign-in form.
+ *
+ * @remarks Collects corporate credentials and routes the user according to authentication, disabled-account and first-login state.
+ * @author Dario Avila de la cruz
+ */
 @Component({
   selector: 'app-login',
   imports: [ReactiveFormsModule, MatIcon, MatButton, TranslatePipe, RouterLink, LanguageSwitcher],
@@ -26,8 +32,19 @@ export class Login {
     password: ['', Validators.required]
   });
 
+/**
+ * Toggles visibility of the password field.
+ * 
+ * @author Dario Avila de la cruz
+ */
   togglePassword(): void { this.showPassword.update(value => !value); }
 
+/**
+ * Validates and submits the current form data.
+ *
+ * @returns The value produced by the `submit` operation.
+ * @author Dario Avila de la cruz
+ */
   async submit(): Promise<void> {
     this.submitted.set(true);
     if (this.form.invalid) return;

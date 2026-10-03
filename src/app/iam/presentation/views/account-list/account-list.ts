@@ -9,6 +9,12 @@ import {RoleType} from '../../../domain/model/role.entity';
 import {RoleDialog} from '../../components/role-dialog/role-dialog';
 import {ResetPasswordDialog} from '../../components/reset-password-dialog/reset-password-dialog';
 
+/**
+ * Presents the IAM account-management list for authorized users.
+ *
+ * @remarks Provides account filtering, role changes, password resets and CSV export actions.
+ * @author Dario Avila de la cruz
+ */
 @Component({
   selector:'app-account-list',
   imports:[MatButton,MatIcon,MatMenu,MatMenuItem,MatMenuTrigger,MatProgressBar,TranslatePipe,RoleDialog,ResetPasswordDialog],
@@ -25,12 +31,48 @@ export class AccountList {
     (!this.roleFilter() || account.role === this.roleFilter()) && (!this.statusFilter() || account.status === this.statusFilter())));
   readonly activeHrCount = computed(() => this.store.activeHrCount());
 
+/**
+ * Updates the selected role filter.
+ *
+ * @param role the role to assign or select.
+ * @author Dario Avila de la cruz
+ */
   selectRole(role: RoleType|null): void { this.roleFilter.set(role); }
+/**
+ * Updates the selected account-status filter.
+ *
+ * @param status the attendance status to format or evaluate.
+ * @author Dario Avila de la cruz
+ */
   selectStatus(status: 'ACTIVE'|'DISABLED'|null): void { this.statusFilter.set(status); }
+/**
+ * Opens the role-management dialog for the selected account.
+ *
+ * @param account the account being updated or displayed.
+ * @author Dario Avila de la cruz
+ */
   openRole(account: AccountListItem): void { this.selectedAccount.set(account); this.modal.set('role'); }
+/**
+ * Opens the password-reset dialog for the selected account.
+ *
+ * @param account the account being updated or displayed.
+ * @author Dario Avila de la cruz
+ */
   openReset(account: AccountListItem): void { this.selectedAccount.set(account); this.modal.set('reset'); }
+/**
+ * Closes the current account-management dialog and clears the selected account.
+ *
+ */
   closeModal(): void { this.modal.set(null); this.selectedAccount.set(null); }
 
+/**
+ * Persists the selected role for the currently selected account.
+ *
+ * @param role the role to assign or select.
+ * @returns The value produced by the `saveRole` operation.
+ * @author Dario Avila de la cruz
+ * 
+ */
   async saveRole(role: RoleType): Promise<void> {
     const account = this.selectedAccount();
     if (!account) return;
@@ -38,14 +80,38 @@ export class AccountList {
     if (ok) this.closeModal();
   }
 
+/**
+ * Completes the reset-dialog flow and closes the modal.
+ *
+ * @returns The value produced by the `resetCompleted` operation.
+ * @author Dario Avila de la cruz
+ */
   async resetCompleted(): Promise<void> { this.closeModal(); }
 
+/**
+ * Builds the initials used to represent the employee in the user interface.
+ *
+ * @param account the account being updated or displayed.
+ * @returns The formatted or calculated value.
+ * @author Dario Avila de la cruz
+ */
   initials(account: AccountListItem): string {
     return account.employeeName.split(' ').map(part => part.charAt(0)).slice(0,2).join('').toUpperCase();
   }
 
+/**
+ * Returns the translation key associated with an account role.
+ *
+ * @param role the role to assign or select.
+ * @returns The formatted or calculated value.
+ * @author Dario Avila de la cruz
+ */
   roleLabel(role: RoleType): string { return role === 'HR_STAFF' ? 'iam.role.hr' : 'iam.role.employee'; }
 
+/**
+ * Exports the currently filtered accounts as a CSV file.
+ * @author Dario Avila de la cruz
+ */
   exportAccounts(): void {
     const rows = this.filteredAccounts().map(account => [account.employeeName, account.employeeEmail, account.role, account.status]);
     const csv = [['Employee', 'Username', 'Role', 'Status'], ...rows]
