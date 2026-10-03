@@ -10,11 +10,23 @@ import {RoleType} from '../domain/model/role.entity';
 import {PasswordHash} from '../domain/model/password-hash';
 import {UserAccount} from '../domain/model/user-account.entity';
 
+/**
+ * Represents an IAM account enriched with employee information for account administration.
+ *
+ * @remarks Defines the account data consumed by the account list and role-management views.
+ * @author Dario Avila de la cruz
+ */
 export interface AccountListItem extends UserAccount {
   employeeName: string;
   employeeEmail: string;
 }
 
+/**
+ * Coordinates IAM account state, authentication and account-management operations.
+ *
+ * @remarks Acts as the application-level state store for authentication, password changes, password resets and role changes.
+ * @author Dario Avila de la cruz
+ */
 @Injectable({providedIn: 'root'})
 export class IamStore {
   private readonly destroyRef = inject(DestroyRef);
@@ -41,10 +53,16 @@ export class IamStore {
   readonly error = this.errorSignal.asReadonly();
   readonly activeHrCount = computed(() => this.accountsSignal().filter(a => a.status === 'ACTIVE' && a.role === 'HR_STAFF').length);
 
+/**
+ * Performs the constructor operation.
+ */
   constructor() {
     this.load();
   }
 
+/**
+ * Loads the required data for the bounded context into the application store.
+ */
   load(): void {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
@@ -63,6 +81,14 @@ export class IamStore {
       });
   }
 
+/**
+ * Authenticates an account using the supplied username and password.
+ *
+ * @param username the account username.
+ * @param password the password supplied for authentication.
+ * @returns The authentication result: success, invalid credentials, or a disabled account.
+ * @author Dario Avila de la cruz
+ */
   authenticate(username: string, password: string): Promise<'success' | 'invalid' | 'disabled'> {
     const normalized = username.trim().toLowerCase();
     this.errorSignal.set(null);
@@ -98,6 +124,14 @@ export class IamStore {
     });
   }
 
+/**
+ * Changes the password of the currently authenticated account.
+ *
+ * @param temporaryPassword the temporary password issued for the account.
+ * @param newPassword the new password to assign.
+ * @returns A boolean indicating the result of the operation.
+ * @author Dario Avila de la cruz
+ */
   async changeCurrentPassword(temporaryPassword: string, newPassword: string): Promise<boolean> {
     const current = this.session.session();
     if (!current) return false;
@@ -125,6 +159,13 @@ export class IamStore {
     }));
   }
 
+/**
+ * Replaces the account password hash with a temporary hash and marks the account for a password change.
+ *
+ * @param accountId the account identifier.
+ * @returns A boolean indicating the result of the operation.
+ * @author Dario Avila de la cruz
+ */
   async resetPassword(accountId: number): Promise<boolean> {
     const source = this.accountsSignal().find(item => item.id === accountId);
     if (!source || !source.canSignIn()) {
@@ -144,6 +185,14 @@ export class IamStore {
     }));
   }
 
+/**
+ * Assigns a new role to the account.
+ *
+ * @param accountId the account identifier.
+ * @param role the role to assign or select.
+ * @returns A boolean indicating the result of the operation.
+ * @author Dario Avila de la cruz
+ */
   changeRole(accountId: number, role: RoleType): Promise<boolean> {
     const source = this.accountsSignal().find(item => item.id === accountId);
     if (!source) return Promise.resolve(false);
@@ -159,11 +208,21 @@ export class IamStore {
     }));
   }
 
+/**
+ * Ends the current authenticated session.
+ */
   signOut(): void {
     this.session.clear();
     this.currentEmployee.setEmployeeId(1);
   }
 
+/**
+ * Performs the setAuthenticatedSession operation.
+ *
+ * @param account the account being updated or displayed.
+ * @param displayName the value used by the operation.
+ * @author Dario Avila de la cruz
+ */
   private setAuthenticatedSession(account: UserAccount, displayName: string): void {
     this.session.setSession({
       token: this.createToken(account),
@@ -176,10 +235,24 @@ export class IamStore {
     this.currentEmployee.setEmployeeId(account.employeeId);
   }
 
+/**
+ * Performs the createToken operation.
+ *
+ * @param account the account being updated or displayed.
+ * @returns The value produced by the `createToken` operation.
+ * @author Dario Avila de la cruz
+ */
   private createToken(account: UserAccount): string {
     return `demo.${btoa(JSON.stringify({sub: account.id, employeeId: account.employeeId, role: account.role, iat: Date.now()}))}.flowboard`;
   }
 
+/**
+ * Performs the findEmployee operation.
+ *
+ * @param employeeId the employee identifier.
+ * @returns The value produced by the `findEmployee` operation.
+ * @author Dario Avila de la cruz
+ */
   private async findEmployee(employeeId: number): Promise<IamEmployee | undefined> {
     try {
       const employees = await this.workspace.getEmployees().pipe(retry(2)).toPromise();
@@ -191,19 +264,38 @@ export class IamStore {
     }
   }
 
-
-  // The browser fake-API has no server-side BCrypt runtime; the real API should replace this with BCrypt.
+/**
+ * Performs the hashPassword operation.
+ *
+ * @param password the password supplied for authentication.
+ * @returns The value produced by the `hashPassword` operation.
+ * @author Dario Avila de la cruz
+ */
   private async hashPassword(password: string): Promise<string> {
     const bytes = new TextEncoder().encode(password);
     const digest = await crypto.subtle.digest('SHA-256', bytes);
     return `sha256$${Array.from(new Uint8Array(digest)).map(byte => byte.toString(16).padStart(2, '0')).join('')}`;
   }
 
+/**
+ * Performs the verifyPassword operation.
+ *
+ * @param password the password supplied for authentication.
+ * @param hash the value used by the operation.
+ * @returns The value produced by the `verifyPassword` operation.
+ * @author Dario Avila de la cruz
+ */
   private async verifyPassword(password: string, hash: string): Promise<boolean> {
     if (hash.startsWith('sha256$')) return (await this.hashPassword(password)) === hash;
     return false;
   }
 
+/**
+ * Performs the generateTemporaryPassword operation.
+ * 
+ * @returns The value produced by the `generateTemporaryPassword` operation.
+ * @author Dario Avila de la cruz
+ */
   private generateTemporaryPassword(): string {
     const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$';
     let result = 'Flow';
