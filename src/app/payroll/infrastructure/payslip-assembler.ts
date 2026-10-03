@@ -2,7 +2,18 @@ import {BaseAssembler} from '../../shared/infrastructure/base-assembler';
 import {FileReference, Money, Payslip, PaymentDetails} from '../domain/model/payslip.entity';
 import {PayslipResource, PayslipsResponse} from './payslips-response';
 
+/**
+ * Transforms infrastructure payslip resources into domain entities and vice versa.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Diana Li
+ */
 export class PayslipAssembler implements BaseAssembler<Payslip, PayslipResource, PayslipsResponse> {
+/**
+ * Converts an API resource into a domain entity.
+ * @param resource Parameter used by the operation.
+ * @author Diana Li
+ */
   toEntityFromResource(resource: PayslipResource): Payslip {
     const payment = resource.paymentStatus === 'PAID'
       ? PaymentDetails.pending().paid(resource.paidOn ?? '')
@@ -28,6 +39,11 @@ export class PayslipAssembler implements BaseAssembler<Payslip, PayslipResource,
     });
   }
 
+/**
+ * Converts a domain entity into an API resource.
+ * @param entity Parameter used by the operation.
+ * @author Diana Li
+ */
   toResourceFromEntity(entity: Payslip): PayslipResource {
     return {
       id: entity.id,
@@ -48,6 +64,11 @@ export class PayslipAssembler implements BaseAssembler<Payslip, PayslipResource,
     };
   }
 
+/**
+ * Converts an API response into a collection of entities.
+ * @param response Parameter used by the operation.
+ * @author Diana Li
+ */
   toEntitiesFromResponse(response: PayslipsResponse): Payslip[] {
     return response.data.map(resource => this.toEntityFromResource(resource));
   }
