@@ -6,6 +6,12 @@ const myAttendance = () => import('./views/my-attendance/my-attendance').then(m 
 const summary = () => import('./views/attendance-summary/attendance-summary').then(m => m.AttendanceSummary);
 const hours = () => import('./views/attendance-hours/attendance-hours').then(m => m.AttendanceHours);
 
+/**
+ * Defines the routes exposed by the Attendance bounded context.
+ *
+ * @remarks Registers the attendance records, personal attendance, summary and hours views.
+ * @author Dario Avila de la cruz
+ */
 export const attendanceRoutes: Routes = [
   {path:'records', loadComponent: records, canActivate:[roleGuard], data:{breadcrumb:['breadcrumb.attendance','breadcrumb.attendance-records'], roles:['HR_STAFF']}},
   {path:'my-attendance', loadComponent: myAttendance, data:{breadcrumb:['breadcrumb.my-attendance']}},
