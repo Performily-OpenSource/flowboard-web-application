@@ -10,6 +10,12 @@ import {Office} from '../../../domain/model/office.entity';
 import {WellbeingStore} from '../../../application/wellbeing.store';
 
 @Component({selector:'app-history-dialog', imports:[DatePipe,MatDialogClose,MatDialogTitle,MatButton,MatIcon,TranslatePipe], templateUrl:'./history-dialog.html', styleUrl:'./history-dialog.css'})
+/**
+ * Displays the environmental reading history of a workspace.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Diana Li
+ */
 export class HistoryDialog {
   readonly data = inject<{office: Office; metricType: MetricType}>(MAT_DIALOG_DATA);
   private readonly store = inject(WellbeingStore);
@@ -25,24 +31,59 @@ export class HistoryDialog {
   
     readonly valid = computed(() => { 
     const start = new Date(`${this.start()}T00:00:00`); const end = new Date(`${this.end()}T00:00:00`); const today = new Date(); today.setHours(0,0,0,0); return start <= end && start <= today && end <= today; });
+/**
+ * Executes the toDateInput operation of the component.
+ * @param date Parameter used by the operation.
+ * @author Diana Li
+ */
   private toDateInput(date: Date): string { 
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`; 
   }
   
+/**
+ * Selects the metric whose history should be displayed.
+ * @param metric Parameter used by the operation.
+ * @author Diana Li
+ */
   selectMetric(metric: MetricType): void { 
     this.metricType.set(metric); }
   
+/**
+ * Executes the labelKey operation of the component.
+ * @param metric Parameter used by the operation.
+ * @author Diana Li
+ */
   labelKey(metric: MetricType): string { 
     return metric === 'TEMPERATURE' ? 'wellbeing.metric.temperature' : metric === 'ILLUMINATION' ? 'wellbeing.metric.illumination' : 'wellbeing.metric.air-quality'; }
   
+/**
+ * Returns the unit of measurement associated with the value.
+ * @param metric Parameter used by the operation.
+ * @author Diana Li
+ */
     unit(metric: MetricType): string { 
     return metric === 'TEMPERATURE' ? '°C' : metric === 'ILLUMINATION' ? 'lx' : 'ppm'; }
  
+/**
+ * Executes the format operation of the component.
+ * @param reading Parameter used by the operation.
+ * @author Diana Li
+ */
   format(reading: EnvironmentalReading): string { 
     return reading.measurement.value.toLocaleString('es-PE', {maximumFractionDigits: reading.measurement.metricType === 'TEMPERATURE' ? 1 : 0}); }
   
+/**
+ * Executes the height operation of the component.
+ * @param reading Parameter used by the operation.
+ * @author Diana Li
+ */
     height(reading: EnvironmentalReading): number { 
     const values = this.rows().map(item => item.measurement.value); const min = Math.min(...values, reading.measurement.value); const max = Math.max(...values, reading.measurement.value); return max === min ? 45 : 14 + ((reading.measurement.value - min) / (max - min)) * 70; }
   
+/**
+ * Executes the translated operation of the component.
+ * @param key Parameter used by the operation.
+ * @author Diana Li
+ */
     translated(key: string): string { return this.translate.instant(key); }
 }
