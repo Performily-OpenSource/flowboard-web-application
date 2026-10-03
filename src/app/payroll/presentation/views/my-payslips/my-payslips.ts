@@ -18,6 +18,12 @@ const PAGE_SIZE = 6;
   templateUrl: './my-payslips.html',
   styleUrl: './my-payslips.css'
 })
+/**
+ * Displays the payslips available to the authenticated employee.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Diana Li
+ */
 export class MyPayslips {
   readonly store = inject(PayrollStore);
   private readonly dialog = inject(MatDialog);
@@ -38,13 +44,47 @@ export class MyPayslips {
   readonly rangeStart = computed(() => this.filteredPayslips().length ? this.page() * PAGE_SIZE + 1 : 0);
   readonly rangeEnd = computed(() => Math.min((this.page() + 1) * PAGE_SIZE, this.filteredPayslips().length));
 
+/**
+ * Executes the employeeName operation of the component.
+ * @author Diana Li
+ */
   employeeName(): string { return this.store.getEmployeeById(this.store.currentEmployeeId())?.fullName ?? '—'; }
+/**
+ * Executes the periodLabel operation of the component.
+ * @param id Parameter used by the operation.
+ * @author Diana Li
+ */
   periodLabel(id: number): string { return this.store.getPeriodById(id)?.label() ?? '—'; }
+/**
+ * Executes the money operation of the component.
+ * @param payslip Parameter used by the operation.
+ * @author Diana Li
+ */
   money(payslip: Payslip): string { return `S/ ${payslip.netAmount.amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`; }
+/**
+ * Executes the setYear operation of the component.
+ * @param value Parameter used by the operation.
+ * @author Diana Li
+ */
   setYear(value: string) { this.yearFilter.set(Number(value)); this.periodFilter.set(null); this.page.set(0); }
+/**
+ * Updates the selected period filter.
+ * @param value Parameter used by the operation.
+ * @author Diana Li
+ */
   setPeriod(value: string) { this.periodFilter.set(value ? Number(value) : null); this.page.set(0); }
 
+/**
+ * Opens the payslip view.
+ * @param payslip Parameter used by the operation.
+ * @author Diana Li
+ */
   openViewer(payslip: Payslip) { this.dialog.open(PayslipViewDialog, {data: {payslip}, width: '900px', maxWidth: '96vw'}).afterClosed().subscribe(); }
+/**
+ * Downloads the payslip file.
+ * @param payslip Parameter used by the operation.
+ * @author Diana Li
+ */
   download(payslip: Payslip) {
     const link = document.createElement('a');
     link.href = payslip.file.storageUrl;

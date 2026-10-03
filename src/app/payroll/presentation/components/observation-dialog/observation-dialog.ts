@@ -8,6 +8,12 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {PayrollStore} from '../../../application/payroll.store';
 import {Payslip} from '../../../domain/model/payslip.entity';
 
+/**
+ * Input data used by the observation dialog.
+ *
+ * @remarks Defines the data contract used between layers or components of the bounded context.
+ * @author Diana Li
+ */
 export interface ObservationDialogData { payslip: Payslip; readOnly?: boolean; }
 
 @Component({
@@ -16,6 +22,12 @@ export interface ObservationDialogData { payslip: Payslip; readOnly?: boolean; }
   templateUrl: './observation-dialog.html',
   styleUrl: './observation-dialog.css'
 })
+/**
+ * Manages the dialog used to record an observation about a payslip payment.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Diana Li
+ */
 export class ObservationDialog {
   private readonly fb = inject(FormBuilder);
   readonly store = inject(PayrollStore);
@@ -37,6 +49,10 @@ export class ObservationDialog {
     else this.dialogRef.close(true);
   });
 
+/**
+ * Executes the confirm operation of the component.
+ * @author Diana Li
+ */
   confirm(): void {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;

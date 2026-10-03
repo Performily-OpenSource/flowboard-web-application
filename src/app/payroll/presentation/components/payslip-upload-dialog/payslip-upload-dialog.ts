@@ -9,6 +9,12 @@ import {FileReference, Money, Payslip} from '../../../domain/model/payslip.entit
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
+/**
+ * Input data used by the payslip upload dialog.
+ *
+ * @remarks Defines the data contract used between layers or components of the bounded context.
+ * @author Diana Li
+ */
 export interface PayslipUploadDialogData { payslip?: Payslip; }
 
 @Component({
@@ -17,6 +23,12 @@ export interface PayslipUploadDialogData { payslip?: Payslip; }
   templateUrl: './payslip-upload-dialog.html',
   styleUrl: './payslip-upload-dialog.css'
 })
+/**
+ * Manages the upload of a payslip file and its associated data.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Diana Li
+ */
 export class PayslipUploadDialog {
   private readonly fb = inject(FormBuilder);
   readonly store = inject(PayrollStore);
@@ -43,6 +55,11 @@ export class PayslipUploadDialog {
     netAmount: new FormControl<number>(this.data.payslip?.netAmount.amount ?? 0, {nonNullable: true, validators: [Validators.required, Validators.min(0.01)]})
   });
 
+/**
+ * Validates and submits the form data.
+ * @param replace Parameter used by the operation.
+ * @author Diana Li
+ */
   async submit(replace = false): Promise<void> {
     this.form.markAllAsTouched();
     this.error = '';
@@ -92,20 +109,40 @@ export class PayslipUploadDialog {
     else this.store.createPayslip(replacement);
   }
 
+/**
+ * Processes the file selected by the user.
+ * @param event Parameter used by the operation.
+ * @author Diana Li
+ */
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.selectedFile.set(input.files?.[0] ?? null);
     this.error = '';
   }
 
+/**
+ * Executes the employeeName operation of the component.
+ * @param id Parameter used by the operation.
+ * @author Diana Li
+ */
   employeeName(id: number): string {
     return this.store.getEmployeeById(id)?.fullName ?? '—';
   }
 
+/**
+ * Executes the periodLabel operation of the component.
+ * @param id Parameter used by the operation.
+ * @author Diana Li
+ */
   periodLabel(id: number): string {
     return this.store.getPeriodById(id)?.label() ?? '—';
   }
 
+/**
+ * Executes the readAsDataUrl operation of the component.
+ * @param file Parameter used by the operation.
+ * @author Diana Li
+ */
   private readAsDataUrl(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
