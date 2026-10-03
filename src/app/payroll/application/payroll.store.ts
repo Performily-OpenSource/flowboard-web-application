@@ -12,6 +12,12 @@ import {PayrollEmployee} from '../domain/model/payroll-employee.model';
 import {CurrentEmployeeStore} from '../../shared/application/current-employee.store';
 
 @Injectable({providedIn: 'root'})
+/**
+ * Centralizes payroll state and coordinates operations between the user interface and infrastructure services.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Diana Li
+ */
 export class PayrollStore {
   private readonly destroyRef = inject(DestroyRef);
   private readonly translate = inject(TranslateService);
@@ -43,22 +49,59 @@ export class PayrollStore {
     this.load();
   }
 
+/**
+ * Finds a period by its identifier.
+ * @param id Parameter used by the operation.
+ * @author Diana Li
+ */
   getPeriodById(id: number): PayrollPeriod | undefined { return this.periodsSignal().find(period => period.id === id); }
+/**
+ * Finds a payslip by its identifier.
+ * @param id Parameter used by the operation.
+ * @author Diana Li
+ */
   getPayslipById(id: number): Payslip | undefined { return this.payslipsSignal().find(payslip => payslip.id === id); }
+/**
+ * Finds an employee by their identifier.
+ * @param id Parameter used by the operation.
+ * @author Diana Li
+ */
   getEmployeeById(id: number): PayrollEmployee | undefined { return this.employeesSignal().find(employee => employee.id === id); }
+/**
+ * Retrieves the area associated with an employee.
+ * @param employeeId Parameter used by the operation.
+ * @author Diana Li
+ */
   getAreaByEmployeeId(employeeId: number): PayrollArea | undefined {
     const employee = this.getEmployeeById(employeeId);
     return employee ? this.areasSignal().find(area => area.id === employee.areaId) : undefined;
   }
 
+/**
+ * Retrieves published payslips visible to an employee.
+ * @param employeeId Parameter used by the operation.
+ * @author Diana Li
+ */
   visiblePayslipsForEmployee(employeeId: number): Payslip[] {
     return this.payslipsSignal().filter(payslip => payslip.isVisibleTo(employeeId)).sort((a, b) => b.issueDate.localeCompare(a.issueDate));
   }
 
+/**
+ * Checks whether a payslip already exists for an employee and period.
+ * @param employeeId Parameter used by the operation.
+ * @param payrollPeriodId Parameter used by the operation.
+ * @param excludedId Parameter used by the operation.
+ * @author Diana Li
+ */
   existsForEmployeePeriod(employeeId: number, payrollPeriodId: number, excludedId: number | null = null): boolean {
     return this.payslipsSignal().some(payslip => payslip.employeeId === employeeId && payslip.payrollPeriodId === payrollPeriodId && payslip.id !== excludedId);
   }
 
+/**
+ * Creates a new payslip.
+ * @param payslip Parameter used by the operation.
+ * @author Diana Li
+ */
   createPayslip(payslip: Payslip): void {
     if (this.existsForEmployeePeriod(payslip.employeeId, payslip.payrollPeriodId)) {
       this.failOperation(this.translate.instant('payroll.errors.duplicate'));
@@ -69,6 +112,11 @@ export class PayrollStore {
     });
   }
 
+/**
+ * Creates multiple payslips.
+ * @param payslips Parameter used by the operation.
+ * @author Diana Li
+ */
   createPayslips(payslips: Payslip[]): void {
     const duplicate = payslips.find(item => this.existsForEmployeePeriod(item.employeeId, item.payrollPeriodId));
     if (duplicate) {
@@ -80,32 +128,63 @@ export class PayrollStore {
     });
   }
 
+/**
+ * Replaces the data of an existing payslip.
+ * @param existing Parameter used by the operation.
+ * @param replacement Parameter used by the operation.
+ * @author Diana Li
+ */
   replacePayslip(existing: Payslip, replacement: Payslip): void {
     const updated = this.copyPayslip(existing);
     updated.replaceFile(replacement.file, replacement.issueDate, replacement.netAmount);
     this.persist(this.payrollApi.updatePayslip(updated), saved => this.replaceInState(saved));
   }
 
+/**
+ * Publishes a payslip.
+ * @param payslip Parameter used by the operation.
+ * @author Diana Li
+ */
   publishPayslip(payslip: Payslip): void {
     const updated = this.copyPayslip(payslip);
     updated.publish();
     this.persist(this.payrollApi.updatePayslip(updated), saved => this.replaceInState(saved));
   }
 
+/**
+ * Marks the payslip as paid with the specified date.
+ * @param payslip Parameter used by the operation.
+ * @param paidOn Parameter used by the operation.
+ * @author Diana Li
+ */
   markAsPaid(payslip: Payslip, paidOn: string): void {
     const updated = this.copyPayslip(payslip);
     updated.markAsPaid(paidOn);
     this.persist(this.payrollApi.updatePayslip(updated), saved => this.replaceInState(saved));
   }
 
+/**
+ * Records an observation about the payslip payment.
+ * @param payslip Parameter used by the operation.
+ * @param reason Parameter used by the operation.
+ * @author Diana Li
+ */
   markAsObserved(payslip: Payslip, reason: string): void {
     const updated = this.copyPayslip(payslip);
     updated.markAsObserved(reason);
     this.persist(this.payrollApi.updatePayslip(updated), saved => this.replaceInState(saved));
   }
 
+/**
+ * Clears the error messages from the state.
+ * @author Diana Li
+ */
   clearError(): void { this.errorSignal.set(null); this.operationErrorSignal.set(null); }
 
+/**
+ * Executes the load operation of the component.
+ * @author Diana Li
+ */
   private load(): void {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
@@ -134,6 +213,11 @@ export class PayrollStore {
     this.operationErrorSignal.set(null);
     request.pipe(retry(2), takeUntilDestroyed(this.destroyRef)).subscribe({
       next: saved => {
+/**
+ * Executes the onSuccess operation of the component.
+ * @param saved Parameter used by the operation.
+ * @author Diana Li
+ */
         onSuccess(saved);
         this.loadingSignal.set(false);
         this.operationVersionSignal.update(version => version + 1);
@@ -142,16 +226,31 @@ export class PayrollStore {
     });
   }
 
+/**
+ * Executes the failOperation operation of the component.
+ * @param message Parameter used by the operation.
+ * @author Diana Li
+ */
   private failOperation(message: string): void {
     this.operationErrorSignal.set(message);
     this.loadingSignal.set(false);
     this.operationVersionSignal.update(version => version + 1);
   }
 
+/**
+ * Executes the replaceInState operation of the component.
+ * @param saved Parameter used by the operation.
+ * @author Diana Li
+ */
   private replaceInState(saved: Payslip): void {
     this.payslipsSignal.update(items => items.map(item => item.id === saved.id ? saved : item));
   }
 
+/**
+ * Executes the copyPayslip operation of the component.
+ * @param payslip Parameter used by the operation.
+ * @author Diana Li
+ */
   private copyPayslip(payslip: Payslip): Payslip {
     return new Payslip({
       id: payslip.id,
@@ -175,6 +274,12 @@ export class PayrollStore {
     });
   }
 
+/**
+ * Executes the formatError operation of the component.
+ * @param error Parameter used by the operation.
+ * @param fallbackKey Parameter used by the operation.
+ * @author Diana Li
+ */
   private formatError(error: unknown, fallbackKey: string): string {
     return error instanceof Error && error.message ? error.message : this.translate.instant(fallbackKey);
   }
