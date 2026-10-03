@@ -51,23 +51,11 @@ export class PayrollList {
   readonly rangeStart = computed(() => this.filteredPayslips().length ? this.page() * PAGE_SIZE + 1 : 0);
   readonly rangeEnd = computed(() => Math.min((this.page() + 1) * PAGE_SIZE, this.filteredPayslips().length));
 
-/**
- * Updates the selected period filter.
- * @param value Parameter used by the operation.
- * @author Diana Li
- */
+
   setPeriod(value: string) { this.periodFilter.set(value ? Number(value) : null); this.page.set(0); }
-/**
- * Updates the selected area filter.
- * @param value Parameter used by the operation.
- * @author Diana Li
- */
+
   setArea(value: string) { this.areaFilter.set(value ? Number(value) : null); this.page.set(0); }
-/**
- * Updates the payment status filter.
- * @param value Parameter used by the operation.
- * @author Diana Li
- */
+
   setPaymentStatus(value: string) { this.paymentFilter.set(value ? value as PaymentStatus : null); this.page.set(0); }
 
 /**

@@ -61,17 +61,9 @@ export class MyPayslips {
  * @author Diana Li
  */
   money(payslip: Payslip): string { return `S/ ${payslip.netAmount.amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`; }
-/**
- * Executes the setYear operation of the component.
- * @param value Parameter used by the operation.
- * @author Diana Li
- */
+
   setYear(value: string) { this.yearFilter.set(Number(value)); this.periodFilter.set(null); this.page.set(0); }
-/**
- * Updates the selected period filter.
- * @param value Parameter used by the operation.
- * @author Diana Li
- */
+
   setPeriod(value: string) { this.periodFilter.set(value ? Number(value) : null); this.page.set(0); }
 
 /**

@@ -37,20 +37,10 @@ export class PayrollEmployee {
     this.active = props.active;
   }
 
-/**
- * Executes the identityDocumentNumber operation of the component.
- * @author Diana Li
- */
   get identityDocumentNumber(): string { return this.document; }
-/**
- * Executes the area operation of the component.
- * @author Diana Li
- */
+
   get area(): {id: number; name: string} { return {id: this.areaId, name: this.areaName}; }
-/**
- * Executes the position operation of the component.
- * @author Diana Li
- */
+
   get position(): {title: string} { return {title: this.positionTitle}; }
 /**
  * Executes the isActive operation of the component.

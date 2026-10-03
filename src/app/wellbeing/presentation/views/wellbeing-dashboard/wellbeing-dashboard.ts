@@ -59,11 +59,7 @@ export class WellbeingDashboard {
     if (routePath === 'thresholds') this.tab.set('thresholds');
   }
 
-/**
- * Changes the active dashboard section.
- * @param tab Parameter used by the operation.
- * @author Diana Li
- */
+
   setTab(tab: 'dashboard' | 'spaces' | 'thresholds') { this.tab.set(tab); }
 /**
  * Opens the form for creating a workspace.
