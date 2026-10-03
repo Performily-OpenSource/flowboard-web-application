@@ -2,6 +2,12 @@ import {Component, computed, inject, input} from '@angular/core';
 import {TranslatePipe} from '@ngx-translate/core';
 import {AttendanceStore} from '../../../application/attendance.store';
 
+/**
+ * Presents attendance employment information associated with an employee.
+ *
+ * @remarks Provides the attendance-specific employee employment section used by the presentation layer.
+ * @author Dario Avila de la cruz
+ */
 @Component({
   selector: 'app-employee-attendance-employment',
   imports: [TranslatePipe],

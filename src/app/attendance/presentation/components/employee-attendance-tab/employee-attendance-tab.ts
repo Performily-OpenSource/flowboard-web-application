@@ -3,6 +3,12 @@ import {SlicePipe} from '@angular/common';
 import {TranslatePipe} from '@ngx-translate/core';
 import {AttendanceStore} from '../../../application/attendance.store';
 
+/**
+ * Presents attendance information within an employee detail view.
+ *
+ * @remarks Provides attendance-specific display helpers for the employee attendance tab.
+ * @author Dario Avila de la cruz
+ */
 @Component({
   selector: 'app-employee-attendance-tab',
   imports: [TranslatePipe, SlicePipe],
@@ -28,5 +34,12 @@ export class EmployeeAttendanceTab {
     };
   });
 
+/**
+ * Formats an hour value for display.
+ *
+ * @param value the value used by the operation.
+ * @returns The formatted or calculated value.
+ * @author Dario Avila de la cruz
+ */
   hours(value: number | null): string { return AttendanceStore.hoursToLabel(value); }
 }
