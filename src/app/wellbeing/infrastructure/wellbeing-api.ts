@@ -17,6 +17,12 @@ import {OfficeResource} from './offices-response';
 import {ThresholdRangeResource} from './threshold-ranges-response';
 
 @Injectable({providedIn: 'root'})
+/**
+ * Exposes the HTTP operations used by the Wellbeing context.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Diana Li
+ */
 export class WellbeingApi extends BaseApi {
   private readonly offices: OfficesApiEndpoint;
   private readonly devices: DevicesApiEndpoint;
@@ -24,7 +30,15 @@ export class WellbeingApi extends BaseApi {
   private readonly thresholds: MetricThresholdsApiEndpoint;
   private readonly ranges: ThresholdRangesApiEndpoint;
 
+/**
+ * Initializes the instance with the data required for operation.
+ * @author Diana Li
+ */
   constructor() {
+/**
+ * Executes the super operation of the component.
+ * @author Diana Li
+ */
     super();
     const http = inject(HttpClient);
     this.offices = new OfficesApiEndpoint(http);
@@ -34,16 +48,67 @@ export class WellbeingApi extends BaseApi {
     this.ranges = new ThresholdRangesApiEndpoint(http);
   }
 
+/**
+ * Retrieves workspaces from the API.
+ * @author Diana Li
+ */
   getOffices(): Observable<Office[]> { return this.offices.getAll(); }
+/**
+ * Creates a new workspace.
+ * @param resource Parameter used by the operation.
+ * @author Diana Li
+ */
   createOffice(resource: Omit<OfficeResource, 'id'>): Observable<Office> { return this.offices.createResource(resource); }
+/**
+ * Updates a workspace through the API.
+ * @param entity Parameter used by the operation.
+ * @author Diana Li
+ */
   updateOffice(entity: Office): Observable<Office> { return this.offices.update(entity, entity.id); }
+/**
+ * Retrieves registered devices.
+ * @author Diana Li
+ */
   getDevices(): Observable<Device[]> { return this.devices.getAll(); }
+/**
+ * Registers a new device.
+ * @param resource Parameter used by the operation.
+ * @author Diana Li
+ */
   createDevice(resource: Omit<DeviceResource, 'id'>): Observable<Device> { return this.devices.createResource(resource); }
+/**
+ * Updates a device.
+ * @param entity Parameter used by the operation.
+ * @author Diana Li
+ */
   updateDevice(entity: Device): Observable<Device> { return this.devices.update(entity, entity.id); }
+/**
+ * Retrieves environmental readings.
+ * @author Diana Li
+ */
   getReadings(): Observable<EnvironmentalReading[]> { return this.readings.getAll(); }
+/**
+ * Retrieves configured thresholds.
+ * @author Diana Li
+ */
   getThresholds(): Observable<MetricThreshold[]> { return this.thresholds.getAll(); }
+/**
+ * Retrieves configured threshold ranges.
+ * @author Diana Li
+ */
   getThresholdRanges(): Observable<ThresholdRange[]> { return this.ranges.getAll(); }
+/**
+ * Updates a threshold configuration.
+ * @param entity Parameter used by the operation.
+ * @author Diana Li
+ */
   updateThreshold(entity: MetricThreshold): Observable<MetricThreshold> { return this.thresholds.update(entity, entity.id); }
+/**
+ * Updates the ranges associated with a threshold.
+ * @param thresholdId Parameter used by the operation.
+ * @param ranges Parameter used by the operation.
+ * @author Diana Li
+ */
   updateThresholdRanges(thresholdId: number, ranges: Array<Pick<ThresholdRangeResource, 'healthIndicator' | 'minValue' | 'maxValue'>>): Observable<ThresholdRange[]> {
     return this.ranges.getAll().pipe(
       switchMap(current => {

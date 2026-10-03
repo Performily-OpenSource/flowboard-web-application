@@ -3,15 +3,36 @@ import {Device} from '../domain/model/device.entity';
 import {DeviceCode} from '../domain/model/device-code';
 import {DeviceResource,DevicesResponse} from './devices-response';
 
+/**
+ * Transforms device resources between infrastructure and domain entities.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Diana Li
+ */
 export class DeviceAssembler implements BaseAssembler<Device,DeviceResource,DevicesResponse>{
+/**
+ * Converts an API resource into a domain entity.
+ * @param r Parameter used by the operation.
+ * @author Diana Li
+ */
     toEntityFromResource(r:DeviceResource):Device{
         return new Device({id:r.id,code:new DeviceCode(r.code),officeId:r.officeId,supportedMetrics:new Set(r.supportedMetrics),status:r.status});
     }
     
+/**
+ * Converts a domain entity into an API resource.
+ * @param e Parameter used by the operation.
+ * @author Diana Li
+ */
     toResourceFromEntity(e:Device):DeviceResource{
         return{id:e.id,code:e.code.value,officeId:e.officeId,supportedMetrics:[...e.supportedMetrics],status:e.status};
     }
     
+/**
+ * Converts an API response into a collection of entities.
+ * @param r Parameter used by the operation.
+ * @author Diana Li
+ */
     toEntitiesFromResponse(r:DevicesResponse):Device[]{
         return r.devices.map(x=>this.toEntityFromResource(x));
     }
