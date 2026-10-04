@@ -1,0 +1,28 @@
+<section class="dash-card">
+  <div class="dash-card-head">
+    <h2 class="dash-card-title">{{ 'request-dashboard.my-requests-title' | translate }}</h2>
+    <a class="dash-link" routerLink="/requests/my-requests">{{ 'request-dashboard.view-all' | translate }}</a>
+  </div>
+
+  @for (request of latest(); track request.id) {
+    <div class="dash-row">
+      <div class="dash-row-text">
+        <p class="dash-row-title">{{ request.requestType?.name ?? '-' }}</p>
+        <p class="dash-row-subtitle">
+          @if (request.startDate && !request.hasTimes()) {
+            @if (request.isSingleDay()) {
+              {{ request.startDate | date: 'dd/MM' }}
+            } @else {
+              {{ 'request-period.range' | translate: { start: (request.startDate | date: 'dd/MM'), end: (request.endDate | date: 'dd/MM') } }}
+            }
+          } @else {
+            {{ request | requestPeriod }}
+          }
+        </p>
+      </div>
+      <app-request-status-badge [status]="request.status"/>
+    </div>
+  } @empty {
+    <p class="dash-empty">{{ 'request-dashboard.my-requests-empty' | translate }}</p>
+  }
+</section>

@@ -1,0 +1,5 @@
+<article class="dash-kpi">
+  <p class="dash-kpi-label">{{ 'request-dashboard.pending-requests' | translate }}</p>
+  <p class="dash-kpi-value">{{ pendingCount() }}</p>
+  <p class="dash-kpi-hint">{{ 'request-dashboard.older-than-two-days' | translate: { count: delayedCount() } }}</p>
+</article>

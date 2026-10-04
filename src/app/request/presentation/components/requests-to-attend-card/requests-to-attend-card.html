@@ -1,0 +1,33 @@
+<section class="dash-card">
+  <div class="dash-card-head">
+    <h2 class="dash-card-title">{{ 'request-dashboard.to-attend-title' | translate }}</h2>
+    <a class="dash-link" routerLink="/requests/inbox">{{ 'request-dashboard.view-all' | translate }}</a>
+  </div>
+
+  <div class="attend-list">
+    @for (row of rows(); track row.request.id) {
+      <div class="dash-row">
+        <span class="avatar">{{ row.requester?.initials ?? '?' }}</span>
+        <div class="dash-row-text attend-text">
+          <p class="dash-row-title attend-name">{{ row.requester?.fullName ?? ('request-dashboard.unknown-requester' | translate) }}</p>
+          <p class="dash-row-subtitle">
+            {{ row.request.requestType?.name ?? '-' }} ·
+            @if (row.request.startDate && !row.request.hasTimes()) {
+              @if (row.request.isSingleDay()) {
+                {{ row.request.startDate | date: 'dd/MM' }}
+              } @else {
+                {{ 'request-period.range' | translate: { start: (row.request.startDate | date: 'dd/MM'), end: (row.request.endDate | date: 'dd/MM') } }}
+              }
+            } @else {
+              {{ row.request | requestPeriod }}
+            }
+          </p>
+        </div>
+        <app-request-status-badge [status]="row.request.status"/>
+        <span class="attend-time">{{ row.request.submittedAt | relativeTime }}</span>
+      </div>
+    } @empty {
+      <p class="dash-empty">{{ 'request-dashboard.to-attend-empty' | translate }}</p>
+    }
+  </div>
+</section>
