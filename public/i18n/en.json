@@ -62,7 +62,13 @@
   },
   "home": {
     "title": "Welcome to Flowboard",
-    "content": "Manage employees, areas, positions and the organization chart from a single source of truth."
+    "content": "Manage employees, areas, positions and the organization chart from a single source of truth.",
+    "good-morning": "Good morning, {{name}}",
+    "good-afternoon": "Good afternoon, {{name}}",
+    "good-evening": "Good evening, {{name}}",
+    "hello": "Hello, {{name}}",
+    "hr-subtitle": "Staff status as of {{date}}.",
+    "employee-subtitle": "This is your information as of {{date}}. Nobody else sees it."
   },
   "about": {
     "title": "About Flowboard",
@@ -1424,6 +1430,82 @@
     "validation": {
       "username": "Username is not valid.",
       "password-hash": "Password hash is not valid."
+    }
+  },
+  "workspace-dashboard": {
+    "active-employees": "Active employees",
+    "hired-this-month": "+{{count}} this month",
+    "my-position-title": "My position",
+    "view-profile": "View my profile"
+  },
+  "attendance-dashboard": {
+    "monthly-lates": "Lates this month",
+    "lates-share": "{{percent}}% of the records",
+    "lates-share-month": "{{percent}}% of the records in {{month}}",
+    "today-title": "Today's attendance",
+    "day-title": "Attendance on {{date}}",
+    "on-time": "On time",
+    "lates": "Late",
+    "absences": "Absences",
+    "justified": "Justified",
+    "no-records": "There are no attendance records yet.",
+    "my-week-title": "My attendance this week",
+    "weekday-letter": {
+      "monday": "M",
+      "tuesday": "T",
+      "wednesday": "W",
+      "thursday": "T",
+      "friday": "F"
+    },
+    "tile-status": {
+      "ON_TIME": "On time",
+      "LATE": "Late",
+      "ABSENT": "Absent",
+      "JUSTIFIED": "Justified",
+      "INCOMPLETE": "Incomplete"
+    },
+    "today": "Today",
+    "no-record": "-",
+    "worked-this-week": "Hours worked this week",
+    "worked-week-of": "Hours worked in the week of {{date}}"
+  },
+  "benefits-dashboard": {
+    "available-vacation": "AVAILABLE VACATION",
+    "available-vacation-hint": "days across {{ count }} employees",
+    "my-balance-title": "My vacation balance",
+    "request-vacation": "Request vacation",
+    "no-balance": "You don't have a vacation balance yet.",
+    "my-benefits-title": "My benefits",
+    "valid-until": "valid until {{date}}",
+    "no-benefits": "You have no benefits assigned.",
+    "more-benefits": "And {{count}} more."
+  },
+  "payroll-dashboard": {
+    "latest-payslip-title": "My latest payslip",
+    "uploaded-on": "Uploaded on {{ date }}",
+    "download-pdf": "Download PDF",
+    "no-payslip": "You don't have published payslips yet."
+  },
+  "request-dashboard": {
+    "pending-requests": "Pending requests",
+    "older-than-two-days": "{{count}} older than 2 days",
+    "to-attend-title": "Requests to attend",
+    "to-attend-empty": "No requests to attend.",
+    "unknown-requester": "Unknown employee",
+    "my-requests-title": "My requests",
+    "my-requests-empty": "You have not submitted any requests yet.",
+    "view-all": "View all"
+  },
+  "wellbeing-dashboard": {
+    "card-title": "Workspace wellbeing",
+    "view-all": "View all",
+    "no-readings-hours": "No readings for {{ hours }} h",
+    "no-readings-days": "No readings for {{ days }} d",
+    "empty": "There are no active spaces.",
+    "indicator": {
+      "optimal": "Optimal",
+      "hazardous": "Hazardous",
+      "no-data": "No data"
     }
   }
 }

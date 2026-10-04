@@ -62,7 +62,13 @@
   },
   "home": {
     "title": "Bienvenido a Flowboard",
-    "content": "Gestiona colaboradores, áreas, posiciones y el organigrama desde una única fuente de verdad."
+    "content": "Gestiona colaboradores, áreas, posiciones y el organigrama desde una única fuente de verdad.",
+    "good-morning": "Buenos días, {{name}}",
+    "good-afternoon": "Buenas tardes, {{name}}",
+    "good-evening": "Buenas noches, {{name}}",
+    "hello": "Hola, {{name}}",
+    "hr-subtitle": "Estado del personal al {{date}}.",
+    "employee-subtitle": "Esto es lo tuyo al {{date}}. Nadie más ve esta información."
   },
   "about": {
     "title": "Acerca de Flowboard",
@@ -1425,6 +1431,82 @@
     "validation": {
       "username": "El usuario no es válido.",
       "password-hash": "El hash de contraseña no es válido."
+    }
+  },
+  "workspace-dashboard": {
+    "active-employees": "Colaboradores activos",
+    "hired-this-month": "+{{count}} este mes",
+    "my-position-title": "Mi puesto",
+    "view-profile": "Ver mi perfil"
+  },
+  "attendance-dashboard": {
+    "monthly-lates": "Tardanzas del mes",
+    "lates-share": "{{percent}}% de las marcaciones",
+    "lates-share-month": "{{percent}}% de las marcaciones de {{month}}",
+    "today-title": "Asistencia de hoy",
+    "day-title": "Asistencia del {{date}}",
+    "on-time": "Puntuales",
+    "lates": "Tardanzas",
+    "absences": "Faltas",
+    "justified": "Justificadas",
+    "no-records": "Aún no hay marcaciones registradas.",
+    "my-week-title": "Mi asistencia de la semana",
+    "weekday-letter": {
+      "monday": "L",
+      "tuesday": "M",
+      "wednesday": "M",
+      "thursday": "J",
+      "friday": "V"
+    },
+    "tile-status": {
+      "ON_TIME": "Puntual",
+      "LATE": "Tardanza",
+      "ABSENT": "Falta",
+      "JUSTIFIED": "Justificada",
+      "INCOMPLETE": "Incompleta"
+    },
+    "today": "Hoy",
+    "no-record": "-",
+    "worked-this-week": "Horas trabajadas esta semana",
+    "worked-week-of": "Horas trabajadas en la semana del {{date}}"
+  },
+  "benefits-dashboard": {
+    "available-vacation": "VACACIONES DISPONIBLES",
+    "available-vacation-hint": "días en {{ count }} colaboradores",
+    "my-balance-title": "Mi saldo de vacaciones",
+    "request-vacation": "Solicitar vacaciones",
+    "no-balance": "Aún no tienes un saldo de vacaciones.",
+    "my-benefits-title": "Mis beneficios",
+    "valid-until": "vigente hasta el {{date}}",
+    "no-benefits": "No tienes beneficios asignados.",
+    "more-benefits": "Y {{count}} más."
+  },
+  "payroll-dashboard": {
+    "latest-payslip-title": "Mi última boleta",
+    "uploaded-on": "Cargada el {{ date }}",
+    "download-pdf": "Descargar PDF",
+    "no-payslip": "Aún no tienes boletas publicadas."
+  },
+  "request-dashboard": {
+    "pending-requests": "Solicitudes pendientes",
+    "older-than-two-days": "{{count}} con más de 2 días",
+    "to-attend-title": "Solicitudes por atender",
+    "to-attend-empty": "No hay solicitudes por atender.",
+    "unknown-requester": "Colaborador desconocido",
+    "my-requests-title": "Mis solicitudes",
+    "my-requests-empty": "Aún no has registrado solicitudes.",
+    "view-all": "Ver todas"
+  },
+  "wellbeing-dashboard": {
+    "card-title": "Bienestar de los espacios",
+    "view-all": "Ver todo",
+    "no-readings-hours": "Sin lecturas hace {{ hours }} h",
+    "no-readings-days": "Sin lecturas hace {{ days }} d",
+    "empty": "No hay espacios activos.",
+    "indicator": {
+      "optimal": "Óptimo",
+      "hazardous": "Peligroso",
+      "no-data": "Sin dato"
     }
   }
 }
