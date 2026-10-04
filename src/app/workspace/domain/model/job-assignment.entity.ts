@@ -1,10 +1,18 @@
 import {Area} from './area.entity';
 import {Position} from './position.entity';
 
+/** Reason that originated a job assignment: initial hire, reassignment or reinstatement. */
 export type AssignmentChangeType = 'HIRE' | 'REASSIGNMENT' | 'REINSTATEMENT';
 
+/** All supported assignment change types, e.g. for select options. */
 export const ASSIGNMENT_CHANGE_TYPES: AssignmentChangeType[] = ['HIRE', 'REASSIGNMENT', 'REINSTATEMENT'];
 
+/**
+ * Entity representing a period in which an employee held a position in an area.
+ * Together, an employee's assignments form their job history; an assignment without end date is the current one.
+ *
+ * @author Oscar Lizandro Vasquez Llave
+ */
 export class JobAssignment {
   private _id: number;
   private _employeeId: number;
@@ -16,6 +24,13 @@ export class JobAssignment {
   private _area: Area | null;
   private _position: Position | null;
 
+  /**
+   * Creates a new JobAssignment.
+   * Optional fields (endDate, area, position) default to null.
+   *
+   * @param props - The assignment data: id, employeeId, areaId, positionId, change type, start date and optional end date.
+   * @author Oscar Lizandro Vasquez Llave
+   */
   constructor(props: {
     id: number;
     employeeId: number;
@@ -38,6 +53,7 @@ export class JobAssignment {
     this._position = props.position ?? null;
   }
 
+  /** Unique identifier of the job assignment. */
   get id(): number {
     return this._id;
   }
@@ -46,6 +62,7 @@ export class JobAssignment {
     this._id = value;
   }
 
+  /** Identifier of the employee this assignment belongs to. */
   get employeeId(): number {
     return this._employeeId;
   }
@@ -54,6 +71,7 @@ export class JobAssignment {
     this._employeeId = value;
   }
 
+  /** Identifier of the assigned area. */
   get areaId(): number {
     return this._areaId;
   }
@@ -62,6 +80,7 @@ export class JobAssignment {
     this._areaId = value;
   }
 
+  /** Identifier of the assigned position. */
   get positionId(): number {
     return this._positionId;
   }
@@ -70,6 +89,7 @@ export class JobAssignment {
     this._positionId = value;
   }
 
+  /** Reason that originated this assignment. */
   get changeType(): AssignmentChangeType {
     return this._changeType;
   }
@@ -78,6 +98,7 @@ export class JobAssignment {
     this._changeType = value;
   }
 
+  /** Start date as a 'YYYY-MM-DD' string. */
   get startDate(): string {
     return this._startDate;
   }
@@ -86,6 +107,7 @@ export class JobAssignment {
     this._startDate = value;
   }
 
+  /** End date as a 'YYYY-MM-DD' string, or null while the assignment is current. */
   get endDate(): string | null {
     return this._endDate;
   }
@@ -94,6 +116,7 @@ export class JobAssignment {
     this._endDate = value;
   }
 
+  /** Resolved assigned area, or null if not loaded. */
   get area(): Area | null {
     return this._area;
   }
@@ -102,6 +125,7 @@ export class JobAssignment {
     this._area = value;
   }
 
+  /** Resolved assigned position, or null if not loaded. */
   get position(): Position | null {
     return this._position;
   }
@@ -110,6 +134,12 @@ export class JobAssignment {
     this._position = value;
   }
 
+  /**
+   * Checks whether this is the employee's current assignment.
+   *
+   * @returns True if the assignment has no end date, false otherwise
+   * @author Oscar Lizandro Vasquez Llave
+   */
   isCurrent(): boolean {
     return this._endDate === null;
   }

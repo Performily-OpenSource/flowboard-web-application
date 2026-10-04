@@ -11,10 +11,20 @@ import {WorkspaceStore} from '../../../application/workspace.store';
 import {CONTRACT_TYPES, ContractType, Employee} from '../../../domain/model/employee.entity';
 import {EmployeeSummaryCard, SummaryRow} from '../employee-summary-card/employee-summary-card';
 
+/** Data passed to the employee reinstatement dialog through MAT_DIALOG_DATA. */
 export interface EmployeeReinstatementData {
+  /** The terminated employee to reinstate. */
   employee: Employee;
 }
 
+/**
+ * Dialog to reinstate a terminated employee (US16).
+ * Shows the termination date and the last area, position and identity document of the employee,
+ * and asks for the new area, position, reinstatement date and contract type.
+ * Receives {@link EmployeeReinstatementData} and closes with true when the employee is reinstated.
+ *
+ * @author Oscar Lizandro Vasquez Llave
+ */
 @Component({
   selector: 'app-employee-reinstatement-dialog',
   imports: [
@@ -30,24 +40,34 @@ export interface EmployeeReinstatementData {
   styleUrl: './employee-reinstatement-dialog.css',
 })
 export class EmployeeReinstatementDialog extends BaseForm {
+  /** Form builder used to create the reinstatement form. */
   private fb = inject(FormBuilder);
+  /** Translation service used to build the subtitle and summary labels. */
   private translate = inject(TranslateService);
+  /** Workspace store that holds areas and positions; also used by the template to list areas. */
   readonly store = inject(WorkspaceStore);
+  /** Reference to this dialog, used to close it with the result. */
   private dialogRef = inject(MatDialogRef<EmployeeReinstatementDialog>);
+  /** Dialog data with the employee to reinstate. */
   readonly data = inject<EmployeeReinstatementData>(MAT_DIALOG_DATA);
 
+  /** Contract types available for selection. */
   readonly contractTypes = CONTRACT_TYPES;
+  /** Earliest reinstatement date allowed: the termination date, or the hire date if there is none. */
   readonly minDate = this.data.employee.terminationDate ?? this.data.employee.hireDate;
 
+  /** Subtitle of the summary card with the termination date. */
   readonly subtitle = this.translate.instant('reinstatement-dialog.terminated-on',
     { date: new LocalDatePipe().transform(this.data.employee.terminationDate) });
 
+  /** Rows shown in the employee summary card with the last area, position and identity document. */
   readonly summaryRows = computed<SummaryRow[]>(() => [
     { label: this.translate.instant('reinstatement-dialog.last-area'), value: this.data.employee.area?.name ?? '-' },
     { label: this.translate.instant('reinstatement-dialog.last-position'), value: this.data.employee.position?.title ?? '-' },
     { label: this.translate.instant('reinstatement-dialog.document'), value: `${this.data.employee.identityDocumentType} ${this.data.employee.identityDocumentNumber}` }
   ]);
 
+  /** Form with the area, position, reinstatement date and contract type. */
   readonly form = this.fb.group({
     areaId: new FormControl<number | null>(null, { validators: [Validators.required] }),
     positionId: new FormControl<number | null>(null, { validators: [Validators.required] }),
@@ -55,14 +75,18 @@ export class EmployeeReinstatementDialog extends BaseForm {
     contractType: new FormControl<ContractType>(this.data.employee.contractType, { nonNullable: true, validators: [Validators.required] })
   });
 
+  /** Area currently selected in the form, as a signal. */
   private readonly selectedAreaId = toSignal(this.form.controls.areaId.valueChanges, { initialValue: null });
+  /** Active positions of the selected area. */
   readonly positionsOfArea = computed(() => this.store.getActivePositionsByArea(this.selectedAreaId()));
 
+  /** Creates the dialog and clears the selected position whenever the area changes. */
   constructor() {
     super();
     this.form.controls.areaId.valueChanges.subscribe(() => this.form.controls.positionId.setValue(null));
   }
 
+  /** Validates the form, reinstates the employee through the store and closes the dialog with true. */
   confirm() {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;

@@ -2,8 +2,21 @@ import {BaseAssembler} from '../../shared/infrastructure/base-assembler';
 import {ContractType, Employee, EmploymentStatus, IdentityDocumentType} from '../domain/model/employee.entity';
 import {EmployeeResource, EmployeesResponse} from './employees-response';
 
+/**
+ * Assembler that converts between EmployeeResource (API) and Employee (domain entity).
+ * String codes are cast to their domain types; resolved area and position are not mapped.
+ *
+ * @author Oscar Lizandro Vasquez Llave
+ */
 export class EmployeeAssembler implements BaseAssembler<Employee, EmployeeResource, EmployeesResponse> {
 
+  /**
+   * Converts a EmployeeResource into a Employee entity.
+   *
+   * @param resource - The resource returned by the API.
+   * @returns The corresponding Employee entity
+   * @author Oscar Lizandro Vasquez Llave
+   */
   toEntityFromResource(resource: EmployeeResource): Employee {
     return new Employee({
       id: resource.id,
@@ -30,6 +43,13 @@ export class EmployeeAssembler implements BaseAssembler<Employee, EmployeeResour
     });
   }
 
+  /**
+   * Converts a Employee entity into a EmployeeResource to be sent to the API.
+   *
+   * @param entity - The entity to convert.
+   * @returns The corresponding EmployeeResource
+   * @author Oscar Lizandro Vasquez Llave
+   */
   toResourceFromEntity(entity: Employee): EmployeeResource {
     return {
       id: entity.id,
@@ -56,6 +76,13 @@ export class EmployeeAssembler implements BaseAssembler<Employee, EmployeeResour
     } as EmployeeResource;
   }
 
+  /**
+   * Converts a EmployeesResponse into a list of Employee entities.
+   *
+   * @param response - The response whose 'employees' array is converted.
+   * @returns The list of Employee entities
+   * @author Oscar Lizandro Vasquez Llave
+   */
   toEntitiesFromResponse(response: EmployeesResponse): Employee[] {
     return response.employees.map(resource => this.toEntityFromResource(resource));
   }

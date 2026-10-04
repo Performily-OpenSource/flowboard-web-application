@@ -1,14 +1,27 @@
 import {Area} from './area.entity';
 import {Position} from './position.entity';
 
+/** Type of identity document an employee can register: DNI, CE (foreign resident card) or passport. */
 export type IdentityDocumentType = 'DNI' | 'CE' | 'PASSPORT';
+/** Type of employment contract held by an employee. */
 export type ContractType = 'INDEFINITE' | 'FIXED_TERM' | 'PART_TIME' | 'INTERNSHIP';
+/** Employment status of an employee within the company. */
 export type EmploymentStatus = 'ACTIVE' | 'SUSPENDED' | 'TERMINATED';
 
+/** All supported identity document types, e.g. for select options. */
 export const IDENTITY_DOCUMENT_TYPES: IdentityDocumentType[] = ['DNI', 'CE', 'PASSPORT'];
+/** All supported contract types, e.g. for select options. */
 export const CONTRACT_TYPES: ContractType[] = ['INDEFINITE', 'FIXED_TERM', 'PART_TIME', 'INTERNSHIP'];
+/** All supported employment statuses, e.g. for select options. */
 export const EMPLOYMENT_STATUSES: EmploymentStatus[] = ['ACTIVE', 'SUSPENDED', 'TERMINATED'];
 
+/**
+ * Aggregate root of the Workspace bounded context representing a company employee.
+ * Holds personal, contact, address and contract data, the employment status (with termination
+ * data when terminated) and references to the employee's area, position and optional direct manager.
+ *
+ * @author Oscar Lizandro Vasquez Llave
+ */
 export class Employee {
   private _id: number;
   private _firstName: string;
@@ -34,6 +47,13 @@ export class Employee {
   private _area: Area | null;
   private _position: Position | null;
 
+  /**
+   * Creates a new Employee.
+   * Optional fields (contractEndDate, terminationReason, terminationDate, directManagerId, area, position) default to null.
+   *
+   * @param props - The employee data: identity, contact, address, contract, status and area/position/manager references.
+   * @author Oscar Lizandro Vasquez Llave
+   */
   constructor(props: {
     id: number;
     firstName: string;
@@ -84,6 +104,7 @@ export class Employee {
     this._position = props.position ?? null;
   }
 
+  /** Unique identifier of the employee. */
   get id(): number {
     return this._id;
   }
@@ -92,6 +113,7 @@ export class Employee {
     this._id = value;
   }
 
+  /** Employee first name. */
   get firstName(): string {
     return this._firstName;
   }
@@ -100,6 +122,7 @@ export class Employee {
     this._firstName = value;
   }
 
+  /** Employee last name. */
   get lastName(): string {
     return this._lastName;
   }
@@ -108,6 +131,7 @@ export class Employee {
     this._lastName = value;
   }
 
+  /** Type of the employee's identity document. */
   get identityDocumentType(): IdentityDocumentType {
     return this._identityDocumentType;
   }
@@ -116,6 +140,7 @@ export class Employee {
     this._identityDocumentType = value;
   }
 
+  /** Number of the employee's identity document. */
   get identityDocumentNumber(): string {
     return this._identityDocumentNumber;
   }
@@ -124,6 +149,7 @@ export class Employee {
     this._identityDocumentNumber = value;
   }
 
+  /** Birth date as a 'YYYY-MM-DD' string. */
   get birthDate(): string {
     return this._birthDate;
   }
@@ -132,6 +158,7 @@ export class Employee {
     this._birthDate = value;
   }
 
+  /** Employee email address. */
   get email(): string {
     return this._email;
   }
@@ -140,6 +167,7 @@ export class Employee {
     this._email = value;
   }
 
+  /** Employee phone number. */
   get phoneNumber(): string {
     return this._phoneNumber;
   }
@@ -148,6 +176,7 @@ export class Employee {
     this._phoneNumber = value;
   }
 
+  /** Street part of the employee address. */
   get addressStreet(): string {
     return this._addressStreet;
   }
@@ -156,6 +185,7 @@ export class Employee {
     this._addressStreet = value;
   }
 
+  /** District part of the employee address. */
   get addressDistrict(): string {
     return this._addressDistrict;
   }
@@ -164,6 +194,7 @@ export class Employee {
     this._addressDistrict = value;
   }
 
+  /** Province part of the employee address. */
   get addressProvince(): string {
     return this._addressProvince;
   }
@@ -172,6 +203,7 @@ export class Employee {
     this._addressProvince = value;
   }
 
+  /** Department (region) part of the employee address. */
   get addressDepartment(): string {
     return this._addressDepartment;
   }
@@ -180,6 +212,7 @@ export class Employee {
     this._addressDepartment = value;
   }
 
+  /** Type of the employee's contract. */
   get contractType(): ContractType {
     return this._contractType;
   }
@@ -188,6 +221,7 @@ export class Employee {
     this._contractType = value;
   }
 
+  /** Hire date as a 'YYYY-MM-DD' string. */
   get hireDate(): string {
     return this._hireDate;
   }
@@ -196,6 +230,7 @@ export class Employee {
     this._hireDate = value;
   }
 
+  /** Contract end date as a 'YYYY-MM-DD' string, or null if the contract has no end date. */
   get contractEndDate(): string | null {
     return this._contractEndDate;
   }
@@ -204,6 +239,7 @@ export class Employee {
     this._contractEndDate = value;
   }
 
+  /** Current employment status. */
   get status(): EmploymentStatus {
     return this._status;
   }
@@ -212,6 +248,7 @@ export class Employee {
     this._status = value;
   }
 
+  /** Reason for termination, or null if the employee has not been terminated. */
   get terminationReason(): string | null {
     return this._terminationReason;
   }
@@ -220,6 +257,7 @@ export class Employee {
     this._terminationReason = value;
   }
 
+  /** Termination date as a 'YYYY-MM-DD' string, or null if not terminated. */
   get terminationDate(): string | null {
     return this._terminationDate;
   }
@@ -228,6 +266,7 @@ export class Employee {
     this._terminationDate = value;
   }
 
+  /** Identifier of the area the employee works in. */
   get areaId(): number {
     return this._areaId;
   }
@@ -236,6 +275,7 @@ export class Employee {
     this._areaId = value;
   }
 
+  /** Identifier of the position the employee holds. */
   get positionId(): number {
     return this._positionId;
   }
@@ -244,6 +284,7 @@ export class Employee {
     this._positionId = value;
   }
 
+  /** Identifier of the employee's direct manager (another employee), or null if none. */
   get directManagerId(): number | null {
     return this._directManagerId;
   }
@@ -252,6 +293,7 @@ export class Employee {
     this._directManagerId = value;
   }
 
+  /** Resolved area of the employee, or null if not loaded. */
   get area(): Area | null {
     return this._area;
   }
@@ -260,6 +302,7 @@ export class Employee {
     this._area = value;
   }
 
+  /** Resolved position of the employee, or null if not loaded. */
   get position(): Position | null {
     return this._position;
   }
@@ -268,22 +311,42 @@ export class Employee {
     this._position = value;
   }
 
+  /** Full name built as 'firstName lastName'. */
   get fullName(): string {
     return `${this._firstName} ${this._lastName}`;
   }
 
+  /** Full address built as 'street, district, province, department'. */
   get fullAddress(): string {
     return `${this._addressStreet}, ${this._addressDistrict}, ${this._addressProvince}, ${this._addressDepartment}`;
   }
 
+  /**
+   * Checks whether the employee is currently active.
+   *
+   * @returns True if the status is 'ACTIVE', false otherwise
+   * @author Oscar Lizandro Vasquez Llave
+   */
   isActive(): boolean {
     return this._status === 'ACTIVE';
   }
 
+  /**
+   * Checks whether the employee has been terminated.
+   *
+   * @returns True if the status is 'TERMINATED', false otherwise
+   * @author Oscar Lizandro Vasquez Llave
+   */
   isTerminated(): boolean {
     return this._status === 'TERMINATED';
   }
 
+  /**
+   * Checks whether the employee reports to a direct manager.
+   *
+   * @returns True if a direct manager id is set, false otherwise
+   * @author Oscar Lizandro Vasquez Llave
+   */
   hasDirectManager(): boolean {
     return this._directManagerId !== null;
   }

@@ -1,5 +1,10 @@
 import {FormGroup} from '@angular/forms';
 
+/**
+ * Base class of the forms and form dialogs, with helpers to show validation errors.
+ *
+ * @author Oscar Lizandro Vasquez Llave
+ */
 export class BaseForm {
   /**
    * Checks if a form control is invalid and has been touched.

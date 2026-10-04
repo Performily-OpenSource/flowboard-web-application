@@ -1,3 +1,4 @@
+/** Category of a document stored in an employee's file. */
 export type DocumentType =
   | 'IDENTITY_DOCUMENT'
   | 'EMPLOYMENT_CONTRACT'
@@ -9,6 +10,7 @@ export type DocumentType =
   | 'WARNING_LETTER'
   | 'COMMENDATION_LETTER';
 
+/** All supported employee document types, e.g. for select options. */
 export const DOCUMENT_TYPES: DocumentType[] = [
   'IDENTITY_DOCUMENT',
   'EMPLOYMENT_CONTRACT',
@@ -21,6 +23,12 @@ export const DOCUMENT_TYPES: DocumentType[] = [
   'COMMENDATION_LETTER'
 ];
 
+/**
+ * Entity representing a file attached to an employee's record (contract, certificate, letter, etc.).
+ * Stores file metadata and the URL where the file content is stored.
+ *
+ * @author Oscar Lizandro Vasquez Llave
+ */
 export class EmployeeDocument {
   private _id: number;
   private _employeeId: number;
@@ -31,6 +39,13 @@ export class EmployeeDocument {
   private _storageUrl: string;
   private _uploadedAt: string;
 
+  /**
+   * Creates a new EmployeeDocument.
+   *
+   * @param props - The document data: id, owning employeeId, document type, file name, MIME content type,
+   *                size in bytes, storage URL and upload timestamp.
+   * @author Oscar Lizandro Vasquez Llave
+   */
   constructor(props: {
     id: number;
     employeeId: number;
@@ -51,6 +66,7 @@ export class EmployeeDocument {
     this._uploadedAt = props.uploadedAt;
   }
 
+  /** Unique identifier of the document. */
   get id(): number {
     return this._id;
   }
@@ -59,6 +75,7 @@ export class EmployeeDocument {
     this._id = value;
   }
 
+  /** Identifier of the employee who owns the document. */
   get employeeId(): number {
     return this._employeeId;
   }
@@ -67,6 +84,7 @@ export class EmployeeDocument {
     this._employeeId = value;
   }
 
+  /** Category of the document. */
   get documentType(): DocumentType {
     return this._documentType;
   }
@@ -75,6 +93,7 @@ export class EmployeeDocument {
     this._documentType = value;
   }
 
+  /** Original file name. */
   get fileName(): string {
     return this._fileName;
   }
@@ -83,6 +102,7 @@ export class EmployeeDocument {
     this._fileName = value;
   }
 
+  /** MIME type of the file (e.g. 'application/pdf'). */
   get contentType(): string {
     return this._contentType;
   }
@@ -91,6 +111,7 @@ export class EmployeeDocument {
     this._contentType = value;
   }
 
+  /** File size in bytes. */
   get sizeInBytes(): number {
     return this._sizeInBytes;
   }
@@ -99,6 +120,7 @@ export class EmployeeDocument {
     this._sizeInBytes = value;
   }
 
+  /** URL where the file content is stored. */
   get storageUrl(): string {
     return this._storageUrl;
   }
@@ -107,6 +129,7 @@ export class EmployeeDocument {
     this._storageUrl = value;
   }
 
+  /** Upload date-time as an ISO string. */
   get uploadedAt(): string {
     return this._uploadedAt;
   }
@@ -115,6 +138,12 @@ export class EmployeeDocument {
     this._uploadedAt = value;
   }
 
+  /**
+   * Checks whether the document is a PDF file.
+   *
+   * @returns True if the content type is 'application/pdf', false otherwise
+   * @author Oscar Lizandro Vasquez Llave
+   */
   isPdf(): boolean {
     return this._contentType === 'application/pdf';
   }
