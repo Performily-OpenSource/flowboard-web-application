@@ -703,6 +703,77 @@
       "quantity": 2,
       "status": "CANCELLED",
       "delivery": null
+    },
+    {
+      "id": 11,
+      "benefitTypeId": 5,
+      "employeeId": 7,
+      "sourceAreaId": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-31",
+      "quantity": 300,
+      "status": "ASSIGNED",
+      "delivery": null
+    },
+    {
+      "id": 12,
+      "benefitTypeId": 8,
+      "employeeId": 7,
+      "sourceAreaId": null,
+      "validFrom": "2026-09-01",
+      "validTo": "2026-12-31",
+      "quantity": 150,
+      "status": "ASSIGNED",
+      "delivery": null
+    },
+    {
+      "id": 13,
+      "benefitTypeId": 4,
+      "employeeId": 7,
+      "sourceAreaId": null,
+      "validFrom": "2026-12-01",
+      "validTo": "2026-12-31",
+      "quantity": 1,
+      "status": "ASSIGNED",
+      "delivery": null
+    },
+    {
+      "id": 14,
+      "benefitTypeId": 5,
+      "employeeId": 8,
+      "sourceAreaId": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-31",
+      "quantity": 300,
+      "status": "ASSIGNED",
+      "delivery": null
+    },
+    {
+      "id": 15,
+      "benefitTypeId": 9,
+      "employeeId": 2,
+      "sourceAreaId": null,
+      "validFrom": "2026-09-01",
+      "validTo": "2026-09-30",
+      "quantity": 200,
+      "status": "DELIVERED",
+      "delivery": {
+        "id": 15,
+        "deliveredOn": "2026-09-20",
+        "registeredBy": 1,
+        "notes": ""
+      }
+    },
+    {
+      "id": 16,
+      "benefitTypeId": 8,
+      "employeeId": 3,
+      "sourceAreaId": null,
+      "validFrom": "2026-09-01",
+      "validTo": "2026-12-31",
+      "quantity": 150,
+      "status": "ASSIGNED",
+      "delivery": null
     }
   ],
   "vacation-balances": [
@@ -824,6 +895,205 @@
           "authorId": null,
           "requestId": 104,
           "occurredAt": "2026-06-05T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "employeeId": 7,
+      "accruedDays": 30,
+      "usedDays": 5,
+      "movements": [
+        {
+          "id": 10,
+          "type": "ACCRUAL",
+          "days": 30,
+          "reason": "Accrual by seniority",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-01-02T09:00:00.000Z"
+        },
+        {
+          "id": 11,
+          "type": "USAGE",
+          "days": -5,
+          "reason": "Approved vacation request",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-07-15T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "employeeId": 8,
+      "accruedDays": 30,
+      "usedDays": 8,
+      "movements": [
+        {
+          "id": 12,
+          "type": "ACCRUAL",
+          "days": 30,
+          "reason": "Accrual by seniority",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-01-02T09:00:00.000Z"
+        },
+        {
+          "id": 13,
+          "type": "USAGE",
+          "days": -8,
+          "reason": "Approved vacation request",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-07-15T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "employeeId": 9,
+      "accruedDays": 30,
+      "usedDays": 12,
+      "movements": [
+        {
+          "id": 14,
+          "type": "ACCRUAL",
+          "days": 30,
+          "reason": "Accrual by seniority",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-01-02T09:00:00.000Z"
+        },
+        {
+          "id": 15,
+          "type": "USAGE",
+          "days": -12,
+          "reason": "Approved vacation request",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-07-15T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "employeeId": 10,
+      "accruedDays": 30,
+      "usedDays": 0,
+      "movements": [
+        {
+          "id": 16,
+          "type": "ACCRUAL",
+          "days": 30,
+          "reason": "Accrual by seniority",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-01-02T09:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "employeeId": 11,
+      "accruedDays": 30,
+      "usedDays": 3,
+      "movements": [
+        {
+          "id": 17,
+          "type": "ACCRUAL",
+          "days": 30,
+          "reason": "Accrual by seniority",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-01-02T09:00:00.000Z"
+        },
+        {
+          "id": 18,
+          "type": "USAGE",
+          "days": -3,
+          "reason": "Approved vacation request",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-07-15T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "employeeId": 12,
+      "accruedDays": 30,
+      "usedDays": 5,
+      "movements": [
+        {
+          "id": 19,
+          "type": "ACCRUAL",
+          "days": 30,
+          "reason": "Accrual by seniority",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-01-02T09:00:00.000Z"
+        },
+        {
+          "id": 20,
+          "type": "USAGE",
+          "days": -5,
+          "reason": "Approved vacation request",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-07-15T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "employeeId": 13,
+      "accruedDays": 30,
+      "usedDays": 8,
+      "movements": [
+        {
+          "id": 21,
+          "type": "ACCRUAL",
+          "days": 30,
+          "reason": "Accrual by seniority",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-01-02T09:00:00.000Z"
+        },
+        {
+          "id": 22,
+          "type": "USAGE",
+          "days": -8,
+          "reason": "Approved vacation request",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-07-15T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "employeeId": 14,
+      "accruedDays": 30,
+      "usedDays": 12,
+      "movements": [
+        {
+          "id": 23,
+          "type": "ACCRUAL",
+          "days": 30,
+          "reason": "Accrual by seniority",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-01-02T09:00:00.000Z"
+        },
+        {
+          "id": 24,
+          "type": "USAGE",
+          "days": -12,
+          "reason": "Approved vacation request",
+          "authorId": null,
+          "requestId": null,
+          "occurredAt": "2026-07-15T10:00:00.000Z"
         }
       ]
     }
@@ -1116,6 +1386,142 @@
       "storageUrl": "/payroll/sample-payslip.pdf",
       "issueDate": "2026-09-03",
       "netAmount": 2600,
+      "netCurrency": "PEN",
+      "publicationStatus": "PUBLISHED",
+      "publishedAt": "2026-09-03T10:00:00.000Z",
+      "paymentStatus": "PAID",
+      "paidOn": "2026-09-05",
+      "observationReason": null
+    },
+    {
+      "id": 15,
+      "employeeId": 7,
+      "payrollPeriodId": 8,
+      "fileName": "boleta-agosto-2026-7.pdf",
+      "contentType": "application/pdf",
+      "sizeBytes": 1940,
+      "storageUrl": "/payroll/sample-payslip.pdf",
+      "issueDate": "2026-09-03",
+      "netAmount": 5200,
+      "netCurrency": "PEN",
+      "publicationStatus": "PUBLISHED",
+      "publishedAt": "2026-09-03T10:00:00.000Z",
+      "paymentStatus": "PAID",
+      "paidOn": "2026-09-05",
+      "observationReason": null
+    },
+    {
+      "id": 16,
+      "employeeId": 8,
+      "payrollPeriodId": 8,
+      "fileName": "boleta-agosto-2026-8.pdf",
+      "contentType": "application/pdf",
+      "sizeBytes": 1940,
+      "storageUrl": "/payroll/sample-payslip.pdf",
+      "issueDate": "2026-09-03",
+      "netAmount": 5200,
+      "netCurrency": "PEN",
+      "publicationStatus": "PUBLISHED",
+      "publishedAt": "2026-09-03T10:00:00.000Z",
+      "paymentStatus": "PAID",
+      "paidOn": "2026-09-05",
+      "observationReason": null
+    },
+    {
+      "id": 17,
+      "employeeId": 9,
+      "payrollPeriodId": 8,
+      "fileName": "boleta-agosto-2026-9.pdf",
+      "contentType": "application/pdf",
+      "sizeBytes": 1940,
+      "storageUrl": "/payroll/sample-payslip.pdf",
+      "issueDate": "2026-09-03",
+      "netAmount": 5200,
+      "netCurrency": "PEN",
+      "publicationStatus": "PUBLISHED",
+      "publishedAt": "2026-09-03T10:00:00.000Z",
+      "paymentStatus": "PENDING",
+      "paidOn": null,
+      "observationReason": null
+    },
+    {
+      "id": 18,
+      "employeeId": 10,
+      "payrollPeriodId": 8,
+      "fileName": "boleta-agosto-2026-10.pdf",
+      "contentType": "application/pdf",
+      "sizeBytes": 1940,
+      "storageUrl": "/payroll/sample-payslip.pdf",
+      "issueDate": "2026-09-03",
+      "netAmount": 3200,
+      "netCurrency": "PEN",
+      "publicationStatus": "PUBLISHED",
+      "publishedAt": "2026-09-03T10:00:00.000Z",
+      "paymentStatus": "PAID",
+      "paidOn": "2026-09-05",
+      "observationReason": null
+    },
+    {
+      "id": 19,
+      "employeeId": 11,
+      "payrollPeriodId": 8,
+      "fileName": "boleta-agosto-2026-11.pdf",
+      "contentType": "application/pdf",
+      "sizeBytes": 1940,
+      "storageUrl": "/payroll/sample-payslip.pdf",
+      "issueDate": "2026-09-03",
+      "netAmount": 5200,
+      "netCurrency": "PEN",
+      "publicationStatus": "PUBLISHED",
+      "publishedAt": "2026-09-03T10:00:00.000Z",
+      "paymentStatus": "PAID",
+      "paidOn": "2026-09-05",
+      "observationReason": null
+    },
+    {
+      "id": 20,
+      "employeeId": 12,
+      "payrollPeriodId": 8,
+      "fileName": "boleta-agosto-2026-12.pdf",
+      "contentType": "application/pdf",
+      "sizeBytes": 1940,
+      "storageUrl": "/payroll/sample-payslip.pdf",
+      "issueDate": "2026-09-03",
+      "netAmount": 9000,
+      "netCurrency": "PEN",
+      "publicationStatus": "PUBLISHED",
+      "publishedAt": "2026-09-03T10:00:00.000Z",
+      "paymentStatus": "PENDING",
+      "paidOn": null,
+      "observationReason": null
+    },
+    {
+      "id": 21,
+      "employeeId": 13,
+      "payrollPeriodId": 8,
+      "fileName": "boleta-agosto-2026-13.pdf",
+      "contentType": "application/pdf",
+      "sizeBytes": 1940,
+      "storageUrl": "/payroll/sample-payslip.pdf",
+      "issueDate": "2026-09-03",
+      "netAmount": 3800,
+      "netCurrency": "PEN",
+      "publicationStatus": "PUBLISHED",
+      "publishedAt": "2026-09-03T10:00:00.000Z",
+      "paymentStatus": "PAID",
+      "paidOn": "2026-09-05",
+      "observationReason": null
+    },
+    {
+      "id": 22,
+      "employeeId": 14,
+      "payrollPeriodId": 8,
+      "fileName": "boleta-agosto-2026-14.pdf",
+      "contentType": "application/pdf",
+      "sizeBytes": 1940,
+      "storageUrl": "/payroll/sample-payslip.pdf",
+      "issueDate": "2026-09-03",
+      "netAmount": 9000,
       "netCurrency": "PEN",
       "publicationStatus": "PUBLISHED",
       "publishedAt": "2026-09-03T10:00:00.000Z",
@@ -2339,6 +2745,786 @@
       "justificationReason": null,
       "justificationDocumentName": null,
       "effectiveHours": 9.5833
+    },
+    {
+      "id": 65,
+      "employeeId": 1,
+      "workDate": "2026-09-28",
+      "checkInTime": "08:00",
+      "checkOutTime": "17:49",
+      "overtimeHours": 1.8167,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.8167
+    },
+    {
+      "id": 66,
+      "employeeId": 1,
+      "workDate": "2026-09-29",
+      "checkInTime": "07:58",
+      "checkOutTime": "18:10",
+      "overtimeHours": 2.2,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 10.2
+    },
+    {
+      "id": 67,
+      "employeeId": 1,
+      "workDate": "2026-09-30",
+      "checkInTime": "08:01",
+      "checkOutTime": "17:16",
+      "overtimeHours": 1.25,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.25
+    },
+    {
+      "id": 68,
+      "employeeId": 1,
+      "workDate": "2026-10-01",
+      "checkInTime": "07:59",
+      "checkOutTime": "17:37",
+      "overtimeHours": 1.6333,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.6333
+    },
+    {
+      "id": 69,
+      "employeeId": 1,
+      "workDate": "2026-10-02",
+      "checkInTime": "08:14",
+      "checkOutTime": "17:14",
+      "overtimeHours": 1,
+      "status": "LATE",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9
+    },
+    {
+      "id": 70,
+      "employeeId": 2,
+      "workDate": "2026-09-28",
+      "checkInTime": "08:02",
+      "checkOutTime": "17:23",
+      "overtimeHours": 1.35,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.35
+    },
+    {
+      "id": 71,
+      "employeeId": 2,
+      "workDate": "2026-09-29",
+      "checkInTime": null,
+      "checkOutTime": null,
+      "overtimeHours": null,
+      "status": "ABSENT",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": null
+    },
+    {
+      "id": 72,
+      "employeeId": 2,
+      "workDate": "2026-09-30",
+      "checkInTime": "08:01",
+      "checkOutTime": "17:21",
+      "overtimeHours": 1.3333,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.3333
+    },
+    {
+      "id": 73,
+      "employeeId": 2,
+      "workDate": "2026-10-01",
+      "checkInTime": "07:59",
+      "checkOutTime": "17:42",
+      "overtimeHours": 1.7167,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.7167
+    },
+    {
+      "id": 74,
+      "employeeId": 2,
+      "workDate": "2026-10-02",
+      "checkInTime": "08:02",
+      "checkOutTime": "18:03",
+      "overtimeHours": 2.0167,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 10.0167
+    },
+    {
+      "id": 75,
+      "employeeId": 3,
+      "workDate": "2026-09-28",
+      "checkInTime": "08:02",
+      "checkOutTime": "17:28",
+      "overtimeHours": 1.4333,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.4333
+    },
+    {
+      "id": 76,
+      "employeeId": 3,
+      "workDate": "2026-09-29",
+      "checkInTime": "08:00",
+      "checkOutTime": "17:49",
+      "overtimeHours": 1.8167,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.8167
+    },
+    {
+      "id": 77,
+      "employeeId": 3,
+      "workDate": "2026-09-30",
+      "checkInTime": "07:58",
+      "checkOutTime": "18:10",
+      "overtimeHours": 2.2,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 10.2
+    },
+    {
+      "id": 78,
+      "employeeId": 3,
+      "workDate": "2026-10-01",
+      "checkInTime": "08:01",
+      "checkOutTime": "17:16",
+      "overtimeHours": 1.25,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.25
+    },
+    {
+      "id": 79,
+      "employeeId": 3,
+      "workDate": "2026-10-02",
+      "checkInTime": "07:59",
+      "checkOutTime": "17:37",
+      "overtimeHours": 1.6333,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.6333
+    },
+    {
+      "id": 80,
+      "employeeId": 4,
+      "workDate": "2026-09-28",
+      "checkInTime": "08:23",
+      "checkOutTime": "17:02",
+      "overtimeHours": 0.65,
+      "status": "LATE",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 8.65
+    },
+    {
+      "id": 81,
+      "employeeId": 4,
+      "workDate": "2026-09-29",
+      "checkInTime": "08:02",
+      "checkOutTime": "17:23",
+      "overtimeHours": 1.35,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.35
+    },
+    {
+      "id": 82,
+      "employeeId": 4,
+      "workDate": "2026-09-30",
+      "checkInTime": null,
+      "checkOutTime": null,
+      "overtimeHours": null,
+      "status": "ABSENT",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": null
+    },
+    {
+      "id": 83,
+      "employeeId": 4,
+      "workDate": "2026-10-01",
+      "checkInTime": "08:01",
+      "checkOutTime": "17:21",
+      "overtimeHours": 1.3333,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.3333
+    },
+    {
+      "id": 84,
+      "employeeId": 4,
+      "workDate": "2026-10-02",
+      "checkInTime": "07:59",
+      "checkOutTime": "17:42",
+      "overtimeHours": 1.7167,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.7167
+    },
+    {
+      "id": 85,
+      "employeeId": 6,
+      "workDate": "2026-09-28",
+      "checkInTime": "08:01",
+      "checkOutTime": "17:56",
+      "overtimeHours": 1.9167,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.9167
+    },
+    {
+      "id": 86,
+      "employeeId": 6,
+      "workDate": "2026-09-29",
+      "checkInTime": "08:23",
+      "checkOutTime": "17:02",
+      "overtimeHours": 0.65,
+      "status": "LATE",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 8.65
+    },
+    {
+      "id": 87,
+      "employeeId": 6,
+      "workDate": "2026-09-30",
+      "checkInTime": "08:02",
+      "checkOutTime": "17:23",
+      "overtimeHours": 1.35,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.35
+    },
+    {
+      "id": 88,
+      "employeeId": 6,
+      "workDate": "2026-10-01",
+      "checkInTime": null,
+      "checkOutTime": null,
+      "overtimeHours": null,
+      "status": "ABSENT",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": null
+    },
+    {
+      "id": 89,
+      "employeeId": 6,
+      "workDate": "2026-10-02",
+      "checkInTime": "08:01",
+      "checkOutTime": "17:21",
+      "overtimeHours": 1.3333,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.3333
+    },
+    {
+      "id": 90,
+      "employeeId": 7,
+      "workDate": "2026-09-28",
+      "checkInTime": "07:58",
+      "checkOutTime": "17:30",
+      "overtimeHours": 1.5333,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.5333
+    },
+    {
+      "id": 91,
+      "employeeId": 7,
+      "workDate": "2026-09-29",
+      "checkInTime": null,
+      "checkOutTime": null,
+      "overtimeHours": null,
+      "status": "JUSTIFIED",
+      "justificationReason": "Cita médica con sustento.",
+      "justificationDocumentName": null,
+      "effectiveHours": null
+    },
+    {
+      "id": 92,
+      "employeeId": 7,
+      "workDate": "2026-09-30",
+      "checkInTime": "08:02",
+      "checkOutTime": "17:28",
+      "overtimeHours": 1.4333,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.4333
+    },
+    {
+      "id": 93,
+      "employeeId": 7,
+      "workDate": "2026-10-01",
+      "checkInTime": "08:00",
+      "checkOutTime": "17:49",
+      "overtimeHours": 1.8167,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.8167
+    },
+    {
+      "id": 94,
+      "employeeId": 7,
+      "workDate": "2026-10-02",
+      "checkInTime": "07:58",
+      "checkOutTime": "18:10",
+      "overtimeHours": 2.2,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 10.2
+    },
+    {
+      "id": 95,
+      "employeeId": 8,
+      "workDate": "2026-09-28",
+      "checkInTime": "08:17",
+      "checkOutTime": "17:35",
+      "overtimeHours": 1.3,
+      "status": "LATE",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.3
+    },
+    {
+      "id": 96,
+      "employeeId": 8,
+      "workDate": "2026-09-29",
+      "checkInTime": "08:01",
+      "checkOutTime": "17:56",
+      "overtimeHours": 1.9167,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.9167
+    },
+    {
+      "id": 97,
+      "employeeId": 8,
+      "workDate": "2026-09-30",
+      "checkInTime": "08:23",
+      "checkOutTime": "17:02",
+      "overtimeHours": 0.65,
+      "status": "LATE",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 8.65
+    },
+    {
+      "id": 98,
+      "employeeId": 8,
+      "workDate": "2026-10-01",
+      "checkInTime": "08:02",
+      "checkOutTime": "17:23",
+      "overtimeHours": 1.35,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.35
+    },
+    {
+      "id": 99,
+      "employeeId": 8,
+      "workDate": "2026-10-02",
+      "checkInTime": null,
+      "checkOutTime": null,
+      "overtimeHours": null,
+      "status": "ABSENT",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": null
+    },
+    {
+      "id": 100,
+      "employeeId": 9,
+      "workDate": "2026-09-28",
+      "checkInTime": "08:00",
+      "checkOutTime": "17:09",
+      "overtimeHours": 1.15,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.15
+    },
+    {
+      "id": 101,
+      "employeeId": 9,
+      "workDate": "2026-09-29",
+      "checkInTime": "07:58",
+      "checkOutTime": "17:30",
+      "overtimeHours": 1.5333,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.5333
+    },
+    {
+      "id": 102,
+      "employeeId": 9,
+      "workDate": "2026-09-30",
+      "checkInTime": null,
+      "checkOutTime": null,
+      "overtimeHours": null,
+      "status": "JUSTIFIED",
+      "justificationReason": "Cita médica con sustento.",
+      "justificationDocumentName": null,
+      "effectiveHours": null
+    },
+    {
+      "id": 103,
+      "employeeId": 9,
+      "workDate": "2026-10-01",
+      "checkInTime": "08:02",
+      "checkOutTime": "17:28",
+      "overtimeHours": 1.4333,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.4333
+    },
+    {
+      "id": 104,
+      "employeeId": 9,
+      "workDate": "2026-10-02",
+      "checkInTime": "08:00",
+      "checkOutTime": "17:49",
+      "overtimeHours": 1.8167,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.8167
+    },
+    {
+      "id": 105,
+      "employeeId": 10,
+      "workDate": "2026-09-28",
+      "checkInTime": "08:14",
+      "checkOutTime": "17:14",
+      "overtimeHours": 1,
+      "status": "LATE",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9
+    },
+    {
+      "id": 106,
+      "employeeId": 10,
+      "workDate": "2026-09-29",
+      "checkInTime": "08:17",
+      "checkOutTime": "17:35",
+      "overtimeHours": 1.3,
+      "status": "LATE",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.3
+    },
+    {
+      "id": 107,
+      "employeeId": 10,
+      "workDate": "2026-09-30",
+      "checkInTime": "08:01",
+      "checkOutTime": "17:56",
+      "overtimeHours": 1.9167,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.9167
+    },
+    {
+      "id": 108,
+      "employeeId": 10,
+      "workDate": "2026-10-01",
+      "checkInTime": "08:23",
+      "checkOutTime": "17:02",
+      "overtimeHours": 0.65,
+      "status": "LATE",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 8.65
+    },
+    {
+      "id": 109,
+      "employeeId": 10,
+      "workDate": "2026-10-02",
+      "checkInTime": "08:02",
+      "checkOutTime": "17:23",
+      "overtimeHours": 1.35,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.35
+    },
+    {
+      "id": 110,
+      "employeeId": 11,
+      "workDate": "2026-09-28",
+      "checkInTime": "08:02",
+      "checkOutTime": "18:03",
+      "overtimeHours": 2.0167,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 10.0167
+    },
+    {
+      "id": 111,
+      "employeeId": 11,
+      "workDate": "2026-09-29",
+      "checkInTime": "08:00",
+      "checkOutTime": "17:09",
+      "overtimeHours": 1.15,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.15
+    },
+    {
+      "id": 112,
+      "employeeId": 11,
+      "workDate": "2026-09-30",
+      "checkInTime": "07:58",
+      "checkOutTime": "17:30",
+      "overtimeHours": 1.5333,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.5333
+    },
+    {
+      "id": 113,
+      "employeeId": 11,
+      "workDate": "2026-10-01",
+      "checkInTime": null,
+      "checkOutTime": null,
+      "overtimeHours": null,
+      "status": "JUSTIFIED",
+      "justificationReason": "Cita médica con sustento.",
+      "justificationDocumentName": null,
+      "effectiveHours": null
+    },
+    {
+      "id": 114,
+      "employeeId": 11,
+      "workDate": "2026-10-02",
+      "checkInTime": "08:02",
+      "checkOutTime": "17:28",
+      "overtimeHours": 1.4333,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.4333
+    },
+    {
+      "id": 115,
+      "employeeId": 12,
+      "workDate": "2026-09-28",
+      "checkInTime": "07:59",
+      "checkOutTime": "17:37",
+      "overtimeHours": 1.6333,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.6333
+    },
+    {
+      "id": 116,
+      "employeeId": 12,
+      "workDate": "2026-09-29",
+      "checkInTime": "08:14",
+      "checkOutTime": "17:14",
+      "overtimeHours": 1,
+      "status": "LATE",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9
+    },
+    {
+      "id": 117,
+      "employeeId": 12,
+      "workDate": "2026-09-30",
+      "checkInTime": "08:17",
+      "checkOutTime": "17:35",
+      "overtimeHours": 1.3,
+      "status": "LATE",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.3
+    },
+    {
+      "id": 118,
+      "employeeId": 12,
+      "workDate": "2026-10-01",
+      "checkInTime": "08:01",
+      "checkOutTime": "17:56",
+      "overtimeHours": 1.9167,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.9167
+    },
+    {
+      "id": 119,
+      "employeeId": 12,
+      "workDate": "2026-10-02",
+      "checkInTime": "08:23",
+      "checkOutTime": "17:02",
+      "overtimeHours": 0.65,
+      "status": "LATE",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 8.65
+    },
+    {
+      "id": 120,
+      "employeeId": 13,
+      "workDate": "2026-09-28",
+      "checkInTime": "07:59",
+      "checkOutTime": "17:42",
+      "overtimeHours": 1.7167,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.7167
+    },
+    {
+      "id": 121,
+      "employeeId": 13,
+      "workDate": "2026-09-29",
+      "checkInTime": "08:02",
+      "checkOutTime": "18:03",
+      "overtimeHours": 2.0167,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 10.0167
+    },
+    {
+      "id": 122,
+      "employeeId": 13,
+      "workDate": "2026-09-30",
+      "checkInTime": "08:00",
+      "checkOutTime": "17:09",
+      "overtimeHours": 1.15,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.15
+    },
+    {
+      "id": 123,
+      "employeeId": 13,
+      "workDate": "2026-10-01",
+      "checkInTime": "07:58",
+      "checkOutTime": "17:30",
+      "overtimeHours": 1.5333,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.5333
+    },
+    {
+      "id": 124,
+      "employeeId": 13,
+      "workDate": "2026-10-02",
+      "checkInTime": null,
+      "checkOutTime": null,
+      "overtimeHours": null,
+      "status": "JUSTIFIED",
+      "justificationReason": "Cita médica con sustento.",
+      "justificationDocumentName": null,
+      "effectiveHours": null
+    },
+    {
+      "id": 125,
+      "employeeId": 14,
+      "workDate": "2026-09-28",
+      "checkInTime": "08:01",
+      "checkOutTime": "17:16",
+      "overtimeHours": 1.25,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.25
+    },
+    {
+      "id": 126,
+      "employeeId": 14,
+      "workDate": "2026-09-29",
+      "checkInTime": "07:59",
+      "checkOutTime": "17:37",
+      "overtimeHours": 1.6333,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.6333
+    },
+    {
+      "id": 127,
+      "employeeId": 14,
+      "workDate": "2026-09-30",
+      "checkInTime": "08:14",
+      "checkOutTime": "17:14",
+      "overtimeHours": 1,
+      "status": "LATE",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9
+    },
+    {
+      "id": 128,
+      "employeeId": 14,
+      "workDate": "2026-10-01",
+      "checkInTime": "08:17",
+      "checkOutTime": "17:35",
+      "overtimeHours": 1.3,
+      "status": "LATE",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.3
+    },
+    {
+      "id": 129,
+      "employeeId": 14,
+      "workDate": "2026-10-02",
+      "checkInTime": "08:01",
+      "checkOutTime": "17:56",
+      "overtimeHours": 1.9167,
+      "status": "ON_TIME",
+      "justificationReason": null,
+      "justificationDocumentName": null,
+      "effectiveHours": 9.9167
     }
   ],
   "work-schedules": [
@@ -3265,6 +4451,804 @@
       "punchedAt": "2026-09-09T18:20:00",
       "type": "CHECK_OUT",
       "attendanceRecordId": 64
+    },
+    {
+      "id": 122,
+      "employeeId": 1,
+      "punchedAt": "2026-09-28T08:00:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 65
+    },
+    {
+      "id": 123,
+      "employeeId": 1,
+      "punchedAt": "2026-09-28T17:49:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 65
+    },
+    {
+      "id": 124,
+      "employeeId": 1,
+      "punchedAt": "2026-09-29T07:58:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 66
+    },
+    {
+      "id": 125,
+      "employeeId": 1,
+      "punchedAt": "2026-09-29T18:10:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 66
+    },
+    {
+      "id": 126,
+      "employeeId": 1,
+      "punchedAt": "2026-09-30T08:01:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 67
+    },
+    {
+      "id": 127,
+      "employeeId": 1,
+      "punchedAt": "2026-09-30T17:16:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 67
+    },
+    {
+      "id": 128,
+      "employeeId": 1,
+      "punchedAt": "2026-10-01T07:59:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 68
+    },
+    {
+      "id": 129,
+      "employeeId": 1,
+      "punchedAt": "2026-10-01T17:37:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 68
+    },
+    {
+      "id": 130,
+      "employeeId": 1,
+      "punchedAt": "2026-10-02T08:14:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 69
+    },
+    {
+      "id": 131,
+      "employeeId": 1,
+      "punchedAt": "2026-10-02T17:14:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 69
+    },
+    {
+      "id": 132,
+      "employeeId": 2,
+      "punchedAt": "2026-09-28T08:02:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 70
+    },
+    {
+      "id": 133,
+      "employeeId": 2,
+      "punchedAt": "2026-09-28T17:23:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 70
+    },
+    {
+      "id": 134,
+      "employeeId": 2,
+      "punchedAt": "2026-09-30T08:01:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 72
+    },
+    {
+      "id": 135,
+      "employeeId": 2,
+      "punchedAt": "2026-09-30T17:21:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 72
+    },
+    {
+      "id": 136,
+      "employeeId": 2,
+      "punchedAt": "2026-10-01T07:59:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 73
+    },
+    {
+      "id": 137,
+      "employeeId": 2,
+      "punchedAt": "2026-10-01T17:42:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 73
+    },
+    {
+      "id": 138,
+      "employeeId": 2,
+      "punchedAt": "2026-10-02T08:02:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 74
+    },
+    {
+      "id": 139,
+      "employeeId": 2,
+      "punchedAt": "2026-10-02T18:03:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 74
+    },
+    {
+      "id": 140,
+      "employeeId": 3,
+      "punchedAt": "2026-09-28T08:02:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 75
+    },
+    {
+      "id": 141,
+      "employeeId": 3,
+      "punchedAt": "2026-09-28T17:28:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 75
+    },
+    {
+      "id": 142,
+      "employeeId": 3,
+      "punchedAt": "2026-09-29T08:00:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 76
+    },
+    {
+      "id": 143,
+      "employeeId": 3,
+      "punchedAt": "2026-09-29T17:49:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 76
+    },
+    {
+      "id": 144,
+      "employeeId": 3,
+      "punchedAt": "2026-09-30T07:58:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 77
+    },
+    {
+      "id": 145,
+      "employeeId": 3,
+      "punchedAt": "2026-09-30T18:10:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 77
+    },
+    {
+      "id": 146,
+      "employeeId": 3,
+      "punchedAt": "2026-10-01T08:01:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 78
+    },
+    {
+      "id": 147,
+      "employeeId": 3,
+      "punchedAt": "2026-10-01T17:16:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 78
+    },
+    {
+      "id": 148,
+      "employeeId": 3,
+      "punchedAt": "2026-10-02T07:59:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 79
+    },
+    {
+      "id": 149,
+      "employeeId": 3,
+      "punchedAt": "2026-10-02T17:37:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 79
+    },
+    {
+      "id": 150,
+      "employeeId": 4,
+      "punchedAt": "2026-09-28T08:23:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 80
+    },
+    {
+      "id": 151,
+      "employeeId": 4,
+      "punchedAt": "2026-09-28T17:02:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 80
+    },
+    {
+      "id": 152,
+      "employeeId": 4,
+      "punchedAt": "2026-09-29T08:02:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 81
+    },
+    {
+      "id": 153,
+      "employeeId": 4,
+      "punchedAt": "2026-09-29T17:23:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 81
+    },
+    {
+      "id": 154,
+      "employeeId": 4,
+      "punchedAt": "2026-10-01T08:01:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 83
+    },
+    {
+      "id": 155,
+      "employeeId": 4,
+      "punchedAt": "2026-10-01T17:21:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 83
+    },
+    {
+      "id": 156,
+      "employeeId": 4,
+      "punchedAt": "2026-10-02T07:59:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 84
+    },
+    {
+      "id": 157,
+      "employeeId": 4,
+      "punchedAt": "2026-10-02T17:42:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 84
+    },
+    {
+      "id": 158,
+      "employeeId": 6,
+      "punchedAt": "2026-09-28T08:01:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 85
+    },
+    {
+      "id": 159,
+      "employeeId": 6,
+      "punchedAt": "2026-09-28T17:56:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 85
+    },
+    {
+      "id": 160,
+      "employeeId": 6,
+      "punchedAt": "2026-09-29T08:23:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 86
+    },
+    {
+      "id": 161,
+      "employeeId": 6,
+      "punchedAt": "2026-09-29T17:02:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 86
+    },
+    {
+      "id": 162,
+      "employeeId": 6,
+      "punchedAt": "2026-09-30T08:02:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 87
+    },
+    {
+      "id": 163,
+      "employeeId": 6,
+      "punchedAt": "2026-09-30T17:23:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 87
+    },
+    {
+      "id": 164,
+      "employeeId": 6,
+      "punchedAt": "2026-10-02T08:01:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 89
+    },
+    {
+      "id": 165,
+      "employeeId": 6,
+      "punchedAt": "2026-10-02T17:21:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 89
+    },
+    {
+      "id": 166,
+      "employeeId": 7,
+      "punchedAt": "2026-09-28T07:58:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 90
+    },
+    {
+      "id": 167,
+      "employeeId": 7,
+      "punchedAt": "2026-09-28T17:30:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 90
+    },
+    {
+      "id": 168,
+      "employeeId": 7,
+      "punchedAt": "2026-09-30T08:02:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 92
+    },
+    {
+      "id": 169,
+      "employeeId": 7,
+      "punchedAt": "2026-09-30T17:28:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 92
+    },
+    {
+      "id": 170,
+      "employeeId": 7,
+      "punchedAt": "2026-10-01T08:00:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 93
+    },
+    {
+      "id": 171,
+      "employeeId": 7,
+      "punchedAt": "2026-10-01T17:49:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 93
+    },
+    {
+      "id": 172,
+      "employeeId": 7,
+      "punchedAt": "2026-10-02T07:58:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 94
+    },
+    {
+      "id": 173,
+      "employeeId": 7,
+      "punchedAt": "2026-10-02T18:10:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 94
+    },
+    {
+      "id": 174,
+      "employeeId": 8,
+      "punchedAt": "2026-09-28T08:17:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 95
+    },
+    {
+      "id": 175,
+      "employeeId": 8,
+      "punchedAt": "2026-09-28T17:35:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 95
+    },
+    {
+      "id": 176,
+      "employeeId": 8,
+      "punchedAt": "2026-09-29T08:01:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 96
+    },
+    {
+      "id": 177,
+      "employeeId": 8,
+      "punchedAt": "2026-09-29T17:56:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 96
+    },
+    {
+      "id": 178,
+      "employeeId": 8,
+      "punchedAt": "2026-09-30T08:23:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 97
+    },
+    {
+      "id": 179,
+      "employeeId": 8,
+      "punchedAt": "2026-09-30T17:02:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 97
+    },
+    {
+      "id": 180,
+      "employeeId": 8,
+      "punchedAt": "2026-10-01T08:02:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 98
+    },
+    {
+      "id": 181,
+      "employeeId": 8,
+      "punchedAt": "2026-10-01T17:23:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 98
+    },
+    {
+      "id": 182,
+      "employeeId": 9,
+      "punchedAt": "2026-09-28T08:00:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 100
+    },
+    {
+      "id": 183,
+      "employeeId": 9,
+      "punchedAt": "2026-09-28T17:09:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 100
+    },
+    {
+      "id": 184,
+      "employeeId": 9,
+      "punchedAt": "2026-09-29T07:58:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 101
+    },
+    {
+      "id": 185,
+      "employeeId": 9,
+      "punchedAt": "2026-09-29T17:30:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 101
+    },
+    {
+      "id": 186,
+      "employeeId": 9,
+      "punchedAt": "2026-10-01T08:02:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 103
+    },
+    {
+      "id": 187,
+      "employeeId": 9,
+      "punchedAt": "2026-10-01T17:28:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 103
+    },
+    {
+      "id": 188,
+      "employeeId": 9,
+      "punchedAt": "2026-10-02T08:00:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 104
+    },
+    {
+      "id": 189,
+      "employeeId": 9,
+      "punchedAt": "2026-10-02T17:49:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 104
+    },
+    {
+      "id": 190,
+      "employeeId": 10,
+      "punchedAt": "2026-09-28T08:14:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 105
+    },
+    {
+      "id": 191,
+      "employeeId": 10,
+      "punchedAt": "2026-09-28T17:14:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 105
+    },
+    {
+      "id": 192,
+      "employeeId": 10,
+      "punchedAt": "2026-09-29T08:17:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 106
+    },
+    {
+      "id": 193,
+      "employeeId": 10,
+      "punchedAt": "2026-09-29T17:35:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 106
+    },
+    {
+      "id": 194,
+      "employeeId": 10,
+      "punchedAt": "2026-09-30T08:01:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 107
+    },
+    {
+      "id": 195,
+      "employeeId": 10,
+      "punchedAt": "2026-09-30T17:56:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 107
+    },
+    {
+      "id": 196,
+      "employeeId": 10,
+      "punchedAt": "2026-10-01T08:23:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 108
+    },
+    {
+      "id": 197,
+      "employeeId": 10,
+      "punchedAt": "2026-10-01T17:02:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 108
+    },
+    {
+      "id": 198,
+      "employeeId": 10,
+      "punchedAt": "2026-10-02T08:02:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 109
+    },
+    {
+      "id": 199,
+      "employeeId": 10,
+      "punchedAt": "2026-10-02T17:23:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 109
+    },
+    {
+      "id": 200,
+      "employeeId": 11,
+      "punchedAt": "2026-09-28T08:02:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 110
+    },
+    {
+      "id": 201,
+      "employeeId": 11,
+      "punchedAt": "2026-09-28T18:03:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 110
+    },
+    {
+      "id": 202,
+      "employeeId": 11,
+      "punchedAt": "2026-09-29T08:00:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 111
+    },
+    {
+      "id": 203,
+      "employeeId": 11,
+      "punchedAt": "2026-09-29T17:09:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 111
+    },
+    {
+      "id": 204,
+      "employeeId": 11,
+      "punchedAt": "2026-09-30T07:58:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 112
+    },
+    {
+      "id": 205,
+      "employeeId": 11,
+      "punchedAt": "2026-09-30T17:30:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 112
+    },
+    {
+      "id": 206,
+      "employeeId": 11,
+      "punchedAt": "2026-10-02T08:02:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 114
+    },
+    {
+      "id": 207,
+      "employeeId": 11,
+      "punchedAt": "2026-10-02T17:28:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 114
+    },
+    {
+      "id": 208,
+      "employeeId": 12,
+      "punchedAt": "2026-09-28T07:59:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 115
+    },
+    {
+      "id": 209,
+      "employeeId": 12,
+      "punchedAt": "2026-09-28T17:37:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 115
+    },
+    {
+      "id": 210,
+      "employeeId": 12,
+      "punchedAt": "2026-09-29T08:14:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 116
+    },
+    {
+      "id": 211,
+      "employeeId": 12,
+      "punchedAt": "2026-09-29T17:14:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 116
+    },
+    {
+      "id": 212,
+      "employeeId": 12,
+      "punchedAt": "2026-09-30T08:17:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 117
+    },
+    {
+      "id": 213,
+      "employeeId": 12,
+      "punchedAt": "2026-09-30T17:35:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 117
+    },
+    {
+      "id": 214,
+      "employeeId": 12,
+      "punchedAt": "2026-10-01T08:01:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 118
+    },
+    {
+      "id": 215,
+      "employeeId": 12,
+      "punchedAt": "2026-10-01T17:56:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 118
+    },
+    {
+      "id": 216,
+      "employeeId": 12,
+      "punchedAt": "2026-10-02T08:23:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 119
+    },
+    {
+      "id": 217,
+      "employeeId": 12,
+      "punchedAt": "2026-10-02T17:02:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 119
+    },
+    {
+      "id": 218,
+      "employeeId": 13,
+      "punchedAt": "2026-09-28T07:59:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 120
+    },
+    {
+      "id": 219,
+      "employeeId": 13,
+      "punchedAt": "2026-09-28T17:42:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 120
+    },
+    {
+      "id": 220,
+      "employeeId": 13,
+      "punchedAt": "2026-09-29T08:02:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 121
+    },
+    {
+      "id": 221,
+      "employeeId": 13,
+      "punchedAt": "2026-09-29T18:03:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 121
+    },
+    {
+      "id": 222,
+      "employeeId": 13,
+      "punchedAt": "2026-09-30T08:00:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 122
+    },
+    {
+      "id": 223,
+      "employeeId": 13,
+      "punchedAt": "2026-09-30T17:09:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 122
+    },
+    {
+      "id": 224,
+      "employeeId": 13,
+      "punchedAt": "2026-10-01T07:58:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 123
+    },
+    {
+      "id": 225,
+      "employeeId": 13,
+      "punchedAt": "2026-10-01T17:30:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 123
+    },
+    {
+      "id": 226,
+      "employeeId": 14,
+      "punchedAt": "2026-09-28T08:01:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 125
+    },
+    {
+      "id": 227,
+      "employeeId": 14,
+      "punchedAt": "2026-09-28T17:16:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 125
+    },
+    {
+      "id": 228,
+      "employeeId": 14,
+      "punchedAt": "2026-09-29T07:59:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 126
+    },
+    {
+      "id": 229,
+      "employeeId": 14,
+      "punchedAt": "2026-09-29T17:37:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 126
+    },
+    {
+      "id": 230,
+      "employeeId": 14,
+      "punchedAt": "2026-09-30T08:14:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 127
+    },
+    {
+      "id": 231,
+      "employeeId": 14,
+      "punchedAt": "2026-09-30T17:14:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 127
+    },
+    {
+      "id": 232,
+      "employeeId": 14,
+      "punchedAt": "2026-10-01T08:17:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 128
+    },
+    {
+      "id": 233,
+      "employeeId": 14,
+      "punchedAt": "2026-10-01T17:35:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 128
+    },
+    {
+      "id": 234,
+      "employeeId": 14,
+      "punchedAt": "2026-10-02T08:01:00",
+      "type": "CHECK_IN",
+      "attendanceRecordId": 129
+    },
+    {
+      "id": 235,
+      "employeeId": 14,
+      "punchedAt": "2026-10-02T17:56:00",
+      "type": "CHECK_OUT",
+      "attendanceRecordId": 129
     }
   ],
   "request-types": [
@@ -4658,7 +6642,7 @@
       "role": "HR_STAFF",
       "status": "ACTIVE",
       "mustChangePassword": false,
-      "lastSignInAt": "2026-10-04T03:58:12.710Z"
+      "lastSignInAt": "2026-10-04T22:57:18.318Z"
     },
     {
       "id": 2,
@@ -4678,7 +6662,7 @@
       "role": "EMPLOYEE",
       "status": "ACTIVE",
       "mustChangePassword": false,
-      "lastSignInAt": "2026-10-04T03:57:30.815Z"
+      "lastSignInAt": "2026-10-04T23:14:19.764Z"
     },
     {
       "id": 4,
