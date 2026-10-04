@@ -4,9 +4,21 @@ import {AssignmentStatus, BenefitAssignment} from '../domain/model/benefit-assig
 import {BenefitDelivery} from '../domain/model/benefit-delivery.entity';
 import {BenefitAssignmentResource, BenefitAssignmentsResponse} from './benefit-assignments-response';
 
+/**
+ * Transforms benefit assignment resources between infrastructure and domain entities, including the
+ * validity period and the delivery.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export class BenefitAssignmentAssembler
   implements BaseAssembler<BenefitAssignment, BenefitAssignmentResource, BenefitAssignmentsResponse> {
 
+  /**
+   * Converts an API resource into a domain entity.
+   * @param resource Resource received from or sent to the API.
+   * @author Salym
+   */
   toEntityFromResource(resource: BenefitAssignmentResource): BenefitAssignment {
     return new BenefitAssignment({
       id: resource.id,
@@ -20,6 +32,11 @@ export class BenefitAssignmentAssembler
     });
   }
 
+  /**
+   * Converts a domain entity into an API resource.
+   * @param entity Domain entity to convert.
+   * @author Salym
+   */
   toResourceFromEntity(entity: BenefitAssignment): BenefitAssignmentResource {
     const delivery = entity.delivery;
     return {
@@ -40,6 +57,11 @@ export class BenefitAssignmentAssembler
     } as BenefitAssignmentResource;
   }
 
+  /**
+   * Converts an API response into a collection of entities.
+   * @param response API response that wraps a collection of resources.
+   * @author Salym
+   */
   toEntitiesFromResponse(response: BenefitAssignmentsResponse): BenefitAssignment[] {
     return response.benefitAssignments.map(resource => this.toEntityFromResource(resource));
   }

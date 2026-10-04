@@ -30,7 +30,6 @@ type BalanceFilter = 'ALL' | 'WITH' | 'WITHOUT';
 
 const PAGE_SIZE = 8;
 
-/** WA-25 Beneficios: catalog of benefit types with filters and actions. */
 @Component({
   selector: 'app-benefit-catalog',
   imports: [
@@ -42,6 +41,12 @@ const PAGE_SIZE = 8;
   templateUrl: './benefit-catalog.html',
   styleUrl: './benefit-catalog.css',
 })
+/**
+ * Displays the benefit catalog with its filters and actions (WA-25).
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export class BenefitCatalog {
   readonly store = inject(BenefitsStore);
   private dialog = inject(MatDialog);
@@ -65,29 +70,59 @@ export class BenefitCatalog {
   readonly pageTypes = computed(() =>
     this.filteredTypes().slice(this.page() * PAGE_SIZE, (this.page() + 1) * PAGE_SIZE));
 
+  /**
+   * Filters the catalog by unit.
+   * @param unit Unit selected in the filter, or null for all units.
+   * @author Salym
+   */
   setUnit(unit: BenefitUnit | null) {
     this.unitFilter.set(unit);
     this.page.set(0);
   }
 
+  /**
+   * Filters the catalog by benefits that have or do not have a balance.
+   * @param filter Option selected in the filter.
+   * @author Salym
+   */
   setBalance(filter: BalanceFilter) {
     this.balanceFilter.set(filter);
     this.page.set(0);
   }
 
+  /**
+   * Filters the catalog by active or inactive benefits.
+   * @param filter Option selected in the filter.
+   * @author Salym
+   */
   setStatus(filter: StatusFilter) {
     this.statusFilter.set(filter);
     this.page.set(0);
   }
 
+  /**
+   * Opens the form to edit a benefit.
+   * @param benefitType Benefit type of the catalog.
+   * @author Salym
+   */
   editBenefit(benefitType: BenefitType) {
     this.dialog.open(BenefitTypeFormDialog, { data: { benefitType }, width: '540px', maxWidth: '95vw' });
   }
 
+  /**
+   * Opens the assign dialog with the benefit already selected.
+   * @param benefitType Benefit type of the catalog.
+   * @author Salym
+   */
   assignBenefit(benefitType: BenefitType) {
     this.dialog.open(AssignBenefitDialog, { data: { benefitTypeId: benefitType.id }, width: '560px', maxWidth: '95vw' });
   }
 
+  /**
+   * Activates or deactivates a benefit.
+   * @param benefitType Benefit type of the catalog.
+   * @author Salym
+   */
   toggleStatus(benefitType: BenefitType) {
     this.store.toggleBenefitTypeStatus(benefitType);
   }

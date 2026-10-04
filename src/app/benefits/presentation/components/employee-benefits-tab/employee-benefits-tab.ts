@@ -18,7 +18,6 @@ import {LocalDatePipe} from '../../../../shared/presentation/pipes/local-date-pi
 import {BenefitsStore} from '../../../application/benefits.store';
 import {BenefitQuantity} from '../benefit-quantity/benefit-quantity';
 
-/** "Beneficios" tab of the employee file (WA-04): benefits assigned to the employee. */
 @Component({
   selector: 'app-employee-benefits-tab',
   imports: [
@@ -30,6 +29,13 @@ import {BenefitQuantity} from '../benefit-quantity/benefit-quantity';
   templateUrl: './employee-benefits-tab.html',
   styleUrl: './employee-benefits-tab.css',
 })
+/**
+ * Shows the "Benefits" tab of the employee file (WA-04) with the benefits assigned to the employee.
+ * It is registered in the EMPLOYEE_FILE_SECTIONS of app.config.ts.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export class EmployeeBenefitsTab {
   private store = inject(BenefitsStore);
   readonly employeeId = input.required<number>();

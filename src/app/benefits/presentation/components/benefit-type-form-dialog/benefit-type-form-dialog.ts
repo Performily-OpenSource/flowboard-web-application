@@ -15,17 +15,28 @@ import {
   BenefitUnit
 } from '../../../domain/model/benefit-type.entity';
 
+/**
+ * Data received by the benefit form dialog.
+ *
+ * @remarks Defines the data contract used between layers or components of the bounded context.
+ * @author Salym
+ */
 export interface BenefitTypeFormData {
   benefitType?: BenefitType;
 }
 
-/** WA-28 Nuevo beneficio (also used to edit a benefit of the catalog). */
 @Component({
   selector: 'app-benefit-type-form-dialog',
   imports: [ReactiveFormsModule, MatDialogTitle, MatDialogClose, MatButton, MatIcon, MatSlideToggle, TranslatePipe],
   templateUrl: './benefit-type-form-dialog.html',
   styleUrl: './benefit-type-form-dialog.css',
 })
+/**
+ * Manages the creation and editing of benefits of the catalog (WA-28).
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export class BenefitTypeFormDialog extends BaseForm {
   private fb = inject(FormBuilder);
   private store = inject(BenefitsStore);
@@ -46,6 +57,10 @@ export class BenefitTypeFormDialog extends BaseForm {
     hasBalance: new FormControl<boolean>(this.data.benefitType?.hasBalance ?? false, { nonNullable: true })
   });
 
+  /**
+   * Validates the form, checks that the name is unique and saves the benefit.
+   * @author Salym
+   */
   confirm() {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;

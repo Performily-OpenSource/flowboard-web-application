@@ -12,19 +12,31 @@ import {DateRange} from '../../../../shared/domain/model/date-range';
 import {BenefitsStore} from '../../../application/benefits.store';
 import {WorkspaceAcl} from '../../../infrastructure/workspace-acl';
 
+/**
+ * Data received by the assign benefit dialog.
+ *
+ * @remarks Defines the data contract used between layers or components of the bounded context.
+ * @author Salym
+ */
 export interface AssignBenefitData {
   benefitTypeId?: number;
 }
 
 type AssignmentTarget = 'EMPLOYEE' | 'AREA';
 
-/** WA-29 Asignar beneficio: to one employee or to every active employee of an area. */
 @Component({
   selector: 'app-assign-benefit-dialog',
   imports: [ReactiveFormsModule, MatDialogTitle, MatDialogClose, MatButton, MatIcon, TranslatePipe, LocalDatePipe],
   templateUrl: './assign-benefit-dialog.html',
   styleUrl: './assign-benefit-dialog.css',
 })
+/**
+ * Manages the assignment of a benefit to one employee or to every active employee of an area
+ * (WA-29).
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export class AssignBenefitDialog extends BaseForm {
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<AssignBenefitDialog>);
@@ -98,14 +110,28 @@ export class AssignBenefitDialog extends BaseForm {
     return this.invalidRange() || this.areaHasNoActiveEmployees() || (!!plan && plan.employeeIds.length === 0);
   });
 
+  /**
+   * Gets the name of an area to show it in the summary.
+   * @param areaId Identifier of the area (AreaId of the Shared Kernel).
+   * @author Salym
+   */
   areaName(areaId: number | null): string {
     return this.directory.areas().find(area => area.id === areaId)?.name ?? '';
   }
 
+  /**
+   * Changes the recipients of the benefit between one employee and a whole area.
+   * @param target Recipients of the benefit: one employee or a whole area.
+   * @author Salym
+   */
   setTarget(target: AssignmentTarget) {
     this.form.controls.target.setValue(target);
   }
 
+  /**
+   * Validates the form and the overlapping rule and assigns the benefit.
+   * @author Salym
+   */
   confirm() {
     this.form.markAllAsTouched();
     const value = this.form.getRawValue();

@@ -1,8 +1,25 @@
+/**
+ * Kind of change applied to a vacation balance.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export type VacationMovementType = 'ACCRUAL' | 'USAGE' | 'REVERSAL' | 'MANUAL_ADJUSTMENT';
 
+/**
+ * Available movement types of a vacation balance.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export const VACATION_MOVEMENT_TYPES: VacationMovementType[] = ['ACCRUAL', 'USAGE', 'REVERSAL', 'MANUAL_ADJUSTMENT'];
 
-/** Entity inside VacationBalance: every change of the balance leaves one movement. */
+/**
+ * Entity inside VacationBalance: every change of the balance leaves one movement in its history.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export class VacationMovement {
   private _id: number;
   private _type: VacationMovementType;
@@ -12,6 +29,11 @@ export class VacationMovement {
   private _requestId: number | null;
   private _occurredAt: string;
 
+  /**
+   * Initializes the movement with its type, signed days, reason and references.
+   * @param props Initial values of the instance.
+   * @author Salym
+   */
   constructor(props: {
     id: number;
     type: VacationMovementType;

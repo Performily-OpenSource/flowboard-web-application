@@ -38,7 +38,6 @@ interface BalanceRow {
 const PAGE_SIZE = 6;
 const HIGH_USAGE = 80;
 
-/** WA-26 Saldo por colaborador: accrued, used and available vacation days per employee. */
 @Component({
   selector: 'app-vacation-balances',
   imports: [
@@ -51,6 +50,12 @@ const HIGH_USAGE = 80;
   templateUrl: './vacation-balances.html',
   styleUrl: './vacation-balances.css',
 })
+/**
+ * Displays the accrued, used and available vacation days per employee (WA-26).
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export class VacationBalances {
   readonly store = inject(BenefitsStore);
   readonly directory = inject(WorkspaceAcl);
@@ -91,33 +96,67 @@ export class VacationBalances {
   readonly highUsageCount = computed(() =>
     this.store.vacationBalances().filter(balance => balance.usagePercentage() >= HIGH_USAGE).length);
 
+  /**
+   * Gets the name of an area to show it in the filter.
+   * @param areaId Identifier of the area (AreaId of the Shared Kernel).
+   * @author Salym
+   */
   areaName(areaId: number | null): string {
     return this.directory.areas().find(area => area.id === areaId)?.name ?? '';
   }
 
+  /**
+   * Filters the balances by area.
+   * @param areaId Identifier of the area, or null for all areas.
+   * @author Salym
+   */
   setArea(areaId: number | null) {
     this.areaFilter.set(areaId);
     this.page.set(0);
   }
 
+  /**
+   * Filters the balances by employees with or without available days.
+   * @param filter Option selected in the filter.
+   * @author Salym
+   */
   setAvailability(filter: AvailabilityFilter) {
     this.availabilityFilter.set(filter);
     this.page.set(0);
   }
 
+  /**
+   * Changes the sort order of the balances.
+   * @param order Sort order selected by the user.
+   * @author Salym
+   */
   setSort(order: SortOrder) {
     this.sortOrder.set(order);
     this.page.set(0);
   }
 
+  /**
+   * Opens the dialog to adjust a vacation balance (WA-31).
+   * @param balance Vacation balance of the employee.
+   * @author Salym
+   */
   adjust(balance: VacationBalance) {
     this.dialog.open(VacationAdjustmentDialog, { data: { balance }, width: '540px', maxWidth: '95vw' });
   }
 
+  /**
+   * Opens the history of movements of a vacation balance.
+   * @param balance Vacation balance of the employee.
+   * @author Salym
+   */
   showMovements(balance: VacationBalance) {
     this.dialog.open(VacationMovementsDialog, { data: { balance }, width: '540px', maxWidth: '95vw' });
   }
 
+  /**
+   * Exports the filtered balances to a CSV file.
+   * @author Salym
+   */
   exportBalances() {
     const header = ['vacation-balances.employee', 'vacation-balances.area', 'vacation-balances.accrued',
       'vacation-balances.used', 'vacation-balances.available', 'vacation-balances.usage']

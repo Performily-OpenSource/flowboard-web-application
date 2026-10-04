@@ -15,6 +15,12 @@ import {BenefitUnit} from '../../../domain/model/benefit-type.entity';
     }
   `,
 })
+/**
+ * Shows a quantity with the unit of its benefit type, for example S/ 300.00, 2 days or 1 unit.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export class BenefitQuantity {
   readonly quantity = input.required<number>();
   readonly unit = input.required<BenefitUnit | null | undefined>();

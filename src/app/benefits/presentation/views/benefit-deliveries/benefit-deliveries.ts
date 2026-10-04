@@ -24,7 +24,6 @@ import {BenefitQuantity} from '../../components/benefit-quantity/benefit-quantit
 
 const PAGE_SIZE = 8;
 
-/** Registered deliveries: who received which benefit, when and who registered it. */
 @Component({
   selector: 'app-benefit-deliveries',
   imports: [
@@ -36,6 +35,12 @@ const PAGE_SIZE = 8;
   templateUrl: './benefit-deliveries.html',
   styleUrl: './benefit-deliveries.css',
 })
+/**
+ * Displays the registered deliveries: who received which benefit, when and who registered it.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export class BenefitDeliveries {
   readonly store = inject(BenefitsStore);
   private directory = inject(WorkspaceAcl);
@@ -47,6 +52,11 @@ export class BenefitDeliveries {
   readonly pageDeliveries = computed(() =>
     this.store.deliveredAssignments().slice(this.page() * PAGE_SIZE, (this.page() + 1) * PAGE_SIZE));
 
+  /**
+   * Finds the summary of an employee to show it in the table.
+   * @param employeeId Identifier of the employee (EmployeeId of the Shared Kernel).
+   * @author Salym
+   */
   employee(employeeId: number) {
     return this.directory.findEmployee(employeeId);
   }

@@ -1,7 +1,12 @@
 import {computed, inject, Injectable} from '@angular/core';
 import {WorkspaceStore} from '../../workspace/application/workspace.store';
 
-/** What Benefits needs to know about an employee. Workspace owns the real data. */
+/**
+ * Data of an employee that Benefits needs to show. Workspace owns the real data.
+ *
+ * @remarks Defines the data contract used between layers or components of the bounded context.
+ * @author Salym
+ */
 export interface EmployeeSummary {
   id: number;
   fullName: string;
@@ -12,18 +17,27 @@ export interface EmployeeSummary {
   active: boolean;
 }
 
+/**
+ * Data of an area that Benefits needs to show and filter.
+ *
+ * @remarks Defines the data contract used between layers or components of the bounded context.
+ * @author Salym
+ */
 export interface AreaSummary {
   id: number;
   name: string;
   active: boolean;
 }
 
-/**
- * Anti-corruption layer towards the Workspace bounded context (read only).
- * Benefits only refers to employees and areas by their ids (EmployeeId / AreaId of the Shared Kernel)
- * and reads the names it shows through this directory.
- */
 @Injectable({providedIn: 'root'})
+/**
+ * Anti-corruption layer towards the Workspace bounded context (read only). Benefits only refers to
+ * employees and areas by their ids (EmployeeId / AreaId of the Shared Kernel) and reads the names
+ * it shows through this class.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export class WorkspaceAcl {
   private workspace = inject(WorkspaceStore);
 
@@ -46,10 +60,20 @@ export class WorkspaceAcl {
 
   private readonly employeesById = computed(() => new Map(this.employees().map(employee => [employee.id, employee])));
 
+  /**
+   * Finds the summary of an employee by its identifier.
+   * @param id Identifier of the employee.
+   * @author Salym
+   */
   findEmployee(id: number): EmployeeSummary | undefined {
     return this.employeesById().get(id);
   }
 
+  /**
+   * Gets the identifiers of the ACTIVE employees of an area.
+   * @param areaId Identifier of the area (AreaId of the Shared Kernel).
+   * @author Salym
+   */
   activeEmployeeIdsOfArea(areaId: number): number[] {
     return this.activeEmployees().filter(employee => employee.areaId === areaId).map(employee => employee.id);
   }

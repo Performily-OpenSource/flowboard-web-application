@@ -12,13 +12,18 @@ import {BenefitsStore} from '../../../application/benefits.store';
 import {VacationBalance} from '../../../domain/model/vacation-balance.entity';
 import {EmployeeSummaryPanel} from '../employee-summary-panel/employee-summary-panel';
 
+/**
+ * Data received by the vacation adjustment dialog.
+ *
+ * @remarks Defines the data contract used between layers or components of the bounded context.
+ * @author Salym
+ */
 export interface VacationAdjustmentData {
   balance: VacationBalance;
 }
 
 type AdjustmentOperation = 'ADD' | 'SUBTRACT';
 
-/** WA-31 Ajustar saldo de vacaciones: manual adjustment with a mandatory reason. */
 @Component({
   selector: 'app-vacation-adjustment-dialog',
   imports: [ReactiveFormsModule, DecimalPipe, MatDialogTitle, MatDialogClose, MatButton, MatIcon, TranslatePipe,
@@ -26,6 +31,12 @@ type AdjustmentOperation = 'ADD' | 'SUBTRACT';
   templateUrl: './vacation-adjustment-dialog.html',
   styleUrl: './vacation-adjustment-dialog.css',
 })
+/**
+ * Manages the manual adjustment of a vacation balance with a mandatory reason (WA-31).
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export class VacationAdjustmentDialog extends BaseForm {
   private fb = inject(FormBuilder);
   private store = inject(BenefitsStore);
@@ -54,6 +65,10 @@ export class VacationAdjustmentDialog extends BaseForm {
   readonly resultingDays = computed(() => this.balance.availableAfterAdjustment(this.signedDays()));
   readonly wouldBeNegative = computed(() => this.resultingDays() < 0);
 
+  /**
+   * Validates the form and saves the adjustment when the balance does not become negative.
+   * @author Salym
+   */
   confirm() {
     this.form.markAllAsTouched();
     if (this.form.invalid || this.wouldBeNegative()) return;

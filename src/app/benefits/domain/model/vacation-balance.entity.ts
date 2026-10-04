@@ -4,9 +4,12 @@ import {VacationMovement, VacationMovementType} from './vacation-movement.entity
 const toDays = (value: number): number => Math.round(value * 100) / 100;
 
 /**
- * Aggregate root: vacation days of one employee.
- * availableDays = accruedDays - usedDays and it is never negative.
- * Every change adds a VacationMovement (ACCRUAL, USAGE, REVERSAL, MANUAL_ADJUSTMENT).
+ * Aggregate root with the vacation days of one employee. availableDays = accruedDays - usedDays and
+ * it is never negative. Every change adds a VacationMovement (ACCRUAL, USAGE, REVERSAL,
+ * MANUAL_ADJUSTMENT).
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
  */
 export class VacationBalance {
   private _id: number;
@@ -15,6 +18,11 @@ export class VacationBalance {
   private _usedDays: number;
   private _movements: VacationMovement[];
 
+  /**
+   * Initializes the balance and validates that it is not negative.
+   * @param props Initial values of the instance.
+   * @author Salym
+   */
   constructor(props: {
     id: number;
     employeeId: number;
@@ -56,27 +64,50 @@ export class VacationBalance {
     return [...this._movements];
   }
 
+  /**
+   * Calculates the available days (accrued minus used).
+   * @author Salym
+   */
   availableDays(): number {
     return toDays(this._accruedDays - this._usedDays);
   }
 
-  /** Percentage of the accrued days that was already used (0 when nothing was accrued). */
+  /**
+   * Calculates the percentage of the accrued days that was already used (0 when nothing was
+   * accrued).
+   * @author Salym
+   */
   usagePercentage(): number {
     return this._accruedDays === 0 ? 0 : Math.round((this._usedDays / this._accruedDays) * 100);
   }
 
+  /**
+   * Determines whether the balance has enough available days.
+   * @param days Number of days requested.
+   * @author Salym
+   */
   hasEnough(days: number): boolean {
     return this.availableDays() >= toDays(days);
   }
 
-  /** Accrual by seniority. */
+  /**
+   * Adds days accrued by seniority and registers an ACCRUAL movement.
+   * @param days Number of vacation days (up to 2 decimals).
+   * @author Salym
+   */
   accrue(days: number): void {
     this.requirePositive(days);
     this._accruedDays = toDays(this._accruedDays + days);
     this.addMovement('ACCRUAL', days, 'Accrual by seniority', null, null);
   }
 
-  /** Approved vacation request (called when Request emits RequestApproved). */
+  /**
+   * Discounts the days of an approved vacation request and registers a USAGE movement. It is
+   * rejected when there are not enough available days.
+   * @param days Number of vacation days (up to 2 decimals).
+   * @param requestId Identifier of the vacation request (RequestId of the Shared Kernel).
+   * @author Salym
+   */
   debit(days: number, requestId: number): void {
     this.requirePositive(days);
     if (!this.hasEnough(days)) {
@@ -86,7 +117,12 @@ export class VacationBalance {
     this.addMovement('USAGE', -days, 'Approved vacation request', null, requestId);
   }
 
-  /** Annulled approved request: gives the days back. */
+  /**
+   * Gives back the days of an annulled approved request and registers a REVERSAL movement.
+   * @param days Number of vacation days (up to 2 decimals).
+   * @param requestId Identifier of the vacation request (RequestId of the Shared Kernel).
+   * @author Salym
+   */
   revertDebit(days: number, requestId: number): void {
     this.requirePositive(days);
     if (days > this._usedDays) {
@@ -96,14 +132,22 @@ export class VacationBalance {
     this.addMovement('REVERSAL', days, 'Annulled vacation request', null, requestId);
   }
 
-  /** Available days after a manual adjustment, without changing the balance. */
+  /**
+   * Calculates the available days after a manual adjustment, without changing the balance.
+   * @param days Signed days of the adjustment: positive adds, negative removes.
+   * @author Salym
+   */
   availableAfterAdjustment(days: number): number {
     return toDays(this.availableDays() + days);
   }
 
   /**
-   * Manual adjustment made by HR. Positive days are added to the accrued days,
-   * negative days are removed from them. Requires a reason and an author.
+   * Applies a manual adjustment made by HR and registers a MANUAL_ADJUSTMENT movement. It requires
+   * a reason and an author and never leaves the balance negative.
+   * @param days Signed days of the adjustment: positive adds, negative removes.
+   * @param reason Reason of the change, kept in the movement history.
+   * @param authorId Identifier of the employee that makes the adjustment.
+   * @author Salym
    */
   adjust(days: number, reason: string, authorId: number): void {
     if (days === 0) {
@@ -122,12 +166,26 @@ export class VacationBalance {
     this.addMovement('MANUAL_ADJUSTMENT', days, reason.trim(), authorId, null);
   }
 
+  /**
+   * Validates that a number of days is greater than zero.
+   * @param days Number of vacation days (up to 2 decimals).
+   * @author Salym
+   */
   private requirePositive(days: number): void {
     if (!(days > 0)) {
       throw new Error('The number of days must be greater than zero.');
     }
   }
 
+  /**
+   * Adds a movement to the history of the balance.
+   * @param type Type of the movement.
+   * @param days Signed days of the movement.
+   * @param reason Reason of the change, kept in the movement history.
+   * @param authorId Identifier of the employee that makes the adjustment.
+   * @param requestId Identifier of the vacation request (RequestId of the Shared Kernel).
+   * @author Salym
+   */
   private addMovement(type: VacationMovementType, days: number, reason: string,
                       authorId: number | null, requestId: number | null): void {
     this._movements = [...this._movements, new VacationMovement({

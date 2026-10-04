@@ -9,11 +9,16 @@ import {WorkspaceAcl} from '../../../infrastructure/workspace-acl';
 import {VacationBalance} from '../../../domain/model/vacation-balance.entity';
 import {EmployeeSummaryPanel} from '../employee-summary-panel/employee-summary-panel';
 
+/**
+ * Data received by the vacation movements dialog.
+ *
+ * @remarks Defines the data contract used between layers or components of the bounded context.
+ * @author Salym
+ */
 export interface VacationMovementsData {
   balance: VacationBalance;
 }
 
-/** History of a vacation balance: every accrual, usage, reversal and manual adjustment. */
 @Component({
   selector: 'app-vacation-movements-dialog',
   imports: [DecimalPipe, MatDialogTitle, MatDialogClose, MatButton, MatIcon, TranslatePipe, LocalDatePipe,
@@ -21,6 +26,12 @@ export interface VacationMovementsData {
   templateUrl: './vacation-movements-dialog.html',
   styleUrl: './vacation-movements-dialog.css',
 })
+/**
+ * Shows the history of a vacation balance: every accrual, usage, reversal and manual adjustment.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export class VacationMovementsDialog {
   private directory = inject(WorkspaceAcl);
   readonly balance = inject<VacationMovementsData>(MAT_DIALOG_DATA).balance;
@@ -28,6 +39,11 @@ export class VacationMovementsDialog {
   readonly movements = computed(() =>
     [...this.balance.movements].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt)));
 
+  /**
+   * Gets the name of the employee that made a movement.
+   * @param authorId Identifier of the author of the movement, or null.
+   * @author Salym
+   */
   authorName(authorId: number | null): string {
     return authorId !== null ? this.directory.findEmployee(authorId)?.fullName ?? '' : '';
   }

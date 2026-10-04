@@ -29,7 +29,6 @@ import {RegisterDeliveryDialog} from '../../components/register-delivery-dialog/
 
 const PAGE_SIZE = 8;
 
-/** Assignments of benefits to employees; entry point of WA-30 Registrar entrega. */
 @Component({
   selector: 'app-benefit-assignments',
   imports: [
@@ -41,6 +40,13 @@ const PAGE_SIZE = 8;
   templateUrl: './benefit-assignments.html',
   styleUrl: './benefit-assignments.css',
 })
+/**
+ * Displays the benefit assignments of the employees and is the entry point of WA-30 Register
+ * delivery.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export class BenefitAssignments {
   readonly store = inject(BenefitsStore);
   readonly directory = inject(WorkspaceAcl);
@@ -61,28 +67,58 @@ export class BenefitAssignments {
   readonly pageAssignments = computed(() =>
     this.filteredAssignments().slice(this.page() * PAGE_SIZE, (this.page() + 1) * PAGE_SIZE));
 
+  /**
+   * Finds the summary of an employee to show it in the table.
+   * @param employeeId Identifier of the employee (EmployeeId of the Shared Kernel).
+   * @author Salym
+   */
   employee(employeeId: number) {
     return this.directory.findEmployee(employeeId);
   }
 
+  /**
+   * Gets the name of a benefit to show it in the filter.
+   * @param benefitTypeId Identifier of the benefit type.
+   * @author Salym
+   */
   benefitName(benefitTypeId: number | null): string {
     return this.store.benefitTypes().find(type => type.id === benefitTypeId)?.name ?? '';
   }
 
+  /**
+   * Filters the assignments by status.
+   * @param status Status selected in the filter, or null for all statuses.
+   * @author Salym
+   */
   setStatus(status: AssignmentStatus | null) {
     this.statusFilter.set(status);
     this.page.set(0);
   }
 
+  /**
+   * Filters the assignments by benefit.
+   * @param benefitTypeId Identifier of the benefit type, or null for all benefits.
+   * @author Salym
+   */
   setBenefit(benefitTypeId: number | null) {
     this.benefitFilter.set(benefitTypeId);
     this.page.set(0);
   }
 
+  /**
+   * Opens the dialog to register the delivery of an assignment.
+   * @param assignment Benefit assignment to work with.
+   * @author Salym
+   */
   registerDelivery(assignment: BenefitAssignment) {
     this.dialog.open(RegisterDeliveryDialog, { data: { assignment }, width: '540px', maxWidth: '95vw' });
   }
 
+  /**
+   * Cancels an assignment that was not delivered yet.
+   * @param assignment Benefit assignment to work with.
+   * @author Salym
+   */
   cancel(assignment: BenefitAssignment) {
     this.store.cancelAssignment(assignment);
   }

@@ -3,9 +3,21 @@ import {VacationBalance} from '../domain/model/vacation-balance.entity';
 import {VacationMovement, VacationMovementType} from '../domain/model/vacation-movement.entity';
 import {VacationBalanceResource, VacationBalancesResponse} from './vacation-balances-response';
 
+/**
+ * Transforms vacation balance resources between infrastructure and domain entities, including their
+ * movements.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export class VacationBalanceAssembler
   implements BaseAssembler<VacationBalance, VacationBalanceResource, VacationBalancesResponse> {
 
+  /**
+   * Converts an API resource into a domain entity.
+   * @param resource Resource received from or sent to the API.
+   * @author Salym
+   */
   toEntityFromResource(resource: VacationBalanceResource): VacationBalance {
     return new VacationBalance({
       id: resource.id,
@@ -24,6 +36,11 @@ export class VacationBalanceAssembler
     });
   }
 
+  /**
+   * Converts a domain entity into an API resource.
+   * @param entity Domain entity to convert.
+   * @author Salym
+   */
   toResourceFromEntity(entity: VacationBalance): VacationBalanceResource {
     return {
       id: entity.id,
@@ -42,6 +59,11 @@ export class VacationBalanceAssembler
     } as VacationBalanceResource;
   }
 
+  /**
+   * Converts an API response into a collection of entities.
+   * @param response API response that wraps a collection of resources.
+   * @author Salym
+   */
   toEntitiesFromResponse(response: VacationBalancesResponse): VacationBalance[] {
     return response.vacationBalances.map(resource => this.toEntityFromResource(resource));
   }

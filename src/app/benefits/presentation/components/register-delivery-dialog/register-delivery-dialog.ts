@@ -11,17 +11,29 @@ import {BenefitAssignment} from '../../../domain/model/benefit-assignment.entity
 import {EmployeeSummaryPanel} from '../employee-summary-panel/employee-summary-panel';
 import {BenefitQuantity} from '../benefit-quantity/benefit-quantity';
 
+/**
+ * Data received by the register delivery dialog.
+ *
+ * @remarks Defines the data contract used between layers or components of the bounded context.
+ * @author Salym
+ */
 export interface RegisterDeliveryData {
   assignment: BenefitAssignment;
 }
 
-/** WA-30 Registrar entrega: a delivery can be registered only once per assignment. */
 @Component({
   selector: 'app-register-delivery-dialog',
   imports: [ReactiveFormsModule, MatDialogTitle, MatDialogClose, MatButton, MatIcon, TranslatePipe, LocalDatePipe,
     EmployeeSummaryPanel, BenefitQuantity],
   templateUrl: './register-delivery-dialog.html',
 })
+/**
+ * Manages the registration of the delivery of an assignment (WA-30); a delivery can be registered
+ * only once.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export class RegisterDeliveryDialog extends BaseForm {
   private fb = inject(FormBuilder);
   private store = inject(BenefitsStore);
@@ -40,6 +52,10 @@ export class RegisterDeliveryDialog extends BaseForm {
 
   readonly blocked = this.assignment.isDelivered() || this.assignment.isCancelled();
 
+  /**
+   * Validates the delivery date and registers the delivery.
+   * @author Salym
+   */
   confirm() {
     this.form.markAllAsTouched();
     if (this.form.invalid || this.blocked) return;

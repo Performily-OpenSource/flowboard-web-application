@@ -1,12 +1,39 @@
+/**
+ * Unit in which the quantity of a benefit is measured: money, days or units.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export type BenefitUnit = 'MONEY' | 'DAYS' | 'UNITS';
+/**
+ * How often a benefit is granted: monthly, semiannual or annual.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export type BenefitPeriodicity = 'MONTHLY' | 'SEMIANNUAL' | 'ANNUAL';
 
+/**
+ * Available benefit units, used to fill the selectors of the forms.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export const BENEFIT_UNITS: BenefitUnit[] = ['MONEY', 'DAYS', 'UNITS'];
+/**
+ * Available periodicities, used to fill the selectors of the forms.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
 export const BENEFIT_PERIODICITIES: BenefitPeriodicity[] = ['MONTHLY', 'SEMIANNUAL', 'ANNUAL'];
 
 /**
- * Entity of the benefits catalog. The name is unique inside the organization
+ * Represents a benefit of the organization catalog. Its name is unique inside the organization
  * (checked by the store because it needs the whole catalog).
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
  */
 export class BenefitType {
   private _id: number;
@@ -17,6 +44,11 @@ export class BenefitType {
   private _periodicity: BenefitPeriodicity;
   private _active: boolean;
 
+  /**
+   * Initializes the benefit type with its catalog data.
+   * @param props Initial values of the instance.
+   * @author Salym
+   */
   constructor(props: {
     id: number;
     name: string;
@@ -91,14 +123,27 @@ export class BenefitType {
     this._active = value;
   }
 
+  /**
+   * Marks the benefit as active so it can be assigned again.
+   * @author Salym
+   */
   activate(): void {
     this._active = true;
   }
 
+  /**
+   * Marks the benefit as inactive; inactive benefits cannot be assigned.
+   * @author Salym
+   */
   deactivate(): void {
     this._active = false;
   }
 
+  /**
+   * Compares the name of the benefit ignoring case and surrounding spaces.
+   * @param name Name to compare or validate.
+   * @author Salym
+   */
   hasSameName(name: string): boolean {
     return this._name.trim().toLowerCase() === name.trim().toLowerCase();
   }
