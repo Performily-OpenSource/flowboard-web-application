@@ -1,0 +1,22 @@
+<section class="dash-card">
+  <div class="dash-card-head">
+    <h2 class="dash-card-title">{{ 'benefits-dashboard.my-benefits-title' | translate }}</h2>
+  </div>
+  @for (assignment of visibleAssignments(); track assignment.id) {
+    <div class="dash-row">
+      <div class="dash-row-text">
+        <p class="dash-row-title">{{ assignment.benefitType?.name ?? '-' }}</p>
+        <p class="dash-row-subtitle">
+          <app-benefit-quantity [quantity]="assignment.quantity" [unit]="assignment.benefitType?.unit"/>
+          · {{ 'benefits-dashboard.valid-until' | translate: { date: (assignment.validity.endDate | localDate) } }}
+        </p>
+      </div>
+      <span class="pill status-{{ assignment.status.toLowerCase() }}">{{ 'assignment-status.' + assignment.status | translate }}</span>
+    </div>
+  } @empty {
+    <p class="dash-empty">{{ 'benefits-dashboard.no-benefits' | translate }}</p>
+  }
+  @if (hiddenCount() > 0) {
+    <p class="dash-empty">{{ 'benefits-dashboard.more-benefits' | translate: { count: hiddenCount() } }}</p>
+  }
+</section>

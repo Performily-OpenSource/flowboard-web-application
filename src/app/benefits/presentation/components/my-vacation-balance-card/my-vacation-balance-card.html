@@ -1,0 +1,35 @@
+<section class="dash-card">
+  <div class="dash-card-head">
+    <h2 class="dash-card-title">{{ 'benefits-dashboard.my-balance-title' | translate }}</h2>
+  </div>
+  @if (balance(); as balance) {
+    <div class="balance-body">
+      <div class="balance-circle">
+        <span class="balance-value">{{ balance.availableDays() | number: '1.0-1' }}</span>
+        <span class="balance-unit">{{ 'benefits.unit-short.DAYS' | translate }}</span>
+      </div>
+      <div class="balance-detail">
+        <dl class="balance-rows">
+          <div class="balance-row">
+            <dt>{{ 'vacation-balances.accrued' | translate }}</dt>
+            <dd>{{ balance.accruedDays | number: '1.0-1' }} {{ 'benefits.unit-short.DAYS' | translate }}</dd>
+          </div>
+          <div class="balance-row">
+            <dt>{{ 'vacation-balances.used' | translate }}</dt>
+            <dd>{{ balance.usedDays | number: '1.0-1' }} {{ 'benefits.unit-short.DAYS' | translate }}</dd>
+          </div>
+          <div class="balance-row">
+            <dt>{{ 'vacation-balances.available' | translate }}</dt>
+            <dd>{{ balance.availableDays() | number: '1.0-1' }} {{ 'benefits.unit-short.DAYS' | translate }}</dd>
+          </div>
+        </dl>
+        <a mat-flat-button routerLink="/requests/my-requests/new">
+          <mat-icon>add</mat-icon>
+          {{ 'benefits-dashboard.request-vacation' | translate }}
+        </a>
+      </div>
+    </div>
+  } @else {
+    <p class="dash-empty">{{ 'benefits-dashboard.no-balance' | translate }}</p>
+  }
+</section>
