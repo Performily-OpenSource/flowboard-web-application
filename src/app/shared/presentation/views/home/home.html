@@ -1,8 +1,31 @@
-<section class="page">
-  <header class="page-header">
-    <div>
-      <h1 class="page-title">{{ 'home.title' | translate }}</h1>
-      <p class="page-subtitle">{{ 'home.content' | translate }}</p>
-    </div>
+<section class="page dashboard">
+  <header class="dashboard-header">
+    @if (dashboard() === 'hr') {
+      <h1 class="dashboard-title">{{ greetingKey | translate: { name: firstName() } }}</h1>
+      <p class="dashboard-subtitle">{{ 'home.hr-subtitle' | translate: { date: today } }}</p>
+    } @else {
+      <h1 class="dashboard-title">{{ 'home.hello' | translate: { name: firstName() } }}</h1>
+      <p class="dashboard-subtitle">{{ 'home.employee-subtitle' | translate: { date: today } }}</p>
+    }
   </header>
+
+  @if (widgetsFor('kpi').length > 0) {
+    <div class="dashboard-kpis">
+      @for (widget of widgetsFor('kpi'); track $index) {
+        <ng-container *ngComponentOutlet="widget.component; inputs: widgetInputs()"/>
+      }
+    </div>
+  }
+
+  <div class="dashboard-columns" [class.employee]="dashboard() === 'employee'">
+    @for (slot of columns; track slot) {
+      @if (widgetsFor(slot).length > 0) {
+        <div class="dashboard-column">
+          @for (widget of widgetsFor(slot); track $index) {
+            <ng-container *ngComponentOutlet="widget.component; inputs: widgetInputs()"/>
+          }
+        </div>
+      }
+    }
+  </div>
 </section>
