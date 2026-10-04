@@ -1,0 +1,5 @@
+<article class="dash-kpi">
+  <p class="dash-kpi-label">{{ 'workspace-dashboard.active-employees' | translate }}</p>
+  <p class="dash-kpi-value">{{ activeCount() }}</p>
+  <p class="dash-kpi-hint">{{ 'workspace-dashboard.hired-this-month' | translate: { count: hiredThisMonth() } }}</p>
+</article>

@@ -1,0 +1,17 @@
+<section class="dash-card">
+  <div class="dash-card-head">
+    <h2 class="dash-card-title">{{ 'workspace-dashboard.my-position-title' | translate }}</h2>
+    <a class="dash-link" routerLink="/workspace/my-profile">{{ 'workspace-dashboard.view-profile' | translate }}</a>
+  </div>
+  @if (employee(); as employee) {
+    <dl class="position-list">
+      <div><dt>{{ 'employee.area' | translate }}</dt><dd>{{ employee.area?.name ?? '-' }}</dd></div>
+      <div><dt>{{ 'employee.position' | translate }}</dt><dd>{{ employee.position?.title ?? '-' }}</dd></div>
+      <div><dt>{{ 'my-profile.contract' | translate }}</dt><dd>{{ 'contract-type.' + employee.contractType | translate }}</dd></div>
+      <div><dt>{{ 'employee.hire-date' | translate }}</dt><dd>{{ employee.hireDate | localDate }}</dd></div>
+      <div><dt>{{ 'employee.direct-manager' | translate }}</dt><dd>{{ directManager()?.fullName ?? ('my-profile.no-manager' | translate) }}</dd></div>
+    </dl>
+  } @else {
+    <p class="dash-empty">{{ 'my-profile.not-found' | translate }}</p>
+  }
+</section>
