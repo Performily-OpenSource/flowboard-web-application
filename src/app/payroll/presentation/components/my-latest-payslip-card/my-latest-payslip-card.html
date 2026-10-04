@@ -1,0 +1,24 @@
+<section class="dash-card">
+  <div class="dash-card-head">
+    <h2 class="dash-card-title">{{ 'payroll-dashboard.latest-payslip-title' | translate }}</h2>
+  </div>
+  @if (payslip(); as payslip) {
+    <div class="dash-row">
+      <mat-icon class="payslip-icon">receipt_long</mat-icon>
+      <div class="dash-row-text">
+        <p class="dash-row-title">{{ periodName() }}</p>
+        <p class="dash-row-subtitle">{{ 'payroll-dashboard.uploaded-on' | translate: { date: (payslip.issueDate | localDate) } }}</p>
+      </div>
+      <span class="pill" [class]="statusClass()">{{ 'payroll.payment-status.' + payslip.payment.status | translate }}</span>
+    </div>
+    @if (payslip.file.storageUrl) {
+      <a mat-stroked-button class="download" [href]="payslip.file.storageUrl" [attr.download]="payslip.file.fileName"
+         target="_blank" rel="noopener">
+        <mat-icon>download</mat-icon>
+        {{ 'payroll-dashboard.download-pdf' | translate }}
+      </a>
+    }
+  } @else {
+    <p class="dash-empty">{{ 'payroll-dashboard.no-payslip' | translate }}</p>
+  }
+</section>

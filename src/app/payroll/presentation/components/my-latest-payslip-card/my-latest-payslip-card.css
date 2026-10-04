@@ -1,0 +1,18 @@
+.payslip-icon {
+  flex: 0 0 auto;
+  color: var(--fb-text-muted);
+}
+
+.dash-row {
+  gap: 12px;
+}
+
+.dash-row-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.download {
+  align-self: flex-start;
+  margin-top: 2px;
+}
