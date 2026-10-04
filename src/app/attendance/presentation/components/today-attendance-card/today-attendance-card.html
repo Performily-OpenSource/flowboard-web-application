@@ -1,0 +1,28 @@
+<section class="dash-card">
+  <div class="dash-card-head">
+    <h2 class="dash-card-title">
+      @if (isToday() || !hasData()) {
+        {{ 'attendance-dashboard.today-title' | translate }}
+      } @else {
+        {{ 'attendance-dashboard.day-title' | translate: { date: dayLabel() } }}
+      }
+    </h2>
+  </div>
+  @if (hasData()) {
+    <div class="attendance-items">
+      @for (item of items(); track item.status) {
+        <div class="attendance-item">
+          <div class="attendance-item-head">
+            <span class="attendance-item-label">{{ item.labelKey | translate }}</span>
+            <span class="attendance-item-count">{{ item.count }}</span>
+          </div>
+          <div class="attendance-track">
+            <div class="attendance-fill" [class]="item.colorClass" [style.width.%]="item.percent"></div>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <p class="dash-empty">{{ 'attendance-dashboard.no-records' | translate }}</p>
+  }
+</section>

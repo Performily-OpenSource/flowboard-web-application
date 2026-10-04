@@ -1,0 +1,23 @@
+<section class="dash-card">
+  <div class="dash-card-head">
+    <h2 class="dash-card-title">{{ 'attendance-dashboard.my-week-title' | translate }}</h2>
+  </div>
+  <div class="week-tiles">
+    @for (tile of tiles(); track tile.date) {
+      <div class="week-tile" [class]="tile.colorClass" [title]="tile.date">
+        <span class="week-tile-letter">{{ tile.letterKey | translate }}</span>
+        <span class="week-tile-status">{{ tile.statusKey | translate }}</span>
+      </div>
+    }
+  </div>
+  <div class="week-hours">
+    <span class="week-hours-label">
+      @if (isCurrentWeek()) {
+        {{ 'attendance-dashboard.worked-this-week' | translate }}
+      } @else {
+        {{ 'attendance-dashboard.worked-week-of' | translate: { date: weekLabel() } }}
+      }
+    </span>
+    <span class="week-hours-value">{{ workedHours() }}</span>
+  </div>
+</section>

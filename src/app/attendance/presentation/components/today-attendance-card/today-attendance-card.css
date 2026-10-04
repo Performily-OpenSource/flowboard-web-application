@@ -1,0 +1,45 @@
+.attendance-items {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.attendance-item {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.attendance-item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 13px;
+}
+
+.attendance-item-label {
+  color: var(--fb-text-secondary);
+}
+
+.attendance-item-count {
+  color: var(--fb-text);
+  font-weight: 600;
+}
+
+.attendance-track {
+  height: 8px;
+  border-radius: 999px;
+  background: #f2f3fa;
+  overflow: hidden;
+}
+
+.attendance-fill {
+  height: 100%;
+  border-radius: 999px;
+  min-width: 0;
+}
+
+.fill-on-time { background: var(--fb-success-container); }
+.fill-late { background: var(--fb-warning-container); }
+.fill-absent { background: var(--fb-error-container); }
+.fill-justified { background: var(--fb-outline); }

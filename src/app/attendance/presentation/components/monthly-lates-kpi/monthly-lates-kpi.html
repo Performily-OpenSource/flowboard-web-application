@@ -1,0 +1,9 @@
+<article class="dash-kpi">
+  <p class="dash-kpi-label">{{ 'attendance-dashboard.monthly-lates' | translate }}</p>
+  <p class="dash-kpi-value">{{ lateCount() }}</p>
+  @if (isCurrentMonth()) {
+    <p class="dash-kpi-hint">{{ 'attendance-dashboard.lates-share' | translate: { percent: latePercent() } }}</p>
+  } @else {
+    <p class="dash-kpi-hint">{{ 'attendance-dashboard.lates-share-month' | translate: { percent: latePercent(), month: monthLabel() } }}</p>
+  }
+</article>

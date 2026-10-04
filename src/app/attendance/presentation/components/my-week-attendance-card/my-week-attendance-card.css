@@ -1,0 +1,58 @@
+.week-tiles {
+  display: flex;
+  gap: 8px;
+}
+
+.week-tile {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 60px;
+  height: 64px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--fb-text);
+  background: var(--fb-surface-muted);
+}
+
+.week-tile-letter {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.week-tile-status {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 10.5px;
+  white-space: nowrap;
+}
+
+.tile-on-time { background: var(--fb-success-container); }
+.tile-late { background: var(--fb-warning-container); }
+.tile-absent { background: var(--fb-error-container); }
+.tile-justified { background: var(--fb-primary-container); color: var(--fb-on-primary-container); }
+.tile-incomplete,
+.tile-empty { background: var(--fb-surface-muted); color: var(--fb-text-secondary); }
+
+.week-hours {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.week-hours-label {
+  color: var(--fb-text-secondary);
+}
+
+.week-hours-value {
+  flex: none;
+  white-space: nowrap;
+  color: var(--fb-text);
+  font-weight: 600;
+}
