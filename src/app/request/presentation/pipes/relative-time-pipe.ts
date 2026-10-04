@@ -1,6 +1,12 @@
 import {inject, Pipe, PipeTransform} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 
+/**
+ * Pipe that shows how long ago something happened, e.g. "2 days ago", in the current language.
+ *
+ * @remarks It is impure so it updates when the language changes.
+ * @author Diego Alonso Diaz Villalba
+ */
 @Pipe({
   name: 'relativeTime',
   pure: false
@@ -8,6 +14,13 @@ import {TranslateService} from '@ngx-translate/core';
 export class RelativeTimePipe implements PipeTransform {
   private translate = inject(TranslateService);
 
+  /**
+   * Formats a date as the time elapsed until now.
+   *
+   * @param value - The date in ISO format.
+   * @returns The elapsed time in minutes, hours or days, or '-' when there is no date
+   * @author Diego Alonso Diaz Villalba
+   */
   transform(value: string | null | undefined): string {
     if (!value) return '-';
     const minutes = Math.max(0, Math.floor((Date.now() - new Date(value).getTime()) / 60_000));

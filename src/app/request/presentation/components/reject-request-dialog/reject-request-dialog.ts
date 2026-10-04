@@ -11,6 +11,12 @@ import {formatFileSize} from '../../pipes/file-size-pipe';
 import {RequesterSummaryCard, SummaryRow} from '../requester-summary-card/requester-summary-card';
 import {RequestDialogData} from '../approve-request-dialog/approve-request-dialog';
 
+/**
+ * Dialog to reject a pending request (US31).
+ * Shows the requester, the type, the period and the attachments, and asks for the reason.
+ *
+ * @author Diego Alonso Diaz Villalba
+ */
 @Component({
   selector: 'app-reject-request-dialog',
   imports: [ReactiveFormsModule, MatDialogTitle, MatDialogClose, MatButton, MatIcon, TranslatePipe, RequesterSummaryCard],
@@ -24,8 +30,10 @@ export class RejectRequestDialog extends BaseForm {
   private dialogRef = inject(MatDialogRef<RejectRequestDialog>);
   readonly data = inject<RequestDialogData>(MAT_DIALOG_DATA);
 
+  /** The employee who submitted the request. */
   readonly requester = computed(() => this.store.getRequester(this.data.request.requesterId));
 
+  /** Summary rows: type, period and one row per attached file. */
   readonly rows = computed<SummaryRow[]>(() => {
     const request = this.data.request;
     const rows: SummaryRow[] = [
@@ -39,6 +47,7 @@ export class RejectRequestDialog extends BaseForm {
     return rows;
   });
 
+  /** Form with the required reason (up to 500 characters, not only spaces). */
   readonly form = this.fb.group({
     reason: new FormControl<string>('', {
       nonNullable: true,
@@ -46,11 +55,21 @@ export class RejectRequestDialog extends BaseForm {
     })
   });
 
+  /**
+   * Creates the dialog and clears the previous error of the store.
+   *
+   * @author Diego Alonso Diaz Villalba
+   */
   constructor() {
     super();
     this.store.clearError();
   }
 
+  /**
+   * Rejects the request and closes the dialog when the change is sent.
+   *
+   * @author Diego Alonso Diaz Villalba
+   */
   confirm() {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;

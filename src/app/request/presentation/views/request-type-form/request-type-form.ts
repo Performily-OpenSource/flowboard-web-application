@@ -18,13 +18,28 @@ import {
 } from '../../../domain/model/request-field.entity';
 import {DynamicField} from '../../components/dynamic-field/dynamic-field';
 
+/**
+ * Field being configured in the form, before the request type is saved.
+ *
+ * @author Diego Alonso Diaz Villalba
+ */
 interface FieldDraft {
+  /** Key of the field. */
   key: string;
+  /** Label of the field. */
   label: string;
+  /** Data type of the field. */
   dataType: FieldDataType;
+  /** Whether the field is required. */
   required: boolean;
 }
 
+/**
+ * View to create or edit a request type (US28): name, description, attachment rule, balance
+ * deduction and the list of fields, with a preview of the form the employee will see.
+ *
+ * @author Diego Alonso Diaz Villalba
+ */
 @Component({
   selector: 'app-request-type-form',
   imports: [ReactiveFormsModule, RouterLink, MatButton, MatIcon, MatSlideToggle, TranslatePipe, DynamicField],
@@ -37,12 +52,18 @@ export class RequestTypeForm extends BaseForm {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
+  /** Data types offered for a new field. */
   readonly dataTypes = FIELD_DATA_TYPES;
+  /** Keys of the period fields. */
   readonly periodKeys = PERIOD_FIELD_KEYS;
+  /** Request type being edited, taken from the route, or null for a new one. */
   readonly typeId = Number(this.route.snapshot.paramMap.get('id')) || null;
+  /** Whether the view edits an existing type. */
   readonly isEdit = this.typeId !== null;
+  /** The request type being edited, or null. */
   readonly existingType = computed(() => this.typeId ? this.store.requestTypes().find(type => type.id === this.typeId) ?? null : null);
 
+  /** Form with the data of the request type. */
   readonly form = this.fb.group({
     name: new FormControl<string>('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(80)] }),
     description: new FormControl<string>('', { nonNullable: true, validators: [Validators.maxLength(250)] }),
@@ -51,6 +72,7 @@ export class RequestTypeForm extends BaseForm {
     balanceDeduction: new FormControl<BalanceDeduction>('VACATION_DAYS', { nonNullable: true })
   });
 
+  /** Form of the field being added. */
   readonly newFieldForm = this.fb.group({
     label: new FormControl<string>('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(60)] }),
     key: new FormControl<string>('', { nonNullable: true, validators: [Validators.required, Validators.pattern(FIELD_KEY_PATTERN)] }),
@@ -58,15 +80,24 @@ export class RequestTypeForm extends BaseForm {
     required: new FormControl<boolean>(true, { nonNullable: true })
   });
 
+  /** Fields configured, in display order. */
   readonly fields = signal<FieldDraft[]>([]);
+  /** Whether the new field form is open. */
   readonly addingField = signal(false);
+  /** Whether the user already tried to save. */
   readonly submitted = signal(false);
+  /** Error of the view, e.g. when there are no fields, or null. */
   readonly localError = signal<{ key: string; params: Record<string, unknown> } | null>(null);
+  /** Whether the user changed the key, so it is no longer generated from the label. */
   private keyEditedByHand = false;
+  /** Whether the form was already loaded with the type being edited. */
   private initialized = false;
 
+  /** Value of the form as a signal. */
   private readonly formValue = toSignal(this.form.valueChanges, { initialValue: this.form.getRawValue() });
+  /** Whether the type requires an attachment. */
   readonly requiresAttachment = computed(() => !!this.formValue().requiresAttachment);
+  /** Whether the type deducts a balance. */
   readonly deductsBalance = computed(() => !!this.formValue().deductsBalance);
 
   /** Disabled form that shows how the fields will look for the employee. */
@@ -79,11 +110,17 @@ export class RequestTypeForm extends BaseForm {
     return { fields, form: new FormGroup(controls) };
   });
 
+  /** Whether another request type already uses the name. */
   readonly nameTaken = computed(() => {
     const name = this.formValue().name ?? '';
     return !!name.trim() && this.store.isRequestTypeNameTaken(name, this.typeId);
   });
 
+  /**
+   * Creates the view, generates the key from the label of a new field and loads the type being edited.
+   *
+   * @author Diego Alonso Diaz Villalba
+   */
   constructor() {
     super();
     this.store.clearError();
@@ -111,21 +148,37 @@ export class RequestTypeForm extends BaseForm {
     });
   }
 
+  /**
+   * Opens the form to add a field, with default values.
+   *
+   * @author Diego Alonso Diaz Villalba
+   */
   startNewField() {
     this.newFieldForm.reset({ label: '', key: '', dataType: 'TEXT', required: true });
     this.keyEditedByHand = false;
     this.addingField.set(true);
   }
 
+  /**
+   * Marks the key as edited by hand.
+   *
+   * @author Diego Alonso Diaz Villalba
+   */
   onKeyEdited() {
     this.keyEditedByHand = true;
   }
 
+  /** Whether another field already uses the key of the new field. */
   get newKeyTaken(): boolean {
     const key = this.newFieldForm.controls.key.value;
     return this.fields().some(field => field.key === key);
   }
 
+  /**
+   * Adds the new field to the list when it is valid and its key is not taken.
+   *
+   * @author Diego Alonso Diaz Villalba
+   */
   addField() {
     this.newFieldForm.markAllAsTouched();
     if (this.newFieldForm.invalid || this.newKeyTaken) return;
@@ -134,10 +187,23 @@ export class RequestTypeForm extends BaseForm {
     this.addingField.set(false);
   }
 
+  /**
+   * Removes a field.
+   *
+   * @param index - Position of the field.
+   * @author Diego Alonso Diaz Villalba
+   */
   removeField(index: number) {
     this.fields.update(fields => fields.filter((_, current) => current !== index));
   }
 
+  /**
+   * Moves a field one position up or down.
+   *
+   * @param index - Position of the field.
+   * @param direction - -1 to move it up, 1 to move it down.
+   * @author Diego Alonso Diaz Villalba
+   */
   moveField(index: number, direction: -1 | 1) {
     const target = index + direction;
     this.fields.update(fields => {
@@ -148,10 +214,21 @@ export class RequestTypeForm extends BaseForm {
     });
   }
 
+  /**
+   * Makes a field required or optional.
+   *
+   * @param index - Position of the field.
+   * @author Diego Alonso Diaz Villalba
+   */
   toggleRequired(index: number) {
     this.fields.update(fields => fields.map((field, current) => current === index ? { ...field, required: !field.required } : field));
   }
 
+  /**
+   * Validates the form and adds or updates the request type, then goes back to the list.
+   *
+   * @author Diego Alonso Diaz Villalba
+   */
   save() {
     this.submitted.set(true);
     this.form.markAllAsTouched();
@@ -178,6 +255,13 @@ export class RequestTypeForm extends BaseForm {
     if (saved) this.router.navigate(['/requests/types']).then();
   }
 
+  /**
+   * Generates a camelCase key from a label, without accents or symbols.
+   *
+   * @param label - The label of the field.
+   * @returns The key, up to 50 characters
+   * @author Diego Alonso Diaz Villalba
+   */
   private toKey(label: string): string {
     const words = label.normalize('NFD').replace(/[̀-ͯ]/g, '')
       .replace(/[^a-zA-Z0-9 ]/g, ' ').trim().split(/\s+/).filter(Boolean);

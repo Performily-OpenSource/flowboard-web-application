@@ -20,6 +20,12 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {RequestStore} from '../../../application/request.store';
 import {RequestType} from '../../../domain/model/request-type.entity';
 
+/**
+ * View of the request types (US27): the list with its rules and status, and the detail of the selected
+ * type with the options to activate, deactivate or delete it.
+ *
+ * @author Diego Alonso Diaz Villalba
+ */
 @Component({
   selector: 'app-request-type-list',
   imports: [
@@ -48,30 +54,57 @@ import {RequestType} from '../../../domain/model/request-type.entity';
 export class RequestTypeList {
   readonly store = inject(RequestStore);
 
+  /** Columns of the table. */
   readonly columns = ['name', 'attachment', 'deduction', 'fields', 'status'];
+  /** Selected request type, or null to select the first one. */
   readonly selectedId = signal<number | null>(null);
+  /** Type that could not be deleted because it has requests, or null. */
   readonly typeInUse = signal<RequestType | null>(null);
 
+  /** Request type whose detail is shown. */
   readonly selectedType = computed(() => {
     const types = this.store.requestTypes();
     return types.find(type => type.id === this.selectedId()) ?? types.at(0) ?? null;
   });
 
+  /**
+   * Creates the view and clears the previous error of the store.
+   *
+   * @author Diego Alonso Diaz Villalba
+   */
   constructor() {
     this.store.clearError();
   }
 
+  /**
+   * Selects a request type to show its detail.
+   *
+   * @param type - The request type.
+   * @author Diego Alonso Diaz Villalba
+   */
   select(type: RequestType) {
     this.selectedId.set(type.id);
     this.typeInUse.set(null);
     this.store.clearError();
   }
 
+  /**
+   * Activates or deactivates a request type.
+   *
+   * @param type - The request type.
+   * @author Diego Alonso Diaz Villalba
+   */
   toggleStatus(type: RequestType) {
     this.typeInUse.set(null);
     this.store.toggleRequestTypeStatus(type);
   }
 
+  /**
+   * Deletes a request type, or shows a warning when it has requests.
+   *
+   * @param type - The request type.
+   * @author Diego Alonso Diaz Villalba
+   */
   delete(type: RequestType) {
     if (this.store.deleteRequestType(type)) {
       this.selectedId.set(null);
@@ -81,6 +114,12 @@ export class RequestTypeList {
     }
   }
 
+  /**
+   * Deactivates a type that could not be deleted.
+   *
+   * @param type - The request type.
+   * @author Diego Alonso Diaz Villalba
+   */
   deactivateInstead(type: RequestType) {
     this.store.clearError();
     this.typeInUse.set(null);

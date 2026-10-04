@@ -1,5 +1,11 @@
 import {RequestStatus} from './request.entity';
 
+/**
+ * Entry of the history of a request: one status change, who made it and when (US31).
+ *
+ * @remarks The first entry of every request has no previous status.
+ * @author Diego Alonso Diaz Villalba
+ */
 export class RequestHistory {
   private _id: number;
   private _previousStatus: RequestStatus | null;
@@ -8,6 +14,13 @@ export class RequestHistory {
   private _comment: string | null;
   private _occurredAt: string;
 
+  /**
+   * Creates a new RequestHistory entry.
+   * The comment defaults to null.
+   *
+   * @param props - The entry data: identifier, previous and new status, actor, optional comment and date.
+   * @author Diego Alonso Diaz Villalba
+   */
   constructor(props: {
     id: number;
     previousStatus: RequestStatus | null;
@@ -24,6 +37,7 @@ export class RequestHistory {
     this._occurredAt = props.occurredAt;
   }
 
+  /** Identifier of the entry within its request. */
   get id(): number {
     return this._id;
   }
@@ -32,6 +46,7 @@ export class RequestHistory {
     this._id = value;
   }
 
+  /** Status before the change, or null for the first entry. */
   get previousStatus(): RequestStatus | null {
     return this._previousStatus;
   }
@@ -40,6 +55,7 @@ export class RequestHistory {
     this._previousStatus = value;
   }
 
+  /** Status after the change. */
   get newStatus(): RequestStatus {
     return this._newStatus;
   }
@@ -48,6 +64,7 @@ export class RequestHistory {
     this._newStatus = value;
   }
 
+  /** Identifier of the employee who made the change. */
   get actorId(): number {
     return this._actorId;
   }
@@ -56,6 +73,7 @@ export class RequestHistory {
     this._actorId = value;
   }
 
+  /** Comment or reason given with the change, or null. */
   get comment(): string | null {
     return this._comment;
   }
@@ -64,6 +82,7 @@ export class RequestHistory {
     this._comment = value;
   }
 
+  /** Date and time of the change in ISO format. */
   get occurredAt(): string {
     return this._occurredAt;
   }

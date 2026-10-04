@@ -18,6 +18,12 @@ import {LocalDatePipe} from '../../../../shared/presentation/pipes/local-date-pi
 import {RequestStatusBadge} from '../request-status-badge/request-status-badge';
 import {RequestPeriodPipe} from '../../pipes/request-period-pipe';
 
+/**
+ * "Requests" tab of the employee file of Workspace (WA-04), registered in EMPLOYEE_FILE_SECTIONS
+ * in the 'requests-tab' slot. Lists every request of the employee with its period and status.
+ *
+ * @author Diego Alonso Diaz Villalba
+ */
 @Component({
   selector: 'app-employee-requests-tab',
   imports: [
@@ -43,9 +49,13 @@ import {RequestPeriodPipe} from '../../pipes/request-period-pipe';
 export class EmployeeRequestsTab {
   private readonly store = inject(RequestStore);
 
+  /** Employee whose requests are listed. */
   readonly employeeId = input.required<number>();
 
+  /** Columns of the table. */
   readonly columns = ['code', 'type', 'period', 'status', 'submittedAt'];
+  /** Requests of the employee, newest first. */
   readonly requests = computed(() => this.store.requestsOf(this.employeeId()));
+  /** Number of requests not resolved yet. */
   readonly openCount = computed(() => this.requests().filter(request => !request.isResolved()).length);
 }

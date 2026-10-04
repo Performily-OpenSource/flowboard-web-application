@@ -4,8 +4,21 @@ import {RequestHistory} from '../domain/model/request-history.entity';
 import {RequestResource, RequestsResponse} from './requests-response';
 
 
+/**
+ * Converts between the Request entity and the resource returned by the API.
+ *
+ * @remarks The period of the entity is grouped in the 'period' object of the resource, and the approver in 'approver'.
+ * @author Diego Alonso Diaz Villalba
+ */
 export class RequestAssembler implements BaseAssembler<Request, RequestResource, RequestsResponse> {
 
+  /**
+   * Converts a resource to a Request entity, including its history.
+   *
+   * @param resource - The request resource.
+   * @returns The Request entity
+   * @author Diego Alonso Diaz Villalba
+   */
   toEntityFromResource(resource: RequestResource): Request {
     return new Request({
       id: resource.id,
@@ -32,6 +45,13 @@ export class RequestAssembler implements BaseAssembler<Request, RequestResource,
     });
   }
 
+  /**
+   * Converts a Request entity to a resource.
+   *
+   * @param entity - The Request entity.
+   * @returns The request resource; the period is null when the request has no start date
+   * @author Diego Alonso Diaz Villalba
+   */
   toResourceFromEntity(entity: Request): RequestResource {
     return {
       id: entity.id,
@@ -59,6 +79,13 @@ export class RequestAssembler implements BaseAssembler<Request, RequestResource,
     };
   }
 
+  /**
+   * Converts a response with several requests to entities.
+   *
+   * @param response - The requests response.
+   * @returns The Request entities
+   * @author Diego Alonso Diaz Villalba
+   */
   toEntitiesFromResponse(response: RequestsResponse): Request[] {
     return response.requests.map(resource => this.toEntityFromResource(resource));
   }

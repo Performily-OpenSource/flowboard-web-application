@@ -25,8 +25,16 @@ import {RequestTimeline} from '../../components/request-timeline/request-timelin
 import {CancelRequestDialog} from '../../components/cancel-request-dialog/cancel-request-dialog';
 import {RequestPeriodPipe} from '../../pipes/request-period-pipe';
 
+/** Tabs of the view: open, resolved or all the requests. */
 type MyRequestsTab = 'open' | 'resolved' | 'all';
 
+/**
+ * View of the requests of the employee in session (US32, US33).
+ * Lists them by tab and shows the timeline of the selected one, with the options to cancel it or,
+ * when it was returned for review, to complete it.
+ *
+ * @author Diego Alonso Diaz Villalba
+ */
 @Component({
   selector: 'app-my-requests',
   imports: [
@@ -60,13 +68,19 @@ export class MyRequests {
   private dialog = inject(MatDialog);
   private router = inject(Router);
 
+  /** Columns of the table. */
   readonly columns = ['code', 'type', 'period', 'status', 'approver', 'actions'];
+  /** Selected tab. */
   readonly tab = signal<MyRequestsTab>('open');
+  /** Selected request, or null to select the first one. */
   readonly selectedId = signal<number | null>(null);
 
+  /** Requests not resolved yet. */
   readonly openRequests = computed(() => this.store.myRequests().filter(request => !request.isResolved()));
+  /** Requests already resolved. */
   readonly resolvedRequests = computed(() => this.store.myRequests().filter(request => request.isResolved()));
 
+  /** Requests of the selected tab. */
   readonly visibleRequests = computed(() => {
     switch (this.tab()) {
       case 'open': return this.openRequests();
@@ -75,28 +89,60 @@ export class MyRequests {
     }
   });
 
+  /** Request whose timeline is shown: the selected one or the first visible. */
   readonly selectedRequest = computed(() => {
     const visible = this.visibleRequests();
     return visible.find(request => request.id === this.selectedId()) ?? visible.at(0) ?? null;
   });
 
+  /**
+   * Changes the tab and clears the selection.
+   *
+   * @param tab - The tab to show.
+   * @author Diego Alonso Diaz Villalba
+   */
   setTab(tab: MyRequestsTab) {
     this.tab.set(tab);
     this.selectedId.set(null);
   }
 
+  /**
+   * Selects a request to show its timeline.
+   *
+   * @param request - The request.
+   * @author Diego Alonso Diaz Villalba
+   */
   select(request: Request) {
     this.selectedId.set(request.id);
   }
 
+  /**
+   * Gets the name of the manager who resolves a request.
+   *
+   * @param request - The request.
+   * @returns The manager's name, or an empty string when it goes to Human Resources
+   * @author Diego Alonso Diaz Villalba
+   */
   approverName(request: Request): string {
     return this.store.approverName(request) ?? '';
   }
 
+  /**
+   * Opens the dialog to cancel a request.
+   *
+   * @param request - The request to cancel.
+   * @author Diego Alonso Diaz Villalba
+   */
   cancel(request: Request) {
     this.dialog.open(CancelRequestDialog, { data: { request }, width: '520px', maxWidth: '95vw' });
   }
 
+  /**
+   * Opens the request form to complete a request returned for review.
+   *
+   * @param request - The request to complete.
+   * @author Diego Alonso Diaz Villalba
+   */
   complete(request: Request) {
     this.router.navigate(['/requests/my-requests', request.id, 'complete']).then();
   }

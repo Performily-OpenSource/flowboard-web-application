@@ -3,8 +3,20 @@ import {BalanceDeduction, RequestType} from '../domain/model/request-type.entity
 import {FieldDataType, RequestField} from '../domain/model/request-field.entity';
 import {RequestTypeResource, RequestTypesResponse} from './request-types-response';
 
+/**
+ * Converts between the RequestType entity, with its fields, and the resource returned by the API.
+ *
+ * @author Diego Alonso Diaz Villalba
+ */
 export class RequestTypeAssembler implements BaseAssembler<RequestType, RequestTypeResource, RequestTypesResponse> {
 
+  /**
+   * Converts a resource to a RequestType entity, including its fields.
+   *
+   * @param resource - The request type resource.
+   * @returns The RequestType entity
+   * @author Diego Alonso Diaz Villalba
+   */
   toEntityFromResource(resource: RequestTypeResource): RequestType {
     return new RequestType({
       id: resource.id,
@@ -24,6 +36,13 @@ export class RequestTypeAssembler implements BaseAssembler<RequestType, RequestT
     });
   }
 
+  /**
+   * Converts a RequestType entity to a resource.
+   *
+   * @param entity - The RequestType entity.
+   * @returns The request type resource
+   * @author Diego Alonso Diaz Villalba
+   */
   toResourceFromEntity(entity: RequestType): RequestTypeResource {
     return {
       id: entity.id,
@@ -43,6 +62,13 @@ export class RequestTypeAssembler implements BaseAssembler<RequestType, RequestT
     };
   }
 
+  /**
+   * Converts a response with several request types to entities.
+   *
+   * @param response - The request types response.
+   * @returns The RequestType entities
+   * @author Diego Alonso Diaz Villalba
+   */
   toEntitiesFromResponse(response: RequestTypesResponse): RequestType[] {
     return response.requestTypes.map(resource => this.toEntityFromResource(resource));
   }
