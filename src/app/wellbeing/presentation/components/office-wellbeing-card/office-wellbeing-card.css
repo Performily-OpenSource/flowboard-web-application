@@ -1,0 +1,12 @@
+.office-name {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.indicator-optimal { background: var(--fb-success-container); }
+.indicator-acceptable { background: var(--fb-primary-container); color: var(--fb-on-primary-container); }
+.indicator-poor { background: var(--fb-warning-container); }
+.indicator-hazardous { background: var(--fb-error-container); }
+.indicator-no_data { background: var(--fb-surface-muted); }

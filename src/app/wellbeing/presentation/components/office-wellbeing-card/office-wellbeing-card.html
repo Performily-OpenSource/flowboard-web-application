@@ -1,0 +1,30 @@
+<section class="dash-card">
+  <div class="dash-card-head">
+    <h2 class="dash-card-title">{{ 'wellbeing-dashboard.card-title' | translate }}</h2>
+    <a class="dash-link" routerLink="/wellbeing/dashboard">{{ 'wellbeing-dashboard.view-all' | translate }}</a>
+  </div>
+
+  @for (row of rows(); track row.officeId) {
+    <div class="dash-row">
+      <div class="dash-row-text">
+        <p class="dash-row-title office-name">{{ row.name }}</p>
+        <p class="dash-row-subtitle">
+          @if (row.values.length) {
+            {{ row.values.join(' · ') }}
+          } @else if (row.staleHours !== null) {
+            @if (row.staleHours < 48) {
+              {{ 'wellbeing-dashboard.no-readings-hours' | translate: { hours: row.staleHours } }}
+            } @else {
+              {{ 'wellbeing-dashboard.no-readings-days' | translate: { days: (row.staleHours / 24).toFixed(0) } }}
+            }
+          } @else {
+            {{ 'wellbeing.relative.no-readings' | translate }}
+          }
+        </p>
+      </div>
+      <span class="pill indicator-{{ row.indicator.toLowerCase() }}">{{ indicatorKey(row.indicator) | translate }}</span>
+    </div>
+  } @empty {
+    <p class="dash-empty">{{ (loading() ? 'wellbeing.loading' : 'wellbeing-dashboard.empty') | translate }}</p>
+  }
+</section>
