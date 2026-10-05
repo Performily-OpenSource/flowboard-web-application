@@ -1,0 +1,83 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{{ 'my-benefits.title' | translate }}</h1>
+      <p class="page-subtitle">{{ 'my-benefits.subtitle' | translate }}</p>
+    </div>
+  </header>
+
+  @if (store.loading()) {
+    <mat-progress-bar mode="indeterminate"/>
+  }
+
+  <div class="my-benefits-grid">
+    <section class="card card-body">
+      <h2 class="card-title">{{ 'my-benefits.with-balance' | translate }}</h2>
+      @if (balanceItems().length) {
+        <ul class="balance-list">
+          @for (item of balanceItems(); track item.key) {
+            <li class="balance-item">
+              <div class="balance-head">
+                <span class="balance-name">{{ item.name ?? ('my-benefits.vacation' | translate) }}</span>
+                <span class="balance-amount">
+                  @if (item.unit === 'MONEY') {
+                    {{ 'my-benefits.of' | translate: {
+                      available: (item.available | currency: 'PEN' : 'S/ ' : '1.0-2'),
+                      total: (item.total | currency: 'PEN' : 'S/ ' : '1.0-2')
+                    } }}
+                  } @else {
+                    {{ 'my-benefits.of' | translate: {
+                      available: (item.available | number: '1.0-1'),
+                      total: (item.total | number: '1.0-1')
+                    } }} {{ 'benefits.unit-short.' + item.unit | translate }}
+                  }
+                </span>
+              </div>
+              <div class="balance-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                   [attr.aria-valuenow]="item.percentage">
+                <div class="balance-fill" [style.width.%]="item.percentage"></div>
+              </div>
+              <div class="balance-foot">
+                <span class="muted">
+                  {{ 'my-benefits.unit' | translate }}: {{ 'benefit-unit.' + item.unit | translate | lowercase }}
+                </span>
+                @if (item.unit === 'DAYS') {
+                  <a mat-stroked-button routerLink="/requests/my-requests/new">{{ 'my-benefits.request' | translate }}</a>
+                } @else if (item.assignment) {
+                  <button mat-stroked-button type="button" (click)="openDetail(item.assignment)">
+                    {{ 'my-benefits.view-detail' | translate }}
+                  </button>
+                }
+              </div>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="no-data">{{ 'my-benefits.no-balance' | translate }}</p>
+      }
+    </section>
+
+    <section class="card card-body">
+      <h2 class="card-title">{{ 'my-benefits.delivered' | translate }}</h2>
+      @if (deliveredItems().length) {
+        <ul class="delivered-list">
+          @for (assignment of deliveredItems(); track assignment.id) {
+            <li class="delivered-row">
+              <div class="delivered-text">
+                <span class="delivered-name">{{ assignment.benefitType?.name }}</span>
+                <span class="muted">{{ assignment.delivery?.deliveredOn | localDate }}</span>
+              </div>
+              <span class="pill pill-active">{{ 'assignment-status.DELIVERED' | translate }}</span>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="no-data">{{ 'my-benefits.no-delivered' | translate }}</p>
+      }
+    </section>
+  </div>
+
+  @if (store.error()) {
+    <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ store.error() }}</span></div>
+  }
+</section>

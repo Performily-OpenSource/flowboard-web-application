@@ -9,6 +9,7 @@
     "benefits": "Benefits",
     "payroll": "Payslips",
     "my-payslips": "My payslips",
+    "my-benefits": "My benefits",
     "wellbeing": "Wellbeing",
     "attendance": "Attendance",
     "my-attendance": "My attendance",
@@ -34,6 +35,7 @@
     "vacation-balances": "Balance per employee",
     "payroll": "Payslips",
     "my-payslips": "My payslips",
+    "my-benefits": "My benefits",
     "wellbeing": "Wellbeing",
     "attendance": "Attendance",
     "attendance-records": "Records",
@@ -488,6 +490,26 @@
       "balance-not-found": "The employee does not have a vacation balance.",
       "not-enough-days": "The employee does not have enough vacation days available.",
       "debit-balance": "The vacation balance could not be debited."
+    }
+  },
+  "my-benefits": {
+    "title": "My benefits",
+    "subtitle": "What you are entitled to this year and what you have already received.",
+    "with-balance": "With available balance",
+    "delivered": "Already delivered",
+    "vacation": "Vacation",
+    "of": "{{available}} of {{total}}",
+    "unit": "Unit",
+    "request": "Request",
+    "view-detail": "View detail",
+    "no-balance": "You have no benefits with an available balance.",
+    "no-delivered": "You have no delivered benefits yet.",
+    "detail": {
+      "assigned": "Assigned",
+      "unit": "Unit",
+      "periodicity": "Periodicity",
+      "validity": "Validity",
+      "status": "Status"
     }
   },
   "benefit-unit": {

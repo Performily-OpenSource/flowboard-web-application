@@ -1,0 +1,39 @@
+<div class="dialog">
+  <header class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">{{ assignment.benefitType?.name }}</h2>
+    <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  @if (assignment.benefitType?.description) {
+    <p class="muted">{{ assignment.benefitType?.description }}</p>
+  }
+
+  <dl class="kv-list">
+    <div class="kv-row">
+      <dt>{{ 'my-benefits.detail.assigned' | translate }}</dt>
+      <dd><app-benefit-quantity [quantity]="assignment.quantity" [unit]="assignment.benefitType?.unit"/></dd>
+    </div>
+    <div class="kv-row">
+      <dt>{{ 'my-benefits.detail.unit' | translate }}</dt>
+      <dd>{{ 'benefit-unit.' + (assignment.benefitType?.unit ?? 'UNITS') | translate }}</dd>
+    </div>
+    <div class="kv-row">
+      <dt>{{ 'my-benefits.detail.periodicity' | translate }}</dt>
+      <dd>{{ 'benefit-periodicity.' + (assignment.benefitType?.periodicity ?? 'ANNUAL') | translate }}</dd>
+    </div>
+    <div class="kv-row">
+      <dt>{{ 'my-benefits.detail.validity' | translate }}</dt>
+      <dd>{{ assignment.validity.startDate | localDate }} – {{ assignment.validity.endDate | localDate }}</dd>
+    </div>
+    <div class="kv-row">
+      <dt>{{ 'my-benefits.detail.status' | translate }}</dt>
+      <dd>{{ 'assignment-status.' + assignment.status | translate }}</dd>
+    </div>
+  </dl>
+
+  <div class="dialog-actions">
+    <button mat-flat-button type="button" mat-dialog-close>{{ 'common.close' | translate }}</button>
+  </div>
+</div>

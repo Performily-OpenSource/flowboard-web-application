@@ -61,7 +61,8 @@ export class Layout {
     { link: '/attendance/my-attendance', label: 'option.my-attendance', icon: 'schedule', activeWhen: ['/attendance/my-attendance'] },
     { link: '/requests/inbox', label: 'option.requests', icon: 'assignment_turned_in', activeWhen: ['/requests/inbox', '/requests/types'], roles: ['HR_STAFF'] },
     { link: '/requests/my-requests', label: 'option.my-requests', icon: 'description', activeWhen: ['/requests/my-requests'] },
-    { link: '/benefits', label: 'option.benefits', icon: 'calendar_month', activeWhen: ['/benefits'], roles: ['HR_STAFF'] },
+    { link: '/benefits', label: 'option.benefits', icon: 'calendar_month', activeWhen: ['/benefits/catalog', '/benefits/assignments', '/benefits/deliveries', '/benefits/balances'], roles: ['HR_STAFF'] },
+    { link: '/benefits/my-benefits', label: 'option.my-benefits', icon: 'redeem', activeWhen: ['/benefits/my-benefits'] },
     { link: '/payroll/payslips', label: 'option.payroll', icon: 'receipt_long', activeWhen: ['/payroll/payslips'], roles: ['HR_STAFF'] },
     { link: '/payroll/my-payslips', label: 'option.my-payslips', icon: 'receipt_long', activeWhen: ['/payroll/my-payslips'] },
     { link: '/wellbeing/dashboard', label: 'option.wellbeing', icon: 'health_and_safety', activeWhen: ['/wellbeing'], roles: ['HR_STAFF'] }
