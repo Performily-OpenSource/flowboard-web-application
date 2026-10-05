@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  platformProviderApiBaseUrl: 'http://localhost:3000/api/v1',
+  platformProviderApiBaseUrl: 'https://flowboard-fake-api.onrender.com',
   platformProviderEmployeesEndpointPath: '/employees',
   platformProviderAreasEndpointPath: '/areas',
   platformProviderPositionsEndpointPath: '/positions',
