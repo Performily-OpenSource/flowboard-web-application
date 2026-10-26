@@ -1,6 +1,10 @@
 export const environment = {
   production: true,
   platformProviderApiBaseUrl: 'https://flowboard-fake-api.onrender.com',
+  // Flowboard Web Service (Spring Boot). Only the bounded contexts already migrated use it;
+  // the others keep using platformProviderApiBaseUrl (fake API) until they are migrated.
+  // TODO: replace with the URL of the deployed web service.
+  webServiceApiBaseUrl: 'http://localhost:8080/api/v1',
   platformProviderEmployeesEndpointPath: '/employees',
   platformProviderAreasEndpointPath: '/areas',
   platformProviderPositionsEndpointPath: '/positions',
