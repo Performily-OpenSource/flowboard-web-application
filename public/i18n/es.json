@@ -1080,7 +1080,7 @@
     "hour": "1 hora",
     "hours": "{{count}} horas",
     "range": "{{start}} al {{end}}",
-    "working-days": "{{count}} días hábiles"
+    "calendar-days": "{{count}} días calendario"
   },
   "inbox": {
     "title": "Bandeja de solicitudes",
@@ -1190,7 +1190,8 @@
     "received": "Recibida por el aprobador",
     "review": "En revisión",
     "resolved": "Resuelta",
-    "history": "Historial"
+    "history": "Historial",
+    "system": "Sistema (automático)"
   },
   "request-dialog": {
     "type": "Tipo",

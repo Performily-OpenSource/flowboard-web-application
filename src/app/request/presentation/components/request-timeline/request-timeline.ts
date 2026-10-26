@@ -1,6 +1,6 @@
 import {Component, computed, inject, input} from '@angular/core';
 import {DatePipe} from '@angular/common';
-import {TranslatePipe} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {Request} from '../../../domain/model/request.entity';
 import {RequestStore} from '../../../application/request.store';
 import {RequestStatusBadge} from '../request-status-badge/request-status-badge';
@@ -33,6 +33,7 @@ interface TimelineStep {
 })
 export class RequestTimeline {
   private store = inject(RequestStore);
+  private translate = inject(TranslateService);
   /** The request to show. */
   readonly request = input.required<Request>();
 
@@ -60,11 +61,12 @@ export class RequestTimeline {
   /**
    * Gets the name of the employee who made a change.
    *
-   * @param actorId - The employee identifier.
-   * @returns The full name, or '-' if not found
+   * @param actorId - The employee identifier, or null when the system made the change.
+   * @returns The full name, the 'system' label, or '-' if not found
    * @author Diego Alonso Diaz Villalba
    */
-  actorName(actorId: number): string {
+  actorName(actorId: number | null): string {
+    if (actorId === null) return this.translate.instant('timeline.system');
     return this.store.getRequester(actorId)?.fullName ?? '-';
   }
 }

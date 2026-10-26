@@ -56,7 +56,7 @@ export class ApproveRequestDialog extends BaseForm {
     if (this.deductsVacation() && balance) {
       const days = request.requestedDays();
       rows.push(
-        { label: this.translate.instant('request-dialog.requested-days'), value: this.translate.instant('request-period.working-days', { count: days }) },
+        { label: this.translate.instant('request-dialog.requested-days'), value: this.translate.instant('request-period.calendar-days', { count: days }) },
         { label: this.translate.instant('request-dialog.available-balance'), value: this.translate.instant('request-period.days', { count: balance.availableDays }) },
         { label: this.translate.instant('request-dialog.balance-after'), value: this.translate.instant('request-period.days', { count: balance.availableAfter(days) }) }
       );

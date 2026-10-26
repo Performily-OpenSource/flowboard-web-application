@@ -9,7 +9,7 @@ import {RequestAssembler} from '../infrastructure/request-assembler';
 import {RequestTypeAssembler} from '../infrastructure/request-type-assembler';
 import {
   ApproverType,
-  countWorkingDays,
+  countCalendarDays,
   Request,
   RequestAttachment,
   RequestFieldValue,
@@ -256,16 +256,16 @@ export class RequestStore {
   }
 
   /**
-   * Counts the working days requested in a form.
+   * Counts the calendar days requested in a form.
    *
    * @param requestType - The selected request type, or null.
    * @param period - The period entered.
-   * @returns The working days, or 0 when the type has no period, is measured in hours or the period is invalid
+   * @returns The calendar days, or 0 when the type has no period, is measured in hours or the period is invalid
    * @author Diego Alonso Diaz Villalba
    */
   requestedDays(requestType: RequestType | null, period: RequestPeriodValues): number {
     if (!requestType?.hasPeriod() || requestType.isMeasuredInHours() || !period.startDate || !period.endDate) return 0;
-    return period.endDate < period.startDate ? 0 : countWorkingDays(period.startDate, period.endDate);
+    return period.endDate < period.startDate ? 0 : countCalendarDays(period.startDate, period.endDate);
   }
 
   /**

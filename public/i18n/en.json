@@ -1079,7 +1079,7 @@
     "hour": "1 hour",
     "hours": "{{count}} hours",
     "range": "{{start}} to {{end}}",
-    "working-days": "{{count}} working days"
+    "calendar-days": "{{count}} calendar days"
   },
   "inbox": {
     "title": "Request inbox",
@@ -1189,7 +1189,8 @@
     "received": "Received by the approver",
     "review": "Under review",
     "resolved": "Resolved",
-    "history": "History"
+    "history": "History",
+    "system": "System (automatic)"
   },
   "request-dialog": {
     "type": "Type",

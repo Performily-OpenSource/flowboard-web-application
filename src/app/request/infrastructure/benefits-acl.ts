@@ -26,7 +26,7 @@ export class BenefitsAcl {
    * Asks Benefits to debit the vacation days of an approved request.
    *
    * @param employeeId - The requester's employee identifier.
-   * @param days - The working days to debit.
+   * @param days - The calendar days to debit.
    * @param requestId - The approved request, kept as the reference of the movement.
    * @author Diego Alonso Diaz Villalba
    */

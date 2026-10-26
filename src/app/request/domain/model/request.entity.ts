@@ -38,27 +38,21 @@ export interface RequestAttachment {
 }
 
 /**
- * Counts the working days (Monday to Friday) between two dates, both included.
+ * Counts the calendar days between two dates, both included, the same rule the web service uses
+ * (in Peru vacations are counted in calendar days).
  *
  * @param startDate - First day, in 'yyyy-MM-dd' format.
  * @param endDate - Last day, in 'yyyy-MM-dd' format.
- * @returns The number of working days
+ * @returns The number of calendar days, or 0 when the end is before the start
  * @author Diego Alonso Diaz Villalba
  */
-export function countWorkingDays(startDate: string, endDate: string): number {
-  const toDate = (value: string) => {
+export function countCalendarDays(startDate: string, endDate: string): number {
+  const toTime = (value: string) => {
     const [year, month, day] = value.split('-').map(Number);
-    return new Date(Date.UTC(year, month - 1, day));
+    return Date.UTC(year, month - 1, day);
   };
-  const current = toDate(startDate);
-  const end = toDate(endDate);
-  let days = 0;
-  while (current <= end) {
-    const weekDay = current.getUTCDay();
-    if (weekDay !== 0 && weekDay !== 6) days++;
-    current.setUTCDate(current.getUTCDate() + 1);
-  }
-  return days;
+  const days = Math.round((toTime(endDate) - toTime(startDate)) / 86_400_000) + 1;
+  return Math.max(0, days);
 }
 
 /**
@@ -98,10 +92,11 @@ export class Request {
   private _submittedAt: string;
   private _history: RequestHistory[];
   private _requestType: RequestType | null;
+  private _requestedDays: number | null;
 
   /**
    * Creates a new Request.
-   * Optional fields (period, field values, attachments, approverId, history and requestType) default to null or an empty list.
+   * Optional fields (period, field values, attachments, approverId, history, requestType and requestedDays) default to null or an empty list.
    *
    * @param props - The request data: identifiers, period, values, attachments, approver, status, submission date and history.
    * @author Diego Alonso Diaz Villalba
@@ -122,6 +117,7 @@ export class Request {
     submittedAt: string;
     history?: RequestHistory[];
     requestType?: RequestType | null;
+    requestedDays?: number | null;
   }) {
     this._id = props.id;
     this._requesterId = props.requesterId;
@@ -138,6 +134,7 @@ export class Request {
     this._submittedAt = props.submittedAt;
     this._history = props.history ?? [];
     this._requestType = props.requestType ?? null;
+    this._requestedDays = props.requestedDays ?? null;
   }
 
   /** Unique identifier of the request. */
@@ -311,14 +308,16 @@ export class Request {
   }
 
   /**
-   * Counts the working days requested.
+   * Gets the calendar days requested.
    *
-   * @returns The working days of the period, or 0 when there is no period or it is measured in hours
+   * @remarks Uses the value calculated by the web service; for a request not sent yet it counts them locally.
+   * @returns The calendar days of the period, or 0 when there is no period or it is measured in hours
    * @author Diego Alonso Diaz Villalba
    */
   requestedDays(): number {
+    if (this._requestedDays !== null) return this._requestedDays;
     if (!this._startDate || this.hasTimes()) return 0;
-    return countWorkingDays(this._startDate, this._endDate ?? this._startDate);
+    return countCalendarDays(this._startDate, this._endDate ?? this._startDate);
   }
 
   /**

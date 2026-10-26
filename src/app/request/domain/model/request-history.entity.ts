@@ -10,7 +10,7 @@ export class RequestHistory {
   private _id: number;
   private _previousStatus: RequestStatus | null;
   private _newStatus: RequestStatus;
-  private _actorId: number;
+  private _actorId: number | null;
   private _comment: string | null;
   private _occurredAt: string;
 
@@ -25,7 +25,7 @@ export class RequestHistory {
     id: number;
     previousStatus: RequestStatus | null;
     newStatus: RequestStatus;
-    actorId: number;
+    actorId: number | null;
     comment?: string | null;
     occurredAt: string;
   }) {
@@ -64,12 +64,12 @@ export class RequestHistory {
     this._newStatus = value;
   }
 
-  /** Identifier of the employee who made the change. */
-  get actorId(): number {
+  /** Identifier of the employee who made the change, or null when the system made it. */
+  get actorId(): number | null {
     return this._actorId;
   }
 
-  set actorId(value: number) {
+  set actorId(value: number | null) {
     this._actorId = value;
   }
 

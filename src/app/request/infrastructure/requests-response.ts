@@ -1,22 +1,6 @@
 import {BaseResource, BaseResponse} from '../../shared/infrastructure/base-response';
 
 /**
- * Period of a request as returned by the API.
- *
- * @author Diego Alonso Diaz Villalba
- */
-export interface RequestPeriodResource {
-  /** First day, in 'yyyy-MM-dd' format. */
-  startDate: string;
-  /** Last day, in 'yyyy-MM-dd' format. */
-  endDate: string;
-  /** Start time for requests measured in hours, or null. */
-  startTime: string | null;
-  /** End time for requests measured in hours, or null. */
-  endTime: string | null;
-}
-
-/**
  * Value of a request field as returned by the API.
  *
  * @author Diego Alonso Diaz Villalba
@@ -45,18 +29,6 @@ export interface AttachmentResource {
 }
 
 /**
- * Approver of a request as returned by the API.
- *
- * @author Diego Alonso Diaz Villalba
- */
-export interface ApproverResource {
-  /** Approver type: 'DIRECT_MANAGER' or 'HR_STAFF'. */
-  type: string;
-  /** Identifier of the direct manager, or null for Human Resources. */
-  employeeId: number | null;
-}
-
-/**
  * History entry of a request as returned by the API.
  *
  * @author Diego Alonso Diaz Villalba
@@ -64,21 +36,22 @@ export interface ApproverResource {
 export interface RequestHistoryResource {
   /** Identifier of the entry. */
   id: number;
-  /** Status before the change, or null. */
+  /** Status before the change, or null for the submission. */
   previousStatus: string | null;
   /** Status after the change. */
   newStatus: string;
-  /** Employee who made the change. */
-  actorId: number;
-  /** Comment of the change, or null. */
+  /** Employee who made the change, or null when the system made it (e.g. the requester was terminated). */
+  actorId: number | null;
+  /** Comment or reason of the change, or null. */
   comment: string | null;
-  /** Date and time of the change in ISO format. */
+  /** Date and time of the change, e.g. '2026-10-20T08:45:00'. */
   occurredAt: string;
 }
 
 /**
- * Request as returned by the API.
+ * Request as returned by the Flowboard Web Service (RequestResource).
  *
+ * @remarks The period and the approver come as plain properties, the same contract the mobile app uses.
  * @author Diego Alonso Diaz Villalba
  */
 export interface RequestResource extends BaseResource {
@@ -88,25 +61,38 @@ export interface RequestResource extends BaseResource {
   requesterId: number;
   /** Request type. */
   requestTypeId: number;
-  /** Period of the request, or null when it has none. */
-  period: RequestPeriodResource | null;
+  /** Name of the request type. */
+  requestTypeName: string;
+  /** Current status, e.g. 'IN_PROGRESS'. */
+  status: string;
+  /** First day in 'yyyy-MM-dd' format, or null when the request has no period. */
+  startDate: string | null;
+  /** Last day in 'yyyy-MM-dd' format, or null. */
+  endDate: string | null;
+  /** Start time ('HH:mm') for requests measured in hours, or null. */
+  startTime: string | null;
+  /** End time ('HH:mm') for requests measured in hours, or null. */
+  endTime: string | null;
+  /** Requested calendar days, calculated by the web service (0 for hours or no period). */
+  requestedDays: number;
+  /** Approver type: 'DIRECT_MANAGER' or 'HR_STAFF'. */
+  approverType: string;
+  /** Identifier of the direct manager, or null when the request goes to Human Resources. */
+  approverEmployeeId: number | null;
+  /** Submission date and time, e.g. '2026-10-20T08:45:00'. */
+  submittedAt: string;
   /** Values of the fields. */
   fieldValues: FieldValueResource[];
   /** Attached files. */
   attachments: AttachmentResource[];
-  /** Who must resolve the request. */
-  approver: ApproverResource;
-  /** Current status, e.g. 'IN_PROGRESS'. */
-  status: string;
-  /** Submission date in ISO format. */
-  submittedAt: string;
-  /** Status changes of the request. */
+  /** Status changes of the request, oldest first. */
   history: RequestHistoryResource[];
 }
 
 /**
  * Response of the API with several requests.
  *
+ * @remarks The web service returns a plain array; BaseApiEndpoint accepts both shapes.
  * @author Diego Alonso Diaz Villalba
  */
 export interface RequestsResponse extends BaseResponse {

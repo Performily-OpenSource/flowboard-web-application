@@ -26,7 +26,7 @@ type FieldsForm = FormGroup<Record<string, FormControl<string>>>;
 
 /**
  * View to submit a new request (US29, US30) or to complete one returned for review.
- * Builds the form from the fields of the selected request type, calculates the working days,
+ * Builds the form from the fields of the selected request type, calculates the calendar days,
  * shows the vacation balance and the approver, and handles the attachments.
  *
  * @author Diego Alonso Diaz Villalba

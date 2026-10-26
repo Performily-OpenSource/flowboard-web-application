@@ -62,7 +62,7 @@
           <div class="field">
             <label for="requestedDays">{{ 'request-form.requested-days' | translate }}</label>
             <input id="requestedDays" class="input" readonly [class.invalid]="insufficientBalance()"
-                   [value]="'request-period.working-days' | translate: { count: requestedDays() }"/>
+                   [value]="'request-period.calendar-days' | translate: { count: requestedDays() }"/>
             @if (insufficientBalance()) {
               <p class="field-error">{{ 'request-error.insufficient-balance' | translate: { available: balance()?.availableDays, requested: requestedDays() } }}</p>
             }

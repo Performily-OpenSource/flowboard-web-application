@@ -7,7 +7,7 @@ import {RequestAssembler} from './request-assembler';
 
 /**
  * HTTP endpoint of the requests resource
- * (environment.platformProviderRequestsEndpointPath).
+ * (environment.platformProviderRequestsEndpointPath) of the Flowboard Web Service (environment.webServiceApiBaseUrl).
  *
  * @author Diego Alonso Diaz Villalba
  */
@@ -20,6 +20,6 @@ export class RequestsApiEndpoint extends BaseApiEndpoint<Request, RequestResourc
    * @author Diego Alonso Diaz Villalba
    */
   constructor(http: HttpClient) {
-    super(http, `${environment.platformProviderApiBaseUrl}${environment.platformProviderRequestsEndpointPath}`, new RequestAssembler());
+    super(http, `${environment.webServiceApiBaseUrl}${environment.platformProviderRequestsEndpointPath}`, new RequestAssembler());
   }
 }

@@ -5,9 +5,11 @@ import {RequestResource, RequestsResponse} from './requests-response';
 
 
 /**
- * Converts between the Request entity and the resource returned by the API.
+ * Converts between the Request entity and the resource returned by the Flowboard Web Service.
  *
- * @remarks The period of the entity is grouped in the 'period' object of the resource, and the approver in 'approver'.
+ * @remarks The web service sends the period and the approver as plain properties
+ * (startDate, endDate, startTime, endTime, approverType, approverEmployeeId) and calculates
+ * the requested days, so the entity uses that value instead of counting them again.
  * @author Diego Alonso Diaz Villalba
  */
 export class RequestAssembler implements BaseAssembler<Request, RequestResource, RequestsResponse> {
@@ -24,14 +26,15 @@ export class RequestAssembler implements BaseAssembler<Request, RequestResource,
       id: resource.id,
       requesterId: resource.requesterId,
       requestTypeId: resource.requestTypeId,
-      startDate: resource.period?.startDate ?? null,
-      endDate: resource.period?.endDate ?? null,
-      startTime: resource.period?.startTime ?? null,
-      endTime: resource.period?.endTime ?? null,
+      startDate: resource.startDate,
+      endDate: resource.endDate,
+      startTime: this.toShortTime(resource.startTime),
+      endTime: this.toShortTime(resource.endTime),
+      requestedDays: resource.requestedDays,
       fieldValues: (resource.fieldValues ?? []).map(value => ({ key: value.key, value: value.value ?? '' })),
       attachments: (resource.attachments ?? []).map(file => ({ ...file })),
-      approverType: resource.approver.type as ApproverType,
-      approverId: resource.approver.employeeId,
+      approverType: resource.approverType as ApproverType,
+      approverId: resource.approverEmployeeId,
       status: resource.status as RequestStatus,
       submittedAt: resource.submittedAt,
       history: (resource.history ?? []).map(entry => new RequestHistory({
@@ -46,10 +49,10 @@ export class RequestAssembler implements BaseAssembler<Request, RequestResource,
   }
 
   /**
-   * Converts a Request entity to a resource.
+   * Converts a Request entity to a resource with the shape of the web service.
    *
    * @param entity - The Request entity.
-   * @returns The request resource; the period is null when the request has no start date
+   * @returns The request resource
    * @author Diego Alonso Diaz Villalba
    */
   toResourceFromEntity(entity: Request): RequestResource {
@@ -57,17 +60,18 @@ export class RequestAssembler implements BaseAssembler<Request, RequestResource,
       id: entity.id,
       requesterId: entity.requesterId,
       requestTypeId: entity.requestTypeId,
-      period: entity.startDate ? {
-        startDate: entity.startDate,
-        endDate: entity.endDate ?? entity.startDate,
-        startTime: entity.startTime,
-        endTime: entity.endTime
-      } : null,
+      requestTypeName: entity.requestType?.name ?? '',
+      status: entity.status,
+      startDate: entity.startDate,
+      endDate: entity.endDate,
+      startTime: entity.startTime,
+      endTime: entity.endTime,
+      requestedDays: entity.requestedDays(),
+      approverType: entity.approverType,
+      approverEmployeeId: entity.approverId,
+      submittedAt: entity.submittedAt,
       fieldValues: entity.fieldValues.map(value => ({ key: value.key, value: value.value })),
       attachments: entity.attachments.map(file => ({ ...file })),
-      approver: { type: entity.approverType, employeeId: entity.approverId },
-      status: entity.status,
-      submittedAt: entity.submittedAt,
       history: entity.history.map(entry => ({
         id: entry.id,
         previousStatus: entry.previousStatus,
@@ -88,5 +92,16 @@ export class RequestAssembler implements BaseAssembler<Request, RequestResource,
    */
   toEntitiesFromResponse(response: RequestsResponse): Request[] {
     return response.requests.map(resource => this.toEntityFromResource(resource));
+  }
+
+  /**
+   * Keeps only hours and minutes of a time ('09:00:00' becomes '09:00'), the format the form and the pipes use.
+   *
+   * @param time - The time sent by the web service, or null.
+   * @returns The time in 'HH:mm' format, or null
+   * @author Diego Alonso Diaz Villalba
+   */
+  private toShortTime(time: string | null): string | null {
+    return time ? time.substring(0, 5) : null;
   }
 }
