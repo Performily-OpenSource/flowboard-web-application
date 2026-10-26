@@ -1297,7 +1297,7 @@
   },
   "request-error": {
     "already-resolved": "The request is already resolved or in another status, so this action is not possible.",
-    "not-assigned": "Only pending requests from other employees can be resolved.",
+    "not-assigned": "Only the assigned approver can resolve this pending request: Human Resources resolves the ones routed to it, and each direct manager the ones of their team.",
     "not-owner": "Only the employee who sent the request can do this.",
     "not-under-review": "Only a request under review can be sent again.",
     "reason-required": "The rejection reason is required.",
@@ -1312,7 +1312,9 @@
     "field-key-invalid": "The key must start with a lowercase letter and only use letters or numbers (2 to 50).",
     "field-key-duplicated": "The key {{key}} is already used in this type.",
     "type-duplicated": "A request type with that name already exists.",
-    "type-in-use": "{{name}} has requests, so it cannot be deleted. You can deactivate it instead."
+    "type-in-use": "{{name}} has requests, so it cannot be deleted. You can deactivate it instead.",
+    "requester-not-found": "Your employee data is still loading or could not be found. Try again in a moment.",
+    "unexpected": "The action could not be completed. Try again."
   },
   "employee-requests": {
     "title": "Requests",

@@ -1,22 +1,19 @@
 import {computed, inject, Injectable, Signal, signal} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {Observable, retry} from 'rxjs';
+import {Observable} from 'rxjs';
 import {CurrentEmployeeStore} from '../../shared/application/current-employee.store';
 import {RequestApi} from '../infrastructure/request-api';
 import {WorkspaceAcl} from '../infrastructure/workspace-acl';
 import {BenefitsAcl} from '../infrastructure/benefits-acl';
-import {RequestAssembler} from '../infrastructure/request-assembler';
-import {RequestTypeAssembler} from '../infrastructure/request-type-assembler';
+import {ResolveRequestResource} from '../infrastructure/request-command-resources';
 import {
   ApproverType,
   countCalendarDays,
   Request,
   RequestAttachment,
-  RequestFieldValue,
-  RequestStatus
+  RequestFieldValue
 } from '../domain/model/request.entity';
 import {RequestType} from '../domain/model/request-type.entity';
-import {RequestHistory} from '../domain/model/request-history.entity';
 import {Requester} from '../domain/model/requester.entity';
 import {VacationBalance} from '../domain/model/vacation-balance.entity';
 
@@ -53,9 +50,16 @@ export interface RequestPeriodValues {
  *
  * @remarks
  * Keeps requests, request types and requesters in private signals and exposes them as read-only or
- * computed signals. It validates and submits requests, routes them to the approver, applies the status
- * changes (approve, reject, return for review, cancel) and manages the request types. Workspace and
- * Benefits are reached only through the WorkspaceAcl and the BenefitsAcl.
+ * computed signals. The Flowboard Web Service is the source of truth: it routes each request, changes
+ * its status, adds the history entries and applies the business rules. The store only checks the form
+ * before sending it (so the employee gets quick feedback), calls the action of the web service and
+ * replaces the request with the answer. When the web service refuses an action, its reason is kept in
+ * the error signal so the view can show it.
+ *
+ * Every write method returns false when the local check fails, and true when the call was sent; the
+ * optional onSuccess callback runs only after the web service confirms, so dialogs close and forms
+ * navigate only when the change was really saved. Workspace and Benefits are reached only through the
+ * WorkspaceAcl and the BenefitsAcl.
  * @author Diego Alonso Diaz Villalba
  */
 @Injectable({providedIn: 'root'})
@@ -171,9 +175,10 @@ export class RequestStore {
   }
 
   /**
-   * Decides who must resolve a request of the requester.
+   * Shows in the form who will resolve a request of the requester.
    *
-   * @remarks It goes to the direct manager when the employee has an active one; otherwise to Human Resources.
+   * @remarks Only a preview: the web service decides the approver with the same rule when the request is
+   * submitted (the direct manager when the employee has an active one; otherwise Human Resources).
    * @param requester - The employee who submits the request.
    * @returns The approver type and the manager identifier (null for Human Resources)
    * @author Diego Alonso Diaz Villalba
@@ -291,10 +296,10 @@ export class RequestStore {
     const periodError = this.periodError(period);
     if (periodError) return periodError;
     if (requestType.deductsVacationDays()) {
+      // Benefits still uses the fake API: the balance only blocks the request when it is known
       const balance = this.myVacationBalance();
       const days = this.requestedDays(requestType, period);
-      if (!balance) return { key: 'request-error.balance-not-found', params: {} };
-      if (!balance.hasEnough(days)) {
+      if (balance && !balance.hasEnough(days)) {
         return { key: 'request-error.insufficient-balance', params: { available: balance.availableDays, requested: days } };
       }
     }
@@ -303,93 +308,91 @@ export class RequestStore {
 
   /**
    * Submits a new request of the employee in session (US29).
-   * It starts 'IN_PROGRESS', routed to the direct manager or to Human Resources.
+   * The web service routes it to the direct manager or to Human Resources and it starts 'IN_PROGRESS'.
    *
    * @param requestType - The request type.
    * @param fieldValues - The values entered.
    * @param attachments - The attached files.
-   * @returns True if the request passed the validations and was sent, false otherwise
+   * @param onSuccess - Runs when the web service saved the request.
+   * @returns True if the request passed the local checks and was sent, false otherwise
    * @author Diego Alonso Diaz Villalba
    */
-  submitRequest(requestType: RequestType, fieldValues: RequestFieldValue[], attachments: RequestAttachment[]): boolean {
+  submitRequest(requestType: RequestType, fieldValues: RequestFieldValue[], attachments: RequestAttachment[],
+                onSuccess?: () => void): boolean {
     const requester = this.currentEmployee();
-    if (!requester || !this.passes(this.checkBeforeSubmit(requestType, fieldValues, attachments))) return false;
-    const now = new Date().toISOString();
-    const period = requestType.hasPeriod() ? this.periodFrom(fieldValues) : null;
-    const { approverType, approverId } = this.resolveApprover(requester);
-    const request = new Request({
-      id: 0,
+    if (!requester) return this.fail('request-error.requester-not-found');
+    if (!this.passes(this.checkBeforeSubmit(requestType, fieldValues, attachments))) return false;
+    const period = this.periodOf(requestType, fieldValues);
+    this.persist(this.requestApi.submitRequest({
       requesterId: requester.id,
       requestTypeId: requestType.id,
-      startDate: period?.startDate,
-      endDate: period?.endDate,
-      startTime: period?.startTime,
-      endTime: period?.endTime,
-      fieldValues,
-      attachments,
-      approverType,
-      approverId,
-      status: 'IN_PROGRESS',
-      submittedAt: now,
-      history: [new RequestHistory({ id: 1, previousStatus: null, newStatus: 'IN_PROGRESS', actorId: requester.id, occurredAt: now })]
+      ...period,
+      fieldValues: this.nonEmpty(fieldValues),
+      attachments
+    }), created => {
+      this.requestsSignal.update(requests => [...requests, created]);
+      onSuccess?.();
     });
-    this.persist(this.requestApi.createRequest(request), created =>
-      this.requestsSignal.update(requests => [...requests, created]), 'Failed to submit request');
     return true;
   }
 
   /**
-   * Sends again a request that was returned for review, with the corrected data.
+   * Sends again a request that was returned for review, with the corrected period, values and attachments.
    * It goes back to 'IN_PROGRESS'.
    *
    * @param request - The request under review.
    * @param requestType - The request type.
    * @param fieldValues - The corrected values.
    * @param attachments - The attached files.
+   * @param onSuccess - Runs when the web service saved the change.
    * @returns True if it was sent, false otherwise
    * @author Diego Alonso Diaz Villalba
    */
-  resubmitRequest(request: Request, requestType: RequestType, fieldValues: RequestFieldValue[], attachments: RequestAttachment[]): boolean {
+  resubmitRequest(request: Request, requestType: RequestType, fieldValues: RequestFieldValue[],
+                  attachments: RequestAttachment[], onSuccess?: () => void): boolean {
     const actor = this.currentEmployee();
     if (!actor || !request.isUnderReview() || !request.isOwnedBy(actor.id)) return this.fail('request-error.not-under-review');
     if (!this.passes(this.checkBeforeSubmit(requestType, fieldValues, attachments))) return false;
-    const updated = this.copyRequest(request);
-    const period = requestType.hasPeriod() ? this.periodFrom(fieldValues) : null;
-    updated.fieldValues = fieldValues;
-    updated.attachments = attachments;
-    updated.startDate = period?.startDate ?? null;
-    updated.endDate = period?.endDate ?? null;
-    updated.startTime = period?.startTime ?? null;
-    updated.endTime = period?.endTime ?? null;
-    this.changeStatus(updated, 'IN_PROGRESS', actor.id, null);
+    this.persist(this.requestApi.resubmitRequest(request.id, {
+      actorId: actor.id,
+      ...this.periodOf(requestType, fieldValues),
+      fieldValues: this.nonEmpty(fieldValues),
+      attachments,
+      comment: null
+    }), updated => this.replaceRequest(updated, onSuccess));
     return true;
   }
 
   /**
    * Checks whether the employee in session can resolve a request.
    *
+   * @remarks A pending request is resolved by the approver the web service assigned: Human Resources
+   * staff resolve the ones routed to 'HR_STAFF', and a direct manager the ones assigned to them. The
+   * requests assigned to another manager are shown read only. Nobody resolves their own request.
    * @param request - The request.
-   * @returns True if it is pending and was not submitted by the employee in session, false otherwise
+   * @returns True if the employee in session is the approver of a pending request, false otherwise
    * @author Diego Alonso Diaz Villalba
    */
   canResolve(request: Request): boolean {
-    // Human Resources can resolve any pending request, except its own
-    return request.isPending() && !request.isOwnedBy(this.currentEmployeeId());
+    const employeeId = this.currentEmployeeId();
+    if (!request.isPending() || request.isOwnedBy(employeeId)) return false;
+    return request.isRoutedToHr() ? !!this.currentEmployee()?.hrStaff : request.approverId === employeeId;
   }
 
   /**
-   * Approves a pending request (US31). Vacation requests then ask Benefits to debit the days.
+   * Approves a pending request (US31). When Benefits is in the web service, it debits the vacation days
+   * by listening to the RequestApproved event, so the client does not do it.
    *
    * @param request - The request to approve.
    * @param comment - Optional comment of the approver.
+   * @param onSuccess - Runs when the web service saved the change.
    * @returns True if the change was sent, false otherwise
    * @author Diego Alonso Diaz Villalba
    */
-  approveRequest(request: Request, comment: string | null): boolean {
+  approveRequest(request: Request, comment: string | null, onSuccess?: () => void): boolean {
     if (!this.canResolve(request)) return this.fail('request-error.not-assigned');
-    const updated = this.copyRequest(request);
-    this.changeStatus(updated, 'APPROVED', this.currentEmployeeId(), comment?.trim() || null,
-      () => this.notifyBenefitsOfApproval(updated));
+    this.persist(this.requestApi.approveRequest(request.id, this.resolution(comment)),
+      updated => this.replaceRequest(updated, onSuccess));
     return true;
   }
 
@@ -398,13 +401,15 @@ export class RequestStore {
    *
    * @param request - The request to reject.
    * @param reason - The reason shown to the employee.
+   * @param onSuccess - Runs when the web service saved the change.
    * @returns True if the change was sent, false otherwise
    * @author Diego Alonso Diaz Villalba
    */
-  rejectRequest(request: Request, reason: string): boolean {
+  rejectRequest(request: Request, reason: string, onSuccess?: () => void): boolean {
     if (!this.canResolve(request)) return this.fail('request-error.not-assigned');
     if (!reason.trim()) return this.fail('request-error.reason-required');
-    this.changeStatus(this.copyRequest(request), 'REJECTED', this.currentEmployeeId(), reason.trim());
+    this.persist(this.requestApi.rejectRequest(request.id, this.resolution(reason)),
+      updated => this.replaceRequest(updated, onSuccess));
     return true;
   }
 
@@ -413,13 +418,15 @@ export class RequestStore {
    *
    * @param request - The request to return.
    * @param comment - What the employee must complete.
+   * @param onSuccess - Runs when the web service saved the change.
    * @returns True if the change was sent, false otherwise
    * @author Diego Alonso Diaz Villalba
    */
-  returnRequestForReview(request: Request, comment: string): boolean {
+  returnRequestForReview(request: Request, comment: string, onSuccess?: () => void): boolean {
     if (!this.canResolve(request)) return this.fail('request-error.not-assigned');
     if (!comment.trim()) return this.fail('request-error.comment-required');
-    this.changeStatus(this.copyRequest(request), 'UNDER_REVIEW', this.currentEmployeeId(), comment.trim());
+    this.persist(this.requestApi.returnRequestForReview(request.id, this.resolution(comment)),
+      updated => this.replaceRequest(updated, onSuccess));
     return true;
   }
 
@@ -427,13 +434,15 @@ export class RequestStore {
    * Cancels a request of the employee in session that is not resolved yet (US33).
    *
    * @param request - The request to cancel.
+   * @param onSuccess - Runs when the web service saved the change.
    * @returns True if the change was sent, false otherwise
    * @author Diego Alonso Diaz Villalba
    */
-  cancelRequest(request: Request): boolean {
+  cancelRequest(request: Request, onSuccess?: () => void): boolean {
     if (!request.canBeCancelled()) return this.fail('request-error.already-resolved');
     if (!request.isOwnedBy(this.currentEmployeeId())) return this.fail('request-error.not-owner');
-    this.changeStatus(this.copyRequest(request), 'CANCELLED', this.currentEmployeeId(), null);
+    this.persist(this.requestApi.cancelRequest(request.id, this.resolution(null)),
+      updated => this.replaceRequest(updated, onSuccess));
     return true;
   }
 
@@ -441,28 +450,35 @@ export class RequestStore {
    * Adds a request type (US28). The name must be unique.
    *
    * @param requestType - The request type to add.
+   * @param onSuccess - Runs when the web service saved the type.
    * @returns True if it was sent, false otherwise
    * @author Diego Alonso Diaz Villalba
    */
-  addRequestType(requestType: RequestType): boolean {
+  addRequestType(requestType: RequestType, onSuccess?: () => void): boolean {
     if (this.isRequestTypeNameTaken(requestType.name, null)) return this.fail('request-error.type-duplicated');
-    this.persist(this.requestApi.createRequestType(requestType), created =>
-      this.requestTypesSignal.update(types => [...types, created]), 'Failed to add request type');
+    this.persist(this.requestApi.createRequestType(requestType), created => {
+      this.requestTypesSignal.update(types => [...types, created]);
+      onSuccess?.();
+    });
     return true;
   }
 
   /**
-   * Updates a request type. The name must be unique.
+   * Updates a request type, including the fields of its form. The name must be unique.
    *
+   * @remarks If the type already has requests, the web service does not allow removing fields nor
+   * changing their data type; its reason is shown in the error signal.
    * @param requestType - The request type with its new data.
+   * @param onSuccess - Runs when the web service saved the type.
    * @returns True if it was sent, false otherwise
    * @author Diego Alonso Diaz Villalba
    */
-  updateRequestType(requestType: RequestType): boolean {
+  updateRequestType(requestType: RequestType, onSuccess?: () => void): boolean {
     if (this.isRequestTypeNameTaken(requestType.name, requestType.id)) return this.fail('request-error.type-duplicated');
-    this.persist(this.requestApi.updateRequestType(requestType), updated =>
-      this.requestTypesSignal.update(types => types.map(type => type.id === updated.id ? updated : type)),
-      'Failed to update request type');
+    this.persist(this.requestApi.updateRequestType(requestType), updated => {
+      this.replaceRequestType(updated);
+      onSuccess?.();
+    });
     return true;
   }
 
@@ -473,9 +489,10 @@ export class RequestStore {
    * @author Diego Alonso Diaz Villalba
    */
   toggleRequestTypeStatus(requestType: RequestType): void {
-    const updated = this.copyRequestType(requestType);
-    updated.active = !updated.active;
-    this.updateRequestType(updated);
+    const operation = requestType.active
+      ? this.requestApi.deactivateRequestType(requestType.id)
+      : this.requestApi.activateRequestType(requestType.id);
+    this.persist(operation, updated => this.replaceRequestType(updated));
   }
 
   /**
@@ -492,8 +509,7 @@ export class RequestStore {
       return false;
     }
     this.persist(this.requestApi.deleteRequestType(requestType.id), () =>
-      this.requestTypesSignal.update(types => types.filter(type => type.id !== requestType.id)),
-      'Failed to delete request type');
+      this.requestTypesSignal.update(types => types.filter(type => type.id !== requestType.id)));
     return true;
   }
 
@@ -507,43 +523,63 @@ export class RequestStore {
   }
 
   /**
-   * Adds a history entry, changes the status and saves the request.
+   * Reads the period that is sent to the web service.
    *
-   * @param request - A copy of the request to change.
-   * @param newStatus - The new status.
-   * @param actorId - The employee who makes the change.
-   * @param comment - The comment or reason, or null.
-   * @param afterSave - Optional action to run once the request is saved.
+   * @param requestType - The request type.
+   * @param fieldValues - The values entered.
+   * @returns The period, or every value null when the type has no period
    * @author Diego Alonso Diaz Villalba
    */
-  private changeStatus(request: Request, newStatus: RequestStatus, actorId: number, comment: string | null, afterSave?: () => void): void {
-    const history = request.history;
-    history.push(new RequestHistory({
-      id: history.reduce((max, entry) => Math.max(max, entry.id), 0) + 1,
-      previousStatus: request.status,
-      newStatus,
-      actorId,
-      comment,
-      occurredAt: new Date().toISOString()
-    }));
-    request.history = history;
-    request.status = newStatus;
-    this.persist(this.requestApi.updateRequest(request), updated => {
-      this.requestsSignal.update(requests => requests.map(current => current.id === updated.id ? updated : current));
-      afterSave?.();
-    }, 'Failed to update request');
+  private periodOf(requestType: RequestType, fieldValues: RequestFieldValue[]): RequestPeriodValues {
+    return requestType.hasPeriod()
+      ? this.periodFrom(fieldValues)
+      : { startDate: null, endDate: null, startTime: null, endTime: null };
   }
 
   /**
-   * Asks Benefits to debit the vacation days of an approved vacation request (RequestApproved).
+   * Keeps only the values that were filled in; the web service does not store empty values.
    *
-   * @param request - The approved request.
+   * @param fieldValues - The values entered.
+   * @returns The values with text
    * @author Diego Alonso Diaz Villalba
    */
-  private notifyBenefitsOfApproval(request: Request): void {
-    const requestType = this.requestTypesSignal().find(type => type.id === request.requestTypeId);
-    if (!requestType?.deductsVacationDays() || request.requestedDays() === 0) return;
-    this.benefitsAcl.debitVacationDays(request.requesterId, request.requestedDays(), request.id);
+  private nonEmpty(fieldValues: RequestFieldValue[]): RequestFieldValue[] {
+    return fieldValues
+      .filter(value => value.value?.trim())
+      .map(value => ({ key: value.key, value: value.value.trim() }));
+  }
+
+  /**
+   * Builds the body of an approve, reject, return or cancel action for the employee in session.
+   *
+   * @param comment - The comment or reason, or null.
+   * @returns The body of the action
+   * @author Diego Alonso Diaz Villalba
+   */
+  private resolution(comment: string | null): ResolveRequestResource {
+    return { actorId: this.currentEmployeeId(), comment: comment?.trim() || null };
+  }
+
+  /**
+   * Replaces a request with the version returned by the web service and runs the callback.
+   *
+   * @param updated - The request returned by the web service.
+   * @param onSuccess - Optional callback of the view.
+   * @author Diego Alonso Diaz Villalba
+   */
+  private replaceRequest(updated: Request, onSuccess?: () => void): void {
+    this.requestsSignal.update(requests => requests.map(current => current.id === updated.id ? updated : current));
+    onSuccess?.();
+  }
+
+  /**
+   * Replaces a request type with the version returned by the web service.
+   *
+   * @param updated - The request type returned by the web service.
+   * @author Diego Alonso Diaz Villalba
+   */
+  private replaceRequestType(updated: RequestType): void {
+    this.requestTypesSignal.update(types => types.map(type => type.id === updated.id ? updated : type));
   }
 
   /**
@@ -571,23 +607,24 @@ export class RequestStore {
   }
 
   /**
-   * Runs a write operation with retries, updating the loading and error signals.
+   * Runs a write operation, updating the loading and error signals.
    *
+   * @remarks It does not retry: the actions are not idempotent (retrying a submit could create the
+   * request twice) and a refused action would be refused again.
    * @param operation - The API call.
    * @param onSuccess - Updates the state with the result.
-   * @param fallback - Message used when the error has none.
    * @author Diego Alonso Diaz Villalba
    */
-  private persist<T>(operation: Observable<T>, onSuccess: (result: T) => void, fallback: string): void {
+  private persist<T>(operation: Observable<T>, onSuccess: (result: T) => void): void {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
-    operation.pipe(retry(2)).subscribe({
+    operation.subscribe({
       next: result => {
         onSuccess(result);
         this.loadingSignal.set(false);
       },
       error: error => {
-        this.errorSignal.set(this.toError(error, fallback));
+        this.errorSignal.set(this.toError(error, 'request-error.unexpected'));
         this.loadingSignal.set(false);
       }
     });
@@ -637,36 +674,11 @@ export class RequestStore {
   }
 
   /**
-   * Creates a copy of a request, so the state is changed only after the API confirms.
-   *
-   * @param request - The request to copy.
-   * @returns The copy, with the same request type
-   * @author Diego Alonso Diaz Villalba
-   */
-  private copyRequest(request: Request): Request {
-    const assembler = new RequestAssembler();
-    const copy = assembler.toEntityFromResource(assembler.toResourceFromEntity(request));
-    copy.requestType = request.requestType;
-    return copy;
-  }
-
-  /**
-   * Creates a copy of a request type.
-   *
-   * @param requestType - The request type to copy.
-   * @returns The copy
-   * @author Diego Alonso Diaz Villalba
-   */
-  private copyRequestType(requestType: RequestType): RequestType {
-    const assembler = new RequestTypeAssembler();
-    return assembler.toEntityFromResource(assembler.toResourceFromEntity(requestType));
-  }
-
-  /**
    * Converts an error of the API to a RequestError.
    *
+   * @remarks The message of the error is the reason sent by the web service (see handleWebServiceError).
    * @param error - The error received.
-   * @param fallback - Message used when the error is not an Error.
+   * @param fallback - Translation key used when the error is not an Error.
    * @returns The RequestError
    * @author Diego Alonso Diaz Villalba
    */

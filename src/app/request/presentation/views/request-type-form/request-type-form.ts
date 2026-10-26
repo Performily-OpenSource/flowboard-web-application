@@ -251,8 +251,13 @@ export class RequestTypeForm extends BaseForm {
         id: index + 1, key: draft.key, label: draft.label, dataType: draft.dataType, required: draft.required, displayOrder: index + 1
       }))
     });
-    const saved = existing ? this.store.updateRequestType(requestType) : this.store.addRequestType(requestType);
-    if (saved) this.router.navigate(['/requests/types']).then();
+    // Navigates only when the web service saved the type; if it refuses it, the reason stays on the form
+    const goToTypes = () => this.router.navigate(['/requests/types']).then();
+    if (existing) {
+      this.store.updateRequestType(requestType, goToTypes);
+    } else {
+      this.store.addRequestType(requestType, goToTypes);
+    }
   }
 
   /**

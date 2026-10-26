@@ -58,13 +58,13 @@ export class ReturnRequestDialog extends BaseForm {
   }
 
   /**
-   * Returns the request for review and closes the dialog when the change is sent.
+   * Returns the request for review and closes the dialog when the web service confirms it; if it is refused, the reason stays in the dialog.
    *
    * @author Diego Alonso Diaz Villalba
    */
   confirm() {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
-    if (this.store.returnRequestForReview(this.data.request, this.form.controls.comment.value)) this.dialogRef.close(true);
+    this.store.returnRequestForReview(this.data.request, this.form.controls.comment.value, () => this.dialogRef.close(true));
   }
 }

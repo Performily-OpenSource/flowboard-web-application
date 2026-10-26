@@ -42,28 +42,6 @@ export class RequestApi extends BaseApi {
   }
 
   /**
-   * Creates a request.
-   *
-   * @param request - The request to create.
-   * @returns An observable with the created request
-   * @author Diego Alonso Diaz Villalba
-   */
-  createRequest(request: Request): Observable<Request> {
-    return this.requestsEndpoint.create(request);
-  }
-
-  /**
-   * Updates a request, e.g. after a status change.
-   *
-   * @param request - The request with its new data.
-   * @returns An observable with the updated request
-   * @author Diego Alonso Diaz Villalba
-   */
-  updateRequest(request: Request): Observable<Request> {
-    return this.requestsEndpoint.update(request, request.id);
-  }
-
-  /**
    * Submits a new request; the web service validates it and routes it to the approver.
    *
    * @param resource - The data of the request.

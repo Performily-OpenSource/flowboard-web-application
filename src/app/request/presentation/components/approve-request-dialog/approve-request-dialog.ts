@@ -80,13 +80,13 @@ export class ApproveRequestDialog extends BaseForm {
   }
 
   /**
-   * Approves the request and closes the dialog when the change is sent.
+   * Approves the request and closes the dialog when the web service confirms it; if it is refused, the reason stays in the dialog.
    *
    * @author Diego Alonso Diaz Villalba
    */
   confirm() {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
-    if (this.store.approveRequest(this.data.request, this.form.controls.comment.value)) this.dialogRef.close(true);
+    this.store.approveRequest(this.data.request, this.form.controls.comment.value, () => this.dialogRef.close(true));
   }
 }

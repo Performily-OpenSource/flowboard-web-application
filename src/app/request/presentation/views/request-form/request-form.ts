@@ -221,10 +221,13 @@ export class RequestForm extends BaseForm {
     this.submitted.set(true);
     this.form().markAllAsTouched();
     const existing = this.existingRequest();
-    const sent = existing
-      ? this.store.resubmitRequest(existing, type, this.fieldValues(), this.attachments())
-      : this.store.submitRequest(type, this.fieldValues(), this.attachments());
-    if (sent) this.router.navigate(['/requests/my-requests']).then();
+    // Navigates only when the web service saved the request; if it refuses it, the reason stays on the form
+    const goToMyRequests = () => this.router.navigate(['/requests/my-requests']).then();
+    if (existing) {
+      this.store.resubmitRequest(existing, type, this.fieldValues(), this.attachments(), goToMyRequests);
+    } else {
+      this.store.submitRequest(type, this.fieldValues(), this.attachments(), goToMyRequests);
+    }
   }
 
   /**

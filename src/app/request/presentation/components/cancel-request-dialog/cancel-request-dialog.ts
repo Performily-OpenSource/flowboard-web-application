@@ -34,11 +34,11 @@ export class CancelRequestDialog {
   }
 
   /**
-   * Cancels the request and closes the dialog when the change is sent.
+   * Cancels the request and closes the dialog when the web service confirms it; if it is refused, the reason stays in the dialog.
    *
    * @author Diego Alonso Diaz Villalba
    */
   confirm() {
-    if (this.store.cancelRequest(this.data.request)) this.dialogRef.close(true);
+    this.store.cancelRequest(this.data.request, () => this.dialogRef.close(true));
   }
 }

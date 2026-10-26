@@ -1298,7 +1298,7 @@
   },
   "request-error": {
     "already-resolved": "La solicitud ya está resuelta o en otro estado, por eso no se puede hacer esta acción.",
-    "not-assigned": "Solo se pueden resolver solicitudes pendientes de otros colaboradores.",
+    "not-assigned": "Solo el aprobador asignado puede resolver esta solicitud pendiente: Recursos Humanos resuelve las que le llegan y cada jefe directo las de su equipo.",
     "not-owner": "Solo el colaborador que envió la solicitud puede hacer esto.",
     "not-under-review": "Solo se puede reenviar una solicitud en revisión.",
     "reason-required": "El motivo del rechazo es obligatorio.",
@@ -1313,7 +1313,9 @@
     "field-key-invalid": "La clave debe empezar con minúscula y usar solo letras o números (de 2 a 50).",
     "field-key-duplicated": "La clave {{key}} ya se usa en este tipo.",
     "type-duplicated": "Ya existe un tipo de solicitud con ese nombre.",
-    "type-in-use": "{{name}} tiene solicitudes, por eso no se puede eliminar. Puedes desactivarlo en su lugar."
+    "type-in-use": "{{name}} tiene solicitudes, por eso no se puede eliminar. Puedes desactivarlo en su lugar.",
+    "requester-not-found": "Tus datos de colaborador aún se están cargando o no se encontraron. Inténtalo de nuevo en un momento.",
+    "unexpected": "No se pudo completar la acción. Inténtalo de nuevo."
   },
   "employee-requests": {
     "title": "Solicitudes",
