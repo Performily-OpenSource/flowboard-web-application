@@ -1,49 +1,41 @@
 import {Injectable} from '@angular/core';
-import {forkJoin, map, Observable} from 'rxjs';
-import {environment} from '../../../environments/environment';
-import {WorkspaceApi} from '../../workspace/infrastructure/workspace-api';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 import {Requester} from '../domain/model/requester.entity';
+import {RequestersApiEndpoint} from './requesters-api-endpoint';
 
 /**
  * Anti-corruption layer from the Request bounded context to Workspace.
  *
  * @remarks
- * Reads employees, areas and positions through the Workspace API and translates them to the
- * Requester read model, so Request never uses the Workspace entities directly.
+ * Reads the employees of Workspace from the Flowboard Web Service and translates them to the
+ * Requester read model, so Request never uses the Workspace entities directly. The web service
+ * already sends the area name and the position title of each employee, so one call is enough.
+ *
  * @author Diego Alonso Diaz Villalba
  */
 @Injectable({providedIn: 'root'})
 export class WorkspaceAcl {
+  /** Endpoint that reads the employees of Workspace. */
+  private readonly requestersEndpoint: RequestersApiEndpoint;
+
   /**
    * Creates the ACL.
    *
-   * @param workspaceApi - The API facade of the Workspace bounded context.
+   * @param http - The Angular HTTP client.
    * @author Diego Alonso Diaz Villalba
    */
-  constructor(private workspaceApi: WorkspaceApi) {}
+  constructor(http: HttpClient) {
+    this.requestersEndpoint = new RequestersApiEndpoint(http);
+  }
 
   /**
    * Gets every employee as a Requester, with the name of its area and the title of its position.
    *
-   * @remarks An employee is Human Resources staff when it is active and belongs to environment.humanResourcesAreaId.
    * @returns An observable with the requesters
    * @author Diego Alonso Diaz Villalba
    */
   getRequesters(): Observable<Requester[]> {
-    return forkJoin({
-      employees: this.workspaceApi.getEmployees(),
-      areas: this.workspaceApi.getAreas(),
-      positions: this.workspaceApi.getPositions()
-    }).pipe(map(({ employees, areas, positions }) => employees.map(employee => new Requester({
-      id: employee.id,
-      fullName: employee.fullName,
-      initials: `${employee.firstName.charAt(0)}${employee.lastName.charAt(0)}`.toUpperCase(),
-      positionTitle: positions.find(position => position.id === employee.positionId)?.title ?? '-',
-      areaId: employee.areaId,
-      areaName: areas.find(area => area.id === employee.areaId)?.name ?? '-',
-      directManagerId: employee.directManagerId,
-      active: employee.isActive(),
-      hrStaff: employee.areaId === environment.humanResourcesAreaId && employee.isActive()
-    }))));
+    return this.requestersEndpoint.getAll();
   }
 }

@@ -2,7 +2,7 @@
 /**
  * Read model of an employee as seen by the Request bounded context.
  *
- * @remarks Built by the WorkspaceAcl from the employees, areas and positions of Workspace; it is not persisted.
+ * @remarks Built by the WorkspaceAcl from the employees of Workspace returned by the web service; it is not persisted.
  * @author Diego Alonso Diaz Villalba
  */
 export class Requester {
