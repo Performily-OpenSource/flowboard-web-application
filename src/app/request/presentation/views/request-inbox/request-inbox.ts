@@ -230,6 +230,21 @@ export class RequestInbox {
   }
 
   /**
+   * Explains why a pending request cannot be resolved by the employee in session.
+   *
+   * @remarks A pending request is resolved only by the approver the web service assigned, so the ones
+   * assigned to another direct manager are shown read only, with the name of that manager.
+   * @param request - The request.
+   * @returns The translation key and its values, or null when the request is not pending or can be resolved
+   * @author Diego Alonso Diaz Villalba
+   */
+  readOnlyNotice(request: Request): { key: string; params: Record<string, unknown> } | null {
+    if (!request.isPending() || this.store.canResolve(request)) return null;
+    if (request.isRoutedToHr()) return { key: 'inbox.read-only-hr', params: {} };
+    return { key: 'inbox.read-only-manager', params: { name: this.store.approverName(request) ?? '-' } };
+  }
+
+  /**
    * Gets the employee who submitted a request.
    *
    * @param request - The request.

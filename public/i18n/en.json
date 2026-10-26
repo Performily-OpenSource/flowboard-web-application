@@ -1121,7 +1121,10 @@
     "empty-content": "Everything that arrived is resolved. When an employee sends a new request, it will appear here.",
     "no-results-title": "No requests match the filters",
     "no-results-content": "Change or clear the filters to see more requests.",
-    "view-resolved": "View resolved requests"
+    "view-resolved": "View resolved requests",
+    "read-only": "Read only",
+    "read-only-manager": "Assigned to {{name}}, the direct manager of the requester. Only they can resolve it.",
+    "read-only-hr": "Routed to Human Resources. Only Human Resources staff can resolve it."
   },
   "my-requests": {
     "title": "My requests",

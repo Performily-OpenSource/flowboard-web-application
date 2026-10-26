@@ -16,6 +16,24 @@
   color: var(--fb-error);
 }
 
+.read-only-notice {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--fb-surface-muted);
+  color: var(--fb-text-secondary);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.read-only-notice mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
 .pagination {
   display: flex;
   flex-wrap: wrap;

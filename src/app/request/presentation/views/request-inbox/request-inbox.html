@@ -136,6 +136,13 @@
                         [matTooltip]="'inbox.reject' | translate" [attr.aria-label]="'inbox.reject' | translate">
                   <mat-icon>close</mat-icon>
                 </button>
+              } @else {
+                @if (readOnlyNotice(request); as notice) {
+                  <span class="read-only-notice" tabindex="0" [matTooltip]="notice.key | translate: notice.params"
+                        [attr.aria-label]="notice.key | translate: notice.params">
+                    <mat-icon aria-hidden="true">visibility</mat-icon>{{ 'inbox.read-only' | translate }}
+                  </span>
+                }
               }
               <button class="icon-action" type="button" [matMenuTriggerFor]="rowMenu"
                       [matTooltip]="'inbox.more-actions' | translate" [attr.aria-label]="'inbox.more-actions' | translate">

@@ -1122,7 +1122,10 @@
     "empty-content": "Todo lo que llegó está resuelto. Cuando un colaborador envíe una solicitud nueva, aparecerá aquí.",
     "no-results-title": "Ninguna solicitud coincide con los filtros",
     "no-results-content": "Cambia o limpia los filtros para ver más solicitudes.",
-    "view-resolved": "Ver solicitudes resueltas"
+    "view-resolved": "Ver solicitudes resueltas",
+    "read-only": "Solo lectura",
+    "read-only-manager": "Asignada a {{name}}, jefe directo del solicitante. Solo esa persona puede resolverla.",
+    "read-only-hr": "Enviada a Recursos Humanos. Solo el personal de Recursos Humanos puede resolverla."
   },
   "my-requests": {
     "title": "Mis solicitudes",
