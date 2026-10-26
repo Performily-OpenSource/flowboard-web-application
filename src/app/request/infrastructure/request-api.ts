@@ -6,6 +6,7 @@ import {Request} from '../domain/model/request.entity';
 import {RequestType} from '../domain/model/request-type.entity';
 import {RequestsApiEndpoint} from './requests-api-endpoint';
 import {RequestTypesApiEndpoint} from './request-types-api-endpoint';
+import {ResolveRequestResource, ResubmitRequestResource, SubmitRequestResource} from './request-command-resources';
 
 /**
  * API facade of the Request bounded context.
@@ -60,6 +61,99 @@ export class RequestApi extends BaseApi {
    */
   updateRequest(request: Request): Observable<Request> {
     return this.requestsEndpoint.update(request, request.id);
+  }
+
+  /**
+   * Submits a new request; the web service validates it and routes it to the approver.
+   *
+   * @param resource - The data of the request.
+   * @returns An observable with the created request
+   * @author Diego Alonso Diaz Villalba
+   */
+  submitRequest(resource: SubmitRequestResource): Observable<Request> {
+    return this.requestsEndpoint.submit(resource);
+  }
+
+  /**
+   * Approves a request.
+   *
+   * @param id - The request identifier.
+   * @param resource - The approver and an optional comment.
+   * @returns An observable with the updated request
+   * @author Diego Alonso Diaz Villalba
+   */
+  approveRequest(id: number, resource: ResolveRequestResource): Observable<Request> {
+    return this.requestsEndpoint.approve(id, resource);
+  }
+
+  /**
+   * Rejects a request.
+   *
+   * @param id - The request identifier.
+   * @param resource - The approver and the reason.
+   * @returns An observable with the updated request
+   * @author Diego Alonso Diaz Villalba
+   */
+  rejectRequest(id: number, resource: ResolveRequestResource): Observable<Request> {
+    return this.requestsEndpoint.reject(id, resource);
+  }
+
+  /**
+   * Returns a request to the requester to complete it.
+   *
+   * @param id - The request identifier.
+   * @param resource - The approver and what must be completed.
+   * @returns An observable with the updated request
+   * @author Diego Alonso Diaz Villalba
+   */
+  returnRequestForReview(id: number, resource: ResolveRequestResource): Observable<Request> {
+    return this.requestsEndpoint.returnForReview(id, resource);
+  }
+
+  /**
+   * Sends again a request returned for review.
+   *
+   * @param id - The request identifier.
+   * @param resource - The corrected data.
+   * @returns An observable with the updated request
+   * @author Diego Alonso Diaz Villalba
+   */
+  resubmitRequest(id: number, resource: ResubmitRequestResource): Observable<Request> {
+    return this.requestsEndpoint.resubmit(id, resource);
+  }
+
+  /**
+   * Cancels a request that is not resolved yet.
+   *
+   * @param id - The request identifier.
+   * @param resource - The requester.
+   * @returns An observable with the updated request
+   * @author Diego Alonso Diaz Villalba
+   */
+  cancelRequest(id: number, resource: ResolveRequestResource): Observable<Request> {
+    return this.requestsEndpoint.cancel(id, resource);
+  }
+
+  /**
+   * Activates a request type.
+   *
+   * @param id - The request type identifier.
+   * @returns An observable with the updated request type
+   * @author Diego Alonso Diaz Villalba
+   */
+  activateRequestType(id: number): Observable<RequestType> {
+    return this.requestTypesEndpoint.activate(id);
+  }
+
+  /**
+   * Deactivates a request type.
+   *
+   * @param id - The request type identifier.
+   * @returns An observable with the updated request type
+   * @author Diego Alonso Diaz Villalba
+   */
+  deactivateRequestType(id: number): Observable<RequestType> {
+    return this.requestTypesEndpoint.deactivate(id);
   }
 
   /**
