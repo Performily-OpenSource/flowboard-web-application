@@ -1,10 +1,16 @@
 import {BaseAssembler} from '../../shared/infrastructure/base-assembler';
 import {ContractType, Employee, EmploymentStatus, IdentityDocumentType} from '../domain/model/employee.entity';
-import {EmployeeResource, EmployeesResponse} from './employees-response';
+import {
+  EmployeeResource,
+  EmployeesResponse,
+  RegisterEmployeeRequest,
+  UpdateEmployeePersonalDataRequest
+} from './employees-response';
 
 /**
  * Assembler that converts between EmployeeResource (API) and Employee (domain entity).
  * String codes are cast to their domain types; resolved area and position are not mapped.
+ * The API names the address fields street, district, province and department.
  *
  * @author Oscar Lizandro Vasquez Llave
  */
@@ -27,10 +33,10 @@ export class EmployeeAssembler implements BaseAssembler<Employee, EmployeeResour
       birthDate: resource.birthDate,
       email: resource.email,
       phoneNumber: resource.phoneNumber,
-      addressStreet: resource.addressStreet,
-      addressDistrict: resource.addressDistrict,
-      addressProvince: resource.addressProvince,
-      addressDepartment: resource.addressDepartment,
+      addressStreet: resource.street,
+      addressDistrict: resource.district,
+      addressProvince: resource.province,
+      addressDepartment: resource.department,
       contractType: resource.contractType as ContractType,
       hireDate: resource.hireDate,
       contractEndDate: resource.contractEndDate,
@@ -44,7 +50,7 @@ export class EmployeeAssembler implements BaseAssembler<Employee, EmployeeResour
   }
 
   /**
-   * Converts a Employee entity into a EmployeeResource to be sent to the API.
+   * Converts a Employee entity into a EmployeeResource.
    *
    * @param entity - The entity to convert.
    * @returns The corresponding EmployeeResource
@@ -60,10 +66,10 @@ export class EmployeeAssembler implements BaseAssembler<Employee, EmployeeResour
       birthDate: entity.birthDate,
       email: entity.email,
       phoneNumber: entity.phoneNumber,
-      addressStreet: entity.addressStreet,
-      addressDistrict: entity.addressDistrict,
-      addressProvince: entity.addressProvince,
-      addressDepartment: entity.addressDepartment,
+      street: entity.addressStreet,
+      district: entity.addressDistrict,
+      province: entity.addressProvince,
+      department: entity.addressDepartment,
       contractType: entity.contractType,
       hireDate: entity.hireDate,
       contractEndDate: entity.contractEndDate,
@@ -74,6 +80,56 @@ export class EmployeeAssembler implements BaseAssembler<Employee, EmployeeResour
       positionId: entity.positionId,
       directManagerId: entity.directManagerId
     } as EmployeeResource;
+  }
+
+  /**
+   * Builds the payload of POST /employees. Optional values that are null are omitted.
+   *
+   * @param entity - The employee to register.
+   * @returns The RegisterEmployeeRequest
+   * @author Oscar Lizandro Vasquez Llave
+   */
+  toRegisterRequestFromEntity(entity: Employee): RegisterEmployeeRequest {
+    return {
+      firstName: entity.firstName,
+      lastName: entity.lastName,
+      identityDocumentType: entity.identityDocumentType,
+      identityDocumentNumber: entity.identityDocumentNumber,
+      birthDate: entity.birthDate,
+      email: entity.email,
+      phoneNumber: entity.phoneNumber,
+      street: entity.addressStreet,
+      district: entity.addressDistrict,
+      province: entity.addressProvince,
+      department: entity.addressDepartment,
+      contractType: entity.contractType,
+      hireDate: entity.hireDate,
+      contractEndDate: entity.contractEndDate ?? undefined,
+      areaId: entity.areaId,
+      positionId: entity.positionId,
+      directManagerId: entity.directManagerId ?? undefined
+    };
+  }
+
+  /**
+   * Builds the payload of PUT /employees/{id}.
+   *
+   * @param entity - The employee with the new personal data.
+   * @returns The UpdateEmployeePersonalDataRequest
+   * @author Oscar Lizandro Vasquez Llave
+   */
+  toUpdatePersonalDataRequestFromEntity(entity: Employee): UpdateEmployeePersonalDataRequest {
+    return {
+      firstName: entity.firstName,
+      lastName: entity.lastName,
+      birthDate: entity.birthDate,
+      email: entity.email,
+      phoneNumber: entity.phoneNumber,
+      street: entity.addressStreet,
+      district: entity.addressDistrict,
+      province: entity.addressProvince,
+      department: entity.addressDepartment
+    };
   }
 
   /**

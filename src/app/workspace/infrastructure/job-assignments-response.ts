@@ -1,21 +1,26 @@
 import {BaseResource, BaseResponse} from '../../shared/infrastructure/base-response';
 
-/** Resource representing the JSON shape of a job assignment returned by the API. */
+/** Resource representing the JSON shape of a job assignment returned by the API (JobAssignmentResponse). */
 export interface JobAssignmentResource extends BaseResource {
   id: number;
-  /** Identifier of the employee the assignment belongs to. */
-  employeeId: number;
   areaId: number;
+  areaName?: string;
   positionId: number;
-  /** Assignment change type ('HIRE', 'REASSIGNMENT' or 'REINSTATEMENT'). */
+  positionTitle?: string;
   changeType: string;
-  /** Start date as a 'YYYY-MM-DD' string. */
   startDate: string;
-  /** End date as a 'YYYY-MM-DD' string, or null while current. */
   endDate: string | null;
+  current?: boolean;
 }
 
-/** Response wrapper returned by the API when the job assignments are listed inside a 'jobAssignments' property. */
+/** Payload of POST /employees/{id}/job-assignments (AssignJobRequest). */
+export interface AssignJobRequest {
+  areaId: number;
+  positionId: number;
+  effectiveDate: string;
+}
+
+/** Response wrapper kept for the BaseAssembler contract; the API returns a plain array. */
 export interface JobAssignmentsResponse extends BaseResponse {
   jobAssignments: JobAssignmentResource[];
 }

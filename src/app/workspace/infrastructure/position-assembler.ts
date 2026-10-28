@@ -1,6 +1,11 @@
 import {BaseAssembler} from '../../shared/infrastructure/base-assembler';
 import {Position} from '../domain/model/position.entity';
-import {PositionResource, PositionsResponse} from './positions-response';
+import {
+  CreatePositionRequest,
+  PositionResource,
+  PositionsResponse,
+  UpdatePositionReferenceSalaryRequest
+} from './positions-response';
 
 /**
  * Assembler that converts between PositionResource (API) and Position (domain entity).
@@ -22,14 +27,14 @@ export class PositionAssembler implements BaseAssembler<Position, PositionResour
       id: resource.id,
       title: resource.title,
       areaId: resource.areaId,
-      referenceSalaryAmount: resource.referenceSalaryAmount,
+      referenceSalaryAmount: Number(resource.referenceSalaryAmount),
       referenceSalaryCurrency: resource.referenceSalaryCurrency,
       active: resource.active
     });
   }
 
   /**
-   * Converts a Position entity into a PositionResource to be sent to the API.
+   * Converts a Position entity into a PositionResource.
    *
    * @param entity - The entity to convert.
    * @returns The corresponding PositionResource
@@ -44,6 +49,36 @@ export class PositionAssembler implements BaseAssembler<Position, PositionResour
       referenceSalaryCurrency: entity.referenceSalaryCurrency,
       active: entity.active
     } as PositionResource;
+  }
+
+  /**
+   * Builds the payload of POST /positions.
+   *
+   * @param entity - The position to create.
+   * @returns The CreatePositionRequest
+   * @author Oscar Lizandro Vasquez Llave
+   */
+  toCreateRequestFromEntity(entity: Position): CreatePositionRequest {
+    return {
+      title: entity.title,
+      areaId: entity.areaId,
+      referenceSalaryAmount: entity.referenceSalaryAmount,
+      referenceSalaryCurrency: entity.referenceSalaryCurrency
+    };
+  }
+
+  /**
+   * Builds the payload of PATCH /positions/{id}/reference-salary.
+   *
+   * @param entity - The position with the new reference salary.
+   * @returns The UpdatePositionReferenceSalaryRequest
+   * @author Oscar Lizandro Vasquez Llave
+   */
+  toReferenceSalaryRequestFromEntity(entity: Position): UpdatePositionReferenceSalaryRequest {
+    return {
+      referenceSalaryAmount: entity.referenceSalaryAmount,
+      referenceSalaryCurrency: entity.referenceSalaryCurrency
+    };
   }
 
   /**

@@ -1,10 +1,14 @@
 import {BaseAssembler} from '../../shared/infrastructure/base-assembler';
 import {DocumentType, EmployeeDocument} from '../domain/model/employee-document.entity';
-import {EmployeeDocumentResource, EmployeeDocumentsResponse} from './employee-documents-response';
+import {
+  AttachEmployeeDocumentRequest,
+  EmployeeDocumentResource,
+  EmployeeDocumentsResponse
+} from './employee-documents-response';
 
 /**
  * Assembler that converts between EmployeeDocumentResource (API) and EmployeeDocument (domain entity).
- * The document type is cast to DocumentType.
+ * The API nests documents under the employee, so the employee id is given by the caller.
  *
  * @author Oscar Lizandro Vasquez Llave
  */
@@ -13,14 +17,15 @@ export class EmployeeDocumentAssembler implements BaseAssembler<EmployeeDocument
   /**
    * Converts a EmployeeDocumentResource into a EmployeeDocument entity.
    *
-   * @param resource - The resource returned by the API.
+   * @param resource   - The resource returned by the API.
+   * @param employeeId - The identifier of the employee that owns the document.
    * @returns The corresponding EmployeeDocument entity
    * @author Oscar Lizandro Vasquez Llave
    */
-  toEntityFromResource(resource: EmployeeDocumentResource): EmployeeDocument {
+  toEntityFromResource(resource: EmployeeDocumentResource, employeeId = 0): EmployeeDocument {
     return new EmployeeDocument({
       id: resource.id,
-      employeeId: resource.employeeId,
+      employeeId,
       documentType: resource.documentType as DocumentType,
       fileName: resource.fileName,
       contentType: resource.contentType,
@@ -31,7 +36,7 @@ export class EmployeeDocumentAssembler implements BaseAssembler<EmployeeDocument
   }
 
   /**
-   * Converts a EmployeeDocument entity into a EmployeeDocumentResource to be sent to the API.
+   * Converts a EmployeeDocument entity into a EmployeeDocumentResource.
    *
    * @param entity - The entity to convert.
    * @returns The corresponding EmployeeDocumentResource
@@ -40,7 +45,6 @@ export class EmployeeDocumentAssembler implements BaseAssembler<EmployeeDocument
   toResourceFromEntity(entity: EmployeeDocument): EmployeeDocumentResource {
     return {
       id: entity.id,
-      employeeId: entity.employeeId,
       documentType: entity.documentType,
       fileName: entity.fileName,
       contentType: entity.contentType,
@@ -48,6 +52,23 @@ export class EmployeeDocumentAssembler implements BaseAssembler<EmployeeDocument
       storageUrl: entity.storageUrl,
       uploadedAt: entity.uploadedAt
     } as EmployeeDocumentResource;
+  }
+
+  /**
+   * Builds the payload of POST /employees/{id}/documents.
+   *
+   * @param entity - The document to attach.
+   * @returns The AttachEmployeeDocumentRequest
+   * @author Oscar Lizandro Vasquez Llave
+   */
+  toAttachRequestFromEntity(entity: EmployeeDocument): AttachEmployeeDocumentRequest {
+    return {
+      documentType: entity.documentType,
+      fileName: entity.fileName,
+      contentType: entity.contentType,
+      sizeInBytes: entity.sizeInBytes,
+      storageUrl: entity.storageUrl
+    };
   }
 
   /**
