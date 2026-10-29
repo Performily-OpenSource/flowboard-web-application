@@ -24,6 +24,5 @@ export class PayslipsApiEndpoint extends BaseApiEndpoint<Payslip, PayslipResourc
  * @param new Parameter used by the operation.
  * @author Diana Li
  */
-    super(http, `${environment.platformProviderApiBaseUrl}${environment.platformProviderPayslipsEndpointPath}`, new PayslipAssembler());
-  }
+super(http, `${environment.webServiceApiBaseUrl}${environment.platformProviderPayslipsEndpointPath}`, new PayslipAssembler());    }
 }

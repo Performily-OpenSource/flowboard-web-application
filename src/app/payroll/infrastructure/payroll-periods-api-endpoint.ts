@@ -24,6 +24,5 @@ export class PayrollPeriodsApiEndpoint extends BaseApiEndpoint<PayrollPeriod, Pa
  * @param new Parameter used by the operation.
  * @author Diana Li
  */
-    super(http, `${environment.platformProviderApiBaseUrl}${environment.platformProviderPayrollPeriodsEndpointPath}`, new PayrollPeriodAssembler());
-  }
+super(http, `${environment.webServiceApiBaseUrl}${environment.platformProviderPayrollPeriodsEndpointPath}`, new PayrollPeriodAssembler());    }
 }
