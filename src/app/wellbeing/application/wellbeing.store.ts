@@ -56,6 +56,7 @@ export class WellbeingStore {
     private readonly readingsSignal=signal<EnvironmentalReading[]>([]);
     private readonly thresholdsSignal=signal<MetricThreshold[]>([]);
     private readonly loadingSignal=signal(false);
+    private readonly thresholdOfficeIds=new Map<number,number>();
     private readonly errorSignal=signal<string|null>(null);
 
     readonly offices=this.officesSignal.asReadonly();
@@ -94,8 +95,7 @@ export class WellbeingStore {
  * Executes the retry operation of the component.
  * @author Diana Li
  */
-            retry(2),
-/**
+            /**
  * Executes the takeUntilDestroyed operation of the component.
  * @param this Parameter used by the operation.
  * @author Diana Li
@@ -273,7 +273,7 @@ export class WellbeingStore {
         const updatedRanges=ranges.map((range,index)=>new ThresholdRange({id:threshold.ranges[index]?.id??0,metricThresholdId:id,indicator:range.indicator,minValue:range.minValue,maxValue:range.maxValue}));
         const updatedThreshold=new MetricThreshold(id,threshold.metricType,updatedRanges);
         const resources=ranges.map(range=>({healthIndicator:range.indicator,minValue:range.minValue,maxValue:range.maxValue}));
-        this.mutate(()=>this.api.updateThresholdRanges(id,resources),()=>this.thresholdsSignal.update(items=>items.map(current=>current.id===id?updatedThreshold:current)));
+        this.mutate(()=>this.api.updateThresholdRanges(this.api.thresholdOffices.get(id) ?? 0,threshold.metricType,resources),()=>this.thresholdsSignal.update(items=>items.map(current=>current.id===id?updatedThreshold:current)));
     }
 
 /**
@@ -298,8 +298,7 @@ export class WellbeingStore {
  * Executes the retry operation of the component.
  * @author Diana Li
  */
-            retry(2),
-/**
+            /**
  * Executes the takeUntilDestroyed operation of the component.
  * @param this Parameter used by the operation.
  * @author Diana Li
@@ -313,7 +312,7 @@ export class WellbeingStore {
  * @author Diana Li
  */
                 onSuccess(value);
-                this.loadingSignal.set(false);
+                this.loadAll();
             },
             error:error=>{
                 this.errorSignal.set(error instanceof Error?error.message:'wellbeing.errors.generic');
