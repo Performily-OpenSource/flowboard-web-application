@@ -1,50 +1,24 @@
 import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
-import {WorkspaceApi} from '../../workspace/infrastructure/workspace-api';
+import {environment} from '../../../environments/environment';
 import {AttendanceArea} from '../domain/model/attendance-area.entity';
 import {AttendanceEmployee} from '../domain/model/attendance-employee.entity';
 
-/**
- * Provides Attendance access to employee and area information owned by Workspace.
- *
- * @remarks Implements the anti-corruption access used by Attendance to consume Workspace data without owning the Workspace model.
- * @author Dario Avila de la cruz
- */
+/** Attendance-specific ACL: reads real Workspace data without changing Workspace code. */
 @Injectable({providedIn: 'root'})
 export class WorkspaceAcl {
-/**
- * Performs the constructor operation.
- *
- * @author Dario Avila de la cruz
- */
-  constructor(private readonly workspaceApi: WorkspaceApi) {}
-
-/**
- * Retrieves employee information required by the bounded context from Workspace.
- *
- * @returns The value produced by the `getEmployees` operation.
- * @author Dario Avila de la cruz
- */
+  constructor(private readonly http: HttpClient) {}
   getEmployees(): Observable<AttendanceEmployee[]> {
-    return this.workspaceApi.getEmployees().pipe(
-      map(employees => employees.map(employee => new AttendanceEmployee(
-        employee.id,
-        employee.fullName,
-        employee.areaId,
-        employee.positionId
-      )))
+    return this.http.get<BackendEmployee[]>(`${environment.webServiceApiBaseUrl}/employees`).pipe(
+      map(rows => rows.map(e => new AttendanceEmployee(e.id, e.fullName, e.areaId, e.positionId)))
     );
   }
-
-/**
- * Performs the getAreas operation.
- *
- * @returns The value produced by the `getAreas` operation.
- * @author Dario Avila de la cruz
- */
   getAreas(): Observable<AttendanceArea[]> {
-    return this.workspaceApi.getAreas().pipe(
-      map(areas => areas.map(area => new AttendanceArea(area.id, area.name)))
+    return this.http.get<BackendArea[]>(`${environment.webServiceApiBaseUrl}/areas`).pipe(
+      map(rows => rows.map(a => new AttendanceArea(a.id, a.name)))
     );
   }
 }
+interface BackendEmployee { id: number; fullName: string; areaId: number; positionId: number; }
+interface BackendArea { id: number; name: string; }

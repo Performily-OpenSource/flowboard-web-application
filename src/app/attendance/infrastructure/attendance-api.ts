@@ -1,82 +1,67 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {BaseApi} from '../../shared/infrastructure/base-api';
-import {AttendanceRecord} from '../domain/model/attendance-record.entity';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Observable, forkJoin, map, of} from 'rxjs';
+import {environment} from '../../../environments/environment';
+import {AttendanceRecord, AttendanceStatus} from '../domain/model/attendance-record.entity';
 import {WorkSchedule} from '../domain/model/work-schedule.entity';
-import {AttendanceRecordsApiEndpoint} from './attendance-records-api-endpoint';
-import {WorkSchedulesApiEndpoint} from './work-schedules-api-endpoint';
-import {Punch} from '../domain/model/punch.entity';
-import {PunchesApiEndpoint} from './punches-api-endpoint';
 
-/**
- * Provides the infrastructure API used to access attendance resources.
- *
- * @remarks Delegates attendance record, work-schedule and punch operations to the corresponding API endpoints.
- * @author Dario Avila de la cruz
- */
+/** REST adapter for the Spring Boot Attendance bounded context. */
 @Injectable({providedIn: 'root'})
-export class AttendanceApi extends BaseApi {
-  private readonly recordsEndpoint: AttendanceRecordsApiEndpoint;
-  private readonly schedulesEndpoint: WorkSchedulesApiEndpoint;
-  private readonly punchesEndpoint: PunchesApiEndpoint;
+export class AttendanceApi {
+  private readonly base = `${environment.webServiceApiBaseUrl}/attendance`;
+  constructor(private readonly http: HttpClient) {}
 
-/**
- * Performs the constructor operation.
- *
- * @param http the HTTP client dependency.
- * @author Dario Avila de la cruz
- */
-  constructor(http: HttpClient) {
-    super();
-    this.recordsEndpoint = new AttendanceRecordsApiEndpoint(http);
-    this.schedulesEndpoint = new WorkSchedulesApiEndpoint(http);
-    this.punchesEndpoint = new PunchesApiEndpoint(http);
+  private mapRecord(r: BackendAttendanceRecord): AttendanceRecord {
+    return new AttendanceRecord({
+      id: r.id, employeeId: r.employeeId, workDate: r.workDate,
+      checkInTime: r.checkInTime?.slice(11, 16) ?? null,
+      checkOutTime: r.checkOutTime?.slice(11, 16) ?? null,
+      effectiveHours: r.workedHours ?? null,
+      overtimeHours: r.overtimeHours ?? null,
+      status: r.status as AttendanceStatus,
+      justificationReason: r.justificationReason ?? null,
+      justificationDocumentName: null
+    });
   }
 
-/**
- * Retrieves attendance records from the attendance API.
- *
- * @returns An observable that emits attendance records.
- * @author Dario Avila de la cruz
- */
-  getAttendanceRecords(): Observable<AttendanceRecord[]> { return this.recordsEndpoint.getAll(); }
-/**
- * Creates an attendance record through the attendance API.
- *
- * @param record the attendance record to update or justify.
- * @returns An observable that emits the persisted attendance record.
- * @author Dario Avila de la cruz
- */
-  createAttendanceRecord(record: AttendanceRecord): Observable<AttendanceRecord> { return this.recordsEndpoint.create(record); }
-/**
- * Updates an attendance record through the attendance API.
- *
- * @param record the attendance record to update or justify.
- * @returns An observable that emits the persisted attendance record.
- * @author Dario Avila de la cruz
- */
-  updateAttendanceRecord(record: AttendanceRecord): Observable<AttendanceRecord> { return this.recordsEndpoint.update(record, record.id); }
-/**
- * Deletes an attendance record through the attendance API.
- *
- * @param id the identifier to look up or delete.
- * @returns An observable that completes after deletion.
- * @author Dario Avila de la cruz
- */
-  deleteAttendanceRecord(id: number): Observable<void> { return this.recordsEndpoint.delete(id); }
-/**
- * Retrieves work schedules from the attendance API.
- *
- * @returns An observable that emits work schedules.
- * @author Dario Avila de la cruz
- */
-  getWorkSchedules(): Observable<WorkSchedule[]> { return this.schedulesEndpoint.getAll(); }
-/**
- * Retrieves attendance punches from the attendance API.
- *
- * @returns An observable that emits attendance punches.
- * @author Dario Avila de la cruz
- */
-  getPunches(): Observable<Punch[]> { return this.punchesEndpoint.getAll(); }
+  /** The backend has no GET /attendance collection; fetch each employee history. */
+  getAttendanceRecords(employeeIds: number[], from: string, to: string): Observable<AttendanceRecord[]> {
+    if (!employeeIds.length) return of([]);
+    const params = new HttpParams().set('from', from).set('to', to);
+    return forkJoin(employeeIds.map(id => this.http.get<BackendAttendanceRecord[]>(
+      `${this.base}/employees/${id}`, {params}
+    ))).pipe(map(groups => groups.flat().map(r => this.mapRecord(r))));
+  }
+
+  getWorkSchedules(): Observable<WorkSchedule[]> {
+    return this.http.get<BackendWorkSchedule[]>(`${environment.webServiceApiBaseUrl}/work-schedules`).pipe(
+      map(rows => rows.map(r => new WorkSchedule({
+        id: r.id, positionId: r.positionId,
+        shiftStartTime: r.startTime.slice(0, 5), shiftEndTime: r.endTime.slice(0, 5),
+        lateToleranceMinutes: r.toleranceMinutes,
+        workingDays: r.days.map(day => DAY_NUMBERS[day]).filter((n): n is number => n !== undefined)
+      })))
+    );
+  }
+
+  justifyAttendanceRecord(id: number, reason: string, evidenceUrl: string | null): Observable<AttendanceRecord> {
+    return this.http.post<BackendAttendanceRecord>(`${this.base}/${id}/justification`, {
+      reason, evidenceUrl
+    }).pipe(map(r => this.mapRecord(r)));
+  }
+}
+
+const DAY_NUMBERS: Record<string, number> = {
+  SUNDAY: 0, MONDAY: 1, TUESDAY: 2, WEDNESDAY: 3,
+  THURSDAY: 4, FRIDAY: 5, SATURDAY: 6
+};
+interface BackendAttendanceRecord {
+  id: number; employeeId: number; workDate: string;
+  checkInTime: string | null; checkOutTime: string | null;
+  workedHours: number; overtimeHours: number; status: string;
+  justificationReason: string | null;
+}
+interface BackendWorkSchedule {
+  id: number; positionId: number; startTime: string; endTime: string;
+  toleranceMinutes: number; days: string[];
 }

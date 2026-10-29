@@ -1,6 +1,6 @@
 import {DestroyRef, computed, inject, Injectable, signal} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {forkJoin, retry} from 'rxjs';
+import {forkJoin, map, switchMap} from 'rxjs';
 import {AttendanceApi} from '../infrastructure/attendance-api';
 import {AttendanceArea} from '../domain/model/attendance-area.entity';
 import {AttendanceEmployee} from '../domain/model/attendance-employee.entity';
@@ -84,19 +84,25 @@ export class AttendanceStore {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
     forkJoin({
-      records: this.api.getAttendanceRecords(),
-      schedules: this.api.getWorkSchedules(),
-      punches: this.api.getPunches(),
       employees: this.workspaceAcl.getEmployees(),
-      areas: this.workspaceAcl.getAreas()
+      areas: this.workspaceAcl.getAreas(),
+      schedules: this.api.getWorkSchedules()
     }).pipe(
-      retry(2),
+      switchMap(context => {
+        // Backend only exposes employee-specific history; include the previous year
+        // so seeded historical attendance is visible without modifying other contexts.
+        const year = new Date().getFullYear();
+        return this.api.getAttendanceRecords(
+          context.employees.map(employee => employee.id),
+          `${year - 1}-01-01`, `${year + 1}-12-31`
+        ).pipe(map(records => ({...context, records})));
+      }),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe({
-      next: ({records, schedules, punches, employees, areas}) => {
+      next: ({records, schedules, employees, areas}) => {
         this.recordsSignal.set([...records].sort((a, b) => b.workDate.localeCompare(a.workDate) || b.id - a.id));
         this.schedulesSignal.set(schedules);
-        this.punchesSignal.set(punches);
+        this.punchesSignal.set([]); // No GET punches endpoint exists in Spring Boot.
         this.employeesSignal.set(employees);
         this.areasSignal.set(areas);
         this.loadingSignal.set(false);
@@ -148,11 +154,13 @@ export class AttendanceStore {
  * @param record the attendance record to update or justify.
  * @author Dario Avila de la cruz
  */
-  updateRecord(record: AttendanceRecord): void {
+  /** Submit a justification through the supported backend command endpoint. */
+  justify(record: AttendanceRecord, reason: string, documentName: string | null): void {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
-    this.api.updateAttendanceRecord(record).pipe(
-      retry(2),
+    // The UI currently collects a filename, not an uploaded URL. Do not send a
+    // fabricated evidence URL: uploading files requires a separate backend endpoint.
+    this.api.justifyAttendanceRecord(record.id, reason, null).pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe({
       next: updated => {
@@ -161,54 +169,6 @@ export class AttendanceStore {
       },
       error: () => {
         this.errorSignal.set('attendance.errors.update');
-        this.loadingSignal.set(false);
-      }
-    });
-  }
-
-/**
- * Creates a justified version of an attendance record and persists it.
- *
- * @param record the attendance record to update or justify.
- * @param reason the justification reason.
- * @param documentName the optional justification document name.
- * @author Dario Avila de la cruz
- */
-  justify(record: AttendanceRecord, reason: string, documentName: string | null): void {
-    const updated = new AttendanceRecord({
-      id: record.id,
-      employeeId: record.employeeId,
-      workDate: record.workDate,
-      checkInTime: record.checkInTime,
-      checkOutTime: record.checkOutTime,
-      effectiveHours: record.effectiveHours,
-      overtimeHours: record.overtimeHours,
-      status: 'JUSTIFIED',
-      justificationReason: reason,
-      justificationDocumentName: documentName
-    });
-    this.updateRecord(updated);
-  }
-
-/**
- * Deletes an attendance record and removes it from local state.
- *
- * @param id the identifier to look up or delete.
- * @author Dario Avila de la cruz
- */
-  deleteRecord(id: number): void {
-    this.loadingSignal.set(true);
-    this.errorSignal.set(null);
-    this.api.deleteAttendanceRecord(id).pipe(
-      retry(2),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe({
-      next: () => {
-        this.recordsSignal.update(records => records.filter(record => record.id !== id));
-        this.loadingSignal.set(false);
-      },
-      error: () => {
-        this.errorSignal.set('attendance.errors.delete');
         this.loadingSignal.set(false);
       }
     });
