@@ -1,4 +1,4 @@
-import {Component, computed, inject} from '@angular/core';
+import {Component, computed, DestroyRef, effect, inject, untracked} from '@angular/core';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {map} from 'rxjs';
@@ -134,15 +134,54 @@ export class AssignBenefitDialog extends BaseForm {
   readonly areaHasNoActiveEmployees = computed(() =>
     this.value().target === 'AREA' && this.value().areaId !== null && this.targetIds().length === 0);
 
-  /** Protects the unsaved changes of the form. */
+  /**
+   * Data of the area preview to ask the web service, or null when the form is not complete. It only
+   * changes with the benefit, the area or the period, so typing the quantity does not call again.
+   */
+  private readonly areaPreviewRequest = computed(() => {
+    const value = this.value();
+    const validity = this.validity();
+    if (value.target !== 'AREA' || value.areaId === null || value.benefitTypeId === null || !validity) return null;
+    return { benefitTypeId: value.benefitTypeId, areaId: value.areaId, startDate: validity.startDate, endDate: validity.endDate };
+  }, {
+    equal: (a, b) => a?.benefitTypeId === b?.benefitTypeId && a?.areaId === b?.areaId &&
+      a?.startDate === b?.startDate && a?.endDate === b?.endDate
+  });
+
+  /** Preview of the web service for the area of the form, or null while it is not answered. */
+  private readonly areaPreview = computed(() => {
+    const preview = this.store.areaPreview();
+    const value = this.value();
+    const validity = this.validity();
+    return preview && validity && value.target === 'AREA' && preview.areaId === value.areaId &&
+      preview.benefitTypeId === value.benefitTypeId && preview.startDate === validity.startDate &&
+      preview.endDate === validity.endDate ? preview : null;
+  });
+
+  /** Employees of the area that will receive the benefit: from the web service, or the local plan. */
+  readonly areaToAssign = computed(() => this.areaPreview()?.toAssign ?? this.plan()?.employeeIds.length ?? 0);
+
+  /** Employees of the area skipped because they already have the benefit in the period. */
+  readonly areaSkipped = computed(() =>
+    this.areaPreview()?.alreadyAssigned ?? this.plan()?.conflictingEmployeeIds.length ?? 0);
+
+  /** Protects the unsaved changes of the form and asks the web service for the area preview. */
   constructor() {
     super();
     guardUnsavedChanges(this.dialogRef, this.form, inject(MatDialog));
+    effect(() => {
+      const request = this.areaPreviewRequest();
+      if (!request) return;
+      untracked(() => this.store.previewAreaAssignment(request.benefitTypeId, request.areaId,
+        new DateRange(request.startDate, request.endDate)));
+    });
+    inject(DestroyRef).onDestroy(() => this.store.clearAreaPreview());
   }
 
   readonly blocked = computed(() => {
     const plan = this.plan();
-    return this.invalidRange() || this.areaHasNoActiveEmployees() || (!!plan && plan.employeeIds.length === 0);
+    const nobodyToAssign = this.value().target === 'AREA' ? this.areaToAssign() === 0 : plan?.employeeIds.length === 0;
+    return this.invalidRange() || this.areaHasNoActiveEmployees() || (!!plan && nobodyToAssign);
   });
 
   /**

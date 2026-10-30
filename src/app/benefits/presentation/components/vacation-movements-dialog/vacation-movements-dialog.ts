@@ -6,6 +6,7 @@ import {MatIcon} from '@angular/material/icon';
 import {TranslatePipe} from '@ngx-translate/core';
 import {LocalDatePipe} from '../../../../shared/presentation/pipes/local-date-pipe';
 import {WorkspaceAcl} from '../../../infrastructure/workspace-acl';
+import {BenefitsStore} from '../../../application/benefits.store';
 import {VacationBalance} from '../../../domain/model/vacation-balance.entity';
 import {EmployeeSummaryPanel} from '../employee-summary-panel/employee-summary-panel';
 import {PluralKeyPipe} from '../../pipes/plural-key-pipe';
@@ -35,15 +36,31 @@ export interface VacationMovementsData {
  */
 export class VacationMovementsDialog {
   private directory = inject(WorkspaceAcl);
+  private store = inject(BenefitsStore);
   readonly balance = inject<VacationMovementsData>(MAT_DIALOG_DATA).balance;
+
+  /** Balance of the store, which gets its movements once the web service answers. */
+  private readonly currentBalance = computed(() =>
+    this.store.getBalanceByEmployeeId(this.balance.employeeId) ?? this.balance);
+
+  /**
+   * Asks the store for the movements of the balance.
+   * @remarks The list of balances of the web service comes without movements, so they are loaded
+   * when the dialog opens.
+   * @author Salym
+   */
+  constructor() {
+    this.store.loadMovements(this.balance.employeeId);
+  }
 
   /**
    * Movements from the newest to the oldest, each one with the available days that remained after
    * it. The balance is rebuilt backwards from the current available days.
    */
   readonly movements = computed(() => {
-    const sorted = [...this.balance.movements].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt));
-    let balanceAfter = this.balance.availableDays();
+    const balance = this.currentBalance();
+    const sorted = [...balance.movements].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt));
+    let balanceAfter = balance.availableDays();
     return sorted.map(movement => {
       const row = { movement, balanceAfter: Math.round(balanceAfter * 100) / 100 };
       balanceAfter -= movement.days;

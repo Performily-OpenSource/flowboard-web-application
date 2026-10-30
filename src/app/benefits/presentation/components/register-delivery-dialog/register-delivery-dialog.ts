@@ -57,7 +57,7 @@ export class RegisterDeliveryDialog extends BaseForm {
   readonly form = this.fb.group({
     deliveredOn: new FormControl<string>(this.defaultDate(),
       { nonNullable: true, validators: [Validators.required, this.notBeforeValidity, notAfter(() => this.maxDate)] }),
-    notes: new FormControl<string>('', { nonNullable: true, validators: [Validators.maxLength(255)] })
+    notes: new FormControl<string>('', { nonNullable: true, validators: [Validators.maxLength(250)] })
   });
 
   readonly blocked = this.assignment.isDelivered() || this.assignment.isCancelled();

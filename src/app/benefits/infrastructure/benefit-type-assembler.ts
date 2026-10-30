@@ -1,11 +1,13 @@
 import {BaseAssembler} from '../../shared/infrastructure/base-assembler';
 import {BenefitPeriodicity, BenefitType, BenefitUnit} from '../domain/model/benefit-type.entity';
 import {BenefitTypeResource, BenefitTypesResponse} from './benefit-types-response';
+import {CreateBenefitTypeResource} from './benefits-command-resources';
 
 /**
- * Transforms benefit type resources between infrastructure and domain entities.
+ * Transforms benefit type resources of the web service into domain entities and back.
  *
- * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @remarks The web service does not send the periodicity yet, so the entity keeps it as null until
+ * it does.
  * @author Salym
  */
 export class BenefitTypeAssembler implements BaseAssembler<BenefitType, BenefitTypeResource, BenefitTypesResponse> {
@@ -19,10 +21,10 @@ export class BenefitTypeAssembler implements BaseAssembler<BenefitType, BenefitT
     return new BenefitType({
       id: resource.id,
       name: resource.name,
-      description: resource.description,
+      description: resource.description ?? '',
       hasBalance: resource.hasBalance,
       unit: resource.unit as BenefitUnit,
-      periodicity: resource.periodicity as BenefitPeriodicity,
+      periodicity: (resource.periodicity ?? null) as BenefitPeriodicity | null,
       active: resource.active
     });
   }
@@ -41,7 +43,21 @@ export class BenefitTypeAssembler implements BaseAssembler<BenefitType, BenefitT
       unit: entity.unit,
       periodicity: entity.periodicity,
       active: entity.active
-    } as BenefitTypeResource;
+    };
+  }
+
+  /**
+   * Converts a new benefit type into the body of POST /benefit-types.
+   * @param entity Benefit type to create.
+   * @author Salym
+   */
+  toCreateResourceFromEntity(entity: BenefitType): CreateBenefitTypeResource {
+    return {
+      name: entity.name,
+      description: entity.description || null,
+      hasBalance: entity.hasBalance,
+      unit: entity.unit
+    };
   }
 
   /**

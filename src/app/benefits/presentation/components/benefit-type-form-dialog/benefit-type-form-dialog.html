@@ -42,14 +42,16 @@
         }
       </select>
     </div>
-    <div class="field">
-      <label for="benefitPeriodicity">{{ 'benefit-dialog.periodicity' | translate }}</label>
-      <select id="benefitPeriodicity" class="input" formControlName="periodicity">
-        @for (periodicity of periodicities; track periodicity) {
-          <option [ngValue]="periodicity">{{ 'benefit-periodicity.' + periodicity | translate }}</option>
-        }
-      </select>
-    </div>
+    @if (showPeriodicity) {
+      <div class="field">
+        <label for="benefitPeriodicity">{{ 'benefit-dialog.periodicity' | translate }}</label>
+        <select id="benefitPeriodicity" class="input" formControlName="periodicity">
+          @for (periodicity of periodicities; track periodicity) {
+            <option [ngValue]="periodicity">{{ 'benefit-periodicity.' + periodicity | translate }}</option>
+          }
+        </select>
+      </div>
+    }
   </div>
 
   <div class="toggle-card" [class.locked]="liveAssignments > 0">

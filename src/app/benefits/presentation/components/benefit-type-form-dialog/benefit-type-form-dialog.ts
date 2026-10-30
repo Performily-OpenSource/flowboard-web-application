@@ -17,6 +17,7 @@ import {
 import {notBlank} from '../../validators/benefits-validators';
 import {guardUnsavedChanges} from '../benefits-confirm-dialog/guard-unsaved-changes';
 import {PluralKeyPipe} from '../../pipes/plural-key-pipe';
+import {BENEFIT_PERIODICITY_VISIBLE} from '../../utils/benefits-features';
 
 /**
  * Data received by the benefit form dialog.
@@ -38,7 +39,10 @@ export interface BenefitTypeFormData {
 /**
  * Manages the creation and editing of benefits of the catalog (WA-28).
  *
- * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @remarks Today it is only opened to create: the web service has no PUT /benefit-types/{id}, so the
+ * catalog hides the edit action (BENEFIT_TYPE_EDIT_ENABLED). The edit code is kept ready for when
+ * that endpoint exists. The periodicity field is hidden while the web service does not store it
+ * (BENEFIT_PERIODICITY_VISIBLE).
  * @author Salym
  */
 export class BenefitTypeFormDialog extends BaseForm {
@@ -50,6 +54,8 @@ export class BenefitTypeFormDialog extends BaseForm {
   readonly isEdit = !!this.data.benefitType;
   readonly units = BENEFIT_UNITS;
   readonly periodicities = BENEFIT_PERIODICITIES;
+  /** Whether the periodicity field is shown; see BENEFIT_PERIODICITY_VISIBLE. */
+  readonly showPeriodicity = BENEFIT_PERIODICITY_VISIBLE;
 
   /**
    * Current or upcoming assignments of the benefit being edited. While there are any, the unit and
@@ -66,9 +72,10 @@ export class BenefitTypeFormDialog extends BaseForm {
     name: new FormControl<string>(this.data.benefitType?.name ?? '',
       { nonNullable: true, validators: [Validators.required, notBlank, Validators.maxLength(80), this.uniqueName] }),
     description: new FormControl<string>(this.data.benefitType?.description ?? '',
-      { nonNullable: true, validators: [Validators.maxLength(255)] }),
+      { nonNullable: true, validators: [Validators.maxLength(250)] }),
     unit: new FormControl<BenefitUnit>(this.data.benefitType?.unit ?? 'MONEY', { nonNullable: true }),
-    periodicity: new FormControl<BenefitPeriodicity>(this.data.benefitType?.periodicity ?? 'MONTHLY', { nonNullable: true }),
+    periodicity: new FormControl<BenefitPeriodicity | null>(
+      this.data.benefitType?.periodicity ?? (this.showPeriodicity ? 'MONTHLY' : null)),
     hasBalance: new FormControl<boolean>(this.data.benefitType?.hasBalance ?? false, { nonNullable: true })
   });
 

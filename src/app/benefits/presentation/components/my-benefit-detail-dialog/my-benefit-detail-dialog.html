@@ -19,10 +19,12 @@
       <dt>{{ 'my-benefits.detail.unit' | translate }}</dt>
       <dd>{{ 'benefit-unit.' + (assignment.benefitType?.unit ?? 'UNITS') | translate }}</dd>
     </div>
-    <div class="kv-row">
-      <dt>{{ 'my-benefits.detail.periodicity' | translate }}</dt>
-      <dd>{{ 'benefit-periodicity.' + (assignment.benefitType?.periodicity ?? 'ANNUAL') | translate }}</dd>
-    </div>
+    @if (showPeriodicity && assignment.benefitType?.periodicity) {
+      <div class="kv-row">
+        <dt>{{ 'my-benefits.detail.periodicity' | translate }}</dt>
+        <dd>{{ 'benefit-periodicity.' + assignment.benefitType?.periodicity | translate }}</dd>
+      </div>
+    }
     <div class="kv-row">
       <dt>{{ 'my-benefits.detail.validity' | translate }}</dt>
       <dd>{{ assignment.validity.startDate | localDate }} – {{ assignment.validity.endDate | localDate }}</dd>

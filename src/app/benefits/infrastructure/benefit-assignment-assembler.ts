@@ -5,10 +5,10 @@ import {BenefitDelivery} from '../domain/model/benefit-delivery.entity';
 import {BenefitAssignmentResource, BenefitAssignmentsResponse} from './benefit-assignments-response';
 
 /**
- * Transforms benefit assignment resources between infrastructure and domain entities, including the
- * validity period and the delivery.
+ * Transforms benefit assignment resources of the web service into domain entities and back,
+ * including the validity period and the delivery.
  *
- * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @remarks The delivery has no id in the web service, so the entity uses the id of its assignment.
  * @author Salym
  */
 export class BenefitAssignmentAssembler
@@ -25,16 +25,23 @@ export class BenefitAssignmentAssembler
       benefitTypeId: resource.benefitTypeId,
       employeeId: resource.employeeId,
       sourceAreaId: resource.sourceAreaId,
-      validity: new DateRange(resource.validFrom, resource.validTo),
-      quantity: resource.quantity,
+      validity: new DateRange(resource.startDate, resource.endDate),
+      quantity: Number(resource.quantity),
       status: resource.status as AssignmentStatus,
-      delivery: resource.delivery ? new BenefitDelivery(resource.delivery) : null
+      delivery: resource.delivery ? new BenefitDelivery({
+        id: resource.id,
+        deliveredOn: resource.delivery.deliveredOn,
+        registeredBy: resource.delivery.registeredById,
+        notes: resource.delivery.notes ?? ''
+      }) : null
     });
   }
 
   /**
    * Converts a domain entity into an API resource.
    * @param entity Domain entity to convert.
+   * @remarks The names and the display quantity are calculated by the web service, so they are not
+   * filled here.
    * @author Salym
    */
   toResourceFromEntity(entity: BenefitAssignment): BenefitAssignmentResource {
@@ -42,19 +49,31 @@ export class BenefitAssignmentAssembler
     return {
       id: entity.id,
       benefitTypeId: entity.benefitTypeId,
+      benefitTypeName: entity.benefitType?.name ?? '',
+      unit: entity.benefitType?.unit ?? '',
       employeeId: entity.employeeId,
+      employeeName: null,
       sourceAreaId: entity.sourceAreaId,
-      validFrom: entity.validity.startDate,
-      validTo: entity.validity.endDate,
       quantity: entity.quantity,
+      displayQuantity: '',
+      startDate: entity.validity.startDate,
+      endDate: entity.validity.endDate,
       status: entity.status,
       delivery: delivery ? {
-        id: delivery.id,
         deliveredOn: delivery.deliveredOn,
-        registeredBy: delivery.registeredBy,
+        registeredById: delivery.registeredBy,
         notes: delivery.notes
       } : null
-    } as BenefitAssignmentResource;
+    };
+  }
+
+  /**
+   * Converts a list of resources of the web service into entities.
+   * @param resources Resources received from the web service.
+   * @author Salym
+   */
+  toEntitiesFromResources(resources: BenefitAssignmentResource[]): BenefitAssignment[] {
+    return resources.map(resource => this.toEntityFromResource(resource));
   }
 
   /**
@@ -63,6 +82,6 @@ export class BenefitAssignmentAssembler
    * @author Salym
    */
   toEntitiesFromResponse(response: BenefitAssignmentsResponse): BenefitAssignment[] {
-    return response.benefitAssignments.map(resource => this.toEntityFromResource(resource));
+    return this.toEntitiesFromResources(response.benefitAssignments);
   }
 }

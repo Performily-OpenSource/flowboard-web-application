@@ -120,14 +120,14 @@
   @if (areaHasNoActiveEmployees()) {
     <p class="field-error" role="alert">{{ 'benefits.error.no-active-employees' | translate }}</p>
   } @else if (form.controls.target.value === 'AREA' && plan(); as plan) {
-    @if (plan.employeeIds.length === 0) {
+    @if (areaToAssign() === 0) {
       <p class="field-error" role="alert">{{ 'assign-dialog.error.area-all-overlap' | translate }}</p>
     } @else {
       <div class="info-note">
         <mat-icon aria-hidden="true">info</mat-icon>
         <span>
-          {{ 'assign-dialog.area-summary-plural' | pluralKey: plan.employeeIds.length | translate: { count: plan.employeeIds.length, area: areaName(form.controls.areaId.value) } }}
-          @if (plan.conflictingEmployeeIds.length > 0) {
+          {{ 'assign-dialog.area-summary-plural' | pluralKey: areaToAssign() | translate: { count: areaToAssign(), area: areaName(form.controls.areaId.value) } }}
+          @if (areaSkipped() > 0 && plan.conflictingEmployeeIds.length > 0) {
             {{ 'assign-dialog.area-skipped' | translate: { names: skippedNames() } }}
           }
         </span>

@@ -58,7 +58,7 @@ export class VacationAdjustmentDialog extends BaseForm {
       { validators: [Validators.required, Validators.min(0.01), Validators.max(MAX_ADJUSTMENT_DAYS),
           Validators.pattern(/^\d+(\.\d{1,2})?$/)] }),
     reason: new FormControl<string>('', { nonNullable: true,
-      validators: [Validators.required, notBlank, Validators.maxLength(255)] })
+      validators: [Validators.required, notBlank, Validators.maxLength(250)] })
   });
 
   /** Protects the unsaved changes of the form. */

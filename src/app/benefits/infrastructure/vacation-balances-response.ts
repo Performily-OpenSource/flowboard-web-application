@@ -1,41 +1,34 @@
-import {BaseResource, BaseResponse} from '../../shared/infrastructure/base-response';
-
 /**
- * Represents a vacation movement received from the API.
+ * Represents a vacation movement received from the web service (VacationMovementResource).
  *
- * @remarks Defines the data contract used between layers or components of the bounded context.
+ * @remarks days is signed: positive adds available days, negative removes them.
  * @author Salym
  */
 export interface VacationMovementResource {
   id: number;
   type: string;
   days: number;
-  reason: string;
+  reason: string | null;
   authorId: number | null;
+  authorName: string | null;
   requestId: number | null;
   occurredAt: string;
 }
 
 /**
- * Represents a vacation balance received from the API.
+ * Represents a vacation balance received from the web service (VacationBalanceResource).
  *
- * @remarks Defines the data contract used between layers or components of the bounded context.
+ * @remarks The web service identifies a balance by its employee, so there is no id. The list of
+ * balances sends the movements empty; they come with GET /vacation-balances/{employeeId}/movements.
  * @author Salym
  */
-export interface VacationBalanceResource extends BaseResource {
-  id: number;
+export interface VacationBalanceResource {
   employeeId: number;
+  employeeName: string | null;
+  areaName: string | null;
   accruedDays: number;
   usedDays: number;
+  availableDays: number;
+  lastAccrualDate: string | null;
   movements: VacationMovementResource[];
-}
-
-/**
- * API response containing vacation balances.
- *
- * @remarks Defines the data contract used between layers or components of the bounded context.
- * @author Salym
- */
-export interface VacationBalancesResponse extends BaseResponse {
-  vacationBalances: VacationBalanceResource[];
 }

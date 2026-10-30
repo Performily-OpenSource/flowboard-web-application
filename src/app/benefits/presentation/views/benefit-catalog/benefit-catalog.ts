@@ -27,6 +27,7 @@ import {AssignBenefitDialog} from '../../components/assign-benefit-dialog/assign
 import {confirmAction} from '../../components/benefits-confirm-dialog/confirm';
 import {PluralKeyPipe} from '../../pipes/plural-key-pipe';
 import {matchesText} from '../../utils/matches-text';
+import {BENEFIT_PERIODICITY_VISIBLE, BENEFIT_TYPE_EDIT_ENABLED} from '../../utils/benefits-features';
 
 type StatusFilter = 'ACTIVE' | 'INACTIVE' | 'ALL';
 type BalanceFilter = 'ALL' | 'WITH' | 'WITHOUT';
@@ -57,7 +58,10 @@ export class BenefitCatalog {
   readonly units = BENEFIT_UNITS;
   readonly statusOptions: StatusFilter[] = ['ACTIVE', 'INACTIVE', 'ALL'];
   readonly balanceOptions: BalanceFilter[] = ['ALL', 'WITH', 'WITHOUT'];
-  readonly columns = ['name', 'unit', 'balance', 'reach', 'periodicity', 'actions'];
+  readonly columns = ['name', 'unit', 'balance', 'reach', 'periodicity', 'actions']
+    .filter(column => column !== 'periodicity' || BENEFIT_PERIODICITY_VISIBLE);
+  /** Whether the edit action is shown; see BENEFIT_TYPE_EDIT_ENABLED. */
+  readonly canEdit = BENEFIT_TYPE_EDIT_ENABLED;
   readonly pageSize = PAGE_SIZE;
 
   readonly unitFilter = signal<BenefitUnit | null>(null);
@@ -150,6 +154,8 @@ export class BenefitCatalog {
   /**
    * Opens the form to edit a benefit.
    * @param benefitType Benefit type of the catalog.
+   * @remarks Only reachable when BENEFIT_TYPE_EDIT_ENABLED is true, because the web service has no
+   * PUT /benefit-types/{id} yet.
    * @author Salym
    */
   editBenefit(benefitType: BenefitType) {

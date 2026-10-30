@@ -41,12 +41,14 @@ export class BenefitType {
   private _description: string;
   private _hasBalance: boolean;
   private _unit: BenefitUnit;
-  private _periodicity: BenefitPeriodicity;
+  private _periodicity: BenefitPeriodicity | null;
   private _active: boolean;
 
   /**
    * Initializes the benefit type with its catalog data.
    * @param props Initial values of the instance.
+   * @remarks The periodicity is optional because the web service does not store it yet; it is null
+   * until it does.
    * @author Salym
    */
   constructor(props: {
@@ -55,7 +57,7 @@ export class BenefitType {
     description: string;
     hasBalance: boolean;
     unit: BenefitUnit;
-    periodicity: BenefitPeriodicity;
+    periodicity?: BenefitPeriodicity | null;
     active: boolean;
   }) {
     this._id = props.id;
@@ -63,7 +65,7 @@ export class BenefitType {
     this._description = props.description;
     this._hasBalance = props.hasBalance;
     this._unit = props.unit;
-    this._periodicity = props.periodicity;
+    this._periodicity = props.periodicity ?? null;
     this._active = props.active;
   }
 
@@ -107,11 +109,11 @@ export class BenefitType {
     this._unit = value;
   }
 
-  get periodicity(): BenefitPeriodicity {
+  get periodicity(): BenefitPeriodicity | null {
     return this._periodicity;
   }
 
-  set periodicity(value: BenefitPeriodicity) {
+  set periodicity(value: BenefitPeriodicity | null) {
     this._periodicity = value;
   }
 

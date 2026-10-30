@@ -8,15 +8,16 @@
 export class BenefitDelivery {
   private _id: number;
   private _deliveredOn: string;
-  private _registeredBy: number;
+  private _registeredBy: number | null;
   private _notes: string;
 
   /**
    * Initializes the delivery with its date, author and notes.
    * @param props Initial values of the instance.
+   * @remarks The author is optional in the web service until IAM exists, so it can be null.
    * @author Salym
    */
-  constructor(props: { id: number; deliveredOn: string; registeredBy: number; notes: string }) {
+  constructor(props: { id: number; deliveredOn: string; registeredBy: number | null; notes: string }) {
     this._id = props.id;
     this._deliveredOn = props.deliveredOn;
     this._registeredBy = props.registeredBy;
@@ -31,7 +32,7 @@ export class BenefitDelivery {
     return this._deliveredOn;
   }
 
-  get registeredBy(): number {
+  get registeredBy(): number | null {
     return this._registeredBy;
   }
 

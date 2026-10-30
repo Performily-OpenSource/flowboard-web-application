@@ -91,10 +91,12 @@
       <ng-container matColumnDef="actions" stickyEnd>
         <th mat-header-cell *matHeaderCellDef>{{ 'benefits.column.actions' | translate }}</th>
         <td mat-cell *matCellDef="let type">
-          <button class="icon-action" type="button" (click)="editBenefit(type)"
-                  [attr.aria-label]="'benefits.aria.edit' | translate: { name: type.name }">
-            <mat-icon aria-hidden="true">edit</mat-icon>
-          </button>
+          @if (canEdit) {
+            <button class="icon-action" type="button" (click)="editBenefit(type)"
+                    [attr.aria-label]="'benefits.aria.edit' | translate: { name: type.name }">
+              <mat-icon aria-hidden="true">edit</mat-icon>
+            </button>
+          }
           <button class="icon-action" type="button" [matMenuTriggerFor]="rowMenu"
                   [attr.aria-label]="'benefits.aria.more-actions' | translate: { name: type.name }">
             <mat-icon aria-hidden="true">more_vert</mat-icon>

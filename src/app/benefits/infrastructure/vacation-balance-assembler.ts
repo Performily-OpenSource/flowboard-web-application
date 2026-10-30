@@ -1,70 +1,58 @@
-import {BaseAssembler} from '../../shared/infrastructure/base-assembler';
 import {VacationBalance} from '../domain/model/vacation-balance.entity';
 import {VacationMovement, VacationMovementType} from '../domain/model/vacation-movement.entity';
-import {VacationBalanceResource, VacationBalancesResponse} from './vacation-balances-response';
+import {VacationBalanceResource, VacationMovementResource} from './vacation-balances-response';
 
 /**
- * Transforms vacation balance resources between infrastructure and domain entities, including their
+ * Transforms vacation balance resources of the web service into domain entities, including their
  * movements.
  *
- * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @remarks It does not implement BaseAssembler because the web service identifies a balance by its
+ * employee and has no id; the entity uses the employeeId as its id. Balances are never sent back:
+ * every change goes through an action of the web service.
  * @author Salym
  */
-export class VacationBalanceAssembler
-  implements BaseAssembler<VacationBalance, VacationBalanceResource, VacationBalancesResponse> {
+export class VacationBalanceAssembler {
 
   /**
    * Converts an API resource into a domain entity.
-   * @param resource Resource received from or sent to the API.
+   * @param resource Resource received from the web service.
+   * @param movements Movements to use instead of the ones of the resource (the list of balances
+   *   sends them empty).
    * @author Salym
    */
-  toEntityFromResource(resource: VacationBalanceResource): VacationBalance {
+  toEntityFromResource(resource: VacationBalanceResource, movements?: VacationMovementResource[]): VacationBalance {
     return new VacationBalance({
-      id: resource.id,
+      id: resource.employeeId,
       employeeId: resource.employeeId,
-      accruedDays: resource.accruedDays,
-      usedDays: resource.usedDays,
-      movements: (resource.movements ?? []).map(movement => new VacationMovement({
-        id: movement.id,
-        type: movement.type as VacationMovementType,
-        days: movement.days,
-        reason: movement.reason,
-        authorId: movement.authorId,
-        requestId: movement.requestId,
-        occurredAt: movement.occurredAt
-      }))
+      accruedDays: Number(resource.accruedDays),
+      usedDays: Number(resource.usedDays),
+      movements: this.toMovementsFromResources(movements ?? resource.movements ?? [])
     });
   }
 
   /**
-   * Converts a domain entity into an API resource.
-   * @param entity Domain entity to convert.
+   * Converts a list of resources of the web service into entities.
+   * @param resources Resources received from the web service.
    * @author Salym
    */
-  toResourceFromEntity(entity: VacationBalance): VacationBalanceResource {
-    return {
-      id: entity.id,
-      employeeId: entity.employeeId,
-      accruedDays: entity.accruedDays,
-      usedDays: entity.usedDays,
-      movements: entity.movements.map(movement => ({
-        id: movement.id,
-        type: movement.type,
-        days: movement.days,
-        reason: movement.reason,
-        authorId: movement.authorId,
-        requestId: movement.requestId,
-        occurredAt: movement.occurredAt
-      }))
-    } as VacationBalanceResource;
+  toEntitiesFromResources(resources: VacationBalanceResource[]): VacationBalance[] {
+    return resources.map(resource => this.toEntityFromResource(resource));
   }
 
   /**
-   * Converts an API response into a collection of entities.
-   * @param response API response that wraps a collection of resources.
+   * Converts the movements of the web service into entities of the balance.
+   * @param resources Movements received from the web service.
    * @author Salym
    */
-  toEntitiesFromResponse(response: VacationBalancesResponse): VacationBalance[] {
-    return response.vacationBalances.map(resource => this.toEntityFromResource(resource));
+  toMovementsFromResources(resources: VacationMovementResource[]): VacationMovement[] {
+    return resources.map(movement => new VacationMovement({
+      id: movement.id,
+      type: movement.type as VacationMovementType,
+      days: Number(movement.days),
+      reason: movement.reason ?? '',
+      authorId: movement.authorId,
+      requestId: movement.requestId,
+      occurredAt: movement.occurredAt
+    }));
   }
 }
