@@ -195,7 +195,21 @@ export class VacationBalance {
       reason,
       authorId,
       requestId,
-      occurredAt: new Date().toISOString()
+      occurredAt: localTimestamp()
     })];
   }
+}
+
+/**
+ * Current date and time as 'yyyy-MM-ddTHH:mm:ss' in the local time zone. toISOString() uses UTC, so
+ * a movement made in Lima after 19:00 would show the next day in the history.
+ *
+ * @remarks Defines the responsibility and main contract of this element within the bounded context.
+ * @author Salym
+ */
+function localTimestamp(): string {
+  const now = new Date();
+  const pad = (value: number) => String(value).padStart(2, '0');
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}` +
+    `T${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
 }

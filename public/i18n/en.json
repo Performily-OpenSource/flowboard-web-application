@@ -50,7 +50,8 @@
     "wellbeing-dashboard": "Wellbeing dashboard",
     "wellbeing-spaces": "Wellbeing spaces",
     "wellbeing-thresholds": "Wellbeing thresholds",
-    "accounts": "Accounts & roles"
+    "accounts": "Accounts & roles",
+    "benefit-catalog": "Catalog"
   },
   "toolbar": {
     "search": "Search",
@@ -428,28 +429,29 @@
       "balances": "Balance per employee"
     },
     "filter": {
-      "type": "Type",
-      "all": "all",
+      "type": "Unit",
+      "all": "All",
       "with-balance": "With balance",
       "status": "Status",
       "balance": {
-        "ALL": "all",
-        "WITH": "yes",
-        "WITHOUT": "no"
+        "ALL": "All",
+        "WITH": "Yes",
+        "WITHOUT": "No"
       },
       "status-option": {
-        "ACTIVE": "active",
-        "INACTIVE": "inactive",
-        "ALL": "all"
+        "ACTIVE": "Active",
+        "INACTIVE": "Inactive",
+        "ALL": "All"
       }
     },
     "column": {
       "benefit": "Benefit",
       "unit": "Unit",
       "has-balance": "Has balance",
-      "reach": "Reach",
+      "reach": "Current reach",
       "periodicity": "Periodicity",
-      "actions": "Actions"
+      "actions": "Actions",
+      "reach-hint": "Employees with a current or upcoming (not cancelled) assignment of this benefit."
     },
     "has-balance": {
       "NO": "No",
@@ -490,6 +492,89 @@
       "balance-not-found": "The employee does not have a vacation balance.",
       "not-enough-days": "The employee does not have enough vacation days available.",
       "debit-balance": "The vacation balance could not be debited."
+    },
+    "search": "Search benefit",
+    "loading": "Loading…",
+    "clear-filters": "Clear filters",
+    "remove-filter": "Remove filter",
+    "no-actions": "No actions",
+    "aria": {
+      "edit": "Edit {{name}}",
+      "more-actions": "More actions for {{name}}"
+    },
+    "catalog-count-plural": {
+      "one": "{{count}} benefit in the catalog",
+      "other": "{{count}} benefits in the catalog"
+    },
+    "catalog-count-filtered": "{{count}} of {{total}} benefits",
+    "reach-count": {
+      "one": "{{count}} employee",
+      "other": "{{count}} employees"
+    },
+    "day-count": {
+      "one": "{{days}} day",
+      "other": "{{days}} days"
+    },
+    "unit-one": {
+      "MONEY": "sol",
+      "DAYS": "day",
+      "UNITS": "unit"
+    },
+    "pagination-items": {
+      "benefits": {
+        "one": "benefit",
+        "other": "benefits"
+      },
+      "employees": {
+        "one": "employee",
+        "other": "employees"
+      },
+      "assignments": {
+        "one": "assignment",
+        "other": "assignments"
+      },
+      "deliveries": {
+        "one": "delivery",
+        "other": "deliveries"
+      }
+    },
+    "notice": {
+      "undo": "Undo",
+      "benefit-created": "Benefit \"{{name}}\" was created.",
+      "benefit-updated": "Changes to \"{{name}}\" were saved.",
+      "benefit-activated": "\"{{name}}\" was activated.",
+      "benefit-deactivated": "\"{{name}}\" was deactivated.",
+      "benefit-assigned": {
+        "one": "Benefit assigned to 1 employee.",
+        "other": "Benefit assigned to {{count}} employees."
+      },
+      "delivery-registered": "The delivery of \"{{name}}\" was registered.",
+      "assignment-cancelled": "The assignment of \"{{name}}\" was cancelled.",
+      "balance-adjusted": "The vacation balance adjustment was saved."
+    },
+    "confirm": {
+      "keep": "Go back",
+      "deactivate": {
+        "title": "Deactivate \"{{name}}\"?",
+        "message": {
+          "one": "It can no longer be assigned. Its current assignment (1 employee) is kept.",
+          "other": "It can no longer be assigned. Its current assignments ({{count}} employees) are kept."
+        }
+      },
+      "activate": {
+        "title": "Activate \"{{name}}\"?",
+        "message": "The benefit will be available to assign again."
+      },
+      "cancel-assignment": {
+        "title": "Cancel this assignment?",
+        "message": "{{employee}} will no longer have \"{{name}}\" from {{from}} to {{to}}. This cannot be undone."
+      },
+      "discard": {
+        "title": "Discard changes?",
+        "message": "This form has unsaved changes.",
+        "confirm": "Discard",
+        "keep": "Keep editing"
+      }
     }
   },
   "my-benefits": {
@@ -505,12 +590,18 @@
     "no-balance": "You have no benefits with an available balance.",
     "no-delivered": "You have no delivered benefits yet.",
     "detail": {
-      "assigned": "Assigned",
+      "assigned": "Assigned for the validity",
       "unit": "Unit",
       "periodicity": "Periodicity",
       "validity": "Validity",
-      "status": "Status"
-    }
+      "status": "Status",
+      "note": "The assigned quantity covers the whole validity, not each month."
+    },
+    "of-available": "{{available}} of {{total}} available",
+    "available-bar": "Available",
+    "used": "Used",
+    "valid-until": "Valid until {{date}}",
+    "upcoming": "Coming up"
   },
   "benefit-unit": {
     "MONEY": "Amount",
@@ -528,9 +619,9 @@
     "CANCELLED": "Cancelled"
   },
   "assignment-status-plural": {
-    "ASSIGNED": "assigned",
-    "DELIVERED": "delivered",
-    "CANCELLED": "cancelled"
+    "ASSIGNED": "Assigned",
+    "DELIVERED": "Delivered",
+    "CANCELLED": "Cancelled"
   },
   "vacation-movement-type": {
     "ACCRUAL": "Accrual by seniority",
@@ -545,11 +636,15 @@
     "name-placeholder": "E.g. Meal vouchers",
     "description": "Description",
     "description-placeholder": "What it is for and who it applies to",
-    "unit": "Unit of measure",
+    "unit": "Unit",
     "periodicity": "Periodicity",
     "has-balance": "Has balance",
     "has-balance-hint": "Usage is deducted from the assigned balance.",
-    "create": "Create benefit"
+    "create": "Create benefit",
+    "locked": {
+      "one": "The unit and \"Has balance\" cannot change because 1 employee has this benefit in force.",
+      "other": "The unit and \"Has balance\" cannot change because {{count}} employees have this benefit in force."
+    }
   },
   "assign-dialog": {
     "title": "Assign benefit",
@@ -564,16 +659,26 @@
     "quantity": {
       "MONEY": "Initial balance (S/)",
       "DAYS": "Assigned days",
-      "UNITS": "Assigned units"
+      "UNITS": "Assigned units",
+      "NONE": "Quantity"
     },
     "area-summary": "It will be assigned to {{count}} active employees of {{area}}.",
-    "area-skipped": "{{count}} who already have it in that period will be skipped.",
+    "area-skipped": "Skipped because they already have it in that period: {{names}}.",
     "assign": "Assign",
     "error": {
       "invalid-range": "The end date cannot be before the start date.",
       "quantity": "Enter a quantity greater than zero with up to 2 decimals.",
       "overlap": "{{employee}} already has this benefit assigned between {{from}} and {{to}}. There cannot be two assignments of the same benefit in the same period.",
-      "area-all-overlap": "Every active employee of the area already has this benefit in that period."
+      "area-all-overlap": "Every active employee of the area already has this benefit in that period.",
+      "step": {
+        "MONEY": "Enter an amount with up to 2 decimals.",
+        "DAYS": "Days are assigned in steps of 0.5.",
+        "UNITS": "Units must be a whole number."
+      }
+    },
+    "area-summary-plural": {
+      "one": "It will be assigned to 1 active employee of {{area}}.",
+      "other": "It will be assigned to {{count}} active employees of {{area}}."
     }
   },
   "delivery-dialog": {
@@ -590,7 +695,8 @@
     "notes-placeholder": "Who delivers, where, observations",
     "register": "Register delivery",
     "error": {
-      "before-validity": "The delivery date cannot be before the start of the validity."
+      "before-validity": "The delivery date cannot be before the start of the validity.",
+      "after-limit": "The date cannot be after the end of the validity or after today."
     }
   },
   "adjustment-dialog": {
@@ -608,13 +714,18 @@
     "save": "Save adjustment",
     "error": {
       "days": "Enter a quantity greater than zero with up to 2 decimals.",
-      "reason": "The reason is required: it stays in the history with your name and the date."
-    }
+      "reason": "The reason is required: it stays in the history with your name and the date.",
+      "max-days": "An adjustment can have at most {{max}} days."
+    },
+    "reason-hint": "It is kept in the history with your name and the date."
   },
   "movements-dialog": {
     "title": "Vacation movements",
     "request": "request #{{id}}",
-    "empty": "This balance has no movements yet."
+    "empty": "This balance has no movements yet.",
+    "by": "by {{name}}",
+    "reason": "Reason: {{reason}}",
+    "balance-after": "Balance after: {{days}} days"
   },
   "vacation-balances": {
     "title": "Balance per employee",
@@ -632,19 +743,24 @@
     "high-usage-count": "{{count}} employees used {{percent}} % or more of their balance",
     "filter": {
       "area": "Area",
-      "all-female": "all",
+      "all-female": "All",
       "balance": "Balance",
       "order": "Order",
       "availability": {
-        "ALL": "all",
-        "WITH_DAYS": "with available days",
-        "WITHOUT_DAYS": "without available days"
+        "ALL": "All",
+        "WITH_DAYS": "With available days",
+        "WITHOUT_DAYS": "Without available days",
+        "HIGH_USAGE": "Usage of 80 % or more"
       },
       "sort": {
-        "MOST_AVAILABLE": "highest balance",
-        "LEAST_AVAILABLE": "lowest balance",
-        "NAME": "name"
+        "MOST_AVAILABLE": "Highest balance",
+        "LEAST_AVAILABLE": "Lowest balance",
+        "NAME": "Name"
       }
+    },
+    "high-usage-plural": {
+      "one": "1 employee used {{percent}} % or more of their balance",
+      "other": "{{count}} employees used {{percent}} % or more of their balance"
     }
   },
   "benefit-assignments": {
@@ -655,13 +771,31 @@
     "register-delivery": "Register delivery",
     "cancel": "Cancel assignment",
     "delivered-on": "Delivered on {{date}}",
-    "empty": "There are no assignments with the selected filters."
+    "empty": "There are no assignments with the selected filters.",
+    "search": "Search employee or benefit",
+    "count-plural": {
+      "one": "{{count}} assignment",
+      "other": "{{count}} assignments"
+    },
+    "starts-on": "Starts {{date}}",
+    "starts-on-hint": "The delivery can be registered when the validity starts ({{date}})."
   },
   "benefit-deliveries": {
     "delivered-on": "Delivery date",
     "registered-by": "Registered by",
     "notes": "Note",
-    "empty": "No deliveries registered yet."
+    "empty": "No deliveries registered yet.",
+    "from": "From",
+    "to": "To",
+    "count": {
+      "one": "{{count}} delivery",
+      "other": "{{count}} deliveries"
+    },
+    "pending": {
+      "one": "View 1 pending delivery",
+      "other": "View {{count}} pending deliveries"
+    },
+    "empty-filtered": "There are no deliveries with the selected filters."
   },
   "payroll": {
     "title": "Payslips and payments",
@@ -1506,7 +1640,12 @@
     "my-benefits-title": "My benefits",
     "valid-until": "valid until {{date}}",
     "no-benefits": "You have no benefits assigned.",
-    "more-benefits": "And {{count}} more."
+    "more-benefits": "And {{count}} more.",
+    "view-all": "View all",
+    "available-vacation-hint-plural": {
+      "one": "days for 1 employee",
+      "other": "days for {{count}} employees"
+    }
   },
   "payroll-dashboard": {
     "latest-payslip-title": "My latest payslip",

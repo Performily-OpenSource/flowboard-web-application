@@ -1,7 +1,42 @@
 <section class="page">
-  <app-benefits-header/>
+  <app-benefits-header primary="assign"/>
   <app-benefits-tabs/>
   <app-benefits-feedback/>
+
+  <div class="filters">
+    <button class="filter-chip" type="button" [class.active]="benefitFilter() !== null" [matMenuTriggerFor]="benefitMenu">
+      {{ 'benefits.column.benefit' | translate }}:
+      {{ benefitFilter() !== null ? benefitName(benefitFilter()) : ('benefits.filter.all' | translate) }}
+      <mat-icon aria-hidden="true">expand_more</mat-icon>
+    </button>
+    <mat-menu #benefitMenu="matMenu">
+      <button mat-menu-item (click)="setBenefit(null)">{{ 'benefits.filter.all' | translate }}</button>
+      @for (type of store.benefitTypes(); track type.id) {
+        <button mat-menu-item (click)="setBenefit(type.id)">{{ type.name }}</button>
+      }
+    </mat-menu>
+
+    <label class="filter-chip date-filter" [class.active]="fromDate() !== ''">
+      {{ 'benefit-deliveries.from' | translate }}
+      <input type="date" [value]="fromDate()" [max]="toDate() || null" (change)="setDate('from', $event)"/>
+    </label>
+    <label class="filter-chip date-filter" [class.active]="toDate() !== ''">
+      {{ 'benefit-deliveries.to' | translate }}
+      <input type="date" [value]="toDate()" [min]="fromDate() || null" (change)="setDate('to', $event)"/>
+    </label>
+
+    <span class="spacer"></span>
+    @if (store.ready()) {
+      @if (pendingCount() > 0) {
+        <a class="text-link pending-link" routerLink="/benefits/assignments" [queryParams]="{ status: 'ASSIGNED' }">
+          {{ 'benefit-deliveries.pending' | pluralKey: pendingCount() | translate: { count: pendingCount() } }}
+        </a>
+      }
+      <span class="count">
+        {{ 'benefit-deliveries.count' | pluralKey: filteredDeliveries().length | translate: { count: filteredDeliveries().length } }}
+      </span>
+    }
+  </div>
 
   <div class="table-card">
     <table mat-table [dataSource]="pageDeliveries()">
@@ -11,7 +46,10 @@
           @if (employee(assignment.employeeId); as employee) {
             <span class="person">
               <span class="avatar" aria-hidden="true">{{ employee.initials }}</span>
-              <span class="cell-strong">{{ employee.fullName }}</span>
+              <span>
+                <span class="cell-strong">{{ employee.fullName }}</span><br>
+                <span class="muted">{{ employee.areaName }}</span>
+              </span>
             </span>
           }
         </td>
@@ -32,20 +70,29 @@
       </ng-container>
       <ng-container matColumnDef="registeredBy">
         <th mat-header-cell *matHeaderCellDef>{{ 'benefit-deliveries.registered-by' | translate }}</th>
-        <td mat-cell *matCellDef="let assignment">{{ employee(assignment.delivery?.registeredBy)?.fullName }}</td>
+        <td mat-cell *matCellDef="let assignment">{{ employee(assignment.delivery?.registeredBy)?.fullName || '—' }}</td>
       </ng-container>
       <ng-container matColumnDef="notes">
         <th mat-header-cell *matHeaderCellDef>{{ 'benefit-deliveries.notes' | translate }}</th>
-        <td mat-cell *matCellDef="let assignment" class="notes">{{ assignment.delivery?.notes || '-' }}</td>
+        <td mat-cell *matCellDef="let assignment" class="notes">{{ assignment.delivery?.notes || '—' }}</td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="columns"></tr>
       <tr mat-row *matRowDef="let row; columns: columns;"></tr>
       <tr class="mat-mdc-row" *matNoDataRow>
-        <td class="mat-mdc-cell no-data" [attr.colspan]="columns.length">{{ 'benefit-deliveries.empty' | translate }}</td>
+        <td class="mat-mdc-cell no-data" [attr.colspan]="columns.length">
+          @if (!store.ready()) {
+            {{ 'benefits.loading' | translate }}
+          } @else if (hasFilters()) {
+            {{ 'benefit-deliveries.empty-filtered' | translate }}
+            <button class="text-link clear-filters" type="button" (click)="clearFilters()">{{ 'benefits.clear-filters' | translate }}</button>
+          } @else {
+            {{ 'benefit-deliveries.empty' | translate }}
+          }
+        </td>
       </tr>
     </table>
   </div>
 
-  <app-list-pagination [total]="store.deliveredAssignments().length" [pageSize]="pageSize"
-                       itemsKey="benefits.pagination.deliveries" [(page)]="page"/>
+  <app-list-pagination [total]="filteredDeliveries().length" [pageSize]="pageSize"
+                       [itemsKey]="'benefits.pagination-items.deliveries' | pluralKey: filteredDeliveries().length" [(page)]="page"/>
 </section>

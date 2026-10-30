@@ -32,6 +32,19 @@
   color: var(--fb-text-secondary);
 }
 
+.amounts {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.balance-after {
+  font-size: 11.5px;
+  color: var(--fb-text-muted);
+}
+
 .days {
   flex: none;
   font-size: 13.5px;

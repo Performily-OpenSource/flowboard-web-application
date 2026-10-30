@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, input} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
@@ -19,6 +19,12 @@ import {AssignBenefitDialog} from '../assign-benefit-dialog/assign-benefit-dialo
  */
 export class BenefitsHeader {
   private dialog = inject(MatDialog);
+
+  /**
+   * Main action of the tab: 'new' in the catalog, 'assign' in assignments and deliveries, 'none'
+   * when the tab shows its own actions (they are projected with ng-content).
+   */
+  readonly primary = input<'new' | 'assign' | 'none'>('new');
 
   /**
    * Opens the dialog to create a benefit (WA-28).

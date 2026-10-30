@@ -11,6 +11,7 @@ import {BenefitAssignmentAssembler} from '../infrastructure/benefit-assignment-a
 import {VacationBalanceAssembler} from '../infrastructure/vacation-balance-assembler';
 import {WorkspaceAcl} from '../infrastructure/workspace-acl';
 import {CurrentEmployeeStore} from '../../shared/application/current-employee.store';
+import {localToday} from './local-today';
 
 /**
  * Data needed to assign a benefit to one employee or to a whole area.
@@ -39,6 +40,21 @@ export interface AssignmentPlan {
   conflictingEmployeeIds: number[];
 }
 
+/**
+ * Message shown to the user after a write operation finishes well.
+ *
+ * @remarks Defines the data contract used between layers or components of the bounded context.
+ * @author Salym
+ */
+export interface BenefitsNotice {
+  /** i18n key of the message. */
+  key: string;
+  /** Values used by the message. */
+  params?: Record<string, unknown>;
+  /** Action that reverts the operation, shown as "Undo". */
+  undo?: () => void;
+}
+
 @Injectable({providedIn: 'root'})
 /**
  * Centralizes the Benefits context state and applies its business rules for the catalog,
@@ -63,6 +79,20 @@ export class BenefitsStore {
 
   private readonly errorSignal = signal<string | null>(null);
   readonly error = this.errorSignal.asReadonly();
+
+  private readonly noticeSignal = signal<BenefitsNotice | null>(null);
+  /** Last success message, consumed by the feedback component. */
+  readonly notice = this.noticeSignal.asReadonly();
+
+  private readonly typesLoaded = signal(false);
+  private readonly assignmentsLoaded = signal(false);
+  private readonly balancesLoaded = signal(false);
+  /** Whether the first load of the catalog, assignments and balances finished (well or with an error). */
+  readonly ready = computed(() => this.typesLoaded() && this.assignmentsLoaded() && this.balancesLoaded());
+
+  private readonly highlightedTypeIdSignal = signal<number | null>(null);
+  /** Benefit type created last, highlighted in the catalog for a moment. */
+  readonly highlightedTypeId = this.highlightedTypeIdSignal.asReadonly();
 
   readonly benefitTypes = computed(() =>
     [...this.benefitTypesSignal()].sort((a, b) => a.id - b.id));
@@ -105,7 +135,7 @@ export class BenefitsStore {
    * @author Salym
    */
   reachOf(benefitTypeId: number): number {
-    const today = new Date().toISOString().substring(0, 10);
+    const today = localToday();
     const employees = new Set(this.assignmentsSignal()
       .filter(assignment => assignment.benefitTypeId === benefitTypeId &&
         !assignment.isCancelled() && assignment.validity.endDate >= today)
@@ -177,7 +207,9 @@ export class BenefitsStore {
     this.benefitsApi.createBenefitType(benefitType).pipe(retry(2)).subscribe({
       next: created => {
         this.benefitTypesSignal.update(types => [...types, created]);
-        this.loadingSignal.set(false);
+        this.highlightedTypeIdSignal.set(created.id);
+        setTimeout(() => this.highlightedTypeIdSignal.set(null), 4000);
+        this.succeed({ key: 'benefits.notice.benefit-created', params: { name: created.name } });
       },
       error: error => this.failOperation(error, 'benefits.error.create-benefit')
     });
@@ -186,9 +218,11 @@ export class BenefitsStore {
   /**
    * Updates a benefit of the catalog after checking that its name is unique.
    * @param benefitType Benefit type with the new data.
+   * @param notice Message shown when the update finishes well.
    * @author Salym
    */
-  updateBenefitType(benefitType: BenefitType): void {
+  updateBenefitType(benefitType: BenefitType,
+                    notice: BenefitsNotice = { key: 'benefits.notice.benefit-updated', params: { name: benefitType.name } }): void {
     if (this.isBenefitNameTaken(benefitType.name, benefitType.id)) {
       this.errorSignal.set('benefits.error.name-taken');
       return;
@@ -197,7 +231,7 @@ export class BenefitsStore {
     this.benefitsApi.updateBenefitType(benefitType).pipe(retry(2)).subscribe({
       next: updated => {
         this.benefitTypesSignal.update(types => types.map(type => type.id === updated.id ? updated : type));
-        this.loadingSignal.set(false);
+        this.succeed(notice);
       },
       error: error => this.failOperation(error, 'benefits.error.update-benefit')
     });
@@ -215,7 +249,11 @@ export class BenefitsStore {
     } else {
       copy.activate();
     }
-    this.updateBenefitType(copy);
+    this.updateBenefitType(copy, {
+      key: copy.active ? 'benefits.notice.benefit-activated' : 'benefits.notice.benefit-deactivated',
+      params: { name: copy.name },
+      undo: () => this.toggleBenefitTypeStatus(copy)
+    });
   }
 
   // ---------- Assignments ----------
@@ -261,7 +299,10 @@ export class BenefitsStore {
       .subscribe({
         next: created => {
           this.assignmentsSignal.update(current => [...current, ...created]);
-          this.loadingSignal.set(false);
+          this.succeed({
+            key: `benefits.notice.benefit-assigned.${created.length === 1 ? 'one' : 'other'}`,
+            params: { count: created.length }
+          });
         },
         error: error => this.failOperation(error, 'benefits.error.assign-benefit')
       });
@@ -283,7 +324,8 @@ export class BenefitsStore {
       this.errorSignal.set(assignment.isDelivered() ? 'benefits.error.already-delivered' : 'benefits.error.cancelled');
       return;
     }
-    this.saveAssignment(copy, 'benefits.error.register-delivery');
+    this.saveAssignment(copy, 'benefits.error.register-delivery',
+      { key: 'benefits.notice.delivery-registered', params: { name: assignment.benefitType?.name ?? '' } });
   }
 
   /**
@@ -299,7 +341,8 @@ export class BenefitsStore {
       this.errorSignal.set('benefits.error.cancel-delivered');
       return;
     }
-    this.saveAssignment(copy, 'benefits.error.cancel-assignment');
+    this.saveAssignment(copy, 'benefits.error.cancel-assignment',
+      { key: 'benefits.notice.assignment-cancelled', params: { name: assignment.benefitType?.name ?? '' } });
   }
 
   // ---------- Vacation balances ----------
@@ -324,7 +367,7 @@ export class BenefitsStore {
     this.benefitsApi.updateVacationBalance(copy).pipe(retry(2)).subscribe({
       next: updated => {
         this.balancesSignal.update(balances => balances.map(current => current.id === updated.id ? updated : current));
-        this.loadingSignal.set(false);
+        this.succeed({ key: 'benefits.notice.balance-adjusted' });
       },
       error: error => this.failOperation(error, 'benefits.error.adjust-balance')
     });
@@ -369,21 +412,30 @@ export class BenefitsStore {
     this.errorSignal.set(null);
   }
 
+  /**
+   * Clears the success message once it was shown.
+   * @author Salym
+   */
+  clearNotice(): void {
+    this.noticeSignal.set(null);
+  }
+
   // ---------- Internals ----------
 
   /**
    * Saves an updated assignment and replaces it in the state.
    * @param assignment Benefit assignment to work with.
    * @param errorKey i18n key of the error shown to the user.
+   * @param notice Message shown when the change is saved.
    * @author Salym
    */
-  private saveAssignment(assignment: BenefitAssignment, errorKey: string): void {
+  private saveAssignment(assignment: BenefitAssignment, errorKey: string, notice: BenefitsNotice): void {
     this.startOperation();
     this.benefitsApi.updateBenefitAssignment(assignment).pipe(retry(2)).subscribe({
       next: updated => {
         this.assignmentsSignal.update(assignments =>
           assignments.map(current => current.id === updated.id ? updated : current));
-        this.loadingSignal.set(false);
+        this.succeed(notice);
       },
       error: error => this.failOperation(error, errorKey)
     });
@@ -408,8 +460,12 @@ export class BenefitsStore {
       next: types => {
         this.benefitTypesSignal.set(types);
         this.loadingSignal.set(false);
+        this.typesLoaded.set(true);
       },
-      error: error => this.failOperation(error, 'benefits.error.load-benefits')
+      error: error => {
+        this.failOperation(error, 'benefits.error.load-benefits');
+        this.typesLoaded.set(true);
+      }
     });
   }
 
@@ -419,8 +475,14 @@ export class BenefitsStore {
    */
   private loadAssignments(): void {
     this.benefitsApi.getBenefitAssignments().pipe(takeUntilDestroyed()).subscribe({
-      next: assignments => this.assignmentsSignal.set(assignments),
-      error: error => this.errorSignal.set(this.formatError(error, 'benefits.error.load-assignments'))
+      next: assignments => {
+        this.assignmentsSignal.set(assignments);
+        this.assignmentsLoaded.set(true);
+      },
+      error: error => {
+        this.errorSignal.set(this.formatError(error, 'benefits.error.load-assignments'));
+        this.assignmentsLoaded.set(true);
+      }
     });
   }
 
@@ -430,8 +492,14 @@ export class BenefitsStore {
    */
   private loadVacationBalances(): void {
     this.benefitsApi.getVacationBalances().pipe(takeUntilDestroyed()).subscribe({
-      next: balances => this.balancesSignal.set(balances),
-      error: error => this.errorSignal.set(this.formatError(error, 'benefits.error.load-balances'))
+      next: balances => {
+        this.balancesSignal.set(balances);
+        this.balancesLoaded.set(true);
+      },
+      error: error => {
+        this.errorSignal.set(this.formatError(error, 'benefits.error.load-balances'));
+        this.balancesLoaded.set(true);
+      }
     });
   }
 
@@ -442,6 +510,16 @@ export class BenefitsStore {
   private startOperation(): void {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
+  }
+
+  /**
+   * Marks the end of a successful operation and publishes its message.
+   * @param notice Message shown to the user.
+   * @author Salym
+   */
+  private succeed(notice: BenefitsNotice): void {
+    this.loadingSignal.set(false);
+    this.noticeSignal.set(notice);
   }
 
   /**

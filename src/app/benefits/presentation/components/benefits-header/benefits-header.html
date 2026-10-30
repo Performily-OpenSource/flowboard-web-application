@@ -4,13 +4,25 @@
     <p class="page-subtitle">{{ 'benefits.subtitle' | translate }}</p>
   </div>
   <div class="page-actions">
-    <button mat-stroked-button type="button" (click)="openAssignBenefit()">
-      <mat-icon>add</mat-icon>
-      {{ 'benefits.assign' | translate }}
-    </button>
-    <button mat-flat-button type="button" (click)="openNewBenefit()">
-      <mat-icon>add</mat-icon>
-      {{ 'benefits.new' | translate }}
-    </button>
+    <ng-content/>
+    @if (primary() === 'new') {
+      <button mat-stroked-button type="button" (click)="openAssignBenefit()">
+        <mat-icon aria-hidden="true">add</mat-icon>
+        {{ 'benefits.assign' | translate }}
+      </button>
+      <button mat-flat-button type="button" (click)="openNewBenefit()">
+        <mat-icon aria-hidden="true">add</mat-icon>
+        {{ 'benefits.new' | translate }}
+      </button>
+    } @else if (primary() === 'assign') {
+      <button mat-stroked-button type="button" (click)="openNewBenefit()">
+        <mat-icon aria-hidden="true">add</mat-icon>
+        {{ 'benefits.new' | translate }}
+      </button>
+      <button mat-flat-button type="button" (click)="openAssignBenefit()">
+        <mat-icon aria-hidden="true">add</mat-icon>
+        {{ 'benefits.assign' | translate }}
+      </button>
+    }
   </div>
 </header>

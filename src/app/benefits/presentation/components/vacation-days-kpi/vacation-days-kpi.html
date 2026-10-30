@@ -1,5 +1,7 @@
-<article class="dash-kpi">
+<a class="dash-kpi kpi-link" routerLink="/benefits/balances">
   <p class="dash-kpi-label">{{ 'benefits-dashboard.available-vacation' | translate }}</p>
   <p class="dash-kpi-value">{{ totalAvailableDays() | number: '1.0-1' }}</p>
-  <p class="dash-kpi-hint">{{ 'benefits-dashboard.available-vacation-hint' | translate: { count: employeesWithDays() } }}</p>
-</article>
+  <p class="dash-kpi-hint">
+    {{ 'benefits-dashboard.available-vacation-hint-plural' | pluralKey: employeesWithDays() | translate: { count: employeesWithDays() } }}
+  </p>
+</a>

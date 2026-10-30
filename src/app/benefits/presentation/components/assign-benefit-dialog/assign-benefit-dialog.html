@@ -2,14 +2,17 @@
   <header class="dialog-header">
     <h2 mat-dialog-title class="dialog-title">{{ 'assign-dialog.title' | translate }}</h2>
     <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate">
-      <mat-icon>close</mat-icon>
+      <mat-icon aria-hidden="true">close</mat-icon>
     </button>
   </header>
 
   <div class="field">
-    <label for="assignBenefit">{{ 'assign-dialog.benefit' | translate }}</label>
-    <select id="assignBenefit" class="input" formControlName="benefitTypeId"
-            [class.invalid]="isInvalidControl(form, 'benefitTypeId')">
+    <label for="assignBenefit">
+      {{ 'assign-dialog.benefit' | translate }}<span class="required-mark" aria-hidden="true">*</span>
+    </label>
+    <select id="assignBenefit" class="input" formControlName="benefitTypeId" required cdkFocusInitial
+            [class.invalid]="isInvalidControl(form, 'benefitTypeId')"
+            [attr.aria-invalid]="isInvalidControl(form, 'benefitTypeId')">
       <option [ngValue]="null" disabled>{{ 'common.select' | translate }}</option>
       @for (type of store.activeBenefitTypes(); track type.id) {
         <option [ngValue]="type.id">{{ type.name }}</option>
@@ -33,11 +36,14 @@
 
   @if (form.controls.target.value === 'EMPLOYEE') {
     <div class="field">
-      <label for="assignEmployee">{{ 'assign-dialog.employee' | translate }}</label>
-      <select id="assignEmployee" class="input" formControlName="employeeId"
-              [class.invalid]="isInvalidControl(form, 'employeeId')">
+      <label for="assignEmployee">
+        {{ 'assign-dialog.employee' | translate }}<span class="required-mark" aria-hidden="true">*</span>
+      </label>
+      <select id="assignEmployee" class="input" formControlName="employeeId" required
+              [class.invalid]="isInvalidControl(form, 'employeeId') || !!conflict()"
+              [attr.aria-invalid]="isInvalidControl(form, 'employeeId') || !!conflict()">
         <option [ngValue]="null" disabled>{{ 'common.select' | translate }}</option>
-        @for (employee of directory.activeEmployees(); track employee.id) {
+        @for (employee of sortedEmployees(); track employee.id) {
           <option [ngValue]="employee.id">{{ employee.fullName }} · {{ employee.areaName }}</option>
         }
       </select>
@@ -47,9 +53,12 @@
     </div>
   } @else {
     <div class="field">
-      <label for="assignArea">{{ 'assign-dialog.area' | translate }}</label>
-      <select id="assignArea" class="input" formControlName="areaId"
-              [class.invalid]="isInvalidControl(form, 'areaId')">
+      <label for="assignArea">
+        {{ 'assign-dialog.area' | translate }}<span class="required-mark" aria-hidden="true">*</span>
+      </label>
+      <select id="assignArea" class="input" formControlName="areaId" required
+              [class.invalid]="isInvalidControl(form, 'areaId')"
+              [attr.aria-invalid]="isInvalidControl(form, 'areaId')">
         <option [ngValue]="null" disabled>{{ 'common.select' | translate }}</option>
         @for (area of directory.activeAreas(); track area.id) {
           <option [ngValue]="area.id">{{ area.name }}</option>
@@ -63,37 +72,52 @@
 
   <div class="form-grid">
     <div class="field">
-      <label for="assignFrom">{{ 'assign-dialog.valid-from' | translate }}</label>
-      <input id="assignFrom" class="input" type="date" formControlName="validFrom"
-             [class.invalid]="isInvalidControl(form, 'validFrom')"/>
+      <label for="assignFrom">
+        {{ 'assign-dialog.valid-from' | translate }}<span class="required-mark" aria-hidden="true">*</span>
+      </label>
+      <input id="assignFrom" class="input" type="date" formControlName="validFrom" required
+             [class.invalid]="isInvalidControl(form, 'validFrom') || !!conflict()"/>
+      @if (isInvalidControl(form, 'validFrom')) {
+        <p class="field-error">{{ 'validation.required' | translate }}</p>
+      }
     </div>
     <div class="field">
-      <label for="assignTo">{{ 'assign-dialog.valid-to' | translate }}</label>
-      <input id="assignTo" class="input" type="date" formControlName="validTo"
-             [class.invalid]="isInvalidControl(form, 'validTo') || invalidRange()"/>
+      <label for="assignTo">
+        {{ 'assign-dialog.valid-to' | translate }}<span class="required-mark" aria-hidden="true">*</span>
+      </label>
+      <input id="assignTo" class="input" type="date" formControlName="validTo" required
+             [min]="form.controls.validFrom.value || null"
+             [class.invalid]="isInvalidControl(form, 'validTo') || invalidRange() || !!conflict()"/>
+      @if (invalidRange()) {
+        <p class="field-error">{{ 'assign-dialog.error.invalid-range' | translate }}</p>
+      } @else if (isInvalidControl(form, 'validTo')) {
+        <p class="field-error">{{ 'validation.required' | translate }}</p>
+      }
     </div>
-    @if (invalidRange()) {
-      <p class="field-error full">{{ 'assign-dialog.error.invalid-range' | translate }}</p>
-    } @else if (isInvalidControl(form, 'validFrom') || isInvalidControl(form, 'validTo')) {
-      <p class="field-error full">{{ 'validation.required' | translate }}</p>
-    }
-  </div>
-
-  <div class="field">
-    <label for="assignQuantity">{{ 'assign-dialog.quantity.' + (selectedType()?.unit ?? 'UNITS') | translate }}</label>
-    <input id="assignQuantity" class="input" type="number" min="0.01" step="0.01" formControlName="quantity"
-           [placeholder]="selectedType()?.unit === 'MONEY' ? 'S/ 0.00' : '0'"
-           [class.invalid]="isInvalidControl(form, 'quantity') || !!conflict()"/>
-    @if (isInvalidControl(form, 'quantity')) {
-      <p class="field-error">{{ 'assign-dialog.error.quantity' | translate }}</p>
-    }
   </div>
 
   @if (conflict(); as conflict) {
-    <p class="field-error" role="alert">
+    <p class="field-error conflict" role="alert">
+      <mat-icon aria-hidden="true">error</mat-icon>
       {{ 'assign-dialog.error.overlap' | translate: { employee: conflict.employee, from: (conflict.from | localDate), to: (conflict.to | localDate) } }}
     </p>
-  } @else if (areaHasNoActiveEmployees()) {
+  }
+
+  <div class="field">
+    <label for="assignQuantity">
+      {{ (selectedType() ? 'assign-dialog.quantity.' + selectedType()!.unit : 'assign-dialog.quantity.NONE') | translate }}<span class="required-mark" aria-hidden="true">*</span>
+    </label>
+    <input id="assignQuantity" class="input" type="number" min="0" [step]="quantityStep()" formControlName="quantity" required
+           [placeholder]="selectedType()?.unit === 'MONEY' ? 'S/ 0.00' : '0'"
+           [class.invalid]="isInvalidControl(form, 'quantity') || quantityNotInStep()"/>
+    @if (isInvalidControl(form, 'quantity')) {
+      <p class="field-error">{{ 'assign-dialog.error.quantity' | translate }}</p>
+    } @else if (quantityNotInStep()) {
+      <p class="field-error">{{ 'assign-dialog.error.step.' + selectedType()!.unit | translate }}</p>
+    }
+  </div>
+
+  @if (areaHasNoActiveEmployees()) {
     <p class="field-error" role="alert">{{ 'benefits.error.no-active-employees' | translate }}</p>
   } @else if (form.controls.target.value === 'AREA' && plan(); as plan) {
     @if (plan.employeeIds.length === 0) {
@@ -102,9 +126,9 @@
       <div class="info-note">
         <mat-icon aria-hidden="true">info</mat-icon>
         <span>
-          {{ 'assign-dialog.area-summary' | translate: { count: plan.employeeIds.length, area: areaName(form.controls.areaId.value) } }}
+          {{ 'assign-dialog.area-summary-plural' | pluralKey: plan.employeeIds.length | translate: { count: plan.employeeIds.length, area: areaName(form.controls.areaId.value) } }}
           @if (plan.conflictingEmployeeIds.length > 0) {
-            {{ 'assign-dialog.area-skipped' | translate: { count: plan.conflictingEmployeeIds.length } }}
+            {{ 'assign-dialog.area-skipped' | translate: { names: skippedNames() } }}
           }
         </span>
       </div>

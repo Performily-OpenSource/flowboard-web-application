@@ -1,13 +1,30 @@
 <section class="page">
-  <app-benefits-header/>
+  <app-benefits-header primary="assign"/>
   <app-benefits-tabs/>
   <app-benefits-feedback/>
 
   <div class="filters">
+    <label class="search-box">
+      <mat-icon aria-hidden="true">search</mat-icon>
+      <input type="search" [value]="searchText()" (input)="onSearch($event)"
+             [placeholder]="'benefit-assignments.search' | translate"
+             [attr.aria-label]="'benefit-assignments.search' | translate"/>
+    </label>
+
+    @if (employeeFilter() !== null) {
+      <span class="filter-chip active">
+        {{ 'vacation-balances.employee' | translate }}: {{ employee(employeeFilter()!)?.fullName }}
+        <button class="chip-remove" type="button" (click)="clearEmployee()"
+                [attr.aria-label]="'benefits.remove-filter' | translate">
+          <mat-icon aria-hidden="true">close</mat-icon>
+        </button>
+      </span>
+    }
+
     <button class="filter-chip" type="button" [class.active]="benefitFilter() !== null" [matMenuTriggerFor]="benefitMenu">
       {{ 'benefits.column.benefit' | translate }}:
       {{ benefitFilter() !== null ? benefitName(benefitFilter()) : ('benefits.filter.all' | translate) }}
-      <mat-icon>expand_more</mat-icon>
+      <mat-icon aria-hidden="true">expand_more</mat-icon>
     </button>
     <mat-menu #benefitMenu="matMenu">
       <button mat-menu-item (click)="setBenefit(null)">{{ 'benefits.filter.all' | translate }}</button>
@@ -19,7 +36,7 @@
     <button class="filter-chip" type="button" [class.active]="statusFilter() !== null" [matMenuTriggerFor]="statusMenu">
       {{ 'benefits.filter.status' | translate }}:
       {{ (statusFilter() !== null ? 'assignment-status-plural.' + statusFilter() : 'benefits.filter.all') | translate }}
-      <mat-icon>expand_more</mat-icon>
+      <mat-icon aria-hidden="true">expand_more</mat-icon>
     </button>
     <mat-menu #statusMenu="matMenu">
       <button mat-menu-item (click)="setStatus(null)">{{ 'benefits.filter.all' | translate }}</button>
@@ -29,7 +46,11 @@
     </mat-menu>
 
     <span class="spacer"></span>
-    <span class="count">{{ 'benefit-assignments.count' | translate: { count: filteredAssignments().length } }}</span>
+    @if (store.ready()) {
+      <span class="count">
+        {{ 'benefit-assignments.count-plural' | pluralKey: filteredAssignments().length | translate: { count: filteredAssignments().length } }}
+      </span>
+    }
   </div>
 
   <div class="table-card">
@@ -79,33 +100,51 @@
           </span>
         </td>
       </ng-container>
-      <ng-container matColumnDef="actions">
+      <ng-container matColumnDef="actions" stickyEnd>
         <th mat-header-cell *matHeaderCellDef>{{ 'benefits.column.actions' | translate }}</th>
         <td mat-cell *matCellDef="let assignment">
           @if (assignment.status === 'ASSIGNED') {
-            <button class="text-link" type="button" (click)="registerDelivery(assignment)">
-              {{ 'benefit-assignments.register-delivery' | translate }}
-            </button>
+            @if (hasStarted(assignment)) {
+              <button class="text-link" type="button" (click)="registerDelivery(assignment)">
+                {{ 'benefit-assignments.register-delivery' | translate }}
+              </button>
+            } @else {
+              <span class="muted not-started"
+                    [attr.title]="'benefit-assignments.starts-on-hint' | translate: { date: (assignment.validity.startDate | localDate) }">
+                {{ 'benefit-assignments.starts-on' | translate: { date: (assignment.validity.startDate | localDate) } }}
+              </span>
+            }
             <button class="icon-action" type="button" [matMenuTriggerFor]="rowMenu"
-                    [attr.aria-label]="'benefits.more-actions' | translate">
-              <mat-icon>more_vert</mat-icon>
+                    [attr.aria-label]="'benefits.aria.more-actions' | translate: { name: assignment.benefitType?.name }">
+              <mat-icon aria-hidden="true">more_vert</mat-icon>
             </button>
             <mat-menu #rowMenu="matMenu" xPosition="before">
               <button mat-menu-item (click)="cancel(assignment)">{{ 'benefit-assignments.cancel' | translate }}</button>
             </mat-menu>
           } @else if (assignment.delivery; as delivery) {
             <span class="muted">{{ 'benefit-assignments.delivered-on' | translate: { date: (delivery.deliveredOn | localDate) } }}</span>
+          } @else {
+            <span class="muted" [attr.aria-label]="'benefits.no-actions' | translate">—</span>
           }
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="columns"></tr>
       <tr mat-row *matRowDef="let row; columns: columns;"></tr>
       <tr class="mat-mdc-row" *matNoDataRow>
-        <td class="mat-mdc-cell no-data" [attr.colspan]="columns.length">{{ 'benefit-assignments.empty' | translate }}</td>
+        <td class="mat-mdc-cell no-data" [attr.colspan]="columns.length">
+          @if (!store.ready()) {
+            {{ 'benefits.loading' | translate }}
+          } @else {
+            {{ 'benefit-assignments.empty' | translate }}
+            @if (hasFilters()) {
+              <button class="text-link clear-filters" type="button" (click)="clearFilters()">{{ 'benefits.clear-filters' | translate }}</button>
+            }
+          }
+        </td>
       </tr>
     </table>
   </div>
 
   <app-list-pagination [total]="filteredAssignments().length" [pageSize]="pageSize"
-                       itemsKey="benefits.pagination.assignments" [(page)]="page"/>
+                       [itemsKey]="'benefits.pagination-items.assignments' | pluralKey: filteredAssignments().length" [(page)]="page"/>
 </section>

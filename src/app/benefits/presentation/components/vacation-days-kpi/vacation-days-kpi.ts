@@ -1,6 +1,8 @@
 import {Component, computed, inject} from '@angular/core';
 import {DecimalPipe} from '@angular/common';
+import {RouterLink} from '@angular/router';
 import {TranslatePipe} from '@ngx-translate/core';
+import {PluralKeyPipe} from '../../pipes/plural-key-pipe';
 import {BenefitsStore} from '../../../application/benefits.store';
 
 /**
@@ -12,7 +14,7 @@ import {BenefitsStore} from '../../../application/benefits.store';
  */
 @Component({
   selector: 'app-vacation-days-kpi',
-  imports: [TranslatePipe, DecimalPipe],
+  imports: [RouterLink, TranslatePipe, DecimalPipe, PluralKeyPipe],
   templateUrl: './vacation-days-kpi.html',
   styleUrl: './vacation-days-kpi.css',
 })

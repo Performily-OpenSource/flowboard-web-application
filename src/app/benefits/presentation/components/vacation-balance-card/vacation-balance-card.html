@@ -26,5 +26,7 @@
     <p class="muted">{{ 'vacation-card.empty' | translate }}</p>
   }
 
-  <a class="text-link card-link" routerLink="/benefits/balances">{{ 'vacation-card.view' | translate }}</a>
+  <a class="text-link card-link" routerLink="/benefits/balances" [queryParams]="{ employeeId: employeeId() }">
+    {{ 'vacation-card.view' | translate }}
+  </a>
 </section>

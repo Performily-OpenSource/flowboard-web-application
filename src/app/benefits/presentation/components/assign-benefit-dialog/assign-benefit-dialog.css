@@ -24,6 +24,25 @@
   font-weight: 600;
 }
 
+.required-mark {
+  margin-left: 2px;
+  color: var(--fb-error);
+}
+
+.conflict {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+}
+
+.conflict mat-icon {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
 .target-switch button:focus-visible {
   outline: 2px solid var(--fb-primary);
   outline-offset: -2px;

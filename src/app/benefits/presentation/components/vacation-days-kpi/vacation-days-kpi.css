@@ -1,0 +1,10 @@
+.kpi-link {
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+
+.kpi-link:hover,
+.kpi-link:focus-visible {
+  border-color: var(--fb-primary);
+}

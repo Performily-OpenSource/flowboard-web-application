@@ -1,0 +1,19 @@
+<div class="dialog">
+  <header class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">{{ data.titleKey | translate: data.params }}</h2>
+    <button class="icon-action" type="button" [mat-dialog-close]="false" [attr.aria-label]="'common.close' | translate">
+      <mat-icon aria-hidden="true">close</mat-icon>
+    </button>
+  </header>
+
+  <p class="confirm-message">{{ data.messageKey | translate: data.params }}</p>
+
+  <div class="dialog-actions">
+    <button mat-stroked-button type="button" [mat-dialog-close]="false" cdkFocusInitial>
+      {{ (data.cancelKey ?? 'common.cancel') | translate }}
+    </button>
+    <button mat-flat-button type="button" [class.danger-button]="data.danger" [mat-dialog-close]="true">
+      {{ data.confirmKey | translate }}
+    </button>
+  </div>
+</div>

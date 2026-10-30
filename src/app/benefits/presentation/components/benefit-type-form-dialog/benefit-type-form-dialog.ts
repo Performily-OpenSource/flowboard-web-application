@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
-import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogClose, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
+import {AbstractControl, FormBuilder, FormControl, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogClose, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
@@ -14,6 +14,9 @@ import {
   BenefitType,
   BenefitUnit
 } from '../../../domain/model/benefit-type.entity';
+import {notBlank} from '../../validators/benefits-validators';
+import {guardUnsavedChanges} from '../benefits-confirm-dialog/guard-unsaved-changes';
+import {PluralKeyPipe} from '../../pipes/plural-key-pipe';
 
 /**
  * Data received by the benefit form dialog.
@@ -27,7 +30,8 @@ export interface BenefitTypeFormData {
 
 @Component({
   selector: 'app-benefit-type-form-dialog',
-  imports: [ReactiveFormsModule, MatDialogTitle, MatDialogClose, MatButton, MatIcon, MatSlideToggle, TranslatePipe],
+  imports: [ReactiveFormsModule, MatDialogTitle, MatDialogClose, MatButton, MatIcon, MatSlideToggle, TranslatePipe,
+    PluralKeyPipe],
   templateUrl: './benefit-type-form-dialog.html',
   styleUrl: './benefit-type-form-dialog.css',
 })
@@ -47,15 +51,36 @@ export class BenefitTypeFormDialog extends BaseForm {
   readonly units = BENEFIT_UNITS;
   readonly periodicities = BENEFIT_PERIODICITIES;
 
+  /**
+   * Current or upcoming assignments of the benefit being edited. While there are any, the unit and
+   * the balance setting cannot change because they define what was already assigned.
+   */
+  readonly liveAssignments = this.data.benefitType ? this.store.reachOf(this.data.benefitType.id) : 0;
+
+  /** Rejects a name already used in the catalog, ignoring case and accents. */
+  private readonly uniqueName = (control: AbstractControl<string>): ValidationErrors | null =>
+    control.value && this.store.isBenefitNameTaken(control.value.trim(), this.data.benefitType?.id ?? null)
+      ? { taken: true } : null;
+
   readonly form = this.fb.group({
     name: new FormControl<string>(this.data.benefitType?.name ?? '',
-      { nonNullable: true, validators: [Validators.required, Validators.maxLength(80)] }),
+      { nonNullable: true, validators: [Validators.required, notBlank, Validators.maxLength(80), this.uniqueName] }),
     description: new FormControl<string>(this.data.benefitType?.description ?? '',
       { nonNullable: true, validators: [Validators.maxLength(255)] }),
     unit: new FormControl<BenefitUnit>(this.data.benefitType?.unit ?? 'MONEY', { nonNullable: true }),
     periodicity: new FormControl<BenefitPeriodicity>(this.data.benefitType?.periodicity ?? 'MONTHLY', { nonNullable: true }),
     hasBalance: new FormControl<boolean>(this.data.benefitType?.hasBalance ?? false, { nonNullable: true })
   });
+
+  /** Locks the fields that cannot change and protects the unsaved changes. */
+  constructor() {
+    super();
+    if (this.liveAssignments > 0) {
+      this.form.controls.unit.disable();
+      this.form.controls.hasBalance.disable();
+    }
+    guardUnsavedChanges(this.dialogRef, this.form, inject(MatDialog));
+  }
 
   /**
    * Validates the form, checks that the name is unique and saves the benefit.

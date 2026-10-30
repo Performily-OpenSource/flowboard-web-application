@@ -2,7 +2,7 @@
   <header class="dialog-header">
     <h2 mat-dialog-title class="dialog-title">{{ 'delivery-dialog.title' | translate }}</h2>
     <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate">
-      <mat-icon>close</mat-icon>
+      <mat-icon aria-hidden="true">close</mat-icon>
     </button>
   </header>
 
@@ -22,11 +22,17 @@
   </app-employee-summary-panel>
 
   <div class="field">
-    <label for="deliveredOn">{{ 'delivery-dialog.delivered-on' | translate }}</label>
-    <input id="deliveredOn" class="input" type="date" formControlName="deliveredOn"
-           [class.invalid]="isInvalidControl(form, 'deliveredOn')"/>
+    <label for="deliveredOn">
+      {{ 'delivery-dialog.delivered-on' | translate }}<span class="required-mark" aria-hidden="true">*</span>
+    </label>
+    <input id="deliveredOn" class="input" type="date" formControlName="deliveredOn" required cdkFocusInitial
+           [min]="assignment.validity.startDate" [max]="maxDate"
+           [class.invalid]="isInvalidControl(form, 'deliveredOn')"
+           [attr.aria-invalid]="isInvalidControl(form, 'deliveredOn')"/>
     @if (form.controls.deliveredOn.hasError('beforeValidity')) {
       <p class="field-error">{{ 'delivery-dialog.error.before-validity' | translate }}</p>
+    } @else if (form.controls.deliveredOn.hasError('afterLimit')) {
+      <p class="field-error">{{ 'delivery-dialog.error.after-limit' | translate }}</p>
     } @else if (isInvalidControl(form, 'deliveredOn')) {
       <p class="field-error">{{ 'validation.required' | translate }}</p>
     }
@@ -53,7 +59,7 @@
   <div class="dialog-actions">
     <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.cancel' | translate }}</button>
     <button mat-flat-button type="submit" [disabled]="blocked">
-      <mat-icon>check</mat-icon>
+      <mat-icon aria-hidden="true">check</mat-icon>
       {{ 'delivery-dialog.register' | translate }}
     </button>
   </div>

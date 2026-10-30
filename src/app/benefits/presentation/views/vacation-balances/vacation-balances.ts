@@ -1,6 +1,7 @@
 import {Component, computed, inject, signal} from '@angular/core';
 import {DecimalPipe} from '@angular/common';
 import {MatDialog} from '@angular/material/dialog';
+import {ActivatedRoute} from '@angular/router';
 import {
   MatCell,
   MatCellDef,
@@ -21,13 +22,15 @@ import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {BenefitsStore} from '../../../application/benefits.store';
 import {WorkspaceAcl, EmployeeSummary} from '../../../infrastructure/workspace-acl';
 import {VacationBalance} from '../../../domain/model/vacation-balance.entity';
+import {BenefitsHeader} from '../../components/benefits-header/benefits-header';
 import {BenefitsTabs} from '../../components/benefits-tabs/benefits-tabs';
 import {BenefitsFeedback} from '../../components/benefits-feedback/benefits-feedback';
 import {ListPagination} from '../../../../shared/presentation/components/list-pagination/list-pagination';
 import {VacationAdjustmentDialog} from '../../components/vacation-adjustment-dialog/vacation-adjustment-dialog';
 import {VacationMovementsDialog} from '../../components/vacation-movements-dialog/vacation-movements-dialog';
+import {PluralKeyPipe} from '../../pipes/plural-key-pipe';
 
-type AvailabilityFilter = 'ALL' | 'WITH_DAYS' | 'WITHOUT_DAYS';
+type AvailabilityFilter = 'ALL' | 'WITH_DAYS' | 'WITHOUT_DAYS' | 'HIGH_USAGE';
 type SortOrder = 'MOST_AVAILABLE' | 'LEAST_AVAILABLE' | 'NAME';
 
 interface BalanceRow {
@@ -35,7 +38,7 @@ interface BalanceRow {
   employee: EmployeeSummary | undefined;
 }
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 8;
 const HIGH_USAGE = 80;
 
 @Component({
@@ -44,8 +47,8 @@ const HIGH_USAGE = 80;
     DecimalPipe,
     MatTable, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatCell, MatCellDef,
     MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef, MatNoDataRow,
-    MatButton, MatIcon, MatMenu, MatMenuItem, MatMenuTrigger, TranslatePipe,
-    BenefitsTabs, BenefitsFeedback, ListPagination
+    MatButton, MatIcon, MatMenu, MatMenuItem, MatMenuTrigger, TranslatePipe, PluralKeyPipe,
+    BenefitsHeader, BenefitsTabs, BenefitsFeedback, ListPagination
   ],
   templateUrl: './vacation-balances.html',
   styleUrl: './vacation-balances.css',
@@ -61,9 +64,10 @@ export class VacationBalances {
   readonly directory = inject(WorkspaceAcl);
   private dialog = inject(MatDialog);
   private translate = inject(TranslateService);
+  private route = inject(ActivatedRoute);
 
   readonly columns = ['employee', 'accrued', 'used', 'available', 'usage', 'actions'];
-  readonly availabilityOptions: AvailabilityFilter[] = ['ALL', 'WITH_DAYS', 'WITHOUT_DAYS'];
+  readonly availabilityOptions: AvailabilityFilter[] = ['ALL', 'WITH_DAYS', 'WITHOUT_DAYS', 'HIGH_USAGE'];
   readonly sortOptions: SortOrder[] = ['MOST_AVAILABLE', 'LEAST_AVAILABLE', 'NAME'];
   readonly pageSize = PAGE_SIZE;
   readonly highUsage = HIGH_USAGE;
@@ -71,15 +75,17 @@ export class VacationBalances {
   readonly areaFilter = signal<number | null>(null);
   readonly availabilityFilter = signal<AvailabilityFilter>('ALL');
   readonly sortOrder = signal<SortOrder>('MOST_AVAILABLE');
+  /** Employee received in the URL (?employeeId=), for example from the employee file. */
+  readonly employeeFilter = signal<number | null>(this.employeeFromUrl());
   readonly page = signal(0);
 
   readonly rows = computed<BalanceRow[]>(() => {
     const rows = this.store.vacationBalances()
       .map(balance => ({ balance, employee: this.directory.findEmployee(balance.employeeId) }))
       .filter(row =>
+        (this.employeeFilter() === null || row.balance.employeeId === this.employeeFilter()) &&
         (this.areaFilter() === null || row.employee?.areaId === this.areaFilter()) &&
-        (this.availabilityFilter() === 'ALL' ||
-          (row.balance.availableDays() > 0) === (this.availabilityFilter() === 'WITH_DAYS')));
+        this.matchesAvailability(row.balance));
     const byName = (a: BalanceRow, b: BalanceRow) => (a.employee?.fullName ?? '').localeCompare(b.employee?.fullName ?? '');
     switch (this.sortOrder()) {
       case 'MOST_AVAILABLE':
@@ -95,6 +101,62 @@ export class VacationBalances {
 
   readonly highUsageCount = computed(() =>
     this.store.vacationBalances().filter(balance => balance.usagePercentage() >= HIGH_USAGE).length);
+
+  /** Whether any filter differs from the default view. */
+  readonly hasFilters = computed(() =>
+    this.areaFilter() !== null || this.availabilityFilter() !== 'ALL' || this.employeeFilter() !== null);
+
+  /**
+   * Shows only the employees that used 80 % or more of their balance (link of the warning).
+   * @author Salym
+   */
+  showHighUsage() {
+    this.setAvailability('HIGH_USAGE');
+  }
+
+  /**
+   * Removes every filter and goes back to the default order.
+   * @author Salym
+   */
+  clearFilters() {
+    this.areaFilter.set(null);
+    this.availabilityFilter.set('ALL');
+    this.employeeFilter.set(null);
+    this.sortOrder.set('MOST_AVAILABLE');
+    this.page.set(0);
+  }
+
+  /**
+   * Gets the name of an employee to show it in the filter.
+   * @param employeeId Identifier of the employee (EmployeeId of the Shared Kernel).
+   * @author Salym
+   */
+  employeeName(employeeId: number | null): string {
+    return employeeId !== null ? this.directory.findEmployee(employeeId)?.fullName ?? '' : '';
+  }
+
+  /**
+   * Checks a balance against the availability filter.
+   * @param balance Vacation balance of the employee.
+   * @author Salym
+   */
+  private matchesAvailability(balance: VacationBalance): boolean {
+    switch (this.availabilityFilter()) {
+      case 'WITH_DAYS': return balance.availableDays() > 0;
+      case 'WITHOUT_DAYS': return balance.availableDays() <= 0;
+      case 'HIGH_USAGE': return balance.usagePercentage() >= HIGH_USAGE;
+      default: return true;
+    }
+  }
+
+  /**
+   * Reads the employee filter from the URL.
+   * @author Salym
+   */
+  private employeeFromUrl(): number | null {
+    const value = Number(this.route.snapshot.queryParamMap.get('employeeId'));
+    return Number.isInteger(value) && value > 0 ? value : null;
+  }
 
   /**
    * Gets the name of an area to show it in the filter.

@@ -8,6 +8,7 @@ import {LocalDatePipe} from '../../../../shared/presentation/pipes/local-date-pi
 import {WorkspaceAcl} from '../../../infrastructure/workspace-acl';
 import {VacationBalance} from '../../../domain/model/vacation-balance.entity';
 import {EmployeeSummaryPanel} from '../employee-summary-panel/employee-summary-panel';
+import {PluralKeyPipe} from '../../pipes/plural-key-pipe';
 
 /**
  * Data received by the vacation movements dialog.
@@ -22,7 +23,7 @@ export interface VacationMovementsData {
 @Component({
   selector: 'app-vacation-movements-dialog',
   imports: [DecimalPipe, MatDialogTitle, MatDialogClose, MatButton, MatIcon, TranslatePipe, LocalDatePipe,
-    EmployeeSummaryPanel],
+    EmployeeSummaryPanel, PluralKeyPipe],
   templateUrl: './vacation-movements-dialog.html',
   styleUrl: './vacation-movements-dialog.css',
 })
@@ -36,8 +37,19 @@ export class VacationMovementsDialog {
   private directory = inject(WorkspaceAcl);
   readonly balance = inject<VacationMovementsData>(MAT_DIALOG_DATA).balance;
 
-  readonly movements = computed(() =>
-    [...this.balance.movements].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt)));
+  /**
+   * Movements from the newest to the oldest, each one with the available days that remained after
+   * it. The balance is rebuilt backwards from the current available days.
+   */
+  readonly movements = computed(() => {
+    const sorted = [...this.balance.movements].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt));
+    let balanceAfter = this.balance.availableDays();
+    return sorted.map(movement => {
+      const row = { movement, balanceAfter: Math.round(balanceAfter * 100) / 100 };
+      balanceAfter -= movement.days;
+      return row;
+    });
+  });
 
   /**
    * Gets the name of the employee that made a movement.

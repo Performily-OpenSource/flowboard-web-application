@@ -14,3 +14,14 @@
 .result.negative strong {
   color: var(--fb-error);
 }
+
+.required-mark {
+  margin-left: 2px;
+  color: var(--fb-error);
+}
+
+.field-hint {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--fb-text-muted);
+}

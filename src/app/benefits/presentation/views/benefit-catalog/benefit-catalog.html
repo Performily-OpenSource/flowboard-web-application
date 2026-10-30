@@ -5,9 +5,15 @@
   <app-benefits-feedback/>
 
   <div class="filters">
+    <label class="search-box">
+      <mat-icon aria-hidden="true">search</mat-icon>
+      <input type="search" [value]="searchText()" (input)="onSearch($event)"
+             [placeholder]="'benefits.search' | translate" [attr.aria-label]="'benefits.search' | translate"/>
+    </label>
+
     <button class="filter-chip" type="button" [class.active]="unitFilter() !== null" [matMenuTriggerFor]="unitMenu">
       {{ 'benefits.filter.type' | translate }}: {{ (unitFilter() !== null ? 'benefit-unit.' + unitFilter() : 'benefits.filter.all') | translate }}
-      <mat-icon>expand_more</mat-icon>
+      <mat-icon aria-hidden="true">expand_more</mat-icon>
     </button>
     <mat-menu #unitMenu="matMenu">
       <button mat-menu-item (click)="setUnit(null)">{{ 'benefits.filter.all' | translate }}</button>
@@ -18,7 +24,7 @@
 
     <button class="filter-chip" type="button" [class.active]="balanceFilter() !== 'ALL'" [matMenuTriggerFor]="balanceMenu">
       {{ 'benefits.filter.with-balance' | translate }}: {{ 'benefits.filter.balance.' + balanceFilter() | translate }}
-      <mat-icon>expand_more</mat-icon>
+      <mat-icon aria-hidden="true">expand_more</mat-icon>
     </button>
     <mat-menu #balanceMenu="matMenu">
       @for (option of balanceOptions; track option) {
@@ -26,9 +32,9 @@
       }
     </mat-menu>
 
-    <button class="filter-chip" type="button" [class.active]="statusFilter() !== 'ALL'" [matMenuTriggerFor]="statusMenu">
+    <button class="filter-chip" type="button" [class.active]="statusFilter() !== 'ACTIVE'" [matMenuTriggerFor]="statusMenu">
       {{ 'benefits.filter.status' | translate }}: {{ 'benefits.filter.status-option.' + statusFilter() | translate }}
-      <mat-icon>expand_more</mat-icon>
+      <mat-icon aria-hidden="true">expand_more</mat-icon>
     </button>
     <mat-menu #statusMenu="matMenu">
       @for (option of statusOptions; track option) {
@@ -37,11 +43,19 @@
     </mat-menu>
 
     <span class="spacer"></span>
-    <span class="count">{{ 'benefits.catalog-count' | translate: { count: store.benefitTypes().length } }}</span>
+    @if (store.ready()) {
+      <span class="count">
+        @if (filteredTypes().length === store.benefitTypes().length) {
+          {{ 'benefits.catalog-count-plural' | pluralKey: store.benefitTypes().length | translate: { count: store.benefitTypes().length } }}
+        } @else {
+          {{ 'benefits.catalog-count-filtered' | translate: { count: filteredTypes().length, total: store.benefitTypes().length } }}
+        }
+      </span>
+    }
   </div>
 
   <div class="table-card">
-    <table mat-table [dataSource]="pageTypes()">
+    <table mat-table [dataSource]="pageTypes()" class="catalog-table">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>{{ 'benefits.column.benefit' | translate }}</th>
         <td mat-cell *matCellDef="let type">
@@ -62,22 +76,28 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="reach">
-        <th mat-header-cell *matHeaderCellDef>{{ 'benefits.column.reach' | translate }}</th>
-        <td mat-cell *matCellDef="let type">{{ 'benefits.reach' | translate: { count: store.reachOf(type.id) } }}</td>
+        <th mat-header-cell *matHeaderCellDef [attr.title]="'benefits.column.reach-hint' | translate">
+          {{ 'benefits.column.reach' | translate }}
+          <mat-icon class="hint-icon" aria-hidden="true">info</mat-icon>
+        </th>
+        <td mat-cell *matCellDef="let type">
+          {{ 'benefits.reach-count' | pluralKey: store.reachOf(type.id) | translate: { count: store.reachOf(type.id) } }}
+        </td>
       </ng-container>
       <ng-container matColumnDef="periodicity">
         <th mat-header-cell *matHeaderCellDef>{{ 'benefits.column.periodicity' | translate }}</th>
         <td mat-cell *matCellDef="let type">{{ 'benefit-periodicity.' + type.periodicity | translate }}</td>
       </ng-container>
-      <ng-container matColumnDef="actions">
+      <ng-container matColumnDef="actions" stickyEnd>
         <th mat-header-cell *matHeaderCellDef>{{ 'benefits.column.actions' | translate }}</th>
         <td mat-cell *matCellDef="let type">
-          <button class="icon-action" type="button" (click)="editBenefit(type)" [attr.aria-label]="'common.edit' | translate">
-            <mat-icon>edit</mat-icon>
+          <button class="icon-action" type="button" (click)="editBenefit(type)"
+                  [attr.aria-label]="'benefits.aria.edit' | translate: { name: type.name }">
+            <mat-icon aria-hidden="true">edit</mat-icon>
           </button>
           <button class="icon-action" type="button" [matMenuTriggerFor]="rowMenu"
-                  [attr.aria-label]="'benefits.more-actions' | translate">
-            <mat-icon>more_vert</mat-icon>
+                  [attr.aria-label]="'benefits.aria.more-actions' | translate: { name: type.name }">
+            <mat-icon aria-hidden="true">more_vert</mat-icon>
           </button>
           <mat-menu #rowMenu="matMenu" xPosition="before">
             @if (type.active) {
@@ -90,13 +110,22 @@
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="columns"></tr>
-      <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns;" [class.highlight]="row.id === store.highlightedTypeId()"></tr>
       <tr class="mat-mdc-row" *matNoDataRow>
-        <td class="mat-mdc-cell no-data" [attr.colspan]="columns.length">{{ 'benefits.no-benefits' | translate }}</td>
+        <td class="mat-mdc-cell no-data" [attr.colspan]="columns.length">
+          @if (!store.ready()) {
+            {{ 'benefits.loading' | translate }}
+          } @else {
+            {{ 'benefits.no-benefits' | translate }}
+            @if (hasFilters()) {
+              <button class="text-link clear-filters" type="button" (click)="clearFilters()">{{ 'benefits.clear-filters' | translate }}</button>
+            }
+          }
+        </td>
       </tr>
     </table>
   </div>
 
   <app-list-pagination [total]="filteredTypes().length" [pageSize]="pageSize"
-                       itemsKey="benefits.pagination.benefits" [(page)]="page"/>
+                       [itemsKey]="'benefits.pagination-items.benefits' | pluralKey: filteredTypes().length" [(page)]="page"/>
 </section>

@@ -5,6 +5,17 @@
   align-items: start;
 }
 
+.side-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.delivered-text app-benefit-quantity {
+  display: inline;
+}
+
 .balance-list,
 .delivered-list {
   margin: 0;

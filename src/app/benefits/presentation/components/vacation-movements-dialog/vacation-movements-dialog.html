@@ -2,33 +2,38 @@
   <header class="dialog-header">
     <h2 mat-dialog-title class="dialog-title">{{ 'movements-dialog.title' | translate }}</h2>
     <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate">
-      <mat-icon>close</mat-icon>
+      <mat-icon aria-hidden="true">close</mat-icon>
     </button>
   </header>
 
   <app-employee-summary-panel [employeeId]="balance.employeeId"/>
 
   <ul class="movements">
-    @for (movement of movements(); track movement.id) {
+    @for (row of movements(); track row.movement.id) {
       <li class="movement">
         <div>
-          <p class="movement-type">{{ 'vacation-movement-type.' + movement.type | translate }}</p>
+          <p class="movement-type">{{ 'vacation-movement-type.' + row.movement.type | translate }}</p>
           <p class="muted">
-            {{ movement.occurredAt | localDate }}
-            @if (movement.requestId !== null) {
-              · {{ 'movements-dialog.request' | translate: { id: movement.requestId } }}
+            {{ row.movement.occurredAt | localDate }}
+            @if (row.movement.requestId !== null) {
+              · {{ 'movements-dialog.request' | translate: { id: row.movement.requestId } }}
             }
-            @if (authorName(movement.authorId); as author) {
-              · {{ author }}
+            @if (authorName(row.movement.authorId); as author) {
+              · {{ 'movements-dialog.by' | translate: { name: author } }}
             }
           </p>
-          @if (movement.type === 'MANUAL_ADJUSTMENT') {
-            <p class="reason">{{ movement.reason }}</p>
+          @if (row.movement.type === 'MANUAL_ADJUSTMENT' && row.movement.reason) {
+            <p class="reason">{{ 'movements-dialog.reason' | translate: { reason: row.movement.reason } }}</p>
           }
         </div>
-        <span class="days" [class.negative]="movement.days < 0">
-          {{ movement.days > 0 ? '+' : '' }}{{ 'benefits.days' | translate: { days: (movement.days | number: '1.0-2') } }}
-        </span>
+        <div class="amounts">
+          <span class="days" [class.negative]="row.movement.days < 0">
+            {{ row.movement.days > 0 ? '+' : '' }}{{ 'benefits.day-count' | pluralKey: row.movement.days | translate: { days: (row.movement.days | number: '1.0-2') } }}
+          </span>
+          <span class="balance-after">
+            {{ 'movements-dialog.balance-after' | translate: { days: (row.balanceAfter | number: '1.0-2') } }}
+          </span>
+        </div>
       </li>
     } @empty {
       <li class="muted">{{ 'movements-dialog.empty' | translate }}</li>

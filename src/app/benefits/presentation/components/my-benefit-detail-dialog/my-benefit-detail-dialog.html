@@ -2,12 +2,12 @@
   <header class="dialog-header">
     <h2 mat-dialog-title class="dialog-title">{{ assignment.benefitType?.name }}</h2>
     <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate">
-      <mat-icon>close</mat-icon>
+      <mat-icon aria-hidden="true">close</mat-icon>
     </button>
   </header>
 
   @if (assignment.benefitType?.description) {
-    <p class="muted">{{ assignment.benefitType?.description }}</p>
+    <p class="muted description">{{ assignment.benefitType?.description }}</p>
   }
 
   <dl class="kv-list">
@@ -29,11 +29,19 @@
     </div>
     <div class="kv-row">
       <dt>{{ 'my-benefits.detail.status' | translate }}</dt>
-      <dd>{{ 'assignment-status.' + assignment.status | translate }}</dd>
+      <dd>
+        <span class="pill" [class.pill-assigned]="assignment.status === 'ASSIGNED'"
+              [class.pill-active]="assignment.status === 'DELIVERED'"
+              [class.pill-inactive]="assignment.status === 'CANCELLED'">
+          {{ 'assignment-status.' + assignment.status | translate }}
+        </span>
+      </dd>
     </div>
   </dl>
 
+  <p class="muted">{{ 'my-benefits.detail.note' | translate }}</p>
+
   <div class="dialog-actions">
-    <button mat-flat-button type="button" mat-dialog-close>{{ 'common.close' | translate }}</button>
+    <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.close' | translate }}</button>
   </div>
 </div>

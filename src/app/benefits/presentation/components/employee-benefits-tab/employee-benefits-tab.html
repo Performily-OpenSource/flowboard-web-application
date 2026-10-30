@@ -1,14 +1,21 @@
 <section class="card card-body">
   <div class="tab-head">
     <h2 class="card-title">{{ 'employee-benefits.title' | translate }}</h2>
-    <a class="text-link" routerLink="/benefits/assignments">{{ 'employee-benefits.view-all' | translate }}</a>
+    <a class="text-link" routerLink="/benefits/assignments" [queryParams]="{ employeeId: employeeId() }">
+      {{ 'employee-benefits.view-all' | translate }}
+    </a>
   </div>
 
   <div class="table-card">
     <table mat-table [dataSource]="assignments()">
       <ng-container matColumnDef="benefit">
         <th mat-header-cell *matHeaderCellDef>{{ 'benefits.column.benefit' | translate }}</th>
-        <td mat-cell *matCellDef="let assignment" class="cell-strong">{{ assignment.benefitType?.name }}</td>
+        <td mat-cell *matCellDef="let assignment">
+          <span class="cell-strong">{{ assignment.benefitType?.name }}</span>
+          @if (assignment.sourceAreaId !== null) {
+            <span class="tag">{{ 'benefit-assignments.by-area' | translate }}</span>
+          }
+        </td>
       </ng-container>
       <ng-container matColumnDef="validity">
         <th mat-header-cell *matHeaderCellDef>{{ 'benefit-assignments.validity' | translate }}</th>

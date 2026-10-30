@@ -10,6 +10,19 @@
   border-bottom: 1px solid var(--fb-border);
 }
 
+.kv-list:empty {
+  display: none;
+}
+
+.summary-panel:has(.kv-list:empty) {
+  padding-bottom: 16px;
+}
+
+.summary-panel:has(.kv-list:empty) .person {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
 .name {
   margin: 0 0 2px;
   font-size: 14px;

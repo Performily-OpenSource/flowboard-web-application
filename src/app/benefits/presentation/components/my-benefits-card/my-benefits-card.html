@@ -1,6 +1,7 @@
 <section class="dash-card">
   <div class="dash-card-head">
     <h2 class="dash-card-title">{{ 'benefits-dashboard.my-benefits-title' | translate }}</h2>
+    <a class="dash-link" routerLink="/benefits/my-benefits">{{ 'benefits-dashboard.view-all' | translate }}</a>
   </div>
   @for (assignment of visibleAssignments(); track assignment.id) {
     <div class="dash-row">

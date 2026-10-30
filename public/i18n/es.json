@@ -50,7 +50,8 @@
     "wellbeing-dashboard": "Panel de Bienestar",
     "wellbeing-spaces": "Espacios de Bienestar",
     "wellbeing-thresholds": "Umbrales de Bienestar",
-    "accounts": "Cuentas y roles"
+    "accounts": "Cuentas y roles",
+    "benefit-catalog": "Catálogo"
   },
   "toolbar": {
     "search": "Buscar",
@@ -428,28 +429,29 @@
       "balances": "Saldo por colaborador"
     },
     "filter": {
-      "type": "Tipo",
-      "all": "todos",
+      "type": "Unidad",
+      "all": "Todos",
       "with-balance": "Con saldo",
       "status": "Estado",
       "balance": {
-        "ALL": "todos",
-        "WITH": "sí",
-        "WITHOUT": "no"
+        "ALL": "Todos",
+        "WITH": "Sí",
+        "WITHOUT": "No"
       },
       "status-option": {
-        "ACTIVE": "activos",
-        "INACTIVE": "inactivos",
-        "ALL": "todos"
+        "ACTIVE": "Activos",
+        "INACTIVE": "Inactivos",
+        "ALL": "Todos"
       }
     },
     "column": {
       "benefit": "Beneficio",
       "unit": "Unidad",
       "has-balance": "Maneja saldo",
-      "reach": "Alcance",
+      "reach": "Alcance vigente",
       "periodicity": "Periodicidad",
-      "actions": "Acciones"
+      "actions": "Acciones",
+      "reach-hint": "Colaboradores con una asignación vigente o por empezar (no cancelada) de este beneficio."
     },
     "has-balance": {
       "NO": "No",
@@ -490,6 +492,89 @@
       "balance-not-found": "El colaborador no tiene un saldo de vacaciones registrado.",
       "not-enough-days": "El colaborador no tiene suficientes días de vacaciones disponibles.",
       "debit-balance": "No se pudo descontar el saldo de vacaciones."
+    },
+    "search": "Buscar beneficio",
+    "loading": "Cargando…",
+    "clear-filters": "Limpiar filtros",
+    "remove-filter": "Quitar filtro",
+    "no-actions": "Sin acciones",
+    "aria": {
+      "edit": "Editar {{name}}",
+      "more-actions": "Más acciones de {{name}}"
+    },
+    "catalog-count-plural": {
+      "one": "{{count}} beneficio en el catálogo",
+      "other": "{{count}} beneficios en el catálogo"
+    },
+    "catalog-count-filtered": "{{count}} de {{total}} beneficios",
+    "reach-count": {
+      "one": "{{count}} colaborador",
+      "other": "{{count}} colaboradores"
+    },
+    "day-count": {
+      "one": "{{days}} día",
+      "other": "{{days}} días"
+    },
+    "unit-one": {
+      "MONEY": "sol",
+      "DAYS": "día",
+      "UNITS": "unidad"
+    },
+    "pagination-items": {
+      "benefits": {
+        "one": "beneficio",
+        "other": "beneficios"
+      },
+      "employees": {
+        "one": "colaborador",
+        "other": "colaboradores"
+      },
+      "assignments": {
+        "one": "asignación",
+        "other": "asignaciones"
+      },
+      "deliveries": {
+        "one": "entrega",
+        "other": "entregas"
+      }
+    },
+    "notice": {
+      "undo": "Deshacer",
+      "benefit-created": "Se creó el beneficio «{{name}}».",
+      "benefit-updated": "Se guardaron los cambios de «{{name}}».",
+      "benefit-activated": "Se activó «{{name}}».",
+      "benefit-deactivated": "Se desactivó «{{name}}».",
+      "benefit-assigned": {
+        "one": "Beneficio asignado a 1 colaborador.",
+        "other": "Beneficio asignado a {{count}} colaboradores."
+      },
+      "delivery-registered": "Se registró la entrega de «{{name}}».",
+      "assignment-cancelled": "Se canceló la asignación de «{{name}}».",
+      "balance-adjusted": "Se guardó el ajuste del saldo de vacaciones."
+    },
+    "confirm": {
+      "keep": "Volver",
+      "deactivate": {
+        "title": "¿Desactivar «{{name}}»?",
+        "message": {
+          "one": "Ya no se podrá asignar a nadie más. La asignación vigente que tiene (1 colaborador) se mantiene.",
+          "other": "Ya no se podrá asignar a nadie más. Las asignaciones vigentes que tiene ({{count}} colaboradores) se mantienen."
+        }
+      },
+      "activate": {
+        "title": "¿Activar «{{name}}»?",
+        "message": "El beneficio volverá a estar disponible para asignarlo."
+      },
+      "cancel-assignment": {
+        "title": "¿Cancelar esta asignación?",
+        "message": "{{employee}} dejará de tener «{{name}}» del {{from}} al {{to}}. Esta acción no se puede deshacer."
+      },
+      "discard": {
+        "title": "¿Descartar los cambios?",
+        "message": "Tienes cambios sin guardar en este formulario.",
+        "confirm": "Descartar",
+        "keep": "Seguir editando"
+      }
     }
   },
   "my-benefits": {
@@ -505,12 +590,18 @@
     "no-balance": "No tienes beneficios con saldo disponible.",
     "no-delivered": "Aún no tienes beneficios entregados.",
     "detail": {
-      "assigned": "Asignado",
+      "assigned": "Asignado en la vigencia",
       "unit": "Unidad",
       "periodicity": "Periodicidad",
       "validity": "Vigencia",
-      "status": "Estado"
-    }
+      "status": "Estado",
+      "note": "La cantidad asignada corresponde a toda la vigencia, no a cada mes."
+    },
+    "of-available": "{{available}} de {{total}} disponibles",
+    "available-bar": "Disponible",
+    "used": "Usados",
+    "valid-until": "Vigente hasta el {{date}}",
+    "upcoming": "Por recibir"
   },
   "benefit-unit": {
     "MONEY": "Monto",
@@ -528,9 +619,9 @@
     "CANCELLED": "Cancelado"
   },
   "assignment-status-plural": {
-    "ASSIGNED": "asignados",
-    "DELIVERED": "entregados",
-    "CANCELLED": "cancelados"
+    "ASSIGNED": "Asignados",
+    "DELIVERED": "Entregados",
+    "CANCELLED": "Cancelados"
   },
   "vacation-movement-type": {
     "ACCRUAL": "Acumulación por antigüedad",
@@ -545,11 +636,15 @@
     "name-placeholder": "Ej. Vales de alimentación",
     "description": "Descripción",
     "description-placeholder": "Para qué sirve y a quién aplica",
-    "unit": "Unidad de medida",
+    "unit": "Unidad",
     "periodicity": "Periodicidad",
     "has-balance": "Maneja saldo",
     "has-balance-hint": "Los consumos descuentan del saldo asignado.",
-    "create": "Crear beneficio"
+    "create": "Crear beneficio",
+    "locked": {
+      "one": "La unidad y \"Maneja saldo\" no se pueden cambiar porque 1 colaborador tiene este beneficio vigente.",
+      "other": "La unidad y \"Maneja saldo\" no se pueden cambiar porque {{count}} colaboradores tienen este beneficio vigente."
+    }
   },
   "assign-dialog": {
     "title": "Asignar beneficio",
@@ -564,16 +659,26 @@
     "quantity": {
       "MONEY": "Saldo inicial (S/)",
       "DAYS": "Días asignados",
-      "UNITS": "Unidades asignadas"
+      "UNITS": "Unidades asignadas",
+      "NONE": "Cantidad"
     },
     "area-summary": "Se asignará a {{count}} colaboradores activos de {{area}}.",
-    "area-skipped": "Se omitirán {{count}} que ya lo tienen en ese período.",
+    "area-skipped": "Se omitirán porque ya lo tienen en ese período: {{names}}.",
     "assign": "Asignar",
     "error": {
       "invalid-range": "La fecha de fin no puede ser anterior a la fecha de inicio.",
       "quantity": "Ingresa una cantidad mayor a cero con hasta 2 decimales.",
       "overlap": "{{employee}} ya tiene este beneficio asignado entre el {{from}} y el {{to}}. No puede haber dos asignaciones del mismo beneficio en el mismo período.",
-      "area-all-overlap": "Todos los colaboradores activos del área ya tienen este beneficio en ese período."
+      "area-all-overlap": "Todos los colaboradores activos del área ya tienen este beneficio en ese período.",
+      "step": {
+        "MONEY": "Ingresa un monto con hasta 2 decimales.",
+        "DAYS": "Los días se asignan en múltiplos de 0.5.",
+        "UNITS": "Las unidades deben ser un número entero."
+      }
+    },
+    "area-summary-plural": {
+      "one": "Se asignará a 1 colaborador activo de {{area}}.",
+      "other": "Se asignará a {{count}} colaboradores activos de {{area}}."
     }
   },
   "delivery-dialog": {
@@ -590,7 +695,8 @@
     "notes-placeholder": "Quién entrega, dónde, observaciones",
     "register": "Registrar entrega",
     "error": {
-      "before-validity": "La fecha de entrega no puede ser anterior al inicio de la vigencia."
+      "before-validity": "La fecha de entrega no puede ser anterior al inicio de la vigencia.",
+      "after-limit": "La fecha no puede ser posterior al fin de la vigencia ni a hoy."
     }
   },
   "adjustment-dialog": {
@@ -608,13 +714,18 @@
     "save": "Guardar ajuste",
     "error": {
       "days": "Ingresa una cantidad mayor a cero con hasta 2 decimales.",
-      "reason": "El motivo es obligatorio: queda en el historial junto con tu nombre y la fecha."
-    }
+      "reason": "El motivo es obligatorio: queda en el historial junto con tu nombre y la fecha.",
+      "max-days": "Un ajuste puede tener como máximo {{max}} días."
+    },
+    "reason-hint": "Quedará registrado en el historial junto con tu nombre y la fecha."
   },
   "movements-dialog": {
     "title": "Movimientos de vacaciones",
     "request": "solicitud #{{id}}",
-    "empty": "Este saldo todavía no tiene movimientos."
+    "empty": "Este saldo todavía no tiene movimientos.",
+    "by": "por {{name}}",
+    "reason": "Motivo: {{reason}}",
+    "balance-after": "Saldo después: {{days}} días"
   },
   "vacation-balances": {
     "title": "Saldo por colaborador",
@@ -632,19 +743,24 @@
     "high-usage-count": "{{count}} colaboradores usaron {{percent}} % o más de su saldo",
     "filter": {
       "area": "Área",
-      "all-female": "todas",
+      "all-female": "Todas",
       "balance": "Saldo",
       "order": "Orden",
       "availability": {
-        "ALL": "todos",
-        "WITH_DAYS": "con días disponibles",
-        "WITHOUT_DAYS": "sin días disponibles"
+        "ALL": "Todos",
+        "WITH_DAYS": "Con días disponibles",
+        "WITHOUT_DAYS": "Sin días disponibles",
+        "HIGH_USAGE": "Uso de 80 % o más"
       },
       "sort": {
-        "MOST_AVAILABLE": "mayor saldo",
-        "LEAST_AVAILABLE": "menor saldo",
-        "NAME": "nombre"
+        "MOST_AVAILABLE": "Mayor saldo",
+        "LEAST_AVAILABLE": "Menor saldo",
+        "NAME": "Nombre"
       }
+    },
+    "high-usage-plural": {
+      "one": "1 colaborador usó {{percent}} % o más de su saldo",
+      "other": "{{count}} colaboradores usaron {{percent}} % o más de su saldo"
     }
   },
   "benefit-assignments": {
@@ -655,13 +771,31 @@
     "register-delivery": "Registrar entrega",
     "cancel": "Cancelar asignación",
     "delivered-on": "Entregado el {{date}}",
-    "empty": "No hay asignaciones con los filtros seleccionados."
+    "empty": "No hay asignaciones con los filtros seleccionados.",
+    "search": "Buscar colaborador o beneficio",
+    "count-plural": {
+      "one": "{{count}} asignación",
+      "other": "{{count}} asignaciones"
+    },
+    "starts-on": "Desde el {{date}}",
+    "starts-on-hint": "La entrega se podrá registrar cuando empiece la vigencia ({{date}})."
   },
   "benefit-deliveries": {
     "delivered-on": "Fecha de entrega",
     "registered-by": "Registrado por",
     "notes": "Nota",
-    "empty": "Todavía no hay entregas registradas."
+    "empty": "Todavía no hay entregas registradas.",
+    "from": "Desde",
+    "to": "Hasta",
+    "count": {
+      "one": "{{count}} entrega",
+      "other": "{{count}} entregas"
+    },
+    "pending": {
+      "one": "Ver 1 pendiente de entrega",
+      "other": "Ver {{count}} pendientes de entrega"
+    },
+    "empty-filtered": "No hay entregas con los filtros seleccionados."
   },
   "payroll": {
     "title": "Boletas y pagos",
@@ -1507,7 +1641,12 @@
     "my-benefits-title": "Mis beneficios",
     "valid-until": "vigente hasta el {{date}}",
     "no-benefits": "No tienes beneficios asignados.",
-    "more-benefits": "Y {{count}} más."
+    "more-benefits": "Y {{count}} más.",
+    "view-all": "Ver todos",
+    "available-vacation-hint-plural": {
+      "one": "días en 1 colaborador",
+      "other": "días en {{count}} colaboradores"
+    }
   },
   "payroll-dashboard": {
     "latest-payslip-title": "Mi última boleta",

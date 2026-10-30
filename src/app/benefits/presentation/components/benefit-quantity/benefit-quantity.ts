@@ -9,9 +9,9 @@ import {BenefitUnit} from '../../../domain/model/benefit-type.entity';
   imports: [CurrencyPipe, DecimalPipe, TranslatePipe],
   template: `
     @if (unit() === 'MONEY') {
-      {{ quantity() | currency: 'PEN' : 'S/ ' }}
+      {{ quantity() | currency: 'PEN' : 'S/ ' : '1.2-2' }}
     } @else {
-      {{ quantity() | number: '1.0-2' }} {{ ('benefits.unit-short.' + (unit() ?? 'UNITS')) | translate }}
+      {{ quantity() | number: '1.0-2' }} {{ ((quantity() === 1 ? 'benefits.unit-one.' : 'benefits.unit-short.') + (unit() ?? 'UNITS')) | translate }}
     }
   `,
 })

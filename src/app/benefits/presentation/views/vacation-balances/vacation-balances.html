@@ -1,25 +1,23 @@
 <section class="page">
-  <header class="page-header">
-    <div>
-      <h1 class="page-title">{{ 'vacation-balances.title' | translate }}</h1>
-      <p class="page-subtitle">{{ 'vacation-balances.subtitle' | translate }}</p>
-    </div>
-    <div class="page-actions">
-      <button mat-stroked-button type="button" (click)="exportBalances()">
-        <mat-icon>upload</mat-icon>
-        {{ 'vacation-balances.export' | translate }}
-      </button>
-    </div>
-  </header>
-
+  <app-benefits-header primary="none"/>
   <app-benefits-tabs/>
   <app-benefits-feedback/>
 
   <div class="filters">
+    @if (employeeFilter() !== null) {
+      <span class="filter-chip active">
+        {{ 'vacation-balances.employee' | translate }}: {{ employeeName(employeeFilter()) }}
+        <button class="chip-remove" type="button" (click)="employeeFilter.set(null)"
+                [attr.aria-label]="'benefits.remove-filter' | translate">
+          <mat-icon aria-hidden="true">close</mat-icon>
+        </button>
+      </span>
+    }
+
     <button class="filter-chip" type="button" [class.active]="areaFilter() !== null" [matMenuTriggerFor]="areaMenu">
       {{ 'vacation-balances.filter.area' | translate }}:
       {{ areaFilter() !== null ? areaName(areaFilter()) : ('vacation-balances.filter.all-female' | translate) }}
-      <mat-icon>expand_more</mat-icon>
+      <mat-icon aria-hidden="true">expand_more</mat-icon>
     </button>
     <mat-menu #areaMenu="matMenu">
       <button mat-menu-item (click)="setArea(null)">{{ 'vacation-balances.filter.all-female' | translate }}</button>
@@ -30,7 +28,7 @@
 
     <button class="filter-chip" type="button" [class.active]="availabilityFilter() !== 'ALL'" [matMenuTriggerFor]="availabilityMenu">
       {{ 'vacation-balances.filter.balance' | translate }}: {{ 'vacation-balances.filter.availability.' + availabilityFilter() | translate }}
-      <mat-icon>expand_more</mat-icon>
+      <mat-icon aria-hidden="true">expand_more</mat-icon>
     </button>
     <mat-menu #availabilityMenu="matMenu">
       @for (option of availabilityOptions; track option) {
@@ -38,9 +36,9 @@
       }
     </mat-menu>
 
-    <button class="filter-chip active" type="button" [matMenuTriggerFor]="sortMenu">
+    <button class="filter-chip" type="button" [class.active]="sortOrder() !== 'MOST_AVAILABLE'" [matMenuTriggerFor]="sortMenu">
       {{ 'vacation-balances.filter.order' | translate }}: {{ 'vacation-balances.filter.sort.' + sortOrder() | translate }}
-      <mat-icon>expand_more</mat-icon>
+      <mat-icon aria-hidden="true">expand_more</mat-icon>
     </button>
     <mat-menu #sortMenu="matMenu">
       @for (option of sortOptions; track option) {
@@ -49,7 +47,16 @@
     </mat-menu>
 
     <span class="spacer"></span>
-    <span class="count">{{ 'vacation-balances.high-usage-count' | translate: { count: highUsageCount(), percent: highUsage } }}</span>
+    @if (highUsageCount() > 0) {
+      <button class="text-link high-usage" type="button" (click)="showHighUsage()">
+        <mat-icon aria-hidden="true">warning</mat-icon>
+        {{ 'vacation-balances.high-usage-plural' | pluralKey: highUsageCount() | translate: { count: highUsageCount(), percent: highUsage } }}
+      </button>
+    }
+    <button mat-stroked-button type="button" (click)="exportBalances()">
+      <mat-icon aria-hidden="true">download</mat-icon>
+      {{ 'vacation-balances.export' | translate }}
+    </button>
   </div>
 
   <div class="table-card">
@@ -59,21 +66,24 @@
         <td mat-cell *matCellDef="let row">
           <span class="person">
             <span class="avatar" aria-hidden="true">{{ row.employee?.initials }}</span>
-            <span class="cell-strong">{{ row.employee?.fullName }}</span>
+            <span>
+              <span class="cell-strong">{{ row.employee?.fullName }}</span><br>
+              <span class="muted">{{ row.employee?.areaName }}</span>
+            </span>
           </span>
         </td>
       </ng-container>
       <ng-container matColumnDef="accrued">
         <th mat-header-cell *matHeaderCellDef>{{ 'vacation-balances.accrued' | translate }}</th>
-        <td mat-cell *matCellDef="let row">{{ 'benefits.days' | translate: { days: (row.balance.accruedDays | number: '1.0-2') } }}</td>
+        <td mat-cell *matCellDef="let row">{{ 'benefits.day-count' | pluralKey: row.balance.accruedDays | translate: { days: (row.balance.accruedDays | number: '1.0-2') } }}</td>
       </ng-container>
       <ng-container matColumnDef="used">
         <th mat-header-cell *matHeaderCellDef>{{ 'vacation-balances.used' | translate }}</th>
-        <td mat-cell *matCellDef="let row">{{ 'benefits.days' | translate: { days: (row.balance.usedDays | number: '1.0-2') } }}</td>
+        <td mat-cell *matCellDef="let row">{{ 'benefits.day-count' | pluralKey: row.balance.usedDays | translate: { days: (row.balance.usedDays | number: '1.0-2') } }}</td>
       </ng-container>
       <ng-container matColumnDef="available">
         <th mat-header-cell *matHeaderCellDef>{{ 'vacation-balances.available' | translate }}</th>
-        <td mat-cell *matCellDef="let row">{{ 'benefits.days' | translate: { days: (row.balance.availableDays() | number: '1.0-2') } }}</td>
+        <td mat-cell *matCellDef="let row" class="cell-strong">{{ 'benefits.day-count' | pluralKey: row.balance.availableDays() | translate: { days: (row.balance.availableDays() | number: '1.0-2') } }}</td>
       </ng-container>
       <ng-container matColumnDef="usage">
         <th mat-header-cell *matHeaderCellDef>{{ 'vacation-balances.usage' | translate }}</th>
@@ -89,13 +99,13 @@
           </span>
         </td>
       </ng-container>
-      <ng-container matColumnDef="actions">
+      <ng-container matColumnDef="actions" stickyEnd>
         <th mat-header-cell *matHeaderCellDef>{{ 'benefits.column.actions' | translate }}</th>
         <td mat-cell *matCellDef="let row">
           <button class="text-link" type="button" (click)="adjust(row.balance)">{{ 'vacation-balances.adjust' | translate }}</button>
           <button class="icon-action" type="button" [matMenuTriggerFor]="rowMenu"
-                  [attr.aria-label]="'benefits.more-actions' | translate">
-            <mat-icon>more_vert</mat-icon>
+                  [attr.aria-label]="'benefits.aria.more-actions' | translate: { name: row.employee?.fullName }">
+            <mat-icon aria-hidden="true">more_vert</mat-icon>
           </button>
           <mat-menu #rowMenu="matMenu" xPosition="before">
             <button mat-menu-item (click)="showMovements(row.balance)">{{ 'vacation-balances.movements' | translate }}</button>
@@ -105,11 +115,20 @@
       <tr mat-header-row *matHeaderRowDef="columns"></tr>
       <tr mat-row *matRowDef="let row; columns: columns;"></tr>
       <tr class="mat-mdc-row" *matNoDataRow>
-        <td class="mat-mdc-cell no-data" [attr.colspan]="columns.length">{{ 'vacation-balances.no-balances' | translate }}</td>
+        <td class="mat-mdc-cell no-data" [attr.colspan]="columns.length">
+          @if (!store.ready()) {
+            {{ 'benefits.loading' | translate }}
+          } @else {
+            {{ 'vacation-balances.no-balances' | translate }}
+            @if (hasFilters()) {
+              <button class="text-link clear-filters" type="button" (click)="clearFilters()">{{ 'benefits.clear-filters' | translate }}</button>
+            }
+          }
+        </td>
       </tr>
     </table>
   </div>
 
   <app-list-pagination [total]="rows().length" [pageSize]="pageSize"
-                       itemsKey="benefits.pagination.employees" [(page)]="page"/>
+                       [itemsKey]="'benefits.pagination-items.employees' | pluralKey: rows().length" [(page)]="page"/>
 </section>

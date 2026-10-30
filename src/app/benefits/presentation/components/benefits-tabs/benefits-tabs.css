@@ -1,0 +1,10 @@
+.segmented-tabs {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.segmented-tabs a {
+  flex: none;
+  white-space: nowrap;
+}

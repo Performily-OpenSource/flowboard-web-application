@@ -3,7 +3,7 @@ import {toSignal} from '@angular/core/rxjs-interop';
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {map} from 'rxjs';
 import {DecimalPipe} from '@angular/common';
-import {MAT_DIALOG_DATA, MatDialogClose, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogClose, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {TranslatePipe} from '@ngx-translate/core';
@@ -11,6 +11,12 @@ import {BaseForm} from '../../../../shared/presentation/components/base-form/bas
 import {BenefitsStore} from '../../../application/benefits.store';
 import {VacationBalance} from '../../../domain/model/vacation-balance.entity';
 import {EmployeeSummaryPanel} from '../employee-summary-panel/employee-summary-panel';
+import {notBlank} from '../../validators/benefits-validators';
+import {guardUnsavedChanges} from '../benefits-confirm-dialog/guard-unsaved-changes';
+import {PluralKeyPipe} from '../../pipes/plural-key-pipe';
+
+/** Largest number of days that can be added or removed in one adjustment. */
+export const MAX_ADJUSTMENT_DAYS = 60;
 
 /**
  * Data received by the vacation adjustment dialog.
@@ -27,7 +33,7 @@ type AdjustmentOperation = 'ADD' | 'SUBTRACT';
 @Component({
   selector: 'app-vacation-adjustment-dialog',
   imports: [ReactiveFormsModule, DecimalPipe, MatDialogTitle, MatDialogClose, MatButton, MatIcon, TranslatePipe,
-    EmployeeSummaryPanel],
+    EmployeeSummaryPanel, PluralKeyPipe],
   templateUrl: './vacation-adjustment-dialog.html',
   styleUrl: './vacation-adjustment-dialog.css',
 })
@@ -44,13 +50,22 @@ export class VacationAdjustmentDialog extends BaseForm {
   readonly balance = inject<VacationAdjustmentData>(MAT_DIALOG_DATA).balance;
 
   readonly operations: AdjustmentOperation[] = ['ADD', 'SUBTRACT'];
+  readonly maxDays = MAX_ADJUSTMENT_DAYS;
 
   readonly form = this.fb.group({
     operation: new FormControl<AdjustmentOperation>('ADD', { nonNullable: true }),
     days: new FormControl<number | null>(null,
-      { validators: [Validators.required, Validators.min(0.01), Validators.pattern(/^\d+(\.\d{1,2})?$/)] }),
-    reason: new FormControl<string>('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(255)] })
+      { validators: [Validators.required, Validators.min(0.01), Validators.max(MAX_ADJUSTMENT_DAYS),
+          Validators.pattern(/^\d+(\.\d{1,2})?$/)] }),
+    reason: new FormControl<string>('', { nonNullable: true,
+      validators: [Validators.required, notBlank, Validators.maxLength(255)] })
   });
+
+  /** Protects the unsaved changes of the form. */
+  constructor() {
+    super();
+    guardUnsavedChanges(this.dialogRef, this.form, inject(MatDialog));
+  }
 
   private readonly value = toSignal(
     this.form.valueChanges.pipe(map(() => this.form.getRawValue())),
@@ -72,7 +87,7 @@ export class VacationAdjustmentDialog extends BaseForm {
   confirm() {
     this.form.markAllAsTouched();
     if (this.form.invalid || this.wouldBeNegative()) return;
-    this.store.adjustVacationBalance(this.balance, this.signedDays(), this.form.controls.reason.value);
+    this.store.adjustVacationBalance(this.balance, this.signedDays(), this.form.controls.reason.value.trim());
     this.dialogRef.close(true);
   }
 }

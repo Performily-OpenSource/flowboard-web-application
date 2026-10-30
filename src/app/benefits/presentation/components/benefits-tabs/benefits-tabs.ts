@@ -6,6 +6,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   selector: 'app-benefits-tabs',
   imports: [RouterLink, RouterLinkActive, TranslatePipe],
   templateUrl: './benefits-tabs.html',
+  styleUrl: './benefits-tabs.css',
 })
 /**
  * Shows the tabs shared by the benefits views: catalog, assignments, deliveries and balance per

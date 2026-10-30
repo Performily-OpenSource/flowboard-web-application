@@ -1,4 +1,5 @@
 import {Component, computed, inject, input} from '@angular/core';
+import {RouterLink} from '@angular/router';
 import {TranslatePipe} from '@ngx-translate/core';
 import {LocalDatePipe} from '../../../../shared/presentation/pipes/local-date-pipe';
 import {BenefitsStore} from '../../../application/benefits.store';
@@ -16,7 +17,7 @@ const VISIBLE_BENEFITS = 4;
  */
 @Component({
   selector: 'app-my-benefits-card',
-  imports: [TranslatePipe, LocalDatePipe, BenefitQuantity],
+  imports: [RouterLink, TranslatePipe, LocalDatePipe, BenefitQuantity],
   templateUrl: './my-benefits-card.html',
   styleUrl: './my-benefits-card.css',
 })

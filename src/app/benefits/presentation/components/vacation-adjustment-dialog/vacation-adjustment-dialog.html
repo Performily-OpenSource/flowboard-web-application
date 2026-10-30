@@ -2,57 +2,68 @@
   <header class="dialog-header">
     <h2 mat-dialog-title class="dialog-title">{{ 'adjustment-dialog.title' | translate }}</h2>
     <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate">
-      <mat-icon>close</mat-icon>
+      <mat-icon aria-hidden="true">close</mat-icon>
     </button>
   </header>
 
   <app-employee-summary-panel [employeeId]="balance.employeeId">
     <div class="kv-row">
       <dt>{{ 'vacation-balances.accrued' | translate }}</dt>
-      <dd>{{ 'benefits.days' | translate: { days: (balance.accruedDays | number: '1.0-2') } }}</dd>
+      <dd>{{ 'benefits.day-count' | pluralKey: balance.accruedDays | translate: { days: (balance.accruedDays | number: '1.0-2') } }}</dd>
     </div>
     <div class="kv-row">
       <dt>{{ 'vacation-balances.used' | translate }}</dt>
-      <dd>{{ 'benefits.days' | translate: { days: (balance.usedDays | number: '1.0-2') } }}</dd>
+      <dd>{{ 'benefits.day-count' | pluralKey: balance.usedDays | translate: { days: (balance.usedDays | number: '1.0-2') } }}</dd>
     </div>
     <div class="kv-row">
       <dt>{{ 'adjustment-dialog.available-now' | translate }}</dt>
-      <dd>{{ 'benefits.days' | translate: { days: (balance.availableDays() | number: '1.0-2') } }}</dd>
+      <dd>{{ 'benefits.day-count' | pluralKey: balance.availableDays() | translate: { days: (balance.availableDays() | number: '1.0-2') } }}</dd>
     </div>
   </app-employee-summary-panel>
 
   <div class="form-grid">
     <div class="field">
       <label for="adjustOperation">{{ 'adjustment-dialog.operation' | translate }}</label>
-      <select id="adjustOperation" class="input" formControlName="operation">
+      <select id="adjustOperation" class="input" formControlName="operation" cdkFocusInitial>
         @for (operation of operations; track operation) {
           <option [ngValue]="operation">{{ 'adjustment-dialog.operations.' + operation | translate }}</option>
         }
       </select>
     </div>
     <div class="field">
-      <label for="adjustDays">{{ 'adjustment-dialog.days' | translate }}</label>
-      <input id="adjustDays" class="input" type="number" min="0.01" step="0.5" formControlName="days"
-             [class.invalid]="isInvalidControl(form, 'days')"/>
-      @if (isInvalidControl(form, 'days')) {
+      <label for="adjustDays">
+        {{ 'adjustment-dialog.days' | translate }}<span class="required-mark" aria-hidden="true">*</span>
+      </label>
+      <input id="adjustDays" class="input" type="number" min="0.01" [max]="maxDays" step="0.5" formControlName="days" required
+             [class.invalid]="isInvalidControl(form, 'days')"
+             [attr.aria-invalid]="isInvalidControl(form, 'days')"/>
+      @if (form.controls.days.hasError('max')) {
+        <p class="field-error">{{ 'adjustment-dialog.error.max-days' | translate: { max: maxDays } }}</p>
+      } @else if (isInvalidControl(form, 'days')) {
         <p class="field-error">{{ 'adjustment-dialog.error.days' | translate }}</p>
       }
     </div>
   </div>
 
   <div class="field">
-    <label for="adjustReason">{{ 'adjustment-dialog.reason' | translate }}</label>
-    <textarea id="adjustReason" class="input" formControlName="reason"
+    <label for="adjustReason">
+      {{ 'adjustment-dialog.reason' | translate }}<span class="required-mark" aria-hidden="true">*</span>
+    </label>
+    <textarea id="adjustReason" class="input" formControlName="reason" required
               [placeholder]="'adjustment-dialog.reason-placeholder' | translate"
-              [class.invalid]="isInvalidControl(form, 'reason')"></textarea>
+              [class.invalid]="isInvalidControl(form, 'reason')"
+              [attr.aria-invalid]="isInvalidControl(form, 'reason')"
+              aria-describedby="adjustReasonHint"></textarea>
     @if (isInvalidControl(form, 'reason')) {
       <p class="field-error">{{ 'adjustment-dialog.error.reason' | translate }}</p>
+    } @else {
+      <p class="field-hint" id="adjustReasonHint">{{ 'adjustment-dialog.reason-hint' | translate }}</p>
     }
   </div>
 
   <div class="result" [class.negative]="wouldBeNegative()">
     <span>{{ 'adjustment-dialog.result' | translate }}</span>
-    <strong>{{ 'benefits.days' | translate: { days: (resultingDays() | number: '1.0-2') } }}</strong>
+    <strong>{{ 'benefits.day-count' | pluralKey: resultingDays() | translate: { days: (resultingDays() | number: '1.0-2') } }}</strong>
   </div>
   @if (wouldBeNegative()) {
     <p class="field-error" role="alert">{{ 'benefits.error.negative-balance' | translate }}</p>

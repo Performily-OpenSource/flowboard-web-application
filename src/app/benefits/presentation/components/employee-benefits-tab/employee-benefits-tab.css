@@ -5,6 +5,14 @@
   gap: 12px;
 }
 
+.tab-head .text-link {
+  text-decoration: none;
+}
+
+.tag {
+  margin-left: 6px;
+}
+
 .table-card table {
   min-width: 520px;
 }

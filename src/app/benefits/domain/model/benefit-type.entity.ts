@@ -140,11 +140,14 @@ export class BenefitType {
   }
 
   /**
-   * Compares the name of the benefit ignoring case and surrounding spaces.
+   * Compares the name of the benefit ignoring case, accents and surrounding spaces, so
+   * "vacaciones" and "Vacaciónes" count as the same name as "Vacaciones".
    * @param name Name to compare or validate.
    * @author Salym
    */
   hasSameName(name: string): boolean {
-    return this._name.trim().toLowerCase() === name.trim().toLowerCase();
+    const normalize = (value: string) =>
+      value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
+    return normalize(this._name) === normalize(name);
   }
 }

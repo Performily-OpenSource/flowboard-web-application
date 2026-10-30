@@ -2,7 +2,7 @@ import {Component, computed, inject} from '@angular/core';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {map} from 'rxjs';
-import {MAT_DIALOG_DATA, MatDialogClose, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogClose, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {TranslatePipe} from '@ngx-translate/core';
@@ -11,6 +11,13 @@ import {LocalDatePipe} from '../../../../shared/presentation/pipes/local-date-pi
 import {DateRange} from '../../../../shared/domain/model/date-range';
 import {BenefitsStore} from '../../../application/benefits.store';
 import {WorkspaceAcl} from '../../../infrastructure/workspace-acl';
+import {localToday} from '../../../application/local-today';
+import {BenefitUnit} from '../../../domain/model/benefit-type.entity';
+import {guardUnsavedChanges} from '../benefits-confirm-dialog/guard-unsaved-changes';
+import {PluralKeyPipe} from '../../pipes/plural-key-pipe';
+
+/** Step of the quantity input for each unit: cents for money, half days, whole units. */
+const QUANTITY_STEP: Record<BenefitUnit, number> = { MONEY: 0.01, DAYS: 0.5, UNITS: 1 };
 
 /**
  * Data received by the assign benefit dialog.
@@ -26,7 +33,8 @@ type AssignmentTarget = 'EMPLOYEE' | 'AREA';
 
 @Component({
   selector: 'app-assign-benefit-dialog',
-  imports: [ReactiveFormsModule, MatDialogTitle, MatDialogClose, MatButton, MatIcon, TranslatePipe, LocalDatePipe],
+  imports: [ReactiveFormsModule, MatDialogTitle, MatDialogClose, MatButton, MatIcon, TranslatePipe, LocalDatePipe,
+    PluralKeyPipe],
   templateUrl: './assign-benefit-dialog.html',
   styleUrl: './assign-benefit-dialog.css',
 })
@@ -49,7 +57,7 @@ export class AssignBenefitDialog extends BaseForm {
     target: new FormControl<AssignmentTarget>('EMPLOYEE', { nonNullable: true }),
     employeeId: new FormControl<number | null>(null),
     areaId: new FormControl<number | null>(null),
-    validFrom: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
+    validFrom: new FormControl<string>(localToday(), { nonNullable: true, validators: [Validators.required] }),
     validTo: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
     quantity: new FormControl<number | null>(null,
       { validators: [Validators.required, Validators.min(0.01), Validators.pattern(/^\d+(\.\d{1,2})?$/)] })
@@ -61,6 +69,21 @@ export class AssignBenefitDialog extends BaseForm {
 
   readonly selectedType = computed(() =>
     this.store.benefitTypes().find(type => type.id === this.value().benefitTypeId) ?? null);
+
+  /** Active employees sorted by name, for the employee selector. */
+  readonly sortedEmployees = computed(() =>
+    [...this.directory.activeEmployees()].sort((a, b) => a.fullName.localeCompare(b.fullName, 'es')));
+
+  /** Step of the quantity input for the unit of the selected benefit. */
+  readonly quantityStep = computed(() => QUANTITY_STEP[this.selectedType()?.unit ?? 'MONEY']);
+
+  /** Whether the quantity does not fit the unit: units must be whole, days go in halves. */
+  readonly quantityNotInStep = computed(() => {
+    const quantity = Number(this.value().quantity);
+    const unit = this.selectedType()?.unit;
+    if (!quantity || !unit || unit === 'MONEY') return false;
+    return !Number.isInteger(quantity / QUANTITY_STEP[unit]);
+  });
 
   readonly invalidRange = computed(() => {
     const { validFrom, validTo } = this.value();
@@ -102,8 +125,20 @@ export class AssignBenefitDialog extends BaseForm {
     } : null;
   });
 
+  /** Names of the employees of the area that will be skipped because they already have the benefit. */
+  readonly skippedNames = computed(() => (this.plan()?.conflictingEmployeeIds ?? [])
+    .map(employeeId => this.directory.findEmployee(employeeId)?.fullName ?? '')
+    .filter(name => name !== '')
+    .join(', '));
+
   readonly areaHasNoActiveEmployees = computed(() =>
     this.value().target === 'AREA' && this.value().areaId !== null && this.targetIds().length === 0);
+
+  /** Protects the unsaved changes of the form. */
+  constructor() {
+    super();
+    guardUnsavedChanges(this.dialogRef, this.form, inject(MatDialog));
+  }
 
   readonly blocked = computed(() => {
     const plan = this.plan();
@@ -140,7 +175,8 @@ export class AssignBenefitDialog extends BaseForm {
       const control = value.target === 'EMPLOYEE' ? this.form.controls.employeeId : this.form.controls.areaId;
       control.setErrors({ required: true });
     }
-    if (this.form.invalid || targetMissing || this.blocked() || value.benefitTypeId === null || value.quantity === null) return;
+    if (this.form.invalid || targetMissing || this.blocked() || this.quantityNotInStep() ||
+      value.benefitTypeId === null || value.quantity === null) return;
 
     this.store.assignBenefit({
       benefitTypeId: value.benefitTypeId,

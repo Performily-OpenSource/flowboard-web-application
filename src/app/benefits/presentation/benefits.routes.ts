@@ -10,7 +10,7 @@ const vacationBalances = () => import('./views/vacation-balances/vacation-balanc
 const myBenefits = () => import('./views/my-benefits/my-benefits').then(m => m.MyBenefits);
 
 export const benefitsRoutes: Routes = [
-  { path: 'catalog', loadComponent: benefitCatalog, canActivate:[roleGuard], data: { breadcrumb: ['breadcrumb.benefits'], roles:['HR_STAFF'] } },
+  { path: 'catalog', loadComponent: benefitCatalog, canActivate:[roleGuard], data: { breadcrumb: ['breadcrumb.benefits', 'breadcrumb.benefit-catalog'], roles:['HR_STAFF'] } },
   { path: 'assignments', loadComponent: benefitAssignments, canActivate:[roleGuard], data: { breadcrumb: ['breadcrumb.benefits', 'breadcrumb.benefit-assignments'], roles:['HR_STAFF'] } },
   { path: 'deliveries', loadComponent: benefitDeliveries, canActivate:[roleGuard], data: { breadcrumb: ['breadcrumb.benefits', 'breadcrumb.benefit-deliveries'], roles:['HR_STAFF'] } },
   { path: 'balances', loadComponent: vacationBalances, canActivate:[roleGuard], data: { breadcrumb: ['breadcrumb.benefits', 'breadcrumb.vacation-balances'], roles:['HR_STAFF'] } },

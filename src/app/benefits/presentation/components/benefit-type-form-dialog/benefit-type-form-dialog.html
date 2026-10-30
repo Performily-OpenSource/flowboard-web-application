@@ -4,19 +4,23 @@
       {{ (isEdit ? 'benefit-dialog.edit-title' : 'benefit-dialog.new-title') | translate }}
     </h2>
     <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate">
-      <mat-icon>close</mat-icon>
+      <mat-icon aria-hidden="true">close</mat-icon>
     </button>
   </header>
 
   <div class="field">
-    <label for="benefitName">{{ 'benefit-dialog.name' | translate }}</label>
-    <input id="benefitName" class="input" formControlName="name"
+    <label for="benefitName">
+      {{ 'benefit-dialog.name' | translate }}<span class="required-mark" aria-hidden="true">*</span>
+    </label>
+    <input id="benefitName" class="input" formControlName="name" required cdkFocusInitial
            [placeholder]="'benefit-dialog.name-placeholder' | translate"
-           [class.invalid]="isInvalidControl(form, 'name')"/>
+           [class.invalid]="isInvalidControl(form, 'name')"
+           [attr.aria-invalid]="isInvalidControl(form, 'name')"
+           [attr.aria-describedby]="isInvalidControl(form, 'name') ? 'benefitNameError' : null"/>
     @if (form.controls.name.hasError('taken')) {
-      <p class="field-error">{{ 'benefits.error.name-taken' | translate }}</p>
+      <p class="field-error" id="benefitNameError">{{ 'benefits.error.name-taken' | translate }}</p>
     } @else if (isInvalidControl(form, 'name')) {
-      <p class="field-error">{{ errorKeyForControl(form, 'name') | translate }}</p>
+      <p class="field-error" id="benefitNameError">{{ errorKeyForControl(form, 'name') | translate }}</p>
     }
   </div>
 
@@ -48,13 +52,20 @@
     </div>
   </div>
 
-  <div class="toggle-card">
+  <div class="toggle-card" [class.locked]="liveAssignments > 0">
     <div>
       <p class="toggle-title" id="hasBalanceLabel">{{ 'benefit-dialog.has-balance' | translate }}</p>
       <p class="toggle-hint">{{ 'benefit-dialog.has-balance-hint' | translate }}</p>
     </div>
     <mat-slide-toggle formControlName="hasBalance" aria-labelledby="hasBalanceLabel"/>
   </div>
+
+  @if (liveAssignments > 0) {
+    <div class="info-note">
+      <mat-icon aria-hidden="true">lock</mat-icon>
+      <span>{{ 'benefit-dialog.locked' | pluralKey: liveAssignments | translate: { count: liveAssignments } }}</span>
+    </div>
+  }
 
   <div class="dialog-actions">
     <button mat-stroked-button type="button" mat-dialog-close>{{ 'common.cancel' | translate }}</button>

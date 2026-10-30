@@ -14,6 +14,7 @@ import {BenefitQuantity} from '../benefit-quantity/benefit-quantity';
  * @author Salym
  */
 export interface MyBenefitDetailData {
+  /** Assignment whose detail is shown. */
   assignment: BenefitAssignment;
 }
 
@@ -21,6 +22,7 @@ export interface MyBenefitDetailData {
   selector: 'app-my-benefit-detail-dialog',
   imports: [MatDialogTitle, MatDialogClose, MatButton, MatIcon, TranslatePipe, LocalDatePipe, BenefitQuantity],
   templateUrl: './my-benefit-detail-dialog.html',
+  styleUrl: './my-benefit-detail-dialog.css',
 })
 /**
  * Shows the detail of one benefit of the signed-in user (WA-27, "Ver detalle"): description,
@@ -30,5 +32,6 @@ export interface MyBenefitDetailData {
  * @author Salym
  */
 export class MyBenefitDetailDialog {
+  /** Assignment received from the screen that opened the dialog. */
   readonly assignment = inject<MyBenefitDetailData>(MAT_DIALOG_DATA).assignment;
 }

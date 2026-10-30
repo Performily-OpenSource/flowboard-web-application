@@ -7,8 +7,37 @@
   margin-left: 8px;
 }
 
+.catalog-table {
+  table-layout: fixed;
+  min-width: 760px;
+}
+
+.mat-column-name { width: 28%; }
+.mat-column-unit { width: 12%; }
+.mat-column-balance { width: 15%; }
+.mat-column-reach { width: 17%; }
+.mat-column-periodicity { width: 14%; }
+.mat-column-actions { width: 104px; }
+
+.hint-icon {
+  width: 15px;
+  height: 15px;
+  font-size: 15px;
+  vertical-align: -3px;
+  color: var(--fb-text-muted);
+}
+
+tr.highlight td {
+  background: var(--fb-primary-container);
+  transition: background 0.6s ease;
+}
+
 .no-data {
   padding: 24px 16px;
   text-align: center;
   color: var(--fb-text-muted);
+}
+
+.clear-filters {
+  margin-left: 8px;
 }
