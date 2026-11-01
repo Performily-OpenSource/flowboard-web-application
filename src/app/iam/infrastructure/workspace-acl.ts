@@ -24,7 +24,7 @@ export interface IamEmployee {
  */
 @Injectable({providedIn: 'root'})
 export class WorkspaceAcl {
-  private readonly endpoint = `${environment.platformProviderApiBaseUrl}${environment.platformProviderEmployeesEndpointPath}`;
+  private readonly endpoint = `${environment.webServiceApiBaseUrl}${environment.platformProviderEmployeesEndpointPath}`;
 
 /**
  * Performs the constructor operation.
@@ -48,3 +48,4 @@ export class WorkspaceAcl {
       }))));
   }
 }
+
