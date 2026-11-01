@@ -19,7 +19,7 @@ export class ResetPasswordDialog {
   readonly lastSignInAt = input<string|null>(null);
   readonly close = output<void>();
   readonly completed = output<void>();
-  private readonly iam = inject(IamStore);
+  readonly iam = inject(IamStore);
 
 /**
  * Formats the account last sign-in timestamp for display.

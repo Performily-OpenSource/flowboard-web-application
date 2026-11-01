@@ -11,6 +11,8 @@ import { PlainPassword } from '../domain/model/plain-password';
 export interface AccountListItem extends AccountResponse {
     employeeName: string;
     employeeEmail: string;
+    lastSignInAt?: string | null;
+
 }
 
 @Injectable({ providedIn: 'root' })
