@@ -5,6 +5,7 @@ import {MatIcon} from '@angular/material/icon';
 import {MatButton} from '@angular/material/button';
 import {TranslatePipe} from '@ngx-translate/core';
 import {IamStore} from '../../../application/iam.store';
+import {SessionStore} from '../../../../shared/application/session.store';
 import {LanguageSwitcher} from '../../../../shared/presentation/components/language-switcher/language-switcher';
 
 /**
@@ -24,6 +25,7 @@ export class Login {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   readonly iam = inject(IamStore);
+  readonly session = inject(SessionStore);
 
   readonly submitted = signal(false);
   readonly showPassword = signal(false);
@@ -55,7 +57,7 @@ export class Login {
     }
     if (result === 'invalid') return;
     const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-    if (this.iam.accounts().find(a => a.employeeEmail === this.form.controls.username.value)?.mustChangePassword) {
+    if (this.session.mustChangePassword()) {
       await this.router.navigate(['/change-password']);
       return;
     }
