@@ -1,6 +1,6 @@
 import {computed, Injectable, Signal, signal} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {retry} from 'rxjs';
+import {concat, last, Observable, retry} from 'rxjs';
 import {WorkspaceApi} from '../infrastructure/workspace-api';
 import {ContractType, Employee, EmploymentStatus} from '../domain/model/employee.entity';
 import {Area} from '../domain/model/area.entity';
@@ -378,19 +378,20 @@ export class WorkspaceStore {
    * @author Oscar Lizandro Vasquez Llave
    */
   updateEmployee(employee: Employee): void {
-    this.loadingSignal.set(true);
-    this.errorSignal.set(null);
-    this.workspaceApi.updateEmployee(employee).pipe(retry(2)).subscribe({
-      next: updatedEmployee => {
-        this.employeesSignal.update(employees =>
-          employees.map(current => current.id === updatedEmployee.id ? updatedEmployee : current));
-        this.loadingSignal.set(false);
-      },
-      error: error => {
-        this.errorSignal.set(this.formatError(error, 'Failed to update employee'));
-        this.loadingSignal.set(false);
-      }
-    });
+    const current = this.employeesSignal().find(item => item.id === employee.id);
+    if (!current) {
+      this.errorSignal.set('Failed to update employee: Not found');
+      return;
+    }
+    if (current.identityDocumentType !== employee.identityDocumentType ||
+        current.identityDocumentNumber !== employee.identityDocumentNumber ||
+        current.contractType !== employee.contractType ||
+        current.hireDate !== employee.hireDate ||
+        current.contractEndDate !== employee.contractEndDate) {
+      this.errorSignal.set('The identity document, the contract type and the contract dates of an employee cannot be changed.');
+      return;
+    }
+    this.runEmployeeOperation(this.workspaceApi.saveEmployee(current, employee), 'Failed to update employee');
   }
 
   /**
@@ -406,9 +407,11 @@ export class WorkspaceStore {
       this.errorSignal.set('The assignment would create a cycle in the hierarchy.');
       return;
     }
-    const updated = this.copyEmployee(employee);
-    updated.directManagerId = managerId;
-    this.updateEmployee(updated);
+    this.runEmployeeOperation(
+      managerId === null
+        ? this.workspaceApi.removeDirectManager(employee.id)
+        : this.workspaceApi.assignDirectManager(employee.id, managerId),
+      'Failed to assign the direct manager');
   }
 
   /**
@@ -419,9 +422,14 @@ export class WorkspaceStore {
    * @author Oscar Lizandro Vasquez Llave
    */
   changeEmployeeStatus(employee: Employee, status: Extract<EmploymentStatus, 'ACTIVE' | 'SUSPENDED'>): void {
-    const updated = this.copyEmployee(employee);
-    updated.status = status;
-    this.updateEmployee(updated);
+    if (status === employee.status) {
+      return;
+    }
+    if (status === 'ACTIVE') {
+      this.errorSignal.set('The Workspace API cannot reactivate a suspended employee.');
+      return;
+    }
+    this.runEmployeeOperation(this.workspaceApi.suspendEmployee(employee.id), 'Failed to suspend employee');
   }
 
   /**
@@ -438,11 +446,9 @@ export class WorkspaceStore {
       this.errorSignal.set('The employee has subordinates. Reassign them before the termination.');
       return;
     }
-    const terminated = this.copyEmployee(employee);
-    terminated.status = 'TERMINATED';
-    terminated.terminationReason = terminationReason;
-    terminated.terminationDate = terminationDate;
-    this.updateEmployee(terminated);
+    this.runEmployeeOperation(
+      this.workspaceApi.terminateEmployee(employee.id, terminationReason, terminationDate),
+      'Failed to terminate employee');
   }
 
   /**
@@ -459,16 +465,10 @@ export class WorkspaceStore {
     reinstatementDate: string;
     contractType: ContractType;
   }): void {
-    const reinstated = this.copyEmployee(employee);
-    reinstated.status = 'ACTIVE';
-    reinstated.areaId = reinstatement.areaId;
-    reinstated.positionId = reinstatement.positionId;
-    reinstated.hireDate = reinstatement.reinstatementDate;
-    reinstated.contractType = reinstatement.contractType;
-    reinstated.contractEndDate = null;
-    reinstated.terminationReason = null;
-    reinstated.terminationDate = null;
-    this.updateEmployee(reinstated);
+    this.runEmployeeOperation(
+      this.workspaceApi.reinstateEmployee(
+        employee.id, reinstatement.areaId, reinstatement.positionId, reinstatement.reinstatementDate),
+      'Failed to reinstate employee');
   }
 
   /**
@@ -501,18 +501,23 @@ export class WorkspaceStore {
    * @author Oscar Lizandro Vasquez Llave
    */
   updateArea(area: Area): void {
-    this.loadingSignal.set(true);
-    this.errorSignal.set(null);
-    this.workspaceApi.updateArea(area).pipe(retry(2)).subscribe({
-      next: updatedArea => {
-        this.areasSignal.update(areas => areas.map(current => current.id === updatedArea.id ? updatedArea : current));
-        this.loadingSignal.set(false);
-      },
-      error: error => {
-        this.errorSignal.set(this.formatError(error, 'Failed to update area'));
-        this.loadingSignal.set(false);
-      }
-    });
+    const current = this.areasSignal().find(item => item.id === area.id);
+    if (!current) {
+      this.errorSignal.set('Failed to update area: Not found');
+      return;
+    }
+    if ((current.description ?? '').trim() !== (area.description ?? '').trim()) {
+      this.errorSignal.set('The description of an area cannot be changed.');
+      return;
+    }
+    const steps: Observable<Area>[] = [];
+    if (current.name !== area.name) {
+      steps.push(this.workspaceApi.updateArea(area));
+    }
+    if (current.active !== area.active) {
+      steps.push(area.active ? this.workspaceApi.activateArea(area.id) : this.workspaceApi.deactivateArea(area.id));
+    }
+    this.runAreaOperation(steps, 'Failed to update area');
   }
 
   /**
@@ -527,12 +532,9 @@ export class WorkspaceStore {
       this.errorSignal.set('An area with active employees cannot be deactivated. Reassign them first.');
       return;
     }
-    this.updateArea(new Area({
-      id: area.id,
-      name: area.name,
-      description: area.description,
-      active: !area.active
-    }));
+    this.runAreaOperation(
+      [area.active ? this.workspaceApi.deactivateArea(area.id) : this.workspaceApi.activateArea(area.id)],
+      'Failed to update area');
   }
 
 
@@ -566,19 +568,28 @@ export class WorkspaceStore {
    * @author Oscar Lizandro Vasquez Llave
    */
   updatePosition(position: Position): void {
-    this.loadingSignal.set(true);
-    this.errorSignal.set(null);
-    this.workspaceApi.updatePosition(position).pipe(retry(2)).subscribe({
-      next: updatedPosition => {
-        this.positionsSignal.update(positions =>
-          positions.map(current => current.id === updatedPosition.id ? updatedPosition : current));
-        this.loadingSignal.set(false);
-      },
-      error: error => {
-        this.errorSignal.set(this.formatError(error, 'Failed to update position'));
-        this.loadingSignal.set(false);
-      }
-    });
+    const current = this.positionsSignal().find(item => item.id === position.id);
+    if (!current) {
+      this.errorSignal.set('Failed to update position: Not found');
+      return;
+    }
+    if (current.title !== position.title || current.areaId !== position.areaId) {
+      this.errorSignal.set('The title and the area of a position cannot be changed.');
+      return;
+    }
+    if (!current.active && position.active) {
+      this.errorSignal.set('The Workspace API cannot reactivate a position.');
+      return;
+    }
+    const steps: Observable<Position>[] = [];
+    if (current.referenceSalaryAmount !== position.referenceSalaryAmount ||
+        current.referenceSalaryCurrency !== position.referenceSalaryCurrency) {
+      steps.push(this.workspaceApi.updatePosition(position));
+    }
+    if (current.active && !position.active) {
+      steps.push(this.workspaceApi.deactivatePosition(position.id));
+    }
+    this.runPositionOperation(steps, 'Failed to update position');
   }
 
   /**
@@ -588,14 +599,11 @@ export class WorkspaceStore {
    * @author Oscar Lizandro Vasquez Llave
    */
   togglePositionStatus(position: Position): void {
-    this.updatePosition(new Position({
-      id: position.id,
-      title: position.title,
-      areaId: position.areaId,
-      referenceSalaryAmount: position.referenceSalaryAmount,
-      referenceSalaryCurrency: position.referenceSalaryCurrency,
-      active: !position.active
-    }));
+    if (!position.active) {
+      this.errorSignal.set('The Workspace API cannot reactivate a position.');
+      return;
+    }
+    this.runPositionOperation([this.workspaceApi.deactivatePosition(position.id)], 'Failed to update position');
   }
 
 
@@ -638,7 +646,7 @@ export class WorkspaceStore {
       fileName: file.name,
       contentType: file.type,
       sizeInBytes: file.size,
-      storageUrl: '',
+      storageUrl: `/files/employees/${employeeId}/${encodeURIComponent(file.name)}`,
       uploadedAt: new Date().toISOString()
     });
     this.workspaceApi.createEmployeeDocument(document).pipe(retry(2)).subscribe({
@@ -733,35 +741,76 @@ export class WorkspaceStore {
   }
 
   /**
-   * Creates a copy of an employee so it can be modified without changing the stored instance.
+   * Runs an operation that returns the updated employee and stores the result.
    *
-   * @param employee - The employee to copy.
-   * @returns A new employee with the same data
+   * @param operation - The API operation.
+   * @param fallback  - Message shown when the error has no description.
    * @author Oscar Lizandro Vasquez Llave
    */
-  private copyEmployee(employee: Employee): Employee {
-    return new Employee({
-      id: employee.id,
-      firstName: employee.firstName,
-      lastName: employee.lastName,
-      identityDocumentType: employee.identityDocumentType,
-      identityDocumentNumber: employee.identityDocumentNumber,
-      birthDate: employee.birthDate,
-      email: employee.email,
-      phoneNumber: employee.phoneNumber,
-      addressStreet: employee.addressStreet,
-      addressDistrict: employee.addressDistrict,
-      addressProvince: employee.addressProvince,
-      addressDepartment: employee.addressDepartment,
-      contractType: employee.contractType,
-      hireDate: employee.hireDate,
-      contractEndDate: employee.contractEndDate,
-      status: employee.status,
-      terminationReason: employee.terminationReason,
-      terminationDate: employee.terminationDate,
-      areaId: employee.areaId,
-      positionId: employee.positionId,
-      directManagerId: employee.directManagerId
+  private runEmployeeOperation(operation: Observable<Employee>, fallback: string): void {
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+    operation.subscribe({
+      next: updated => {
+        this.employeesSignal.update(employees =>
+          employees.map(current => current.id === updated.id ? updated : current));
+        this.loadingSignal.set(false);
+      },
+      error: error => {
+        this.errorSignal.set(this.formatError(error, fallback));
+        this.loadingSignal.set(false);
+      }
+    });
+  }
+
+  /**
+   * Runs the API steps of an area change one after another and stores the last result.
+   *
+   * @param steps    - The API operations, in order. Nothing is done when the list is empty.
+   * @param fallback - Message shown when the error has no description.
+   * @author Oscar Lizandro Vasquez Llave
+   */
+  private runAreaOperation(steps: Observable<Area>[], fallback: string): void {
+    if (steps.length === 0) {
+      return;
+    }
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+    concat(...steps).pipe(last()).subscribe({
+      next: updated => {
+        this.areasSignal.update(areas => areas.map(current => current.id === updated.id ? updated : current));
+        this.loadingSignal.set(false);
+      },
+      error: error => {
+        this.errorSignal.set(this.formatError(error, fallback));
+        this.loadingSignal.set(false);
+      }
+    });
+  }
+
+  /**
+   * Runs the API steps of a position change one after another and stores the last result.
+   *
+   * @param steps    - The API operations, in order. Nothing is done when the list is empty.
+   * @param fallback - Message shown when the error has no description.
+   * @author Oscar Lizandro Vasquez Llave
+   */
+  private runPositionOperation(steps: Observable<Position>[], fallback: string): void {
+    if (steps.length === 0) {
+      return;
+    }
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+    concat(...steps).pipe(last()).subscribe({
+      next: updated => {
+        this.positionsSignal.update(positions =>
+          positions.map(current => current.id === updated.id ? updated : current));
+        this.loadingSignal.set(false);
+      },
+      error: error => {
+        this.errorSignal.set(this.formatError(error, fallback));
+        this.loadingSignal.set(false);
+      }
     });
   }
 

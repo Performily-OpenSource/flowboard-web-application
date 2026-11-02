@@ -1,23 +1,27 @@
 import {BaseResource, BaseResponse} from '../../shared/infrastructure/base-response';
 
-/** Resource representing the JSON shape of an employee document returned by the API. */
+/** Resource representing the JSON shape of an employee document returned by the API (EmployeeDocumentResponse). */
 export interface EmployeeDocumentResource extends BaseResource {
   id: number;
-  /** Identifier of the employee who owns the document. */
-  employeeId: number;
-  /** Document type code (see DocumentType). */
   documentType: string;
   fileName: string;
-  /** MIME type of the file. */
   contentType: string;
   sizeInBytes: number;
-  /** URL where the file content is stored. */
   storageUrl: string;
-  /** Upload date-time as an ISO string. */
+  /** Upload date and time, ISO 8601 without time zone. */
   uploadedAt: string;
 }
 
-/** Response wrapper returned by the API when the documents are listed inside an 'employeeDocuments' property. */
+/** Payload of POST /employees/{id}/documents (AttachEmployeeDocumentRequest). */
+export interface AttachEmployeeDocumentRequest {
+  documentType: string;
+  fileName: string;
+  contentType: string;
+  sizeInBytes: number;
+  storageUrl: string;
+}
+
+/** Response wrapper kept for the BaseAssembler contract; the API returns a plain array. */
 export interface EmployeeDocumentsResponse extends BaseResponse {
   employeeDocuments: EmployeeDocumentResource[];
 }

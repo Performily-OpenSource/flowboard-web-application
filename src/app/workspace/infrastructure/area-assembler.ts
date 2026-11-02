@@ -1,6 +1,6 @@
 import {BaseAssembler} from '../../shared/infrastructure/base-assembler';
 import {Area} from '../domain/model/area.entity';
-import {AreaResource, AreasResponse} from './areas-response';
+import {AreaResource, AreasResponse, CreateAreaRequest, RenameAreaRequest} from './areas-response';
 
 /** Assembler that converts between AreaResource (API) and Area (domain entity). */
 export class AreaAssembler implements BaseAssembler<Area, AreaResource, AreasResponse> {
@@ -16,13 +16,13 @@ export class AreaAssembler implements BaseAssembler<Area, AreaResource, AreasRes
     return new Area({
       id: resource.id,
       name: resource.name,
-      description: resource.description,
+      description: resource.description ?? '',
       active: resource.active
     });
   }
 
   /**
-   * Converts a Area entity into a AreaResource to be sent to the API.
+   * Converts a Area entity into a AreaResource.
    *
    * @param entity - The entity to convert.
    * @returns The corresponding AreaResource
@@ -35,6 +35,28 @@ export class AreaAssembler implements BaseAssembler<Area, AreaResource, AreasRes
       description: entity.description,
       active: entity.active
     } as AreaResource;
+  }
+
+  /**
+   * Builds the payload of POST /areas.
+   *
+   * @param entity - The area to create.
+   * @returns The CreateAreaRequest
+   * @author Oscar Lizandro Vasquez Llave
+   */
+  toCreateRequestFromEntity(entity: Area): CreateAreaRequest {
+    return {name: entity.name, description: entity.description};
+  }
+
+  /**
+   * Builds the payload of PUT /areas/{id}.
+   *
+   * @param entity - The area with the new name.
+   * @returns The RenameAreaRequest
+   * @author Oscar Lizandro Vasquez Llave
+   */
+  toRenameRequestFromEntity(entity: Area): RenameAreaRequest {
+    return {name: entity.name};
   }
 
   /**

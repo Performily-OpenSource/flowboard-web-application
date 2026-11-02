@@ -4,7 +4,7 @@ import {JobAssignmentResource, JobAssignmentsResponse} from './job-assignments-r
 
 /**
  * Assembler that converts between JobAssignmentResource (API) and JobAssignment (domain entity).
- * The change type is cast to AssignmentChangeType; resolved area and position are not mapped.
+ * The API nests job assignments under the employee, so the employee id is given by the caller.
  *
  * @author Oscar Lizandro Vasquez Llave
  */
@@ -13,14 +13,15 @@ export class JobAssignmentAssembler implements BaseAssembler<JobAssignment, JobA
   /**
    * Converts a JobAssignmentResource into a JobAssignment entity.
    *
-   * @param resource - The resource returned by the API.
+   * @param resource   - The resource returned by the API.
+   * @param employeeId - The identifier of the employee that owns the assignment.
    * @returns The corresponding JobAssignment entity
    * @author Oscar Lizandro Vasquez Llave
    */
-  toEntityFromResource(resource: JobAssignmentResource): JobAssignment {
+  toEntityFromResource(resource: JobAssignmentResource, employeeId = 0): JobAssignment {
     return new JobAssignment({
       id: resource.id,
-      employeeId: resource.employeeId,
+      employeeId,
       areaId: resource.areaId,
       positionId: resource.positionId,
       changeType: resource.changeType as AssignmentChangeType,
@@ -30,7 +31,7 @@ export class JobAssignmentAssembler implements BaseAssembler<JobAssignment, JobA
   }
 
   /**
-   * Converts a JobAssignment entity into a JobAssignmentResource to be sent to the API.
+   * Converts a JobAssignment entity into a JobAssignmentResource.
    *
    * @param entity - The entity to convert.
    * @returns The corresponding JobAssignmentResource
@@ -39,7 +40,6 @@ export class JobAssignmentAssembler implements BaseAssembler<JobAssignment, JobA
   toResourceFromEntity(entity: JobAssignment): JobAssignmentResource {
     return {
       id: entity.id,
-      employeeId: entity.employeeId,
       areaId: entity.areaId,
       positionId: entity.positionId,
       changeType: entity.changeType,
