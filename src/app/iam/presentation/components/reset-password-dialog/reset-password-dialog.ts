@@ -1,4 +1,4 @@
-import {Component, inject, input, output} from '@angular/core';
+import {Component, inject, input, OnDestroy, output} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {TranslatePipe} from '@ngx-translate/core';
@@ -11,7 +11,7 @@ import {IamStore} from '../../../application/iam.store';
  * @author Dario Avila de la cruz
  */
 @Component({selector:'app-reset-password-dialog',imports:[MatButton,MatIcon,TranslatePipe],templateUrl:'./reset-password-dialog.html',styleUrl:'./reset-password-dialog.css'})
-export class ResetPasswordDialog {
+export class ResetPasswordDialog implements OnDestroy {
   readonly accountId = input.required<number>();
   readonly employeeName = input.required<string>();
   readonly username = input.required<string>();
@@ -20,6 +20,7 @@ export class ResetPasswordDialog {
   readonly close = output<void>();
   readonly completed = output<void>();
   private readonly iam = inject(IamStore);
+  readonly temporaryPassword = this.iam.temporaryPassword;
 
 /**
  * Formats the account last sign-in timestamp for display.
@@ -27,6 +28,8 @@ export class ResetPasswordDialog {
  * @returns The formatted or calculated value.
  * @author Dario Avila de la cruz
  */
+  ngOnDestroy(): void { this.iam.clearTemporaryPassword(); }
+
   lastSignIn(): string {
     const value = this.lastSignInAt();
     return value ? new Intl.DateTimeFormat('es-PE', {dateStyle: 'short', timeStyle: 'short'}).format(new Date(value)) : '';
@@ -47,6 +50,16 @@ export class ResetPasswordDialog {
  * @author Dario Avila de la cruzs
  */
   async reset(): Promise<void> {
-    if (await this.iam.resetPassword(this.accountId())) this.completed.emit();
+    await this.iam.resetPassword(this.accountId());
+  }
+
+  async copy(): Promise<void> {
+    const value = this.temporaryPassword();
+    if (value) await navigator.clipboard.writeText(value);
+  }
+
+  finish(): void {
+    this.iam.clearTemporaryPassword();
+    this.completed.emit();
   }
 }

@@ -23,6 +23,8 @@ import {ResetPasswordDialog} from '../../components/reset-password-dialog/reset-
 })
 export class AccountList {
   readonly store = inject(IamStore);
+
+  constructor() { this.store.load(); }
   readonly roleFilter = signal<RoleType | null>(null);
   readonly statusFilter = signal<'ACTIVE'|'DISABLED'|null>(null);
   readonly selectedAccount = signal<AccountListItem | null>(null);

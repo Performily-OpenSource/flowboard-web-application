@@ -55,7 +55,7 @@ export class Login {
     }
     if (result === 'invalid') return;
     const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-    if (this.iam.accounts().find(a => a.employeeEmail === this.form.controls.username.value)?.mustChangePassword) {
+    if (this.iam.mustChangePassword()) {
       await this.router.navigate(['/change-password']);
       return;
     }

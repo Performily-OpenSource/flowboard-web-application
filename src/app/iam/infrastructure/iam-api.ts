@@ -1,55 +1,59 @@
-import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {BaseApi} from '../../shared/infrastructure/base-api';
-import {UserAccount} from '../domain/model/user-account.entity';
-import {Role} from '../domain/model/role.entity';
-import {UserAccountsApiEndpoint} from './user-accounts-api-endpoint';
-import {RolesApiEndpoint} from './roles-api-endpoint';
+import {environment} from '../../../environments/environment';
+import {RoleType} from '../domain/model/role.entity';
+
+/** Login / change-password response of the Flowboard Web Service. */
+export interface LoginResultResource {
+  token: string;
+  role: RoleType;
+  employeeId: number;
+  mustChangePassword: boolean;
+}
+
+/** Account as exposed by `GET /accounts` (the backend never exposes password hashes). */
+export interface AccountResource {
+  id: number;
+  employeeId: number;
+  username: string;
+  role: RoleType;
+  status: 'ACTIVE' | 'DISABLED';
+  mustChangePassword: boolean;
+}
 
 /**
- * Provides the infrastructure API used to access IAM resources.
+ * Talks to the IAM bounded context of the Flowboard Web Service.
  *
- * @remarks Delegates account and role operations to the corresponding API endpoints.
- * @author Dario Avila de la cruz
+ * @remarks Authentication is done by the backend; the Bearer token is attached by `authInterceptor`.
  */
 @Injectable({providedIn: 'root'})
-export class IamApi extends BaseApi {
-  private readonly accountsEndpoint: UserAccountsApiEndpoint;
-  private readonly rolesEndpoint: RolesApiEndpoint;
+export class IamApi {
+  private readonly baseUrl = environment.webServiceApiBaseUrl;
 
-/**
- * Performs the constructor operation.
- *
- * @param http the HTTP client dependency.
- * @author Dario Avila de la cruz
- */
-  constructor(http: HttpClient) {
-    super();
-    this.accountsEndpoint = new UserAccountsApiEndpoint(http);
-    this.rolesEndpoint = new RolesApiEndpoint(http);
+  constructor(private readonly http: HttpClient) {}
+
+  login(username: string, password: string): Observable<LoginResultResource> {
+    return this.http.post<LoginResultResource>(`${this.baseUrl}/auth/login`, {username, password});
   }
 
-/**
- * Retrieves all user accounts.
- *
- * @returns An observable that emits the available user accounts.
- * @author Dario Avila de la cruz
- */
-  getAccounts(): Observable<UserAccount[]> { return this.accountsEndpoint.getAll(); }
-/**
- * Updates a user account through the IAM API.
- *
- * @param account the account being updated or displayed.
- * @returns The value produced by the `updateAccount` operation.
- * @author Dario Avila de la cruz
- */
-  updateAccount(account: UserAccount): Observable<UserAccount> { return this.accountsEndpoint.update(account, account.id); }
-/**
- * Retrieves the roles available through the IAM API.
- *
- * @returns An observable that emits the available roles.
- * @author Dario Avila de la cruz
- */
-  getRoles(): Observable<Role[]> { return this.rolesEndpoint.getAll(); }
+  changePassword(currentPassword: string, newPassword: string): Observable<LoginResultResource> {
+    return this.http.post<LoginResultResource>(`${this.baseUrl}/auth/change-password`, {currentPassword, newPassword});
+  }
+
+  logout(): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/auth/logout`, {});
+  }
+
+  getAccounts(): Observable<AccountResource[]> {
+    return this.http.get<AccountResource[]>(`${this.baseUrl}/accounts`);
+  }
+
+  changeRole(accountId: number, role: RoleType): Observable<AccountResource> {
+    return this.http.patch<AccountResource>(`${this.baseUrl}/accounts/${accountId}/role`, {role});
+  }
+
+  resetPassword(accountId: number): Observable<{temporaryPassword: string}> {
+    return this.http.post<{temporaryPassword: string}>(`${this.baseUrl}/accounts/${accountId}/reset-password`, {});
+  }
 }

@@ -1,9 +1,10 @@
 import {ApplicationConfig, provideBrowserGlobalErrorListeners} from '@angular/core';
-import {provideHttpClient} from '@angular/common/http';
+import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import {provideRouter} from '@angular/router';
 import {provideTranslateService} from '@ngx-translate/core';
 import {provideTranslateHttpLoader} from '@ngx-translate/http-loader';
 import {routes} from './app.routes';
+import {authInterceptor} from './shared/infrastructure/auth.interceptor';
 import {EMPLOYEE_FILE_SECTIONS} from './shared/presentation/components/employee-file-section/employee-file-section';
 import {EmployeeBenefitsTab} from './benefits/presentation/components/employee-benefits-tab/employee-benefits-tab';
 import {VacationBalanceCard} from './benefits/presentation/components/vacation-balance-card/vacation-balance-card';
@@ -29,7 +30,7 @@ import {OfficeWellbeingCard} from './wellbeing/presentation/components/office-we
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideTranslateService({
       loader: provideTranslateHttpLoader({ prefix: './i18n/', suffix: '.json' }),
       fallbackLang: 'en',
