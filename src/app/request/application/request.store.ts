@@ -2,6 +2,7 @@ import {computed, inject, Injectable, Signal, signal} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {Observable} from 'rxjs';
 import {CurrentEmployeeStore} from '../../shared/application/current-employee.store';
+import {SessionStore} from '../../shared/application/session.store';
 import {RequestApi} from '../infrastructure/request-api';
 import {WorkspaceAcl} from '../infrastructure/workspace-acl';
 import {BenefitsAcl} from '../infrastructure/benefits-acl';
@@ -85,6 +86,8 @@ export class RequestStore {
   private readonly currentEmployeeStore = inject(CurrentEmployeeStore);
   /** Identifier of the employee in session. */
   readonly currentEmployeeId = this.currentEmployeeStore.employeeId;
+  /** Signed-in user, used to know the IAM role. */
+  private readonly session = inject(SessionStore);
 
   /** Read-only list of requesters. */
   readonly requesters = this.requestersSignal.asReadonly();
@@ -366,8 +369,8 @@ export class RequestStore {
   /**
    * Checks whether the employee in session can resolve a request.
    *
-   * @remarks A pending request is resolved by the approver the web service assigned: Human Resources
-   * staff resolve the ones routed to 'HR_STAFF', and a direct manager the ones assigned to them. The
+   * @remarks A pending request is resolved by the approver the web service assigned: users with the
+   * IAM role 'HR_STAFF' resolve the ones routed to Human Resources, and a direct manager the ones assigned to them. The
    * requests assigned to another manager are shown read only. Nobody resolves their own request.
    * @param request - The request.
    * @returns True if the employee in session is the approver of a pending request, false otherwise
@@ -376,7 +379,7 @@ export class RequestStore {
   canResolve(request: Request): boolean {
     const employeeId = this.currentEmployeeId();
     if (!request.isPending() || request.isOwnedBy(employeeId)) return false;
-    return request.isRoutedToHr() ? !!this.currentEmployee()?.hrStaff : request.approverId === employeeId;
+    return request.isRoutedToHr() ? this.session.role() === 'HR_STAFF' : request.approverId === employeeId;
   }
 
   /**
