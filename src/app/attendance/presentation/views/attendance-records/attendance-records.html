@@ -32,7 +32,7 @@
     @if (periodRecords().length) {
       <div class="table-card">
         <table mat-table [dataSource]="pageRows()">
-          <ng-container matColumnDef="employee"><th mat-header-cell *matHeaderCellDef>{{ 'attendance.employee' | translate }}</th><td mat-cell *matCellDef="let row"><span class="person"><span class="avatar">{{ initials(row.employeeName) }}</span><span class="cell-strong">{{ row.employeeName }}</span></span></td></ng-container>
+          <ng-container matColumnDef="employee"><th mat-header-cell *matHeaderCellDef>{{ 'attendance.employee-name' | translate }}</th><td mat-cell *matCellDef="let row"><span class="person"><span class="avatar">{{ initials(row.employeeName) }}</span><span class="cell-strong">{{ row.employeeName }}</span></span></td></ng-container>
           <ng-container matColumnDef="date"><th mat-header-cell *matHeaderCellDef>{{ 'attendance.date' | translate }}</th><td mat-cell *matCellDef="let row">{{ row.record.workDate | slice:8:10 }}/{{ row.record.workDate | slice:5:7 }}/{{ row.record.workDate | slice:0:4 }}</td></ng-container>
           <ng-container matColumnDef="checkIn"><th mat-header-cell *matHeaderCellDef>{{ 'attendance.check-in' | translate }}</th><td mat-cell *matCellDef="let row">{{ row.record.checkInTime || '—' }}</td></ng-container>
           <ng-container matColumnDef="checkOut"><th mat-header-cell *matHeaderCellDef>{{ 'attendance.check-out' | translate }}</th><td mat-cell *matCellDef="let row">{{ row.record.checkOutTime || '—' }}</td></ng-container>
