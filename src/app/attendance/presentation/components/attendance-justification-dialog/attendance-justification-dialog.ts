@@ -25,6 +25,7 @@ export class AttendanceJustificationDialog {
   private readonly store = inject(AttendanceStore);
   reason = '';
   fileName: string | null = null;
+  submitted = false;
 
 /**
  * Performs the constructor operation.
@@ -50,6 +51,7 @@ export class AttendanceJustificationDialog {
  * @author Dario Avila de la cruz
  */
   submit(): void {
+    this.submitted = true;
     if (!this.reason.trim()) return;
     this.store.justify(this.data.record, this.reason.trim(), this.fileName);
     this.dialogRef.close(true);

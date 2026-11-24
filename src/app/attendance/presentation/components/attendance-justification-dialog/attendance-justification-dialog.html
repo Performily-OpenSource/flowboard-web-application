@@ -11,9 +11,9 @@
   </div>
 
   <label class="field-label" for="reason">{{ 'attendance.justification.reason' | translate }}</label>
-  <textarea id="reason" [(ngModel)]="reason" rows="4" [placeholder]="'attendance.justification.reason-placeholder' | translate"></textarea>
+  <textarea id="reason" [(ngModel)]="reason" rows="4" [class.invalid]="submitted && !reason.trim()" [placeholder]="'attendance.justification.reason-placeholder' | translate"></textarea>
 
-  <label class="field-label">{{ 'attendance.justification.support' | translate }}</label>
+  <label class="field-label spaced">{{ 'attendance.justification.support' | translate }}</label>
   <label class="upload">
     <mat-icon>upload</mat-icon>
     <span>{{ fileName || ('attendance.justification.upload' | translate) }}</span>
@@ -25,6 +25,6 @@
 
   <footer class="dialog-actions">
     <button mat-stroked-button type="button" (click)="close()">{{ 'common.cancel' | translate }}</button>
-    <button mat-flat-button type="button" [disabled]="!reason.trim()" (click)="submit()">{{ 'attendance.justification.submit' | translate }}</button>
+    <button mat-flat-button type="button" (click)="submit()">{{ 'attendance.justification.submit' | translate }}</button>
   </footer>
 </div>
