@@ -9,8 +9,8 @@
   padding: 0;
   border-right: 1px solid var(--fb-border);
   border-radius: 0;
+  box-sizing: border-box;
   background: var(--fb-surface);
-  transition: width 0.18s ease;
 }
 
 .sidebar ::ng-deep .mat-drawer-inner-container {
@@ -161,6 +161,19 @@
 .collapsed .collapse-toggle {
   justify-content: center;
   padding: 0;
+}
+
+/* The content margin follows the sidebar width; set here because Material's autosize measures it too early */
+.shell .main {
+  margin-left: 232px !important;
+}
+
+.shell.sidebar-collapsed .main {
+  margin-left: 60px !important;
+}
+
+.shell.handset .main {
+  margin-left: 0 !important;
 }
 
 .main {

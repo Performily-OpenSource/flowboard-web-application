@@ -1,4 +1,6 @@
-<mat-sidenav-container class="shell" autosize>
+<mat-sidenav-container class="shell"
+                       [class.handset]="isHandset()"
+                       [class.sidebar-collapsed]="isCollapsed()">
   <mat-sidenav #sidenav class="sidebar"
                [class.collapsed]="isCollapsed()"
                [mode]="isHandset() ? 'over' : 'side'"
