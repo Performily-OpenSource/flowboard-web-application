@@ -51,6 +51,10 @@
     <span class="profile-copy"><strong>{{ session.displayName() }}</strong><small>{{ roleLabel() | translate }}</small></span>
   </button>
   <mat-menu #profileMenu="matMenu" xPosition="before">
-    <button mat-menu-item type="button" (click)="logout()"><mat-icon>logout</mat-icon>{{ 'toolbar.logout' | translate }}</button>
+    @if (session.email()) {
+      <div class="profile-menu-email" (click)="$event.stopPropagation()">{{ session.email() }}</div>
+      <mat-divider/>
+    }
+    <button mat-menu-item class="profile-menu-logout" type="button" (click)="logout()">{{ 'toolbar.logout' | translate }}</button>
   </mat-menu>
 </header>
