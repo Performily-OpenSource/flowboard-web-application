@@ -134,17 +134,45 @@
   display: none;
 }
 
-.node-stacked {
-  position: relative;
+/* Tree below each first-level head: a vertical line on the left and an elbow into every node */
+.subtree {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-left: 22px;
+  padding-top: 10px;
 }
 
-.node-stacked::before {
+.branch {
+  position: relative;
+  padding-left: 18px;
+}
+
+.branch::before {
   content: '';
   position: absolute;
-  top: -13px;
-  left: 99px;
-  height: 12px;
+  top: -10px;
+  left: 0;
+  height: 38px;
   border-left: 1px solid var(--fb-outline);
+}
+
+.branch::after {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: 0;
+  width: 18px;
+  border-top: 1px solid var(--fb-outline);
+}
+
+.column > .subtree {
+  margin-top: -12px;
+}
+
+/* Keeps the vertical line running past this node's own team down to the next sibling */
+.branch:not(:last-child)::before {
+  height: calc(100% + 10px);
 }
 
 .pending {

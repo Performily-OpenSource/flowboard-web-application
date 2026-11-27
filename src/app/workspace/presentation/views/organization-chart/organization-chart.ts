@@ -2,6 +2,7 @@ import {Component, computed, inject, signal} from '@angular/core';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {ActivatedRoute, RouterLink, RouterLinkActive} from '@angular/router';
 import {map} from 'rxjs';
+import {NgTemplateOutlet} from '@angular/common';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
@@ -9,12 +10,12 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {OrganizationChartNode, WorkspaceStore} from '../../../application/workspace.store';
 import {Employee} from '../../../domain/model/employee.entity';
 
-/** A column of the chart: a direct report of a root and every employee below them. */
+/** A column of the chart: a direct report of a root and the tree of employees below them. */
 interface ChartColumn {
   /** The direct report that heads the column. */
   head: Employee;
-  /** Employees below the head in depth-first order, with their depth relative to the head. */
-  descendants: { employee: Employee; depth: number }[];
+  /** Direct subordinates of the head, drawn as an indented tree below it. */
+  children: OrganizationChartNode[];
 }
 
 /**
@@ -29,6 +30,7 @@ interface ChartColumn {
 @Component({
   selector: 'app-organization-chart',
   imports: [
+    NgTemplateOutlet,
     RouterLink,
     RouterLinkActive,
     MatButton,
@@ -59,7 +61,7 @@ export class OrganizationChart {
   /** Each root employee with its direct reports arranged as columns. */
   readonly trees = computed(() => this.chart().roots.map(root => ({
     root: root.employee,
-    columns: root.subordinates.map(child => this.toColumn(child))
+    columns: this.sorted(root.subordinates).map(child => this.toColumn(child))
   })));
 
   /** Whether the chart has no roots and no employees pending reassignment. */
@@ -94,19 +96,27 @@ export class OrganizationChart {
   }
 
   /**
-   * Flattens a chart node into a column.
+   * Orders subordinates so managers come before the people without a team, then by name.
    *
-   * @param node - The node of a direct report of a root.
-   * @returns The column headed by the node employee with its descendants
+   * @param nodes - Subordinates of one employee.
+   * @returns A sorted copy.
+   * @author Oscar Lizandro Vasquez Llave
+   */
+  sorted(nodes: OrganizationChartNode[]): OrganizationChartNode[] {
+    return [...nodes].sort((a, b) =>
+      (b.subordinates.length > 0 ? 1 : 0) - (a.subordinates.length > 0 ? 1 : 0)
+      || a.employee.fullName.localeCompare(b.employee.fullName));
+  }
+
+  /**
+   * Builds a first-level column: the head and its direct subordinates.
+   *
+   * @param node - First-level subordinate of a root.
+   * @returns The column to draw.
    * @author Oscar Lizandro Vasquez Llave
    */
   private toColumn(node: OrganizationChartNode): ChartColumn {
-    const descendants: { employee: Employee; depth: number }[] = [];
-    const walk = (children: OrganizationChartNode[], depth: number) => children.forEach(child => {
-      descendants.push({ employee: child.employee, depth });
-      walk(child.subordinates, depth + 1);
-    });
-    walk(node.subordinates, 0);
-    return { head: node.employee, descendants };
+    return { head: node.employee, children: this.sorted(node.subordinates) };
   }
+
 }

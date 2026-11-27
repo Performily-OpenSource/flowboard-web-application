@@ -50,12 +50,8 @@
                     <span class="avatar" aria-hidden="true">{{ initials(column.head) }}</span>
                     <span class="node-text"><strong>{{ column.head.fullName }}</strong><small>{{ column.head.position?.title ?? '-' }}</small></span>
                   </a>
-                  @for (item of column.descendants; track item.employee.id) {
-                    <a class="node node-stacked" [style.margin-left.px]="item.depth * 14"
-                       [class.highlight]="item.employee.id === highlightedId()" [routerLink]="['/workspace/employees', item.employee.id]">
-                      <span class="avatar" aria-hidden="true">{{ initials(item.employee) }}</span>
-                      <span class="node-text"><strong>{{ item.employee.fullName }}</strong><small>{{ item.employee.position?.title ?? '-' }}</small></span>
-                    </a>
+                  @if (column.children.length > 0) {
+                    <ng-container *ngTemplateOutlet="branch; context: { $implicit: column.children }"/>
                   }
                 </div>
               }
@@ -64,6 +60,24 @@
         </div>
       }
     </div>
+
+    <!-- Subordinates below the first level: an indented tree, each manager before its own team -->
+    <ng-template #branch let-nodes>
+      <div class="subtree">
+        @for (child of nodes; track child.employee.id) {
+          <div class="branch">
+            <a class="node" [class.highlight]="child.employee.id === highlightedId()"
+               [routerLink]="['/workspace/employees', child.employee.id]">
+              <span class="avatar" aria-hidden="true">{{ initials(child.employee) }}</span>
+              <span class="node-text"><strong>{{ child.employee.fullName }}</strong><small>{{ child.employee.position?.title ?? '-' }}</small></span>
+            </a>
+            @if (child.subordinates.length > 0) {
+              <ng-container *ngTemplateOutlet="branch; context: { $implicit: sorted(child.subordinates) }"/>
+            }
+          </div>
+        }
+      </div>
+    </ng-template>
 
     @if (chart().pendingReassignment.length > 0) {
       <div class="pending">
