@@ -4,10 +4,6 @@
   font-weight: 600;
 }
 
-.wellbeing-page {
-  max-width: 1200px;
-}
-
 .loading-line {
   height: 3px;
   margin: -4px 0 12px;
@@ -62,17 +58,20 @@
 
 .tabs {
   display: flex;
-  gap: 26px;
+  gap: 24px;
   border-bottom: 1px solid var(--fb-border);
   margin: 14px 0 20px;
 }
 
 .tabs button {
+  margin-bottom: -1px;
   border: none;
   background: transparent;
-  padding: 12px 2px;
+  padding: 10px 2px;
   color: var(--fb-text-secondary);
   font: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
   cursor: pointer;
   border-bottom: 2px solid transparent;
 }
@@ -258,7 +257,7 @@ td {
 .filters select {
   height: 38px;
   padding: 0 12px;
-  border: 1px solid var(--fb-outline);
+  border: 1px solid var(--fb-border);
   border-radius: 8px;
   background: var(--fb-surface);
   color: var(--fb-text-secondary);

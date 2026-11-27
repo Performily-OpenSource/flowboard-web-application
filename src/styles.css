@@ -102,9 +102,8 @@ a {
 }
 
 .page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 28px 28px 48px;
+  margin: 0;
+  padding: 24px 28px 40px;
 }
 
 .page-header {
@@ -284,9 +283,9 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  height: 34px;
+  height: 38px;
   padding: 0 12px;
-  border: 1px solid var(--fb-outline);
+  border: 1px solid var(--fb-border);
   border-radius: 8px;
   background: var(--fb-surface);
   color: var(--fb-text-secondary);
@@ -325,9 +324,9 @@ a {
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 34px;
+  height: 38px;
   padding: 0 12px;
-  border: 1px solid var(--fb-outline);
+  border: 1px solid var(--fb-border);
   border-radius: 8px;
   background: var(--fb-surface);
 }
@@ -489,30 +488,47 @@ select.input {
   gap: 12px;
 }
 
-.segmented-tabs {
+/* Page tabs: underlined, as in Cloudflare. Shared by every bounded context. */
+.segmented-tabs,
+.attendance-tabs {
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-bottom: 20px;
+  flex-wrap: nowrap;
+  gap: 24px;
+  margin: 0 0 20px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--fb-border);
+  scrollbar-width: none;
 }
 
 .segmented-tabs a,
-.segmented-tabs button {
-  padding: 8px 14px;
-  border: 1px solid transparent;
-  border-radius: 8px;
+.segmented-tabs button,
+.attendance-tab {
+  flex: none;
+  margin-bottom: -1px;
+  padding: 10px 2px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
   background: none;
   color: var(--fb-text-secondary);
   font: inherit;
   font-size: 13.5px;
+  font-weight: 500;
+  white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
 }
 
-.segmented-tabs .active {
-  border-color: var(--fb-border);
-  background: var(--fb-surface);
-  color: var(--fb-on-primary-container);
+.segmented-tabs a:hover,
+.segmented-tabs button:hover,
+.attendance-tab:hover {
+  color: var(--fb-text);
+}
+
+.segmented-tabs .active,
+.attendance-tab.active {
+  border-bottom-color: var(--fb-primary);
+  color: var(--fb-primary);
   font-weight: 600;
 }
 
@@ -634,8 +650,8 @@ select.input {
 .dash-card {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 20px 22px;
+  gap: 12px;
+  padding: 16px 20px;
   border: 1px solid var(--fb-border);
   border-radius: 12px;
   background: var(--fb-surface);
@@ -651,9 +667,8 @@ select.input {
 
 .dash-card-title {
   margin: 0;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
-  letter-spacing: -0.048px;
   color: var(--fb-text);
 }
 
@@ -672,8 +687,8 @@ select.input {
 .dash-kpi {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 20px 22px;
+  gap: 4px;
+  padding: 16px 20px;
   border: 1px solid var(--fb-border);
   border-radius: 12px;
   background: var(--fb-surface);
@@ -682,18 +697,16 @@ select.input {
 
 .dash-kpi-label {
   margin: 0;
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-weight: 500;
-  letter-spacing: 0.69px;
-  text-transform: uppercase;
-  color: var(--fb-text-muted);
+  color: var(--fb-text-secondary);
 }
 
 .dash-kpi-value {
   margin: 0;
-  font-size: 30px;
-  font-weight: 700;
-  letter-spacing: -0.6px;
+  font-size: 26px;
+  font-weight: 650;
+  letter-spacing: -0.5px;
   line-height: 1.2;
   color: var(--fb-text);
 }
@@ -736,4 +749,71 @@ select.input {
   margin: 0;
   font-size: 12.5px;
   color: var(--fb-text-muted);
+}
+
+/* KPI strip: the indicators of the home dashboard share one card, split by dividers */
+.dash-kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid var(--fb-border);
+  border-radius: 12px;
+  background: var(--fb-surface);
+}
+
+.dash-kpi-strip > * {
+  min-width: 0;
+  border-left: 1px solid var(--fb-border);
+}
+
+.dash-kpi-strip > *:first-child {
+  border-left: none;
+}
+
+.dash-kpi-strip .dash-kpi {
+  height: 100%;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 0;
+}
+
+.dash-kpi-strip a.dash-kpi:hover,
+.dash-kpi-strip a.dash-kpi:focus-visible {
+  background: var(--fb-surface-muted);
+}
+
+@media (max-width: 1100px) {
+  .dash-kpi-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dash-kpi-strip > *:nth-child(odd) {
+    border-left: none;
+  }
+
+  .dash-kpi-strip > *:nth-child(n + 3) {
+    border-top: 1px solid var(--fb-border);
+  }
+}
+
+@media (max-width: 599px) {
+  .dash-kpi-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-kpi-strip > * {
+    border-left: none;
+  }
+
+  .dash-kpi-strip > *:nth-child(n + 2) {
+    border-top: 1px solid var(--fb-border);
+  }
+}
+
+/* Ellipsis between page buttons of the list paginators */
+.page-gap {
+  min-width: 20px;
+  color: var(--fb-text-muted);
+  font-size: 12.5px;
+  text-align: center;
 }
