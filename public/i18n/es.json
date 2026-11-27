@@ -1540,6 +1540,13 @@
       "error-content": "Escribe a Recursos Humanos con tu nombre completo y tu documento de identidad. Si te reincorporan, tu cuenta se reactiva con el mismo usuario.",
       "cta": "Escribir a Recursos Humanos"
     },
+    "forgot": {
+      "title": "¿Olvidaste tu contraseña?",
+      "subtitle": "Por seguridad, las contraseñas no se recuperan desde esta pantalla. Recursos Humanos te entrega una nueva contraseña temporal.",
+      "steps-title": "Cómo volver a ingresar",
+      "steps-content": "Escribe a Recursos Humanos con tu nombre completo y tu correo corporativo. Te enviarán una contraseña temporal por correo; ingresa con ella y se te pedirá crear una nueva.",
+      "cta": "Volver a iniciar sesión"
+    },
     "accounts": {
       "title": "Cuentas y roles",
       "subtitle": "Las credenciales se generan al registrar al colaborador. Aquí se administra el rol y el estado de cada cuenta.",
@@ -1603,7 +1610,7 @@
     "view-profile": "Ver mi perfil"
   },
   "attendance-dashboard": {
-    "monthly-lates": "Tardanzas del mes",
+    "monthly-lates": "Tardanzas este mes",
     "lates-share": "{{percent}}% de las marcaciones",
     "lates-share-month": "{{percent}}% de las marcaciones de {{month}}",
     "today-title": "Asistencia de hoy",
