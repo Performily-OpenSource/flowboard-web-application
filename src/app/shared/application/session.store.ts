@@ -12,6 +12,8 @@ export interface AuthenticatedSession {
   employeeId: number;
   /** Name shown in the toolbar. */
   displayName: string;
+  /** Corporate email (username) of the account, shown in the profile menu. */
+  email: string;
   /** Role used to filter the menu and protect routes. */
   role: SessionRole;
   /** Whether the user must change the temporary password. */
@@ -40,6 +42,8 @@ export class SessionStore {
   readonly employeeId = () => this.sessionSignal()?.employeeId ?? null;
   /** Display name of the signed-in user, or an empty string. */
   readonly displayName = () => this.sessionSignal()?.displayName ?? '';
+  /** Email of the signed-in user, or an empty string. */
+  readonly email = () => this.sessionSignal()?.email ?? '';
   /** Whether the signed-in user must change the password. */
   readonly mustChangePassword = () => this.sessionSignal()?.mustChangePassword ?? false;
 
@@ -78,7 +82,10 @@ export class SessionStore {
   private read(): AuthenticatedSession | null {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) as AuthenticatedSession : null;
+      if (!raw) return null;
+      const stored = JSON.parse(raw) as AuthenticatedSession;
+      // Sessions saved before the email was stored do not have it.
+      return {...stored, email: stored.email ?? ''};
     } catch {
       return null;
     }

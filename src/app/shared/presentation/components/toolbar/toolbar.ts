@@ -4,12 +4,14 @@ import {ActivatedRoute, NavigationEnd, NavigationStart, Router} from '@angular/r
 import {filter, map} from 'rxjs';
 import {MatIcon} from '@angular/material/icon';
 import {MatIconButton} from '@angular/material/button';
+import {MatDivider} from '@angular/material/divider';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {MatTooltip} from '@angular/material/tooltip';
 import {TranslatePipe} from '@ngx-translate/core';
 import {LanguageSwitcher} from '../language-switcher/language-switcher';
 import {LayoutStore} from '../../../application/layout.store';
 import {SessionStore} from '../../../application/session.store';
-import {CurrentEmployeeStore} from '../../../application/current-employee.store';
+import {IamStore} from '../../../../iam/application/iam.store';
 
 /**
  * Top bar of the shell: breadcrumb, language switcher and signed-in user.
@@ -21,6 +23,7 @@ import {CurrentEmployeeStore} from '../../../application/current-employee.store'
   imports: [
     MatIcon,
     MatIconButton,
+    MatDivider,
     MatMenu,
     MatMenuItem,
     MatMenuTrigger,
@@ -35,7 +38,7 @@ export class Toolbar {
   private route = inject(ActivatedRoute);
   readonly layoutStore = inject(LayoutStore);
   readonly session = inject(SessionStore);
-  private readonly currentEmployee = inject(CurrentEmployeeStore);
+  private readonly iam = inject(IamStore);
 
   /** Shows the button that opens the sidebar on small screens. */
   readonly showMenuButton = input(false);
@@ -94,5 +97,20 @@ export class Toolbar {
    *
    * @author Oscar Lizandro Vasquez Llave
    */
-  logout(): void { this.session.clear(); this.currentEmployee.setEmployeeId(1); this.router.navigate(['/login']).then(); }
+
+  logout(): void { this.iam.signOut(); this.router.navigate(['/login']).then(); }
+
+  /**
+   * Emits the global search text and clears the box.
+   *
+   * @param searchInput - Search input element.
+   * @author Oscar Lizandro Vasquez Llave
+   */
+  onSearch(searchInput: HTMLInputElement) {
+    const text = searchInput.value.trim();
+    if (!text) return;
+    this.searchSubmit.emit(text);
+    searchInput.value = '';
+    searchInput.blur();
+  }
 }
