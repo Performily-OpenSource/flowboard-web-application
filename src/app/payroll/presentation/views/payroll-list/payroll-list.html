@@ -67,11 +67,5 @@
     </div>
   </div>
 
-  <nav class="pagination" [attr.aria-label]="'payroll.pagination' | translate">
-    <span class="muted">{{ 'payroll.range' | translate: {start: rangeStart(), end: rangeEnd(), total: filteredPayslips().length} }}</span>
-    <span class="spacer"></span>
-    <button class="page-button" type="button" [disabled]="page() === 0" (click)="page.set(page() - 1)">{{ 'payroll.previous' | translate }}</button>
-    @for (index of pages(); track index) { <button class="page-button" type="button" [class.current]="index === page()" (click)="page.set(index)">{{ index + 1 }}</button> }
-    <button class="page-button" type="button" [disabled]="page() >= pageCount() - 1" (click)="page.set(page() + 1)">{{ 'payroll.next' | translate }}</button>
-  </nav>
+  <app-list-pagination [total]="filteredPayslips().length" [pageSize]="pageSize" itemsKey="payroll.pagination-items" [(page)]="page"/>
 </section>
