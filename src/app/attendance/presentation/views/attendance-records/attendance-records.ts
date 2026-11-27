@@ -5,7 +5,7 @@ import {MatIcon} from '@angular/material/icon';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import {MatTable, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatCell, MatCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef} from '@angular/material/table';
 import {MatDialog} from '@angular/material/dialog';
-import {TranslatePipe} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {RouterLink} from '@angular/router';
 import {AttendanceStore} from '../../../application/attendance.store';
 import {AttendanceRecord, ATTENDANCE_STATUSES, AttendanceStatus} from '../../../domain/model/attendance-record.entity';
@@ -27,6 +27,7 @@ import {pageWindow} from '../../../../shared/presentation/components/list-pagina
 export class AttendanceRecords {
   readonly store = inject(AttendanceStore);
   private readonly dialog = inject(MatDialog);
+  private readonly translate = inject(TranslateService);
   readonly columns = ['employee', 'date', 'checkIn', 'checkOut', 'workedHours', 'status', 'actions'];
   readonly fromDate = signal(AttendanceRecords.monthStart());
   readonly toDate = signal(AttendanceRecords.today());
@@ -147,6 +148,36 @@ export class AttendanceRecords {
   }
 
 /**
+ * Downloads the filtered attendance records (all pages) as a UTF-8 CSV file with translated headers.
+ *
+ * @author Dario Avila de la cruz
+ */
+  exportRecords(): void {
+    const header = ['attendance.employee-name', 'attendance.area', 'attendance.date', 'attendance.check-in',
+      'attendance.check-out', 'attendance.worked-hours', 'attendance.overtime', 'attendance.status.label']
+      .map(key => this.translate.instant(key));
+    const rows = this.periodRecords().map(row => [
+      row.employeeName,
+      row.areaName,
+      row.record.workDate,
+      row.record.checkInTime ?? '',
+      row.record.checkOutTime ?? '',
+      this.hours(row.record.effectiveHours),
+      this.hours(row.record.overtimeHours ?? 0),
+      this.translate.instant(`attendance.status.${row.record.status}`)
+    ]);
+    const csv = [header, ...rows]
+      .map(row => row.map(value => `"${String(value).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+    const url = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `attendance-records_${this.fromDate()}_${this.toDate()}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+/**
  * Returns the number of distinct employees represented in the current period.
  *
  * @returns The value produced by the `employeeCount` operation.
@@ -154,4 +185,3 @@ export class AttendanceRecords {
  */
   employeeCount(): number { return new Set(this.periodRecords().map(r => r.record.employeeId)).size; }
 }
-

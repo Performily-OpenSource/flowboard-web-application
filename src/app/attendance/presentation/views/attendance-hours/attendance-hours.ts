@@ -1,7 +1,7 @@
 import {Component, computed, inject, signal} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
-import {TranslatePipe} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {RouterLink} from '@angular/router';
 import {AttendanceStore} from '../../../application/attendance.store';
 
@@ -14,6 +14,7 @@ import {AttendanceStore} from '../../../application/attendance.store';
 @Component({selector: 'app-attendance-hours', imports: [MatButton, MatIcon, TranslatePipe, RouterLink], templateUrl: './attendance-hours.html', styleUrl: './attendance-hours.css'})
 export class AttendanceHours {
   readonly store = inject(AttendanceStore);
+  private readonly translate = inject(TranslateService);
   readonly period = signal(AttendanceHours.currentMonth());
   readonly areaFilter = signal<number | null>(null);
   readonly order = signal('overtime');
@@ -69,6 +70,36 @@ export class AttendanceHours {
  * @author Dario Avila de la cruz
  */
   hours(value: number): string { return AttendanceStore.hoursToLabel(value); }
+
+/**
+ * Downloads the hours table of the selected month and area filter as a UTF-8 CSV file.
+ *
+ * @author Dario Avila de la cruz
+ */
+  exportHours(): void {
+    const header = ['attendance.employee-name', 'attendance.area', 'attendance.worked-hours', 'attendance.hours.expected',
+      'attendance.overtime', 'attendance.hours.variation', 'attendance.hours.level']
+      .map(key => this.translate.instant(key));
+    const areas = new Map(this.store.areas().map(area => [area.id, area.name]));
+    const rows = this.rows().map(row => [
+      row.employee.fullName,
+      areas.get(row.employee.areaId) ?? '',
+      this.hours(row.effective),
+      this.hours(row.expected),
+      this.hours(row.overtime),
+      `${row.variation.toFixed(1)} %`,
+      this.translate.instant(`attendance.hours.${this.level(row.variation)}`)
+    ]);
+    const csv = [header, ...rows]
+      .map(row => row.map(value => `"${String(value).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+    const url = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `attendance-hours_${this.period()}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
 
 /**
  * Returns the current month in ISO year-month format.

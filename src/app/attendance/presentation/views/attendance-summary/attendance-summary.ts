@@ -1,7 +1,7 @@
 import {Component, computed, inject, signal} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
-import {TranslatePipe} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {RouterLink} from '@angular/router';
 import {AttendanceStore} from '../../../application/attendance.store';
 
@@ -19,6 +19,7 @@ import {AttendanceStore} from '../../../application/attendance.store';
 })
 export class AttendanceSummary {
   readonly store = inject(AttendanceStore);
+  private readonly translate = inject(TranslateService);
   readonly period = signal(AttendanceSummary.currentMonth());
   readonly compare = signal(AttendanceSummary.previousMonth());
 
@@ -37,6 +38,33 @@ export class AttendanceSummary {
       punctuality: denominator ? Math.round(onTime / denominator * 100) : 100
     };
   }));
+
+/**
+ * Downloads the attendance summary of the selected month, one row per area, as a UTF-8 CSV file.
+ *
+ * @author Dario Avila de la cruz
+ */
+  exportSummary(): void {
+    const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
+    const header = [
+      this.translate.instant('attendance.area'),
+      capitalize(this.translate.instant('attendance.summary.records')),
+      this.translate.instant('attendance.status.ON_TIME'),
+      this.translate.instant('attendance.status.LATE'),
+      this.translate.instant('attendance.status.ABSENT'),
+      `${capitalize(this.translate.instant('attendance.summary.punctuality'))} (%)`
+    ];
+    const rows = this.areas().map(item => [item.area.name, item.total, item.onTime, item.late, item.absent, item.punctuality]);
+    const csv = [header, ...rows]
+      .map(row => row.map(value => `"${String(value).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+    const url = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `attendance-summary_${this.period()}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
 
 /**
  * Returns the current month in ISO year-month format.

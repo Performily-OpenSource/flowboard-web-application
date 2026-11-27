@@ -1,7 +1,7 @@
 <section class="page attendance-page">
   <header class="page-header">
     <div><h1 class="page-title">{{ 'attendance.records.title' | translate }}</h1><p class="page-subtitle">{{ 'attendance.records.subtitle' | translate }}</p></div>
-    <div class="page-actions"><button mat-stroked-button type="button"><mat-icon>upload</mat-icon>{{ 'attendance.export' | translate }}</button></div>
+    <div class="page-actions"><button mat-stroked-button type="button" (click)="exportRecords()" [disabled]="!periodRecords().length"><mat-icon>upload</mat-icon>{{ 'attendance.export' | translate }}</button></div>
   </header>
 
   <nav class="attendance-tabs" aria-label="Attendance views">
