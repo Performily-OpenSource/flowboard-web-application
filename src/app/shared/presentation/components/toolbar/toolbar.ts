@@ -99,18 +99,4 @@ export class Toolbar {
    */
 
   logout(): void { this.iam.signOut(); this.router.navigate(['/login']).then(); }
-
-  /**
-   * Emits the global search text and clears the box.
-   *
-   * @param searchInput - Search input element.
-   * @author Oscar Lizandro Vasquez Llave
-   */
-  onSearch(searchInput: HTMLInputElement) {
-    const text = searchInput.value.trim();
-    if (!text) return;
-    this.searchSubmit.emit(text);
-    searchInput.value = '';
-    searchInput.blur();
-  }
 }
