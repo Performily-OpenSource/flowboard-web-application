@@ -31,10 +31,10 @@
     <mat-icon class="profile-caret" aria-hidden="true">expand_more</mat-icon>
   </button>
   <mat-menu #profileMenu="matMenu" xPosition="before">
-    <div class="profile-menu-header">
-      <strong>{{ session.displayName() }}</strong>
-      <small>{{ roleLabel() | translate }}</small>
-    </div>
-    <button mat-menu-item type="button" (click)="logout()"><mat-icon>logout</mat-icon>{{ 'toolbar.logout' | translate }}</button>
-  </mat-menu>
+  @if (session.email()) {
+    <div class="profile-menu-email" (click)="$event.stopPropagation()">{{ session.email() }}</div>
+    <mat-divider/>
+  }
+  <button mat-menu-item class="profile-menu-logout" type="button" (click)="logout()">{{ 'toolbar.logout' | translate }}</button>
+</mat-menu>
 </header>

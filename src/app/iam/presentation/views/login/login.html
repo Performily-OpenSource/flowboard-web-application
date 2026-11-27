@@ -33,7 +33,7 @@
           <input [type]="showPassword() ? 'text' : 'password'" formControlName="password" autocomplete="current-password" [class.invalid]="submitted() && form.controls.password.invalid || (submitted() && iam.error())"/>
           <button type="button" (click)="togglePassword()">{{ (showPassword() ? 'iam.login.hide' : 'iam.login.show') | translate }}</button>
         </div>
-        <a class="forgot" routerLink="/login">{{ 'iam.login.forgot' | translate }}</a>
+        <a class="forgot" routerLink="/forgot-password">{{ 'iam.login.forgot' | translate }}</a>
         <button class="primary" mat-flat-button type="submit">{{ 'iam.login.submit' | translate }}</button>
       </form>
 

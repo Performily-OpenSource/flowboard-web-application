@@ -123,3 +123,22 @@
     display: none;
   }
 }
+
+.profile-menu-email {
+  min-width: 220px;
+  max-width: 320px;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  font-size: 13.5px;
+  color: var(--fb-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: default;
+  user-select: text;
+}
+
+.profile-menu-logout {
+  --mat-menu-item-label-text-color: var(--fb-error);
+  color: var(--fb-error);
+}

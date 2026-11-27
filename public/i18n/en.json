@@ -68,7 +68,7 @@
     "hr-role": "Human Resources",
     "employee-role": "Employee",
     "profile": "User profile",
-    "logout": "Sign out"
+    "logout": "Log out"
   },
   "home": {
     "title": "Welcome to Flowboard",
@@ -1546,6 +1546,13 @@
       "error-content": "Write to Human Resources with your full name and identity document. If you are reinstated, your account is reactivated with the same username.",
       "cta": "Write to Human Resources"
     },
+    "forgot": {
+      "title": "Forgot your password?",
+      "subtitle": "For security, passwords are not recovered from this screen. Human Resources issues you a new temporary password.",
+      "steps-title": "How to get access again",
+      "steps-content": "Write to Human Resources with your full name and corporate email. They will send you a temporary password by email; sign in with it and you will be asked to create a new one.",
+      "cta": "Back to sign in"
+    },
     "accounts": {
       "title": "Accounts & roles",
       "subtitle": "Credentials are generated when an employee is registered. Roles and account status are managed here.",
@@ -1609,7 +1616,7 @@
     "view-profile": "View my profile"
   },
   "attendance-dashboard": {
-    "monthly-lates": "Lates this month",
+    "monthly-lates": "Instances of tardiness this month",
     "lates-share": "{{percent}}% of the records",
     "lates-share-month": "{{percent}}% of the records in {{month}}",
     "today-title": "Today's attendance",
