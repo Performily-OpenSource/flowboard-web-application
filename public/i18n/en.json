@@ -829,6 +829,7 @@
     "under-review": "Under review",
     "more-actions": "More actions",
     "pagination": "Pagination",
+    "pagination-items": "payslips",
     "range": "Showing {{ start }} to {{ end }} of {{ total }} payslips",
     "previous": "Previous",
     "next": "Next",
@@ -939,6 +940,7 @@
     "all-periods": "Period: all",
     "download": "Download payslip",
     "pagination": "Pagination",
+    "pagination-items": "payslips",
     "range": "Showing {{ start }} to {{ end }} of {{ total }} payslips",
     "previous": "Previous",
     "next": "Next"

@@ -829,6 +829,7 @@
     "under-review": "En revisión",
     "more-actions": "Más acciones",
     "pagination": "Paginación",
+    "pagination-items": "boletas",
     "range": "Mostrando {{ start }} a {{ end }} de {{ total }} boletas",
     "previous": "Anterior",
     "next": "Siguiente",
@@ -939,6 +940,7 @@
     "all-periods": "Periodo: todos",
     "download": "Descargar boleta",
     "pagination": "Paginación",
+    "pagination-items": "boletas",
     "range": "Mostrando {{ start }} a {{ end }} de {{ total }} boletas",
     "previous": "Anterior",
     "next": "Siguiente"
