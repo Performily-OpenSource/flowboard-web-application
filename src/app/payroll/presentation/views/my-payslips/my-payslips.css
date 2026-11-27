@@ -30,6 +30,10 @@
   border-color: transparent;
 }
 
+.select-filter span {
+  display: none;
+}
+
 .select-filter select {
   appearance: none;
   min-height: 34px;
