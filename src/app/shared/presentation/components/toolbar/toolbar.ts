@@ -4,8 +4,7 @@ import {ActivatedRoute, NavigationEnd, NavigationStart, Router} from '@angular/r
 import {filter, map} from 'rxjs';
 import {MatIcon} from '@angular/material/icon';
 import {MatIconButton} from '@angular/material/button';
-import {MatMenu, MatMenuTrigger} from '@angular/material/menu';
-import {MatTooltip} from '@angular/material/tooltip';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {TranslatePipe} from '@ngx-translate/core';
 import {LanguageSwitcher} from '../language-switcher/language-switcher';
 import {LayoutStore} from '../../../application/layout.store';
@@ -13,7 +12,7 @@ import {SessionStore} from '../../../application/session.store';
 import {CurrentEmployeeStore} from '../../../application/current-employee.store';
 
 /**
- * Top bar of the shell (mockup "Barra superior"): breadcrumb title, global search, language switcher, notifications and signed-in user.
+ * Top bar of the shell: breadcrumb, language switcher and signed-in user.
  *
  * @author Oscar Lizandro Vasquez Llave
  */
@@ -23,8 +22,8 @@ import {CurrentEmployeeStore} from '../../../application/current-employee.store'
     MatIcon,
     MatIconButton,
     MatMenu,
+    MatMenuItem,
     MatMenuTrigger,
-    MatTooltip,
     TranslatePipe,
     LanguageSwitcher
   ],
@@ -42,8 +41,6 @@ export class Toolbar {
   readonly showMenuButton = input(false);
   /** Emits when the menu button is pressed. */
   readonly menuToggle = output<void>();
-  /** Emits the text of the global search when the user presses Enter. */
-  readonly searchSubmit = output<string>();
 
   /** URL of the current route, updated after each navigation. */
   private readonly currentUrl = toSignal(
@@ -62,7 +59,7 @@ export class Toolbar {
   readonly breadcrumb = computed<string[]>(() =>
     (this.deepestRouteData()['breadcrumb'] as string[] | undefined) ?? ['breadcrumb.dashboard']);
 
-  /** i18n key shown after the dynamic detail, e.g. "Employees / Ana Quispe Torres / File". */
+  /** i18n key shown after the dynamic detail, e.g. "Employees › Ana Quispe Torres › File". */
   readonly breadcrumbSuffix = computed(() => this.deepestRouteData()['breadcrumbSuffix'] as string | undefined);
 
   /**
@@ -98,18 +95,4 @@ export class Toolbar {
    * @author Oscar Lizandro Vasquez Llave
    */
   logout(): void { this.session.clear(); this.currentEmployee.setEmployeeId(1); this.router.navigate(['/login']).then(); }
-
-  /**
-   * Emits the global search text and clears the box.
-   *
-   * @param searchInput - Search input element.
-   * @author Oscar Lizandro Vasquez Llave
-   */
-  onSearch(searchInput: HTMLInputElement) {
-    const text = searchInput.value.trim();
-    if (!text) return;
-    this.searchSubmit.emit(text);
-    searchInput.value = '';
-    searchInput.blur();
-  }
 }

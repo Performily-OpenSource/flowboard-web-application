@@ -20,8 +20,7 @@
 
   <mat-sidenav-content class="main">
     <app-toolbar [showMenuButton]="isHandset()"
-                 (menuToggle)="sidenav.toggle()"
-                 (searchSubmit)="searchEmployees($event)"/>
+                 (menuToggle)="sidenav.toggle()"/>
     <main class="content">
       <router-outlet/>
     </main>

@@ -5,52 +5,36 @@
     </button>
   }
 
-  <h1 class="title">
+  <h1 class="breadcrumb">
     @for (key of breadcrumb(); track key; let last = $last) {
-      <span>{{ key | translate }}</span>
+      <span class="crumb" [class.current]="last && !layoutStore.breadcrumbDetail()">{{ key | translate }}</span>
       @if (!last || layoutStore.breadcrumbDetail()) {
-        <span aria-hidden="true"> / </span>
+        <span class="separator" aria-hidden="true">›</span>
       }
     }
     @if (layoutStore.breadcrumbDetail(); as detail) {
-      <span>{{ detail }}</span>
+      <span class="crumb" [class.current]="!breadcrumbSuffix()">{{ detail }}</span>
       @if (breadcrumbSuffix(); as suffix) {
-        <span aria-hidden="true"> / </span>
-        <span>{{ suffix | translate }}</span>
+        <span class="separator" aria-hidden="true">›</span>
+        <span class="crumb current">{{ suffix | translate }}</span>
       }
     }
   </h1>
 
   <span class="spacer"></span>
 
-  <label class="search">
-    <mat-icon aria-hidden="true">search</mat-icon>
-    <input #searchInput type="search"
-           [placeholder]="'toolbar.search' | translate"
-           [attr.aria-label]="'toolbar.search-hint' | translate"
-           [matTooltip]="'toolbar.search-hint' | translate"
-           (keydown.enter)="onSearch(searchInput)"/>
-  </label>
-
   <app-language-switcher/>
-
-  <button class="notifications" type="button"
-          [matMenuTriggerFor]="notificationsMenu"
-          [attr.aria-label]="'toolbar.notifications' | translate">
-    <mat-icon>notifications</mat-icon>
-  </button>
-  <mat-menu #notificationsMenu="matMenu" xPosition="before">
-    <div class="notifications-panel">
-      <p class="notifications-title">{{ 'toolbar.notifications' | translate }}</p>
-      <p class="notifications-empty">{{ 'toolbar.no-notifications' | translate }}</p>
-    </div>
-  </mat-menu>
 
   <button class="profile" type="button" [matMenuTriggerFor]="profileMenu" [attr.aria-label]="'toolbar.profile' | translate">
     <span class="profile-avatar">{{ initials() }}</span>
-    <span class="profile-copy"><strong>{{ session.displayName() }}</strong><small>{{ roleLabel() | translate }}</small></span>
+    <span class="profile-name">{{ session.displayName() }}</span>
+    <mat-icon class="profile-caret" aria-hidden="true">expand_more</mat-icon>
   </button>
   <mat-menu #profileMenu="matMenu" xPosition="before">
+    <div class="profile-menu-header">
+      <strong>{{ session.displayName() }}</strong>
+      <small>{{ roleLabel() | translate }}</small>
+    </div>
     <button mat-menu-item type="button" (click)="logout()"><mat-icon>logout</mat-icon>{{ 'toolbar.logout' | translate }}</button>
   </mat-menu>
 </header>

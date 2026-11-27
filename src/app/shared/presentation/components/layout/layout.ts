@@ -100,14 +100,4 @@ export class Layout {
     const url = this.currentUrl();
     return option.activeWhen.some(path => url.startsWith(path));
   }
-
-  /**
-   * Handles the global search of the toolbar: opens the employee list filtered by the text.
-   *
-   * @param text - Text written in the toolbar search box.
-   * @author Oscar Lizandro Vasquez Llave
-   */
-  searchEmployees(text: string) {
-    this.router.navigate(['/workspace/employees'], { queryParams: { search: text } });
-  }
 }
