@@ -84,7 +84,7 @@ table {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  gap: 6px;
   margin-top: 18px;
 }
 
@@ -99,6 +99,13 @@ table {
   font: inherit;
   font-size: 12.5px;
   cursor: pointer;
+}
+
+.page-gap {
+  min-width: 20px;
+  text-align: center;
+  color: var(--fb-text-secondary);
+  user-select: none;
 }
 
 .page-button:disabled {
