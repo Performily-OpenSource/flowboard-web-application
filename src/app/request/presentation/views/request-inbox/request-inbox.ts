@@ -28,6 +28,7 @@ import {RejectRequestDialog} from '../../components/reject-request-dialog/reject
 import {ReturnRequestDialog} from '../../components/return-request-dialog/return-request-dialog';
 import {RelativeTimePipe} from '../../pipes/relative-time-pipe';
 import {RequestPeriodPipe} from '../../pipes/request-period-pipe';
+import {pageWindow} from '../../../../shared/presentation/components/list-pagination/page-window';
 
 /** Tabs of the inbox: pending, under review, resolved or all. */
 type InboxTab = 'pending' | 'review' | 'resolved' | 'all';
@@ -140,7 +141,7 @@ export class RequestInbox {
   /** Number of pages, at least 1. */
   readonly pageCount = computed(() => Math.max(1, Math.ceil(this.filteredRequests().length / PAGE_SIZE)));
   /** Page indexes for the paginator. */
-  readonly pages = computed(() => Array.from({ length: this.pageCount() }, (_, index) => index));
+  readonly pages = computed(() => pageWindow(this.pageCount(), this.page()));
   /** Requests of the current page. */
   readonly pageRequests = computed(() => this.filteredRequests().slice(this.page() * PAGE_SIZE, (this.page() + 1) * PAGE_SIZE));
   /** Position of the first request of the page, starting at 1. */

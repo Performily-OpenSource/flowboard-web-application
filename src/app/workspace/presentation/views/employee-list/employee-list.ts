@@ -27,6 +27,7 @@ import {
   EMPLOYMENT_STATUSES,
   EmploymentStatus
 } from '../../../domain/model/employee.entity';
+import {pageWindow} from '../../../../shared/presentation/components/list-pagination/page-window';
 
 /** Number of employees shown per page. */
 const PAGE_SIZE = 9;
@@ -120,7 +121,7 @@ export class EmployeeList {
   /** Number of pages, at least one. */
   readonly pageCount = computed(() => Math.max(1, Math.ceil(this.filteredEmployees().length / PAGE_SIZE)));
   /** Indexes of every page, for the paginator. */
-  readonly pages = computed(() => Array.from({ length: this.pageCount() }, (_, index) => index));
+  readonly pages = computed(() => pageWindow(this.pageCount(), this.page()));
   /** Employees of the current page. */
   readonly pageEmployees = computed(() =>
     this.filteredEmployees().slice(this.page() * PAGE_SIZE, (this.page() + 1) * PAGE_SIZE));

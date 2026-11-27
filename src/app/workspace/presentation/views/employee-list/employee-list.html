@@ -164,9 +164,9 @@
       <span class="muted">{{ 'employees.range' | translate: { start: rangeStart(), end: rangeEnd(), total: filteredEmployees().length } }}</span>
       <span class="spacer"></span>
       <button class="page-button" type="button" [disabled]="page() === 0" (click)="page.set(page() - 1)">{{ 'employees.previous' | translate }}</button>
-      @for (index of pages(); track index) {
+      @for (index of pages(); track $index) { @if (index === null) { <span class="page-gap" aria-hidden="true">…</span> } @else {
         <button class="page-button" type="button" [class.current]="index === page()"
-                [attr.aria-current]="index === page() ? 'page' : null" (click)="page.set(index)">{{ index + 1 }}</button>
+                [attr.aria-current]="index === page() ? 'page' : null" (click)="page.set(index)">{{ index + 1 }}</button> }
       }
       <button class="page-button" type="button" [disabled]="page() >= pageCount() - 1" (click)="page.set(page() + 1)">{{ 'employees.next' | translate }}</button>
     </nav>

@@ -10,6 +10,7 @@ import {RouterLink} from '@angular/router';
 import {AttendanceStore} from '../../../application/attendance.store';
 import {AttendanceRecord, ATTENDANCE_STATUSES, AttendanceStatus} from '../../../domain/model/attendance-record.entity';
 import {AttendanceJustificationDialog} from '../../components/attendance-justification-dialog/attendance-justification-dialog';
+import {pageWindow} from '../../../../shared/presentation/components/list-pagination/page-window';
 
 /**
  * Presents the attendance record list for authorized attendance users.
@@ -42,7 +43,7 @@ export class AttendanceRecords {
     .sort((a,b) => b.record.workDate.localeCompare(a.record.workDate) || a.employeeName.localeCompare(b.employeeName)));
 
   readonly pageCount = computed(() => Math.max(1, Math.ceil(this.periodRecords().length / this.pageSize)));
-  readonly pages = computed(() => Array.from({length: this.pageCount()}, (_, i) => i));
+  readonly pages = computed(() => pageWindow(this.pageCount(), this.page()));
   readonly pageRows = computed(() => this.periodRecords().slice(this.page()*this.pageSize, (this.page()+1)*this.pageSize));
   readonly rangeStart = computed(() => this.periodRecords().length ? this.page()*this.pageSize+1 : 0);
   readonly rangeEnd = computed(() => Math.min((this.page()+1)*this.pageSize, this.periodRecords().length));

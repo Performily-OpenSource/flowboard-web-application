@@ -14,6 +14,7 @@ import {PayslipUploadDialog} from '../../components/payslip-upload-dialog/paysli
 import {PaymentDialog} from '../../components/payment-dialog/payment-dialog';
 import {ObservationDialog} from '../../components/observation-dialog/observation-dialog';
 import {PayslipViewDialog} from '../../components/payslip-view-dialog/payslip-view-dialog';
+import {pageWindow} from '../../../../shared/presentation/components/list-pagination/page-window';
 
 const PAGE_SIZE = 6;
 
@@ -46,7 +47,7 @@ export class PayrollList {
     .filter(payslip => this.paymentFilter() === null || payslip.payment.status === this.paymentFilter())
     .sort((a, b) => b.issueDate.localeCompare(a.issueDate)));
   readonly pageCount = computed(() => Math.max(1, Math.ceil(this.filteredPayslips().length / PAGE_SIZE)));
-  readonly pages = computed(() => Array.from({length: this.pageCount()}, (_, index) => index));
+  readonly pages = computed(() => pageWindow(this.pageCount(), this.page()));
   readonly pagePayslips = computed(() => this.filteredPayslips().slice(this.page() * PAGE_SIZE, (this.page() + 1) * PAGE_SIZE));
   readonly rangeStart = computed(() => this.filteredPayslips().length ? this.page() * PAGE_SIZE + 1 : 0);
   readonly rangeEnd = computed(() => Math.min((this.page() + 1) * PAGE_SIZE, this.filteredPayslips().length));

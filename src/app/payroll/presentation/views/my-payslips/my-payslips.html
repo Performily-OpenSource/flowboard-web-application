@@ -11,7 +11,7 @@
   @if (store.error()) { <div class="error-banner" role="alert"><mat-icon>error</mat-icon><span>{{ store.error() }}</span></div> }
 
   <div class="filters-row">
-    <label class="select-filter active"><span>{{ 'my-payslips.year' | translate }}</span><select [value]="effectiveYear()" (change)="setYear($any($event.target).value)">@for (year of years(); track year) { <option [value]="year">{{ 'my-payslips.year' | translate }}: {{ year }}</option> }</select><mat-icon>expand_more</mat-icon></label>
+    <label class="select-filter active"><span>{{ 'my-payslips.year' | translate }}</span><select [value]="effectiveYear()" (change)="setYear($any($event.target).value)">@for (year of years(); track year) { <option [value]="year">{{ year }}</option> }</select><mat-icon>expand_more</mat-icon></label>
     <label class="select-filter"><span>{{ 'payroll.period' | translate }}</span><select [value]="periodFilter() ?? ''" (change)="setPeriod($any($event.target).value)"><option value="">{{ 'my-payslips.all-periods' | translate }}</option>@for (period of store.periods(); track period.id) { @if (period.periodYear === effectiveYear()) { <option [value]="period.id">{{ period.label() }}</option> } }</select><mat-icon>expand_more</mat-icon></label>
   </div>
 
@@ -48,7 +48,7 @@
     <span class="muted">{{ 'my-payslips.range' | translate: {start: rangeStart(), end: rangeEnd(), total: filteredPayslips().length} }}</span>
     <span class="spacer"></span>
     <button class="page-button" type="button" [disabled]="page() === 0" (click)="page.set(page() - 1)">{{ 'my-payslips.previous' | translate }}</button>
-    @for (index of pages(); track index) { <button class="page-button" type="button" [class.current]="index === page()" (click)="page.set(index)">{{ index + 1 }}</button> }
+    @for (index of pages(); track $index) { @if (index === null) { <span class="page-gap" aria-hidden="true">…</span> } @else { <button class="page-button" type="button" [class.current]="index === page()" (click)="page.set(index)">{{ index + 1 }}</button> } }
     <button class="page-button" type="button" [disabled]="page() >= pageCount() - 1" (click)="page.set(page() + 1)">{{ 'my-payslips.next' | translate }}</button>
   </nav>
 </section>
