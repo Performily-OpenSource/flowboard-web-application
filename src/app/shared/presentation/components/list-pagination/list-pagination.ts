@@ -1,6 +1,5 @@
 import {Component, computed, effect, input, model} from '@angular/core';
 import {TranslatePipe} from '@ngx-translate/core';
-import {pageWindow} from './page-window';
 
 /** "Showing 1 to 8 of 10 benefits" + previous / pages / next, as in the mockups. */
 @Component({
@@ -21,8 +20,19 @@ export class ListPagination {
 
   /** Number of pages, at least one. */
   readonly pageCount = computed(() => Math.max(1, Math.ceil(this.total() / this.pageSize())));
-  /** Page buttons to draw; null marks a skipped run of pages (ellipsis). */
-  readonly pages = computed(() => pageWindow(this.pageCount(), this.page()));
+  /**
+   * Compact list of page buttons (zero-based) with at most 7 slots; `null` is a "…" gap.
+   * Always keeps the first and last page, e.g. `1 2 3 4 5 … 11`, `1 … 5 6 7 … 11`.
+   */
+  readonly pages = computed<(number | null)[]>(() => {
+    const count = this.pageCount();
+    const current = this.page();
+    if (count <= 7) return Array.from({ length: count }, (_, index) => index);
+    const last = count - 1;
+    if (current <= 3) return [0, 1, 2, 3, 4, null, last];
+    if (current >= last - 3) return [0, null, last - 4, last - 3, last - 2, last - 1, last];
+    return [0, null, current - 1, current, current + 1, null, last];
+  });
   /** Number of the first row shown. */
   readonly from = computed(() => this.total() === 0 ? 0 : this.page() * this.pageSize() + 1);
   /** Number of the last row shown. */

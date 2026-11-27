@@ -6,12 +6,12 @@
   <button class="page-button" type="button" [disabled]="page() === 0" (click)="page.set(page() - 1)">
     {{ 'pagination.previous' | translate }}
   </button>
-  @for (index of pages(); track $index) {
-    @if (index === null) {
+  @for (item of pages(); track $index) {
+    @if (item === null) {
       <span class="page-gap" aria-hidden="true">…</span>
     } @else {
-      <button class="page-button" type="button" [class.current]="index === page()"
-              [attr.aria-current]="index === page() ? 'page' : null" (click)="page.set(index)">{{ index + 1 }}</button>
+      <button class="page-button" type="button" [class.current]="item === page()"
+              [attr.aria-current]="item === page() ? 'page' : null" (click)="page.set(item)">{{ item + 1 }}</button>
     }
   }
   <button class="page-button" type="button" [disabled]="page() >= pageCount() - 1" (click)="page.set(page() + 1)">

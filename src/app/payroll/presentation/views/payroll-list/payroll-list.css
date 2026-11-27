@@ -106,6 +106,23 @@ table {
   gap: 10px;
 }
 
+.name-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.name-link:hover,
+.name-link:focus-visible {
+  color: var(--fb-primary);
+  text-decoration: underline;
+}
+
 .avatar {
   display: inline-flex;
   align-items: center;
@@ -149,38 +166,6 @@ table {
 
 .payment-observed {
   background: var(--fb-error-container);
-}
-
-.pagination {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-  margin-top: 18px;
-}
-
-.page-button {
-  min-width: 32px;
-  height: 30px;
-  padding: 0 12px;
-  border: 1px solid var(--fb-outline);
-  border-radius: 6px;
-  background: var(--fb-surface);
-  color: var(--fb-text-secondary);
-  font: inherit;
-  font-size: 12.5px;
-  cursor: pointer;
-}
-
-.page-button:disabled {
-  opacity: .5;
-  cursor: default;
-}
-
-.page-button.current {
-  border-color: var(--fb-primary);
-  background: var(--fb-primary);
-  color: var(--fb-on-primary);
 }
 
 @media (max-width: 700px) {

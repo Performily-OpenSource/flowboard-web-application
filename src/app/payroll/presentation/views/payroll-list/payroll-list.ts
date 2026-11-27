@@ -8,19 +8,19 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import {TranslatePipe} from '@ngx-translate/core';
 import {LocalDatePipe} from '../../../../shared/presentation/pipes/local-date-pipe';
+import {ListPagination} from '../../../../shared/presentation/components/list-pagination/list-pagination';
 import {PayrollStore} from '../../../application/payroll.store';
 import {PaymentStatus, Payslip} from '../../../domain/model/payslip.entity';
 import {PayslipUploadDialog} from '../../components/payslip-upload-dialog/payslip-upload-dialog';
 import {PaymentDialog} from '../../components/payment-dialog/payment-dialog';
 import {ObservationDialog} from '../../components/observation-dialog/observation-dialog';
 import {PayslipViewDialog} from '../../components/payslip-view-dialog/payslip-view-dialog';
-import {pageWindow} from '../../../../shared/presentation/components/list-pagination/page-window';
 
 const PAGE_SIZE = 6;
 
 @Component({
   selector: 'app-payroll-list',
-  imports: [MatTable, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatCell, MatCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef, MatButton, MatIcon, MatMenu, MatMenuItem, MatMenuTrigger, MatProgressBar, TranslatePipe, LocalDatePipe],
+  imports: [MatTable, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatCell, MatCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef, MatButton, MatIcon, MatMenu, MatMenuItem, MatMenuTrigger, MatProgressBar, TranslatePipe, LocalDatePipe, ListPagination],
   templateUrl: './payroll-list.html',
   styleUrl: './payroll-list.css'
 })
@@ -40,17 +40,14 @@ export class PayrollList {
   readonly areaFilter = signal<number | null>(null);
   readonly paymentFilter = signal<PaymentStatus | null>(null);
   readonly page = signal(0);
+  readonly pageSize = PAGE_SIZE;
 
   readonly filteredPayslips = computed(() => this.store.payslips()
     .filter(payslip => this.periodFilter() === null || payslip.payrollPeriodId === this.periodFilter())
     .filter(payslip => this.areaFilter() === null || this.store.getEmployeeById(payslip.employeeId)?.areaId === this.areaFilter())
     .filter(payslip => this.paymentFilter() === null || payslip.payment.status === this.paymentFilter())
     .sort((a, b) => b.issueDate.localeCompare(a.issueDate)));
-  readonly pageCount = computed(() => Math.max(1, Math.ceil(this.filteredPayslips().length / PAGE_SIZE)));
-  readonly pages = computed(() => pageWindow(this.pageCount(), this.page()));
   readonly pagePayslips = computed(() => this.filteredPayslips().slice(this.page() * PAGE_SIZE, (this.page() + 1) * PAGE_SIZE));
-  readonly rangeStart = computed(() => this.filteredPayslips().length ? this.page() * PAGE_SIZE + 1 : 0);
-  readonly rangeEnd = computed(() => Math.min((this.page() + 1) * PAGE_SIZE, this.filteredPayslips().length));
 
 
   setPeriod(value: string) { this.periodFilter.set(value ? Number(value) : null); this.page.set(0); }
