@@ -15,7 +15,14 @@
     "my-attendance": "My attendance",
     "requests": "Requests",
     "my-requests": "My requests",
-    "accounts": "Accounts & roles"
+    "accounts": "Accounts & roles",
+    "section": {
+      "general": "General",
+      "management": "People management",
+      "personal": "My space"
+    },
+    "collapse": "Collapse sidebar",
+    "expand": "Expand sidebar"
   },
   "breadcrumb": {
     "dashboard": "Dashboard",

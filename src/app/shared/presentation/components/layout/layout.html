@@ -1,5 +1,6 @@
-<mat-sidenav-container class="shell">
+<mat-sidenav-container class="shell" autosize>
   <mat-sidenav #sidenav class="sidebar"
+               [class.collapsed]="isCollapsed()"
                [mode]="isHandset() ? 'over' : 'side'"
                [opened]="!isHandset()">
     <a class="brand" routerLink="/home">
@@ -7,15 +8,32 @@
       <span class="brand-name">Flowboard</span>
     </a>
     <nav class="nav" [attr.aria-label]="'option.main-navigation' | translate">
-      @for (option of visibleOptions(); track option.link) {
-        <a class="nav-item" [class.active]="isActive(option)" [routerLink]="option.link"
-           [attr.aria-current]="isActive(option) ? 'page' : null"
-           (click)="isHandset() && sidenav.close()">
-          <mat-icon aria-hidden="true">{{ option.icon }}</mat-icon>
-          <span>{{ option.label | translate }}</span>
-        </a>
+      @for (group of visibleGroups(); track group.section) {
+        <div class="nav-group">
+          <p class="nav-title">{{ group.title | translate }}</p>
+          @for (option of group.options; track option.link) {
+            <a class="nav-item" [class.active]="isActive(option)" [routerLink]="option.link"
+               [attr.aria-current]="isActive(option) ? 'page' : null"
+               [attr.aria-label]="option.label | translate"
+               [matTooltip]="option.label | translate" matTooltipPosition="right"
+               [matTooltipDisabled]="!isCollapsed()"
+               (click)="isHandset() && sidenav.close()">
+              <mat-icon aria-hidden="true">{{ option.icon }}</mat-icon>
+              <span class="nav-label">{{ option.label | translate }}</span>
+            </a>
+          }
+        </div>
       }
     </nav>
+    @if (!isHandset()) {
+      <button type="button" class="collapse-toggle" (click)="toggleCollapsed()"
+              [attr.aria-label]="(isCollapsed() ? 'option.expand' : 'option.collapse') | translate"
+              [matTooltip]="(isCollapsed() ? 'option.expand' : 'option.collapse') | translate"
+              matTooltipPosition="right" [matTooltipDisabled]="!isCollapsed()">
+        <mat-icon aria-hidden="true">{{ isCollapsed() ? 'keyboard_double_arrow_right' : 'keyboard_double_arrow_left' }}</mat-icon>
+        <span class="nav-label">{{ 'option.collapse' | translate }}</span>
+      </button>
+    }
   </mat-sidenav>
 
   <mat-sidenav-content class="main">

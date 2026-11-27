@@ -15,7 +15,14 @@
     "my-attendance": "Mi asistencia",
     "requests": "Solicitudes",
     "my-requests": "Mis solicitudes",
-    "accounts": "Cuentas y roles"
+    "accounts": "Cuentas y roles",
+    "section": {
+      "general": "General",
+      "management": "Gestión de personas",
+      "personal": "Mi espacio"
+    },
+    "collapse": "Contraer menú",
+    "expand": "Expandir menú"
   },
   "breadcrumb": {
     "dashboard": "Dashboard",

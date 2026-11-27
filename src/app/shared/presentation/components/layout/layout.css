@@ -3,12 +3,24 @@
   background: var(--fb-background);
 }
 
+/* The sidebar is a column: brand, scrollable nav and the collapse button at the bottom */
 .sidebar {
-  width: 248px;
+  width: 232px;
   padding: 0;
   border-right: 1px solid var(--fb-border);
   border-radius: 0;
   background: var(--fb-surface);
+  transition: width 0.18s ease;
+}
+
+.sidebar ::ng-deep .mat-drawer-inner-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar.collapsed {
+  width: 60px;
 }
 
 /* Same height as the toolbar so both bottom borders form one line */
@@ -17,15 +29,18 @@
   align-items: center;
   gap: 10px;
   height: 52px;
-  padding: 0 22px;
+  padding: 0 17px;
+  flex-shrink: 0;
   box-sizing: border-box;
   border-bottom: 1px solid var(--fb-border);
   color: var(--fb-text);
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .brand-mark {
   display: flex;
+  flex-shrink: 0;
   flex-direction: column;
   justify-content: center;
   gap: 3px;
@@ -54,36 +69,98 @@
 
 .nav {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  gap: 4px;
-  padding: 12px 16px;
+  gap: 12px;
+  padding: 10px 10px 12px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-.nav-item {
+.nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.nav-title {
+  margin: 0;
+  padding: 0 10px 4px;
+  overflow: hidden;
+  color: var(--fb-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-item,
+.collapse-toggle {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 10px;
-  border-radius: 8px;
+  gap: 10px;
+  height: 34px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  border-radius: 6px;
   color: var(--fb-text-secondary);
   font-size: 13.5px;
   text-decoration: none;
+  white-space: nowrap;
 }
 
-.nav-item mat-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
+.nav-item mat-icon,
+.collapse-toggle mat-icon {
+  flex-shrink: 0;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 
-.nav-item:hover {
+.nav-item:hover,
+.collapse-toggle:hover {
   background: var(--fb-surface-muted);
+  color: var(--fb-text);
 }
 
 .nav-item.active {
   background: var(--fb-primary-container);
   color: var(--fb-on-primary-container);
   font-weight: 600;
+}
+
+.collapse-toggle {
+  flex-shrink: 0;
+  width: calc(100% - 20px);
+  margin: 0 10px 10px;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* Collapsed: icons only, section titles become thin dividers */
+.collapsed .brand-name,
+.collapsed .nav-label {
+  display: none;
+}
+
+.collapsed .nav-title {
+  height: 1px;
+  margin: 4px 8px 6px;
+  padding: 0;
+  background: var(--fb-border);
+  font-size: 0;
+}
+
+.collapsed .nav-group:first-child .nav-title {
+  display: none;
+}
+
+.collapsed .nav-item,
+.collapsed .collapse-toggle {
+  justify-content: center;
+  padding: 0;
 }
 
 .main {
