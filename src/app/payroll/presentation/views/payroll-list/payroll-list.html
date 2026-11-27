@@ -26,7 +26,7 @@
       <table mat-table [dataSource]="pagePayslips()">
         <ng-container matColumnDef="employee">
           <th mat-header-cell *matHeaderCellDef>{{ 'payroll.employee' | translate }}</th>
-          <td mat-cell *matCellDef="let payslip"><div class="employee-cell"><span class="avatar">{{ initials(payslip.employeeId) }}</span><strong>{{ employeeName(payslip.employeeId) }}</strong></div></td>
+          <td mat-cell *matCellDef="let payslip"><div class="employee-cell"><span class="avatar">{{ initials(payslip.employeeId) }}</span><button class="name-link" type="button" (click)="openViewer(payslip)" [attr.title]="'payroll.view' | translate">{{ employeeName(payslip.employeeId) }}</button></div></td>
         </ng-container>
         <ng-container matColumnDef="period">
           <th mat-header-cell *matHeaderCellDef>{{ 'payroll.period' | translate }}</th>

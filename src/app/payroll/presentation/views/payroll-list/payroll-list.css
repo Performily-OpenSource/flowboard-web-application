@@ -110,6 +110,23 @@ table {
   gap: 10px;
 }
 
+.name-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.name-link:hover,
+.name-link:focus-visible {
+  color: var(--fb-primary);
+  text-decoration: underline;
+}
+
 .avatar {
   display: inline-flex;
   align-items: center;

@@ -1609,7 +1609,7 @@
     "view-profile": "View my profile"
   },
   "attendance-dashboard": {
-    "monthly-lates": "Instances of tardiness this month",
+    "monthly-lates": "Tardiness this month",
     "lates-share": "{{percent}}% of the records",
     "lates-share-month": "{{percent}}% of the records in {{month}}",
     "today-title": "Today's attendance",
