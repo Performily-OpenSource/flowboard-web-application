@@ -84,7 +84,8 @@ export class IamStore {
     this.errorSignal.set(null);
     try {
       const result = await firstValueFrom(this.api.login(username.trim().toLowerCase(), password));
-      await this.startSession(result, username.trim().toLowerCase());
+      const email = username.trim().toLowerCase();
+      await this.startSession(result, email, email);
       return 'success';
     } catch (error) {
       if (error instanceof HttpErrorResponse && error.status === 403) return 'disabled';
@@ -103,7 +104,7 @@ export class IamStore {
     }
     try {
       const result = await firstValueFrom(this.api.changePassword(temporaryPassword, newPassword));
-      await this.startSession(result, current.displayName);
+      await this.startSession(result, current.displayName, current.email);
       return true;
     } catch (error) {
       const wrongPassword = error instanceof HttpErrorResponse && error.status === 401;
@@ -158,12 +159,13 @@ export class IamStore {
   }
 
   /** Stores the backend token and resolves the display name from the real Workspace employee. */
-  private async startSession(result: LoginResultResource, fallbackName: string): Promise<void> {
+  private async startSession(result: LoginResultResource, fallbackName: string, email: string): Promise<void> {
     this.session.setSession({
       token: result.token,
       accountId: this.accountIdFrom(result.token),
       employeeId: result.employeeId,
       displayName: fallbackName,
+      email,
       role: result.role,
       mustChangePassword: result.mustChangePassword
     });
