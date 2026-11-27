@@ -78,7 +78,11 @@
     "good-evening": "Buenas noches, {{name}}",
     "hello": "Hola, {{name}}",
     "hr-subtitle": "Estado del personal al {{date}}.",
-    "employee-subtitle": "Esto es lo tuyo al {{date}}. Nadie más ve esta información."
+    "employee-subtitle": "Esto es lo tuyo al {{date}}. Nadie más ve esta información.",
+    "dashboard-title": "Inicio",
+    "manage-employees": "Colaboradores",
+    "review-requests": "Revisar solicitudes",
+    "new-request": "Nueva solicitud"
   },
   "about": {
     "title": "Acerca de Flowboard",
@@ -810,7 +814,7 @@
     "upload": "Cargar boletas",
     "page-info": "Flowboard no genera ni recalcula boletas. El archivo que se muestra al colaborador es exactamente el que se carga aquí.",
     "period": "Periodo",
-    "all-periods": "Todos los periodos",
+    "all-periods": "Todos",
     "area": "Área",
     "all-areas": "Todas",
     "status": "Estado",
@@ -936,7 +940,7 @@
     "subtitle": "Solo tú puedes ver estas boletas. Se muestran tal como las emitió el sistema de planilla.",
     "available": "boletas disponibles",
     "year": "Año",
-    "all-periods": "Periodo: todos",
+    "all-periods": "Todos",
     "download": "Descargar boleta",
     "pagination": "Paginación",
     "range": "Mostrando {{ start }} a {{ end }} de {{ total }} boletas",
@@ -1645,10 +1649,13 @@
     "today": "Hoy",
     "no-record": "-",
     "worked-this-week": "Horas trabajadas esta semana",
-    "worked-week-of": "Horas trabajadas en la semana del {{date}}"
+    "worked-week-of": "Horas trabajadas en la semana del {{date}}",
+    "trend-title": "Asistencia por día",
+    "trend-subtitle": "Últimos {{days}} días hábiles · {{percent}}% puntual",
+    "view-all": "Ver todo"
   },
   "benefits-dashboard": {
-    "available-vacation": "VACACIONES DISPONIBLES",
+    "available-vacation": "Vacaciones disponibles",
     "available-vacation-hint": "días en {{ count }} colaboradores",
     "my-balance-title": "Mi saldo de vacaciones",
     "request-vacation": "Solicitar vacaciones",

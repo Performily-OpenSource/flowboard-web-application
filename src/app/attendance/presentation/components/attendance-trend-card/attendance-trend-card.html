@@ -1,0 +1,38 @@
+<section class="dash-card">
+  <div class="dash-card-head">
+    <div>
+      <h2 class="dash-card-title">{{ 'attendance-dashboard.trend-title' | translate }}</h2>
+      @if (hasData()) {
+        <p class="dash-row-subtitle trend-subtitle">
+          {{ 'attendance-dashboard.trend-subtitle' | translate: { days: days().length, percent: onTimePercent() } }}
+        </p>
+      }
+    </div>
+    <a class="dash-link" routerLink="/attendance/summary">{{ 'attendance-dashboard.view-all' | translate }}</a>
+  </div>
+
+  @if (hasData()) {
+    <ul class="trend-legend">
+      @for (item of series; track item.status) {
+        <li><span class="trend-dot" [class]="item.colorClass"></span>{{ item.labelKey | translate }}</li>
+      }
+    </ul>
+
+    <div class="trend-chart" [style.grid-template-columns]="'repeat(' + days().length + ', minmax(0, 1fr))'">
+      @for (day of days(); track day.date) {
+        <div class="trend-day" [attr.title]="tooltip(day)">
+          <div class="trend-area">
+            <div class="trend-bar" [style.height.%]="day.height">
+              @for (segment of day.segments; track segment.status) {
+                <span class="trend-segment" [class]="segment.colorClass" [style.flex-grow]="segment.count"></span>
+              }
+            </div>
+          </div>
+          <span class="trend-label">{{ day.label }}</span>
+        </div>
+      }
+    </div>
+  } @else {
+    <p class="dash-empty">{{ 'attendance-dashboard.no-records' | translate }}</p>
+  }
+</section>

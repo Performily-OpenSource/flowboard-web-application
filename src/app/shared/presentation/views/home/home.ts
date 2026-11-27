@@ -1,5 +1,8 @@
 import {Component, computed, inject} from '@angular/core';
 import {NgComponentOutlet} from '@angular/common';
+import {RouterLink} from '@angular/router';
+import {MatButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
 import {TranslatePipe} from '@ngx-translate/core';
 import {SessionStore} from '../../../application/session.store';
 import {CurrentEmployeeStore} from '../../../application/current-employee.store';
@@ -21,6 +24,9 @@ import {
   selector: 'app-home',
   imports: [
     NgComponentOutlet,
+    RouterLink,
+    MatButton,
+    MatIcon,
     TranslatePipe
   ],
   templateUrl: './home.html',

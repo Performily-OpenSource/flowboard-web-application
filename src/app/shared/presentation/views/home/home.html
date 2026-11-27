@@ -1,16 +1,35 @@
 <section class="page dashboard">
-  <header class="dashboard-header">
-    @if (dashboard() === 'hr') {
-      <h1 class="dashboard-title">{{ greetingKey | translate: { name: firstName() } }}</h1>
-      <p class="dashboard-subtitle">{{ 'home.hr-subtitle' | translate: { date: today } }}</p>
-    } @else {
-      <h1 class="dashboard-title">{{ 'home.hello' | translate: { name: firstName() } }}</h1>
-      <p class="dashboard-subtitle">{{ 'home.employee-subtitle' | translate: { date: today } }}</p>
-    }
+  <header class="page-header dashboard-header">
+    <div>
+      <h1 class="page-title">{{ 'home.dashboard-title' | translate }}</h1>
+      @if (dashboard() === 'hr') {
+        <p class="page-subtitle">
+          {{ greetingKey | translate: { name: firstName() } }} · {{ 'home.hr-subtitle' | translate: { date: today } }}
+        </p>
+      } @else {
+        <p class="page-subtitle">
+          {{ 'home.hello' | translate: { name: firstName() } }} · {{ 'home.employee-subtitle' | translate: { date: today } }}
+        </p>
+      }
+    </div>
+    <div class="page-actions">
+      @if (dashboard() === 'hr') {
+        <button type="button" mat-stroked-button routerLink="/workspace/employees">
+          <mat-icon>group</mat-icon>{{ 'home.manage-employees' | translate }}
+        </button>
+        <button type="button" mat-flat-button routerLink="/requests/inbox">
+          <mat-icon>inbox</mat-icon>{{ 'home.review-requests' | translate }}
+        </button>
+      } @else {
+        <button type="button" mat-flat-button routerLink="/requests/my-requests">
+          <mat-icon>add</mat-icon>{{ 'home.new-request' | translate }}
+        </button>
+      }
+    </div>
   </header>
 
   @if (widgetsFor('kpi').length > 0) {
-    <div class="dashboard-kpis">
+    <div class="dash-kpi-strip">
       @for (widget of widgetsFor('kpi'); track $index) {
         <ng-container *ngComponentOutlet="widget.component; inputs: widgetInputs()"/>
       }

@@ -78,7 +78,11 @@
     "good-evening": "Good evening, {{name}}",
     "hello": "Hello, {{name}}",
     "hr-subtitle": "Staff status as of {{date}}.",
-    "employee-subtitle": "This is your information as of {{date}}. Nobody else sees it."
+    "employee-subtitle": "This is your information as of {{date}}. Nobody else sees it.",
+    "dashboard-title": "Home",
+    "manage-employees": "Employees",
+    "review-requests": "Review requests",
+    "new-request": "New request"
   },
   "about": {
     "title": "About Flowboard",
@@ -810,7 +814,7 @@
     "upload": "Upload payslips",
     "page-info": "Flowboard does not generate or recalculate payslips. The file shown to the employee is exactly the one uploaded here.",
     "period": "Period",
-    "all-periods": "All periods",
+    "all-periods": "All",
     "area": "Area",
     "all-areas": "All",
     "status": "Status",
@@ -936,7 +940,7 @@
     "subtitle": "Only you can view these payslips. They are shown exactly as issued by the payroll system.",
     "available": "payslips available",
     "year": "Year",
-    "all-periods": "Period: all",
+    "all-periods": "All",
     "download": "Download payslip",
     "pagination": "Pagination",
     "range": "Showing {{ start }} to {{ end }} of {{ total }} payslips",
@@ -1644,10 +1648,13 @@
     "today": "Today",
     "no-record": "-",
     "worked-this-week": "Hours worked this week",
-    "worked-week-of": "Hours worked in the week of {{date}}"
+    "worked-week-of": "Hours worked in the week of {{date}}",
+    "trend-title": "Attendance by day",
+    "trend-subtitle": "Last {{days}} work days · {{percent}}% on time",
+    "view-all": "View all"
   },
   "benefits-dashboard": {
-    "available-vacation": "AVAILABLE VACATION",
+    "available-vacation": "Available vacation",
     "available-vacation-hint": "days across {{ count }} employees",
     "my-balance-title": "My vacation balance",
     "request-vacation": "Request vacation",

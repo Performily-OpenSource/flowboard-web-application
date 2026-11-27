@@ -18,6 +18,7 @@ import {PendingRequestsKpi} from './request/presentation/components/pending-requ
 import {RequestsToAttendCard} from './request/presentation/components/requests-to-attend-card/requests-to-attend-card';
 import {MyRequestsCard} from './request/presentation/components/my-requests-card/my-requests-card';
 import {MonthlyLatesKpi} from './attendance/presentation/components/monthly-lates-kpi/monthly-lates-kpi';
+import {AttendanceTrendCard} from './attendance/presentation/components/attendance-trend-card/attendance-trend-card';
 import {TodayAttendanceCard} from './attendance/presentation/components/today-attendance-card/today-attendance-card';
 import {MyWeekAttendanceCard} from './attendance/presentation/components/my-week-attendance-card/my-week-attendance-card';
 import {VacationDaysKpi} from './benefits/presentation/components/vacation-days-kpi/vacation-days-kpi';
@@ -48,7 +49,8 @@ export const appConfig: ApplicationConfig = {
     { provide: DASHBOARD_WIDGETS, multi: true, useValue: { dashboard: 'hr', slot: 'kpi', order: 2, component: PendingRequestsKpi } },
     { provide: DASHBOARD_WIDGETS, multi: true, useValue: { dashboard: 'hr', slot: 'kpi', order: 3, component: MonthlyLatesKpi } },
     { provide: DASHBOARD_WIDGETS, multi: true, useValue: { dashboard: 'hr', slot: 'kpi', order: 4, component: VacationDaysKpi } },
-    { provide: DASHBOARD_WIDGETS, multi: true, useValue: { dashboard: 'hr', slot: 'column-1', order: 1, component: RequestsToAttendCard } },
+    { provide: DASHBOARD_WIDGETS, multi: true, useValue: { dashboard: 'hr', slot: 'column-1', order: 1, component: AttendanceTrendCard } },
+    { provide: DASHBOARD_WIDGETS, multi: true, useValue: { dashboard: 'hr', slot: 'column-1', order: 2, component: RequestsToAttendCard } },
     { provide: DASHBOARD_WIDGETS, multi: true, useValue: { dashboard: 'hr', slot: 'column-2', order: 1, component: TodayAttendanceCard } },
     { provide: DASHBOARD_WIDGETS, multi: true, useValue: { dashboard: 'hr', slot: 'column-2', order: 2, component: OfficeWellbeingCard } },
     { provide: DASHBOARD_WIDGETS, multi: true, useValue: { dashboard: 'employee', slot: 'column-1', order: 1, component: MyVacationBalanceCard } },
