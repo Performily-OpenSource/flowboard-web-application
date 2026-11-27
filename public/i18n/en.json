@@ -822,6 +822,7 @@
     "under-review": "Under review",
     "more-actions": "More actions",
     "pagination": "Pagination",
+    "pagination-items": "payslips",
     "range": "Showing {{ start }} to {{ end }} of {{ total }} payslips",
     "previous": "Previous",
     "next": "Next",
@@ -932,6 +933,7 @@
     "all-periods": "Period: all",
     "download": "Download payslip",
     "pagination": "Pagination",
+    "pagination-items": "payslips",
     "range": "Showing {{ start }} to {{ end }} of {{ total }} payslips",
     "previous": "Previous",
     "next": "Next"
@@ -1609,7 +1611,7 @@
     "view-profile": "View my profile"
   },
   "attendance-dashboard": {
-    "monthly-lates": "Tardiness this month",
+    "monthly-lates": "Instances of tardiness this month",
     "lates-share": "{{percent}}% of the records",
     "lates-share-month": "{{percent}}% of the records in {{month}}",
     "today-title": "Today's attendance",
