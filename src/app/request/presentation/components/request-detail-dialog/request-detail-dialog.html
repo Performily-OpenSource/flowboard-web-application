@@ -7,40 +7,62 @@
     <button class="icon-action" type="button" mat-dialog-close [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
   </header>
 
-  <app-requester-summary-card [requester]="requester()" [rows]="rows()"/>
+  <div class="detail-body">
+    @if (mine && data.request.isUnderReview() && data.request.reviewComment; as comment) {
+      <div class="info-note">
+        <mat-icon aria-hidden="true">info</mat-icon>
+        <span>{{ 'my-requests.review-note' | translate: { comment: comment } }}</span>
+      </div>
+    }
 
-  @if (fields().length > 0) {
+    <app-requester-summary-card [requester]="requester()" [rows]="rows()"/>
+
+    @if (fields().length > 0) {
+      <section>
+        <h3 class="section-title">{{ 'request-detail.details' | translate }}</h3>
+        <dl class="field-list">
+          @for (field of fields(); track field.label) {
+            <div>
+              <dt>{{ field.label }}</dt>
+              <dd>{{ field.value }}</dd>
+            </div>
+          }
+        </dl>
+      </section>
+    }
+
+    @if (data.request.attachments.length > 0) {
+      <section>
+        <h3 class="section-title">{{ 'request-dialog.attachment' | translate }}</h3>
+        <ul class="attachments">
+          @for (file of data.request.attachments; track file.storageUrl) {
+            <li><mat-icon aria-hidden="true">attach_file</mat-icon>{{ file.fileName }} <span class="muted">· {{ file.sizeInBytes | fileSize }}</span></li>
+          }
+        </ul>
+      </section>
+    }
+
     <section>
-      <h3 class="section-title">{{ 'request-detail.details' | translate }}</h3>
-      <dl class="field-list">
-        @for (field of fields(); track field.label) {
-          <div>
-            <dt>{{ field.label }}</dt>
-            <dd>{{ field.value }}</dd>
-          </div>
-        }
-      </dl>
+      <h3 class="section-title">{{ 'request-detail.progress' | translate }}</h3>
+      <app-request-timeline [request]="data.request" [embedded]="true"/>
     </section>
-  }
-
-  @if (data.request.attachments.length > 0) {
-    <section>
-      <h3 class="section-title">{{ 'request-dialog.attachment' | translate }}</h3>
-      <ul class="attachments">
-        @for (file of data.request.attachments; track file.storageUrl) {
-          <li><mat-icon aria-hidden="true">attach_file</mat-icon>{{ file.fileName }} <span class="muted">· {{ file.sizeInBytes | fileSize }}</span></li>
-        }
-      </ul>
-    </section>
-  }
-
-  <section>
-    <h3 class="section-title">{{ 'request-detail.progress' | translate }}</h3>
-    <app-request-timeline [request]="data.request" [embedded]="true"/>
-  </section>
+  </div>
 
   <div class="dialog-actions">
-    @if (store.canResolve(data.request)) {
+    @if (mine) {
+      @if (data.request.isUnderReview()) {
+        <button mat-flat-button type="button" (click)="choose('complete')">
+          <mat-icon>edit</mat-icon>
+          {{ 'my-requests.complete' | translate }}
+        </button>
+      }
+      @if (data.request.canBeCancelled()) {
+        <button mat-stroked-button type="button" class="reject-button" (click)="choose('cancel')">
+          <mat-icon>close</mat-icon>
+          {{ 'my-requests.cancel' | translate }}
+        </button>
+      }
+    } @else if (store.canResolve(data.request)) {
       <button mat-flat-button type="button" (click)="choose('approve')">
         <mat-icon>check</mat-icon>
         {{ 'inbox.approve' | translate }}

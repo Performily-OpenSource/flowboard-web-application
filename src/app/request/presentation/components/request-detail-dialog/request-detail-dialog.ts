@@ -12,12 +12,23 @@ import {RequestStatusBadge} from '../request-status-badge/request-status-badge';
 import {RequestTimeline} from '../request-timeline/request-timeline';
 import {RequesterSummaryCard, SummaryRow} from '../requester-summary-card/requester-summary-card';
 
-/** Action the approver chose in the detail; the inbox opens the matching dialog. */
-export type RequestDetailAction = 'approve' | 'reject' | 'return';
+/** Action chosen in the detail; the view that opened it opens the matching dialog. */
+export type RequestDetailAction = 'approve' | 'reject' | 'return' | 'cancel' | 'complete';
+
+/**
+ * Data received by the detail window.
+ *
+ * @author Diego Alonso Diaz Villalba
+ */
+export interface RequestDetailData extends RequestDialogData {
+  /** True when the employee in session opens his own request (shows cancel and complete instead of approve and reject). */
+  mine?: boolean;
+}
 
 /**
  * Floating window with the detail of a request: requester, period, approver, field values, attachments,
- * timeline with its history, and the buttons to approve, reject or return it.
+ * timeline with its history, and the buttons to approve, reject or return it (or to cancel or complete it, when it is the
+ * employee's own request).
  *
  * @author Diego Alonso Diaz Villalba
  */
@@ -41,7 +52,9 @@ export class RequestDetailDialog {
   readonly store = inject(RequestStore);
   private translate = inject(TranslateService);
   private dialogRef = inject(MatDialogRef<RequestDetailDialog, RequestDetailAction>);
-  readonly data = inject<RequestDialogData>(MAT_DIALOG_DATA);
+  readonly data = inject<RequestDetailData>(MAT_DIALOG_DATA);
+  /** Whether the request belongs to the employee in session. */
+  readonly mine = this.data.mine ?? false;
 
   /** The employee who submitted the request. */
   readonly requester = computed(() => this.store.getRequester(this.data.request.requesterId));
@@ -88,7 +101,7 @@ export class RequestDetailDialog {
    */
   readOnlyNotice(): { key: string; params: Record<string, unknown> } | null {
     const request = this.data.request;
-    if (!request.isPending() || this.store.canResolve(request)) return null;
+    if (this.mine || !request.isPending() || this.store.canResolve(request)) return null;
     if (request.isRoutedToHr()) return { key: 'inbox.read-only-hr', params: {} };
     return { key: 'inbox.read-only-manager', params: { name: this.store.approverName(request) ?? '-' } };
   }

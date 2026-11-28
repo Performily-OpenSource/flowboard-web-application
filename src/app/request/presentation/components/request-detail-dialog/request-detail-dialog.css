@@ -1,3 +1,32 @@
+/* header and buttons stay fixed; only the body scrolls */
+.dialog {
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.dialog-header {
+  padding: 22px 24px 16px;
+}
+
+.detail-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 0;
+  padding: 4px 16px 20px 24px;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+}
+
+.dialog-actions {
+  margin-top: 0;
+  padding: 14px 24px;
+  border-top: 1px solid var(--fb-border);
+}
+
 .title-block {
   display: flex;
   flex-wrap: wrap;

@@ -26,17 +26,6 @@
   </nav>
 
   @if (visibleRequests().length > 0) {
-    <!-- traceability of the selected request stays on top, so it does not move when the list grows -->
-    @if (selectedRequest(); as selected) {
-      @if (selected.isUnderReview() && selected.reviewComment) {
-        <div class="info-note review-note">
-          <mat-icon aria-hidden="true">info</mat-icon>
-          <span>{{ 'my-requests.review-note' | translate: { comment: selected.reviewComment } }}</span>
-        </div>
-      }
-      <app-request-timeline [request]="selected"/>
-    }
-
     <div class="table-card list-card">
       <table mat-table [dataSource]="visibleRequests()">
         <ng-container matColumnDef="code">
@@ -70,10 +59,10 @@
                 <button class="text-link" type="button" (click)="complete(request)">{{ 'my-requests.complete' | translate }}</button>
               }
               @case ('REJECTED') {
-                <button class="text-link muted-link" type="button" (click)="select(request)">{{ 'my-requests.view-reason' | translate }}</button>
+                <button class="text-link muted-link" type="button" (click)="openDetail(request)">{{ 'my-requests.view-reason' | translate }}</button>
               }
               @default {
-                <button class="text-link muted-link" type="button" (click)="select(request)">{{ 'my-requests.view-detail' | translate }}</button>
+                <button class="text-link muted-link" type="button" (click)="openDetail(request)">{{ 'my-requests.view-detail' | translate }}</button>
               }
             }
             @if (request.canBeCancelled()) {
@@ -81,7 +70,7 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #rowMenu="matMenu">
-                <button mat-menu-item (click)="select(request)">{{ 'my-requests.view-detail' | translate }}</button>
+                <button mat-menu-item (click)="openDetail(request)">{{ 'my-requests.view-detail' | translate }}</button>
                 @if (request.isUnderReview()) {
                   <button mat-menu-item (click)="cancel(request)">{{ 'my-requests.cancel' | translate }}</button>
                 }
@@ -90,8 +79,8 @@
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="columns"></tr>
-        <tr mat-row *matRowDef="let row; columns: columns;" class="clickable"
-            [class.selected]="row.id === selectedRequest()?.id" (click)="select(row)"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns;" class="clickable" tabindex="0"
+            (click)="openDetail(row)" (keydown.enter)="openDetail(row)"></tr>
       </table>
     </div>
   } @else if (!store.loading()) {

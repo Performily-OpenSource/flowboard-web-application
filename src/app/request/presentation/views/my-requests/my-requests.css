@@ -6,7 +6,8 @@ tr.clickable {
   cursor: pointer;
 }
 
-tr.selected {
+tr.clickable:hover,
+tr.clickable:focus-visible {
   background: var(--fb-surface-muted);
 }
 
@@ -16,8 +17,4 @@ tr.selected {
 
 .muted-link {
   color: var(--fb-text-secondary);
-}
-
-.review-note {
-  margin-top: 20px;
 }

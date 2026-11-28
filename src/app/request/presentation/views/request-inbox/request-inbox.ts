@@ -22,8 +22,8 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {RequestStore} from '../../../application/request.store';
 import {Request} from '../../../domain/model/request.entity';
 import {RequestStatusBadge} from '../../components/request-status-badge/request-status-badge';
-import {ApproveRequestDialog, RequestDialogData} from '../../components/approve-request-dialog/approve-request-dialog';
-import {RequestDetailAction, RequestDetailDialog} from '../../components/request-detail-dialog/request-detail-dialog';
+import {ApproveRequestDialog} from '../../components/approve-request-dialog/approve-request-dialog';
+import {RequestDetailAction, RequestDetailData, RequestDetailDialog} from '../../components/request-detail-dialog/request-detail-dialog';
 import {RejectRequestDialog} from '../../components/reject-request-dialog/reject-request-dialog';
 import {ReturnRequestDialog} from '../../components/return-request-dialog/return-request-dialog';
 import {RelativeTimePipe} from '../../pipes/relative-time-pipe';
@@ -259,7 +259,7 @@ export class RequestInbox {
    */
   openDetail(request: Request) {
     this.dialog
-      .open<RequestDetailDialog, RequestDialogData, RequestDetailAction>(RequestDetailDialog, {
+      .open<RequestDetailDialog, RequestDetailData, RequestDetailAction>(RequestDetailDialog, {
         data: { request },
         width: '760px',
         maxWidth: '95vw',

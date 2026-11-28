@@ -8,7 +8,7 @@
 
   <ol class="steps">
     @for (step of steps(); track $index) {
-      <li class="step" [class.done]="step.done">
+      <li class="step" [class.done]="step.done" [class.link-done]="steps()[$index + 1]?.done">
         <span class="dot" aria-hidden="true"></span>
         <p class="step-label">{{ step.label | translate }}</p>
         <p class="muted">{{ step.date ? (step.date | date: 'dd/MM/yyyy, HH:mm') : '—' }}</p>

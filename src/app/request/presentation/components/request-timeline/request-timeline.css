@@ -24,31 +24,33 @@
 .step {
   position: relative;
   padding-top: 22px;
+  text-align: center;
 }
 
+/* line from the dot of this step to the dot of the next one */
 .step::before {
   content: '';
   position: absolute;
   top: 6px;
-  left: 0;
-  right: 0;
+  left: 50%;
+  width: 100%;
   height: 2px;
   background: var(--fb-border);
 }
 
 .step:last-child::before {
-  right: auto;
-  width: 12px;
+  display: none;
 }
 
-.step.done::before {
+.step.link-done::before {
   background: var(--fb-primary);
 }
 
 .dot {
   position: absolute;
   top: 0;
-  left: 0;
+  left: calc(50% - 7px);
+  z-index: 1;
   width: 14px;
   height: 14px;
   border-radius: 50%;
@@ -115,5 +117,9 @@
   .steps {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     row-gap: 16px;
+  }
+
+  .step::before {
+    display: none;
   }
 }

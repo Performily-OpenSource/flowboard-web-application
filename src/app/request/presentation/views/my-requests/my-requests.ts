@@ -21,7 +21,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {RequestStore} from '../../../application/request.store';
 import {Request} from '../../../domain/model/request.entity';
 import {RequestStatusBadge} from '../../components/request-status-badge/request-status-badge';
-import {RequestTimeline} from '../../components/request-timeline/request-timeline';
+import {RequestDetailAction, RequestDetailData, RequestDetailDialog} from '../../components/request-detail-dialog/request-detail-dialog';
 import {CancelRequestDialog} from '../../components/cancel-request-dialog/cancel-request-dialog';
 import {RequestPeriodPipe} from '../../pipes/request-period-pipe';
 
@@ -30,7 +30,7 @@ type MyRequestsTab = 'open' | 'resolved' | 'all';
 
 /**
  * View of the requests of the employee in session (US32, US33).
- * Lists them by tab and shows the timeline of the selected one, with the options to cancel it or,
+ * Lists them by tab; clicking one opens a floating window with its detail and timeline, with the options to cancel it or,
  * when it was returned for review, to complete it.
  *
  * @author Diego Alonso Diaz Villalba
@@ -57,7 +57,6 @@ type MyRequestsTab = 'open' | 'resolved' | 'all';
     MatProgressBar,
     TranslatePipe,
     RequestStatusBadge,
-    RequestTimeline,
     RequestPeriodPipe
   ],
   templateUrl: './my-requests.html',
@@ -72,8 +71,6 @@ export class MyRequests {
   readonly columns = ['code', 'type', 'period', 'status', 'approver', 'actions'];
   /** Selected tab. */
   readonly tab = signal<MyRequestsTab>('open');
-  /** Selected request, or null to select the first one. */
-  readonly selectedId = signal<number | null>(null);
 
   /** Requests not resolved yet. */
   readonly openRequests = computed(() => this.store.myRequests().filter(request => !request.isResolved()));
@@ -89,31 +86,36 @@ export class MyRequests {
     }
   });
 
-  /** Request whose timeline is shown: the selected one or the first visible. */
-  readonly selectedRequest = computed(() => {
-    const visible = this.visibleRequests();
-    return visible.find(request => request.id === this.selectedId()) ?? visible.at(0) ?? null;
-  });
-
   /**
-   * Changes the tab and clears the selection.
+   * Changes the tab.
    *
    * @param tab - The tab to show.
    * @author Diego Alonso Diaz Villalba
    */
   setTab(tab: MyRequestsTab) {
     this.tab.set(tab);
-    this.selectedId.set(null);
   }
 
   /**
-   * Selects a request to show its timeline.
+   * Opens the floating window with the detail and timeline of a request. If the employee chooses to cancel
+   * or complete it there, the window closes and that option opens.
    *
    * @param request - The request.
    * @author Diego Alonso Diaz Villalba
    */
-  select(request: Request) {
-    this.selectedId.set(request.id);
+  openDetail(request: Request) {
+    this.dialog
+      .open<RequestDetailDialog, RequestDetailData, RequestDetailAction>(RequestDetailDialog, {
+        data: { request, mine: true },
+        width: '760px',
+        maxWidth: '95vw',
+        autoFocus: false
+      })
+      .afterClosed()
+      .subscribe(action => {
+        if (action === 'cancel') this.cancel(request);
+        else if (action === 'complete') this.complete(request);
+      });
   }
 
   /**
