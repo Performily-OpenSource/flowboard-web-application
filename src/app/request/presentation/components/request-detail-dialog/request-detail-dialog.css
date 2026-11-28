@@ -1,0 +1,73 @@
+.title-block {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-title {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.66px;
+  text-transform: uppercase;
+  color: var(--fb-text-secondary);
+}
+
+.field-list {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 20px;
+}
+
+.field-list dt {
+  font-size: 11.5px;
+  color: var(--fb-text-muted);
+}
+
+.field-list dd {
+  margin: 2px 0 0;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.attachments {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+}
+
+.attachments li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+}
+
+.attachments mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  color: var(--fb-text-secondary);
+}
+
+.reject-button {
+  color: var(--fb-error);
+}
+
+.read-only {
+  margin: 0;
+  align-self: center;
+}
+
+@media (max-width: 599px) {
+  .field-list {
+    grid-template-columns: 1fr;
+  }
+
+  .dialog-actions {
+    flex-wrap: wrap;
+  }
+}

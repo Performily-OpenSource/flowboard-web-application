@@ -22,8 +22,8 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {RequestStore} from '../../../application/request.store';
 import {Request} from '../../../domain/model/request.entity';
 import {RequestStatusBadge} from '../../components/request-status-badge/request-status-badge';
-import {RequestTimeline} from '../../components/request-timeline/request-timeline';
-import {ApproveRequestDialog} from '../../components/approve-request-dialog/approve-request-dialog';
+import {ApproveRequestDialog, RequestDialogData} from '../../components/approve-request-dialog/approve-request-dialog';
+import {RequestDetailAction, RequestDetailDialog} from '../../components/request-detail-dialog/request-detail-dialog';
 import {RejectRequestDialog} from '../../components/reject-request-dialog/reject-request-dialog';
 import {ReturnRequestDialog} from '../../components/return-request-dialog/return-request-dialog';
 import {RelativeTimePipe} from '../../pipes/relative-time-pipe';
@@ -70,7 +70,6 @@ const AGE_FILTERS: AgeFilter[] = ['today', 'over-2-days', 'over-7-days'];
     MatTooltip,
     TranslatePipe,
     RequestStatusBadge,
-    RequestTimeline,
     RelativeTimePipe,
     RequestPeriodPipe
   ],
@@ -96,8 +95,6 @@ export class RequestInbox {
   readonly ageFilter = signal<AgeFilter | null>(null);
   /** Current page, starting at 0. */
   readonly page = signal(0);
-  /** Request whose detail is open, or null. */
-  readonly selectedId = signal<number | null>(null);
 
   /** Pending requests. */
   readonly pending = computed(() => this.store.inboxRequests().filter(request => request.isPending()));
@@ -148,9 +145,6 @@ export class RequestInbox {
   readonly rangeStart = computed(() => this.filteredRequests().length === 0 ? 0 : this.page() * PAGE_SIZE + 1);
   /** Position of the last request of the page. */
   readonly rangeEnd = computed(() => Math.min((this.page() + 1) * PAGE_SIZE, this.filteredRequests().length));
-
-  /** Request whose detail is open, or null. */
-  readonly selectedRequest = computed(() => this.store.inboxRequests().find(request => request.id === this.selectedId()) ?? null);
 
   /**
    * Changes the tab and goes back to the first page.
@@ -257,13 +251,26 @@ export class RequestInbox {
   }
 
   /**
-   * Opens or closes the detail of a request.
+   * Opens the floating window with the detail of a request. If the approver chooses an action there,
+   * the window closes and the dialog of that action opens.
    *
    * @param request - The request.
    * @author Diego Alonso Diaz Villalba
    */
-  toggleDetail(request: Request) {
-    this.selectedId.set(this.selectedId() === request.id ? null : request.id);
+  openDetail(request: Request) {
+    this.dialog
+      .open<RequestDetailDialog, RequestDialogData, RequestDetailAction>(RequestDetailDialog, {
+        data: { request },
+        width: '760px',
+        maxWidth: '95vw',
+        autoFocus: false
+      })
+      .afterClosed()
+      .subscribe(action => {
+        if (action === 'approve') this.approve(request);
+        else if (action === 'reject') this.reject(request);
+        else if (action === 'return') this.returnForReview(request);
+      });
   }
 
   /**

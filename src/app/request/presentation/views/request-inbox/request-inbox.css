@@ -66,6 +66,11 @@
   color: var(--fb-on-primary);
 }
 
-tr.selected {
+tr.clickable {
+  cursor: pointer;
+}
+
+tr.clickable:hover,
+tr.clickable:focus-visible {
   background: var(--fb-surface-muted);
 }

@@ -2,6 +2,10 @@
   margin-top: 20px;
 }
 
+.timeline-card.embedded {
+  margin-top: 0;
+}
+
 .timeline-header {
   display: flex;
   align-items: flex-start;

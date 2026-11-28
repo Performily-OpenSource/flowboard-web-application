@@ -1260,6 +1260,7 @@
     "reject": "Reject",
     "return": "Return for review",
     "view-history": "View history",
+    "view-detail": "View detail",
     "more-actions": "More actions",
     "pagination": "Pagination",
     "range": "Showing {{start}} to {{end}} of {{total}} requests",
@@ -1342,6 +1343,13 @@
     "resolved": "Resolved",
     "history": "History",
     "system": "System (automatic)"
+  },
+  "request-detail": {
+    "details": "Request details",
+    "progress": "Progress and history",
+    "approver": "Approver",
+    "approver-hr": "Human Resources",
+    "submitted": "Submitted"
   },
   "request-dialog": {
     "type": "Type",

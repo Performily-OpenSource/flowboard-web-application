@@ -1,8 +1,10 @@
-<section class="card card-body timeline-card">
-  <header class="timeline-header">
-    <h2 class="card-title">{{ request().code }} · {{ request().requestType?.name }}</h2>
-    <app-request-status-badge [status]="request().status"/>
-  </header>
+<section class="timeline-card" [class.card]="!embedded()" [class.card-body]="!embedded()" [class.embedded]="embedded()">
+  @if (!embedded()) {
+    <header class="timeline-header">
+      <h2 class="card-title">{{ request().code }} · {{ request().requestType?.name }}</h2>
+      <app-request-status-badge [status]="request().status"/>
+    </header>
+  }
 
   <ol class="steps">
     @for (step of steps(); track $index) {

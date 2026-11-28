@@ -36,6 +36,8 @@ export class RequestTimeline {
   private translate = inject(TranslateService);
   /** The request to show. */
   readonly request = input.required<Request>();
+  /** Whether it is shown inside another window: no card around it and no title. */
+  readonly embedded = input(false);
 
   /** The 4 steps of the request; the last one shows how it was resolved. */
   readonly steps = computed<TimelineStep[]>(() => {

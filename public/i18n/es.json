@@ -1261,6 +1261,7 @@
     "reject": "Rechazar",
     "return": "Devolver a revisión",
     "view-history": "Ver historial",
+    "view-detail": "Ver detalle",
     "more-actions": "Más acciones",
     "pagination": "Paginación",
     "range": "Mostrando {{start}} a {{end}} de {{total}} solicitudes",
@@ -1343,6 +1344,13 @@
     "resolved": "Resuelta",
     "history": "Historial",
     "system": "Sistema (automático)"
+  },
+  "request-detail": {
+    "details": "Detalle de la solicitud",
+    "progress": "Avance e historial",
+    "approver": "Aprobador",
+    "approver-hr": "Recursos Humanos",
+    "submitted": "Enviada"
   },
   "request-dialog": {
     "type": "Tipo",
